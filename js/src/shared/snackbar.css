@@ -1,0 +1,167 @@
+/*
+* Snackbar UI
+*
+* https://ultrafunk.com
+* 
+*/
+
+.site-theme-light {
+  --snackbar-background-color: #444;
+  --snackbar-text-color: #fff;
+  --snackbar-action-text-color: #4b96ff;
+  --snackbar-action-text-hover-color: #fff;
+  --snackbar-close-icon-color: #999;
+  --snackbar-close-icon-hover-color: #fff;
+}
+
+.site-theme-dark {
+  --snackbar-background-color: #555;
+  --snackbar-text-color: #fff;
+  --snackbar-action-text-color: #4b96ff;
+  --snackbar-action-text-hover-color: #fff;
+  --snackbar-close-icon-color: #999;
+  --snackbar-close-icon-hover-color: #fff;
+}
+
+#snackbar {
+  display: flex;
+  visibility: hidden;
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+  z-index: 5000;
+  bottom: 25px;
+  justify-content: center;
+}
+
+.snackbar-container {
+  display: flex;
+  margin: 0 25px;
+  padding: 15px 22px 15px 30px;
+  max-width: 700px;
+  min-width: 400px;
+  background-color: var(--snackbar-background-color);
+  color: var(--snackbar-text-color);
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 400;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
+  border-radius: var(--button-border-radius);
+}
+
+.snackbar-message {
+  float: left;
+  width: 100%;
+}
+
+.snackbar-action-text {
+  font-weight: 700;
+  font-size: 25px;
+  cursor: pointer;
+  color: var(--snackbar-action-text-color);
+  text-decoration: none;
+  text-transform: uppercase;
+  margin-left: 20px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+.snackbar-action-text:hover {
+  color: var(--snackbar-action-text-hover-color);
+  text-decoration: none;
+}
+
+.snackbar-close-icon {
+  color: var(--snackbar-close-icon-color);
+  float: right;
+  padding: 0px 0px 0px 12px;
+  width: 40px;
+  height: 40px;
+  user-select: none;
+}
+
+.snackbar-close-icon .material-icons {
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.snackbar-close-icon:hover {
+  color: var(--snackbar-close-icon-hover-color);
+}
+
+#snackbar.show {
+  visibility: visible;
+  animation: snackbar-show 0.5s;
+}
+
+@keyframes snackbar-show {
+  from { bottom:    0; opacity: 0; }
+  to   { bottom: 25px; opacity: 1; }
+}
+
+#snackbar.hide {
+  animation: snackbar-hide 0.5s;
+}
+
+@keyframes snackbar-hide {
+  from { bottom: 25px; opacity: 1; }
+  to   { bottom:    0; opacity: 0; }
+}
+
+@media screen and (max-width: 500px) {
+  
+  @keyframes snackbar-show {
+    from { bottom:    0; opacity: 0; }
+    to   { bottom: 10px; opacity: 1; }
+  }
+
+  @keyframes snackbar-hide {
+    from { bottom: 10px; opacity: 1; }
+    to   { bottom:    0; opacity: 0; }
+  }
+
+  #snackbar {
+    bottom: 10px;
+  }
+  
+  .snackbar-container {
+    margin: 0px 10px;
+    padding: 6px 10px 6px 15px;
+    font-size: 15px;
+    line-height: 22px;
+    max-width: 100%;
+    min-width: unset;
+    width: 100%;
+  }
+
+  .snackbar-message {
+    padding: 4px 0px;
+  }
+
+  .snackbar-action-text {
+    font-size: 18px;
+    margin-left: 8px;
+  }
+  
+  .snackbar-close-icon {
+    padding: 0px 0px 0px 2px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .snackbar-close-icon .material-icons {
+    font-size: 32px;
+  }
+  
+}
+
+@media screen and (max-width: 400px) {
+
+  .snackbar-container {
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+}

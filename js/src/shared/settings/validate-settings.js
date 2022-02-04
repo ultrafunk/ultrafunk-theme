@@ -1,0 +1,98 @@
+//
+// Validation for playback and site settings
+//
+// https://ultrafunk.com
+//
+
+
+import * as debugLogger from '../debuglogger.js';
+
+import {
+  TYPE_INTEGER,
+  TYPE_BOOLEAN,
+  TYPE_STRING
+} from './settings.js';
+
+
+export { validateSettings };
+
+
+/*************************************************************************************************/
+
+
+const debug = debugLogger.newInstance('validate-settings');
+
+
+// ************************************************************************************************
+// Validation
+// ************************************************************************************************
+
+function validateSettings(settings, schema)
+{
+  let invalidCount = 0;
+
+  validateRecursive(settings, schema);
+
+  return invalidCount;
+
+  function validateRecursive(settings, schema)
+  {
+    for (const key in settings)
+    {
+      if (settings && schema && (typeof settings[key] === 'object') && (typeof schema[key] === 'object'))
+      {
+        validateRecursive(settings[key], schema[key]);
+      }
+      else
+      {
+        if (schema[key] !== undefined)
+        {
+          if (isEntryInvalid(settings, schema[key], settings[key], key))
+            invalidCount++;
+        }
+        else
+        {
+          throw(`'${key}' ${(typeof settings[key] === 'object') ? 'object' : 'property'} is not in schema`);
+        }
+      }
+    }
+  }
+}
+
+function isEntryInvalid(settings, schemaEntry, settingValue, entryKey)
+{
+  switch (schemaEntry.type)
+  {
+    case TYPE_INTEGER:
+      if ((Number.isInteger(settingValue) === false) || (settingValue < schemaEntry.values[0]) || (settingValue > schemaEntry.values[schemaEntry.values.length - 1]))
+      {
+        debug.warn(`validate() - '${entryKey}' has invalid value: ${settingValue} ('${entryKey}' is type: INTEGER - min: ${schemaEntry.values[0]} - max: ${schemaEntry.values[schemaEntry.values.length - 1]}) -- setting default value: ${schemaEntry.default}`);
+        settings[entryKey] = schemaEntry.default;
+        return true;
+      }
+      break;
+    
+    case TYPE_BOOLEAN:
+      if ((settingValue !== true) && (settingValue !== false))
+      {
+        debug.warn(`validate() - '${entryKey}' has invalid value: ${settingValue} ('${entryKey}' is type: BOOLEAN) -- setting default value: ${schemaEntry.default}`);
+        settings[entryKey] = schemaEntry.default;
+        return true;
+      }
+      break;
+
+    case TYPE_STRING:
+      if (typeof settingValue !== 'string')
+      {
+        debug.warn(`validate() - '${entryKey}' has invalid value: ${settingValue} ('${entryKey}' is type: STRING) -- setting default value: ${schemaEntry.default}`);
+        settings[entryKey] = schemaEntry.default;
+        return true;
+      }
+      break;
+
+    default:
+      debug.warn(`validate() - '${entryKey}' has unknown type: ${schemaEntry.type}`);
+      return true;
+  }
+}
+

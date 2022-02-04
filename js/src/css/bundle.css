@@ -1,0 +1,14 @@
+/*
+* Bundle all JS-CSS files on build
+*
+* https://ultrafunk.com
+*
+*/
+
+@import '..\\js\\src\\shared\\modal.css';
+@import '..\\js\\src\\shared\\snackbar.css';
+@import '..\\js\\src\\playback\\playback-controls.css';
+@import '..\\js\\src\\playback\\gallery\\crossfade-controls.css';
+@import '..\\js\\src\\playback\\gallery\\gallery-player.css';
+@import '..\\js\\src\\playback\\list\\list-player.css';
+@import '..\\js\\src\\site\\termlist.css';

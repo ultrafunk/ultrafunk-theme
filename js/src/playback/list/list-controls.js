@@ -1,0 +1,441 @@
+//
+// List-player controls module
+//
+// https://ultrafunk.com
+//
+
+
+import * as debugLogger         from '../../shared/debuglogger.js';
+import { STATE }                from '../element-wrappers.js';
+import { autoplay }             from '../footer-toggles.js';
+import { showModal }            from '../../shared/modal.js';
+import { TRACK_TYPE }           from '../shared-gallery-list.js';
+import { loadTracks }           from './list-tracks-rest.js';
+import { showSnackbar }         from '../../shared/snackbar.js';
+import { isPlaying }            from '../playback-controls.js';
+import { response, settings }   from '../../shared/session-data.js';
+import { getModalTrackHtmlEsc } from '../../shared/modal-templates.js';
+
+import {
+  addListener,
+  replaceClass,
+  stripAttribute,
+} from '../../shared/utils.js';
+
+
+export {
+  init,
+  ready,
+  queryTrack,
+  queryTrackAll,
+  queryTrackId,
+  getTrackType,
+  getPrevPlayableId,
+  getNextPlayableId,
+  showUpNextModal,
+  setCuedTrack,
+  loadMoreTracks,
+  setCurrentTrackState,
+  setNextTrackState,
+  setTrackMessage,
+  updateTrackDetails,
+};
+
+
+/*************************************************************************************************/
+
+
+const debug = debugLogger.newInstance('list-player-controls');
+
+const m = {
+  tracklist:         null,
+  tracklistObserver: null,
+  tracklistLoadMore: null,
+  setCurrentTrack:   null,
+  player:            null,
+  currentElement:    null,
+  prevActionButtons: null,
+};
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function init(setCurrentTrackCallback)
+{
+  debug.log('init()');
+
+  m.tracklist         = document.getElementById('tracklist');
+  m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
+  m.setCurrentTrack   = setCurrentTrackCallback;
+
+  m.tracklist.addEventListener('click', (event) =>
+  {
+    const playTrackButton = event.target.closest('div.thumbnail');
+    if (playTrackButton !== null) return setCurrentTrackCallback(playTrackButton.closest('div.track-entry').id, true, true);
+
+    const trackActionsToggle = event.target.closest('div.track-actions-toggle');
+    if (trackActionsToggle !== null) return trackActionsClick(trackActionsToggle.closest('div.track-entry'));
+  
+    const playNextButton = event.target.closest('div.play-next-button');
+    if (playNextButton !== null) return playNextClick(playNextButton.closest('div.track-entry'));
+
+    const removeButton = event.target.closest('div.remove-button');
+    if (removeButton !== null) return removeClick(removeButton.closest('div.track-entry'));
+
+    const arrowUpButton = event.target.closest('span.arrow-up-button');
+    if (arrowUpButton !== null) return arrowUpDownClick(arrowUpButton.closest('div.tracklist-page-separator'), true);
+
+    const arrowDownButton = event.target.closest('span.arrow-down-button');
+    if (arrowDownButton !== null) return arrowUpDownClick(arrowDownButton.closest('div.tracklist-page-separator'), false);
+  });
+}
+
+function ready(player)
+{
+  m.player = player;
+  m.currentElement.classList.add('current');
+
+  if (settings.list.showLoadMoreTracks)
+    initLoadMoreTracks();
+}
+
+function observerCallback(entries)
+{
+  m.tracklistObserver.unobserve(m.currentElement);
+
+  if ((Math.ceil(entries[0].intersectionRatio * 100) / 100) !== 1)
+    m.tracklist.scrollTop = (m.currentElement.offsetTop - m.tracklist.offsetHeight) + m.currentElement.offsetHeight;    
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function queryTrack(selectors)
+{
+  return m.tracklist.querySelector(selectors);
+}
+
+function queryTrackAll(selectors)
+{
+  return m.tracklist.querySelectorAll(selectors);
+}
+
+function queryTrackId(id)
+{
+  return document.getElementById(id);
+}
+
+function getTrackType(element)
+{
+  const trackType = element.getAttribute('data-track-type');
+
+  if (trackType !== null)
+    return parseInt(trackType);
+  
+  return TRACK_TYPE.NONE;
+}
+
+function getPrevPlayableId()
+{
+  let destElement = (m.currentElement !== null)
+                      ? m.currentElement.previousElementSibling
+                      : null;
+
+  while ((destElement !== null) && (getTrackType(destElement) !== TRACK_TYPE.YOUTUBE))
+    destElement = destElement.previousElementSibling;
+
+  return ((destElement !== null) ? destElement.id : null);
+}
+
+function getNextPlayableId(startElement = m.currentElement)
+{
+  let destElement = (startElement !== null)
+                      ? startElement.nextElementSibling
+                      : queryTrack('div.track-entry');
+
+  while ((destElement !== null) && (getTrackType(destElement) !== TRACK_TYPE.YOUTUBE))
+    destElement = destElement.nextElementSibling;
+  
+  return ((destElement !== null) ? destElement.id : null);
+}
+
+function setCuedTrack(trackId)
+{
+  m.currentElement = queryTrackId(trackId);
+  m.tracklistObserver.observe(m.currentElement);
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function playNextClick(trackElement)
+{
+  if (m.currentElement !== null)
+  {
+    const nextTrackElement = trackElement.cloneNode(true);
+    
+    clearTrackState(nextTrackElement);
+    nextTrackElement.id = Date.now();
+
+    if (settings.list.moveTrackOnPlayNext && (trackElement !== m.currentElement))
+      removeClick(trackElement, false, () => addTrack(nextTrackElement, m.currentElement, 'afterend'));
+    else
+      addTrack(nextTrackElement, m.currentElement, 'afterend'); 
+
+    showSnackbar('Track will play next', 3);
+  }
+  else
+  {
+    showSnackbar('Unable to cue track', 3);
+  }
+}
+
+function trackActionsClick(element)
+{
+  const trackActionButtons = element.querySelector('.track-action-buttons');
+
+  if ((m.prevActionButtons !== null) && (m.prevActionButtons !== trackActionButtons))
+    m.prevActionButtons.style.display = '';
+
+  if (trackActionButtons.style.display === '')
+    trackActionButtons.style.display = 'flex';
+  else
+    trackActionButtons.style.display = '';
+
+  m.prevActionButtons = trackActionButtons;
+}
+
+function removeClick(trackElement, allowUndo = true, animationEndCallback = () => {})
+{
+  if (trackElement !== m.currentElement)
+  {
+    const undoRemoveElement = trackElement.cloneNode(true);
+    const undoPrevElement   = trackElement.previousElementSibling;
+
+    trackElement.addEventListener('animationend', () =>
+    {
+      trackElement.remove();
+      animationEndCallback();
+    });
+    
+    trackElement.classList.add('removing');
+
+    if (allowUndo)
+    {
+      showSnackbar('Track removed', 4, 'undo', () =>
+      {
+        addTrack(undoRemoveElement,
+                ((undoPrevElement === null) ? m.tracklist  : undoPrevElement),
+                ((undoPrevElement === null) ? 'afterbegin' : 'afterend'));
+      });
+    }
+  }
+}
+
+function addTrack(trackElement, targetElement, insertPosition)
+{
+  trackElement.classList.add('adding');
+  trackElement.querySelector('.track-action-buttons').style.display = '';
+  trackElement.addEventListener('animationend', () => trackElement.classList.remove('adding'));
+  targetElement.insertAdjacentElement(insertPosition, trackElement);
+}
+
+function arrowUpDownClick(targetElement, isArrowUpClick)
+{
+  const pageNumber  = parseInt(targetElement.getAttribute('data-page-number'));
+  const gotoPageNum = isArrowUpClick ? (pageNumber - 1) : (pageNumber + 1);
+  let gotoElement   = document.getElementById(`tracklist-page-${gotoPageNum}`);
+  let blockOption   = 'center';
+
+  if (gotoElement === null)
+  {
+    gotoElement = isArrowUpClick ? m.tracklist.firstElementChild : m.tracklist.lastElementChild;
+    blockOption = isArrowUpClick ? 'end' : ((window.innerWidth > 1350) ? 'nearest' : 'center');
+
+    if ((isArrowUpClick === false) && (gotoPageNum > response.maxPages))
+      gotoElement = gotoElement?.previousElementSibling;
+  }
+
+  gotoElement?.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: blockOption });
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function showUpNextModal()
+{
+  const modalEntries = [];
+  let trackElement   = m.currentElement;
+
+  modalEntries.push({
+    clickId: trackElement.id,
+    class:   `tracklist-entry ${isPlaying() ? 'playing-track' : 'cued-track'}`,
+    title:   `${isPlaying() ? 'Go To Track' : 'Play Track'}`,
+    content: getModalTrackHtmlEsc(trackElement, 'data-track-artist', 'data-track-title'),
+  });
+
+  modalEntries.push({ class: 'header-entry', content: 'Up Next' });
+
+  for (let i = 0; i < 10; i++)
+  {
+    trackElement = queryTrackId(getNextPlayableId(trackElement));
+
+    if (trackElement === null)
+      break;
+
+    modalEntries.push({
+      clickId: trackElement.id,
+      class:   'tracklist-entry',
+      title:   'Play Track',
+      content: getModalTrackHtmlEsc(trackElement, 'data-track-artist', 'data-track-title'),
+    });
+  }
+
+  if (modalEntries.length > 2)
+  {
+    const playingState  = `${isPlaying() ? 'Playing' : 'Cued'}`;
+    const autoplayState = `Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b>`;
+    const modalTitle    = `${playingState}<span class="light-text lowercase-text toggle-element" title="Toggle Autoplay">${autoplayState}</span>`;
+
+    const modalId = showModal('tracklist', modalTitle, modalEntries, (clickedId) =>
+    {
+      const nextTrackId = modalEntries.find(item => (item.clickId === clickedId)).clickId;
+
+      if ((nextTrackId === m.currentElement.id) && isPlaying())
+        m.currentElement.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
+      else
+        m.setCurrentTrack(nextTrackId, true, false);
+    });
+
+    addListener(`#${modalId} .modal-dialog-title span`, 'click', (event) => 
+    {
+      autoplay.toggle();
+      event.target.closest('span').innerHTML = `Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b>`;
+    });
+  }
+  else
+  {
+    showSnackbar('No more tracks to play!', 5);
+  }
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function initLoadMoreTracks()
+{
+  if (response.requestType.all     ||
+      response.requestType.channel ||
+      response.requestType.artist  ||
+      response.requestType.shuffle)
+  {
+    if ((response.nextPage !== null) && (response.currentPage < response.maxPages))
+    {
+      m.tracklistLoadMore = document.getElementById('tracklist-load-more');
+      m.tracklistLoadMore.querySelector('.load-more-title span').textContent = ` ( ${response.currentPage + 1} / ${response.maxPages} )`;
+      m.tracklistLoadMore.style.display = 'block';
+      m.tracklistLoadMore.addEventListener('click', loadMoreTracks);
+    }
+  }
+}
+
+async function loadMoreTracks()
+{
+  let tracksLoaded = false;
+  
+  if ((response.currentPage + 1) <= response.maxPages)
+  {
+    setIsLoadingTracks(true);
+    tracksLoaded = await loadTracks(stripAttribute(m.tracklist, 'data-term-type'), stripAttribute(m.tracklist, 'data-term-id'));
+    setIsLoadingTracks(false);
+
+    if (tracksLoaded)
+    {
+      response.currentPage++;
+      m.tracklistLoadMore.querySelector('.load-more-title span').textContent = ` ( ${response.currentPage + 1} / ${response.maxPages} )`;
+    }
+    else
+    {
+      showSnackbar('Load more tracks failed!', 10, 'Retry', () => loadMoreTracks());
+    }
+  }
+  
+  if (response.currentPage >= response.maxPages)
+    m.tracklistLoadMore.style.display = 'none';
+
+  return tracksLoaded;
+}
+
+function setIsLoadingTracks(isLoadingTracks)
+{
+  m.tracklistLoadMore.style.pointerEvents                              = isLoadingTracks ? 'none'  : 'unset';
+  m.tracklistLoadMore.querySelector('.load-more-title').style.display  = isLoadingTracks ? 'none'  : 'block';
+  m.tracklistLoadMore.querySelector('.load-more-loader').style.display = isLoadingTracks ? 'block' : 'none';
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function clearTrackState(element)
+{
+  element.classList.remove('current', STATE.LOADING.CLASS, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
+}
+
+function setCurrentTrackState(newState)
+{
+  if (newState.ID === STATE.LOADING.ID)
+  {
+    m.currentElement.classList.remove(STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
+    m.currentElement.classList.add(STATE.LOADING.CLASS);
+  }
+  else
+  {
+    m.currentElement.classList.remove(STATE.LOADING.CLASS);
+  
+    if (newState.ID === STATE.PLAYING.ID)
+      replaceClass(m.currentElement, STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
+    else
+      replaceClass(m.currentElement, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
+  }
+}
+
+function setNextTrackState(nextTrackId, isPointerClick)
+{
+  clearTrackState(m.currentElement);
+
+  m.currentElement = queryTrackId(nextTrackId);
+
+  if (isPointerClick === false)
+    m.tracklistObserver.observe(m.currentElement);
+
+  m.currentElement.classList.add('current');
+}
+
+function setTrackMessage(message)
+{
+  m.currentElement.querySelector('.track-message').textContent   = message;
+  m.currentElement.querySelector('.track-message').style.display = 'block';
+}
+
+function updateTrackDetails()
+{
+  const sourceUid = m.currentElement.getAttribute('data-track-source-uid');
+  
+  m.player.setArtist(m.currentElement.getAttribute('data-track-artist'));
+  m.player.setTitle(m.currentElement.getAttribute('data-track-title'));
+  m.player.setThumbnail(sourceUid);
+
+  return sourceUid;
+}

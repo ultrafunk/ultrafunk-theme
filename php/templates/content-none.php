@@ -1,0 +1,25 @@
+<?php declare(strict_types=1);
+/*
+ * Content cannot be found template
+ *
+*/
+
+
+namespace Ultrafunk\Theme\Templates\None;
+
+
+?>
+
+<div class="entry-content">
+  <?php if (is_search()) { ?>
+    <h1 class="entry-header">Sorry, no content matched your search criteria...</h1>
+  <?php } else { ?>
+    <h1 class="entry-header">Sorry, unable to find the content you were looking for...</h1>
+  <?php } ?>
+  <?php echo get_search_form(); ?>
+  <p><b>Ultrafunk past projects:</b> ProTracker, Sonitus:fx DX / VST audio plug-ins, Popcorn email client,
+  Organic One speaker system, Ultrafunk DSP platform and more can be found here:
+  <a href="https://old.ultrafunk.com">https://old.ultrafunk.com</a></p>
+</div>
+
+<?php \Ultrafunk\Theme\Tags\content_widgets(); ?>

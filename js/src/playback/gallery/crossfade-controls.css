@@ -1,0 +1,94 @@
+/*
+* Crossfade UI controls
+*
+* https://ultrafunk.com
+*
+*/
+
+.crossfade-controls {
+  display: none;
+}
+
+body.autoplay-off.tracks .crossfade-controls {
+  display: contents;
+}
+
+.crossfade-preset-control {
+  width: 32px;
+  height: 32px;
+  font-size: 21px;
+  line-height: 31px;
+  border-radius: var(--button-border-radius);
+  border-width: 2px;
+  border-color: var(--primary-icon-color);
+  border-style: solid;
+  text-align: center;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  margin-left: 20px;
+}
+
+.crossfade-fadeto-control {
+  width: 51px;
+  height: 51px;
+  margin-left: 10px;
+  margin-right: -7px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.crossfade-fadeto-control img {
+  width: 51px;
+  height: 51px;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.site-theme-dark .crossfade-fadeto-control img {
+  filter: invert(1);
+}
+
+.crossfade-preset-control.state-enabled:hover,
+.crossfade-fadeto-control.state-enabled img:hover {
+  opacity: var(--control-hover-opacity);
+}
+
+@media not all and (pointer: fine) {
+
+  .crossfade-preset-control.state-enabled:hover,
+  .crossfade-fadeto-control.state-enabled img:hover {
+    opacity: 1;
+  }
+    
+}
+
+.crossfade-preset-control.state-disabled,
+.crossfade-fadeto-control.state-disabled {
+  opacity: var(--control-disabled-opacity);
+  cursor: default;
+}
+
+@media screen and (max-width: 500px) {
+
+  .crossfade-preset-control {
+    width: 22px;
+    height: 22px;
+    font-size: 15px;
+    line-height: 23px;
+    margin-right: 5px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  .crossfade-fadeto-control {
+    width: 38px;
+    height: 38px;
+    margin-right: -5px;
+  }
+
+  .crossfade-fadeto-control img {
+    width: 38px;
+    height: 38px;
+  }
+
+}

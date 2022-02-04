@@ -1,0 +1,224 @@
+/*
+* Settings UI
+*
+* https://ultrafunk.com
+*
+*/
+
+#settings-container {
+  width: 100%;
+  min-height: 75vh;
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+table.settings {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  user-select: none;
+  font-size: 22px;
+  line-height: 30px;
+}
+
+table.settings tr:nth-child(odd) {
+  background: var(--list-row-odd-color);
+}
+
+@media all and (pointer: fine) {
+ 
+  table.settings tr:hover {
+    background: var(--list-row-hover-color);
+    cursor: pointer;
+  }
+
+}
+
+@media not all and (pointer: fine) {
+
+  table.settings tr:nth-child(odd) {
+    background: var(--list-row-odd-color);
+    transition: background 150ms 0s ease-in;
+  }
+
+  table.settings tr:nth-child(even) {
+    transition: background 150ms 0s ease-in;
+  }
+
+  table.settings tr:active {
+    background: var(--list-row-hover-color);
+    transition: background 0s;
+  }
+
+}
+
+table.settings td {
+  padding: 10px 15px;
+}
+
+table.settings td.description {
+  white-space: nowrap;
+  border-top-left-radius: var(--button-border-radius);
+  border-bottom-left-radius: var(--button-border-radius);
+}
+
+table.settings td.value-string {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  text-align: end;
+  border-top-right-radius: var(--button-border-radius);
+  border-bottom-right-radius: var(--button-border-radius);
+  color: var(--primary-icon-color);
+}
+
+table.settings td.current-value-false {
+  opacity: 0.3;
+}
+
+.settings-clear {
+  clear: both;
+  margin: 100px auto 100px auto;
+  padding: 12px 30px;
+  color: var(--button-text-color);
+  background-color: var(--button-background-color);
+  max-width: 225px;
+  text-align: center;
+  border-radius: var(--button-border-radius);
+}
+
+#settings-save-reset {
+  clear: both;
+  margin: var(--site-content-margin-bottom) 0;
+  overflow: hidden;
+}
+
+.settings-save,
+.settings-reset {
+  float: left;
+  color: var(--button-text-color);
+  background-color: var(--button-background-color);
+  padding: 12px 30px;
+  border-radius: var(--button-border-radius);
+}
+
+.settings-reset {
+  float: right;
+}
+
+@media all and (pointer: fine) {
+ 
+  .settings-clear:hover,
+  .settings-save:hover,
+  .settings-reset:hover {
+    background: var(--button-background-hover-rgba);
+    cursor: pointer;
+  }
+  
+}
+
+@media not all and (pointer: fine) {
+
+  .settings-clear,
+  .settings-save,
+  .settings-reset {
+    background-color: var(--button-background-color);
+    transition: background 150ms 0s ease-in;
+  }
+
+  .settings-clear:active,
+  .settings-save:active,
+  .settings-reset:active {
+    background: var(--button-background-hover-rgba);
+    transition: background 0s;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive
+***************************************************************************************************/
+
+@media screen and (max-width: 1350px) {
+  
+  table.settings {
+    width: calc(100% - (75px + 75px));
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  #settings-save-reset {
+    margin-left: 75px;
+    margin-right: 75px;
+  }  
+}
+
+@media screen and (max-width: 1100px) {
+
+  table.settings {
+    font-size: unset;
+    line-height: unset;
+  }
+    
+}
+
+@media screen and (max-width: 900px) {
+  
+  table.settings {
+    width: calc(100% - (50px + 50px));
+  }
+
+  #settings-save-reset {
+    margin-left: 50px;
+    margin-right: 50px;
+  }  
+
+}
+
+@media screen and (max-width: 768px) {
+  
+  table.settings {
+    width: calc(100% - (25px + 25px));
+  }
+
+  #settings-save-reset {
+    margin-left: 25px;
+    margin-right: 25px;
+  }  
+
+}
+
+@media screen and (max-width: 500px) {
+  
+  table.settings {
+    width: calc(100% - (20px + 20px));
+  }
+
+  .settings-clear {
+    max-width: 125px;
+    margin: 50px auto 50px auto;
+  }
+
+  #settings-save-reset {
+    margin: var(--site-content-margin-bottom) 20px;
+  } 
+
+  table.settings td {
+    padding: 12px 15px;
+  }
+
+  table.settings td.description {
+    padding-right: 0px;
+  }
+
+}
+
+@media screen and (max-width: 400px) {
+  
+  table.settings td.description {
+    white-space: initial;
+  }
+
+}
