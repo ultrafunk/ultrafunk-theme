@@ -97,6 +97,23 @@ function showSnackbar(message, timeout = 5, actionText = null, actionClickCallba
   return ++m.snackbarId;
 }
 
+function dismissSnackbar(dismissId = 0)
+{
+  if (isShowing())
+  {
+    if ((m.snackbarId === 0) || (m.snackbarId === dismissId))
+    {
+      elements.snackbar.classList.add('hide');
+      m.fadeTimeoutId = setTimeout(() => (elements.snackbar.className = ''), 450);
+    }
+  }
+}
+
+
+// ************************************************************************************************
+// 
+// ************************************************************************************************
+
 function init()
 {
   if (elements.snackbar === null)
@@ -128,18 +145,6 @@ function isShowing()
            elements.snackbar.classList.contains('show'));
 }
 
-function dismissSnackbar(dismissId = 0)
-{
-  if (isShowing())
-  {
-    if ((m.snackbarId === 0) || (m.snackbarId === dismissId))
-    {
-      elements.snackbar.classList.add('hide');
-      m.fadeTimeoutId = setTimeout(() => (elements.snackbar.className = ''), 450);
-    }
-  }
-}
-
 function reset(hideSnackbar = false)
 {
   if (m.visibleTimeoutId !== -1)
@@ -154,7 +159,8 @@ function reset(hideSnackbar = false)
     m.fadeTimeoutId = -1;
   }
 
-  elements.actionText.removeEventListener('click', actionTextClick);
+  if (elements.actionText !== null)
+    elements.actionText.removeEventListener('click', actionTextClick);
 
   if (hideSnackbar)
     elements.snackbar.classList.remove('show');

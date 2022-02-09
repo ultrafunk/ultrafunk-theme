@@ -6,7 +6,7 @@
 
 
 import { KEY, setCookie }     from '../shared/storage.js';
-import { showUpNextModal }    from './list/list-controls.js';
+import { showUpNextModal }    from './list/up-next-modal.js';
 import { response, settings } from '../shared/session-data.js';
 
 import {

@@ -96,6 +96,10 @@
   padding: 18px 30px 8px 30px; 
 }
 
+.modal-type-tracklist {
+  min-height: 717px;
+}
+
 .modal-type-tracklist .modal-header-entry {
   padding-top: 14px;
 }
@@ -281,6 +285,10 @@
 
   .modal-header-entry {
     padding: 16px 20px 6px 20px;
+  }
+
+  .modal-type-tracklist {
+    min-height: 550px;
   }
 
   .modal-type-tracklist .modal-header-entry {

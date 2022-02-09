@@ -14,14 +14,26 @@ import {
 } from './modal-templates.js';
 
 
-export { showModal };
+export {
+  showModal,
+  isShowingModal,
+  closeModal,
+  getModalId,
+  getModalEntry,
+  updateModalTitle,
+  updateModalBody,
+};
 
 
 /*************************************************************************************************/
 
 
 const debug = debugLogger.newInstance('modal');
-const m     = { selectedClick: null };
+
+const m = {
+  selectedClick: null,
+  modalId:       0,
+};
 
 const elements = {
   overlay:   null,
@@ -36,8 +48,6 @@ const elements = {
 
 function showModal(typeString, title, singleChoiceList, selectedClickCallback)
 {
-  debug.log(`showModal(): ${typeString} - ${title}`);
-
   init();
   
   m.selectedClick = selectedClickCallback;
@@ -50,8 +60,50 @@ function showModal(typeString, title, singleChoiceList, selectedClickCallback)
   elements.overlay.focus();
   disablePageScrolling(true);
 
+  m.modalId++;
+
+  debug.log(`showModal() - modalId: ${m.modalId} - typeString: ${typeString} - title: ${title}`);
+
   return config.id;
 }
+
+function isShowingModal(showingModalId = -1)
+{
+  return ((showingModalId === m.modalId) && (elements.container !== null) && (elements.overlay.classList.contains('show')));
+}
+
+function closeModal()
+{
+  elements.overlay.removeEventListener('keydown', keyDown);
+  elements.overlay.classList.replace('show', 'hide');
+}
+
+function getModalId()
+{
+  return m.modalId;
+}
+
+function getModalEntry(entryNum)
+{
+  return document.getElementById(`modal-item-${entryNum}`);
+}
+
+function updateModalTitle(updateModalId, updateTitle)
+{
+  if (updateModalId === m.modalId)
+    elements.container.querySelector(`.${config.id}-title`).innerHTML = updateTitle;
+}
+
+function updateModalBody(updateModalId, updateSingleChoiceList)
+{
+  if (updateModalId === m.modalId)
+    setSingleChoiceList(updateSingleChoiceList);
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
 
 function init()
 {
@@ -66,7 +118,7 @@ function init()
     elements.overlay.addEventListener('click', (event) =>
     {
       if (event.target === elements.overlay)
-        close();
+        closeModal();
     });
 
     elements.overlay.addEventListener('animationend', () =>
@@ -78,13 +130,13 @@ function init()
       }
     });
 
-    elements.overlay.querySelector(`.${config.id}-close-icon`).addEventListener('click', close);
+    elements.overlay.querySelector(`.${config.id}-close-icon`).addEventListener('click', closeModal);
   }
 }
 
 function setSingleChoiceList(singleChoiceList)
 {
-  insertSingleChoiceListHtml(singleChoiceList, elements);
+  insertSingleChoiceListHtml(singleChoiceList, elements.body);
   
   singleChoiceList.forEach(entry =>
   {
@@ -95,7 +147,7 @@ function setSingleChoiceList(singleChoiceList)
 
 function singleChoiceListClick()
 {
-  close();
+  closeModal();
   setTimeout(() => m.selectedClick(this.getAttribute('data-click-id')), 150);
 }
 
@@ -104,13 +156,7 @@ function keyDown(event)
   event.stopPropagation();
 
   if (event.key === 'Escape')
-    close();
-}
-
-function close()
-{
-  elements.overlay.removeEventListener('keydown', keyDown);
-  elements.overlay.classList.replace('show', 'hide');
+    closeModal();
 }
 
 function disablePageScrolling(disable)

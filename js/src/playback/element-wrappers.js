@@ -16,6 +16,7 @@ export {
 
 
 const STATE = {
+  UNKNOWN:  { ID:  0, CLASS: 'state-unknown'  },
   DISABLED: { ID: 10, CLASS: 'state-disabled' },
   ENABLED:  { ID: 20, CLASS: 'state-enabled'  },
   HIDDEN:   { ID: 30, CLASS: 'state-hidden'   },

@@ -5,19 +5,15 @@
 //
 
 
-import * as debugLogger         from '../../shared/debuglogger.js';
-import { STATE }                from '../element-wrappers.js';
-import { autoplay }             from '../footer-toggles.js';
-import { showModal }            from '../../shared/modal.js';
-import { TRACK_TYPE }           from '../shared-gallery-list.js';
-import { loadTracks }           from './list-tracks-rest.js';
-import { showSnackbar }         from '../../shared/snackbar.js';
-import { isPlaying }            from '../playback-controls.js';
-import { response, settings }   from '../../shared/session-data.js';
-import { getModalTrackHtmlEsc } from '../../shared/modal-templates.js';
+import * as debugLogger       from '../../shared/debuglogger.js';
+import * as upNextModal       from './up-next-modal.js';
+import { STATE }              from '../element-wrappers.js';
+import { TRACK_TYPE }         from '../shared-gallery-list.js';
+import { loadTracks }         from './list-tracks-rest.js';
+import { showSnackbar }       from '../../shared/snackbar.js';
+import { response, settings } from '../../shared/session-data.js';
 
 import {
-  addListener,
   replaceClass,
   stripAttribute,
 } from '../../shared/utils.js';
@@ -29,10 +25,10 @@ export {
   queryTrack,
   queryTrackAll,
   queryTrackId,
+  getCurrentTrackElement,
   getTrackType,
   getPrevPlayableId,
   getNextPlayableId,
-  showUpNextModal,
   setCuedTrack,
   loadMoreTracks,
   setCurrentTrackState,
@@ -51,9 +47,9 @@ const m = {
   tracklist:         null,
   tracklistObserver: null,
   tracklistLoadMore: null,
-  setCurrentTrack:   null,
   player:            null,
   currentElement:    null,
+  currentState:      STATE.UNKNOWN,
   prevActionButtons: null,
 };
 
@@ -62,18 +58,19 @@ const m = {
 //
 // ************************************************************************************************
 
-function init(setCurrentTrackCallback)
+function init(setCurrentTrackFunc)
 {
   debug.log('init()');
 
+  upNextModal.init(setCurrentTrackFunc);
+
   m.tracklist         = document.getElementById('tracklist');
   m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
-  m.setCurrentTrack   = setCurrentTrackCallback;
 
   m.tracklist.addEventListener('click', (event) =>
   {
     const playTrackButton = event.target.closest('div.thumbnail');
-    if (playTrackButton !== null) return setCurrentTrackCallback(playTrackButton.closest('div.track-entry').id, true, true);
+    if (playTrackButton !== null) return setCurrentTrackFunc(playTrackButton.closest('div.track-entry').id, true, true);
 
     const trackActionsToggle = event.target.closest('div.track-actions-toggle');
     if (trackActionsToggle !== null) return trackActionsClick(trackActionsToggle.closest('div.track-entry'));
@@ -129,6 +126,11 @@ function queryTrackId(id)
   return document.getElementById(id);
 }
 
+function getCurrentTrackElement()
+{
+  return m.currentElement;
+}
+
 function getTrackType(element)
 {
   const trackType = element.getAttribute('data-track-type');
@@ -174,6 +176,21 @@ function setCuedTrack(trackId)
 //
 // ************************************************************************************************
 
+function trackActionsClick(element)
+{
+  const trackActionButtons = element.querySelector('.track-action-buttons');
+
+  if ((m.prevActionButtons !== null) && (m.prevActionButtons !== trackActionButtons))
+    m.prevActionButtons.style.display = '';
+
+  if (trackActionButtons.style.display === '')
+    trackActionButtons.style.display = 'flex';
+  else
+    trackActionButtons.style.display = '';
+
+  m.prevActionButtons = trackActionButtons;
+}
+
 function playNextClick(trackElement)
 {
   if (m.currentElement !== null)
@@ -194,21 +211,6 @@ function playNextClick(trackElement)
   {
     showSnackbar('Unable to cue track', 3);
   }
-}
-
-function trackActionsClick(element)
-{
-  const trackActionButtons = element.querySelector('.track-action-buttons');
-
-  if ((m.prevActionButtons !== null) && (m.prevActionButtons !== trackActionButtons))
-    m.prevActionButtons.style.display = '';
-
-  if (trackActionButtons.style.display === '')
-    trackActionButtons.style.display = 'flex';
-  else
-    trackActionButtons.style.display = '';
-
-  m.prevActionButtons = trackActionButtons;
 }
 
 function removeClick(trackElement, allowUndo = true, animationEndCallback = () => {})
@@ -263,68 +265,6 @@ function arrowUpDownClick(targetElement, isArrowUpClick)
   }
 
   gotoElement?.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: blockOption });
-}
-
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
-
-function showUpNextModal()
-{
-  const modalEntries = [];
-  let trackElement   = m.currentElement;
-
-  modalEntries.push({
-    clickId: trackElement.id,
-    class:   `tracklist-entry ${isPlaying() ? 'playing-track' : 'cued-track'}`,
-    title:   `${isPlaying() ? 'Go To Track' : 'Play Track'}`,
-    content: getModalTrackHtmlEsc(trackElement, 'data-track-artist', 'data-track-title'),
-  });
-
-  modalEntries.push({ class: 'header-entry', content: 'Up Next' });
-
-  for (let i = 0; i < 10; i++)
-  {
-    trackElement = queryTrackId(getNextPlayableId(trackElement));
-
-    if (trackElement === null)
-      break;
-
-    modalEntries.push({
-      clickId: trackElement.id,
-      class:   'tracklist-entry',
-      title:   'Play Track',
-      content: getModalTrackHtmlEsc(trackElement, 'data-track-artist', 'data-track-title'),
-    });
-  }
-
-  if (modalEntries.length > 2)
-  {
-    const playingState  = `${isPlaying() ? 'Playing' : 'Cued'}`;
-    const autoplayState = `Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b>`;
-    const modalTitle    = `${playingState}<span class="light-text lowercase-text toggle-element" title="Toggle Autoplay">${autoplayState}</span>`;
-
-    const modalId = showModal('tracklist', modalTitle, modalEntries, (clickedId) =>
-    {
-      const nextTrackId = modalEntries.find(item => (item.clickId === clickedId)).clickId;
-
-      if ((nextTrackId === m.currentElement.id) && isPlaying())
-        m.currentElement.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
-      else
-        m.setCurrentTrack(nextTrackId, true, false);
-    });
-
-    addListener(`#${modalId} .modal-dialog-title span`, 'click', (event) => 
-    {
-      autoplay.toggle();
-      event.target.closest('span').innerHTML = `Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b>`;
-    });
-  }
-  else
-  {
-    showSnackbar('No more tracks to play!', 5);
-  }
 }
 
 
@@ -395,19 +335,26 @@ function clearTrackState(element)
 
 function setCurrentTrackState(newState)
 {
-  if (newState.ID === STATE.LOADING.ID)
+  if (m.currentState.ID !== newState.ID)
   {
-    m.currentElement.classList.remove(STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
-    m.currentElement.classList.add(STATE.LOADING.CLASS);
-  }
-  else
-  {
-    m.currentElement.classList.remove(STATE.LOADING.CLASS);
-  
-    if (newState.ID === STATE.PLAYING.ID)
-      replaceClass(m.currentElement, STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
+    m.currentState = newState;
+
+    if (newState.ID === STATE.LOADING.ID)
+    {
+      m.currentElement.classList.remove(STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
+      m.currentElement.classList.add(STATE.LOADING.CLASS);
+    }
     else
-      replaceClass(m.currentElement, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
+    {
+      m.currentElement.classList.remove(STATE.LOADING.CLASS);
+    
+      if (newState.ID === STATE.PLAYING.ID)
+        replaceClass(m.currentElement, STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
+      else
+        replaceClass(m.currentElement, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
+
+      upNextModal.updateUpNextModal((newState.ID === STATE.PLAYING.ID) ? true : false);
+    }
   }
 }
 

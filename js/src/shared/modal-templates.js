@@ -42,7 +42,7 @@ function getTemplateHtml()
     </div>`;
 }
 
-function insertSingleChoiceListHtml(singleChoiceList, elements)
+function insertSingleChoiceListHtml(singleChoiceList, insertElement)
 {
   let listHtml = '';
 
@@ -60,7 +60,7 @@ function insertSingleChoiceListHtml(singleChoiceList, elements)
       listHtml += `<div class="${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
   });
   
-  elements.body.innerHTML = listHtml;
+  insertElement.innerHTML = listHtml;
 }
 
 function getModalTrackHtml(element, trackArtist, trackTitle)
