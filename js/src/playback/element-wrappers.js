@@ -64,7 +64,11 @@ const ElementWrapper = function(elmentSelector, parentElement = document, initia
       classList.remove(state.CLASS);
       classList.add(newState.CLASS);
       state = newState;
+
+      return true;
     }
+
+    return false;
   }
 };
 

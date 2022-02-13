@@ -7,6 +7,7 @@
 
 import * as debugLogger        from '../shared/debuglogger.js';
 import { settings }            from '../shared/session-data.js';
+import { EVENT, addListener }  from './playback-events.js';
 import { addSettingsObserver } from '../shared/storage.js';
 
 import {
@@ -26,7 +27,6 @@ export {
   updateTimerAndProgress,
   updateProgressPercent,
   isPlaying,
-  setLoadState,
   setPlayState,
   setPauseState,
   blinkPlayPause,
@@ -44,6 +44,11 @@ export {
 const debug = debugLogger.newInstance('playback-controls');
 const m     = { players: {} };
 const ctrl  = {};
+
+// DEBUG START
+// let playState  = 0;
+// let pauseState = 0;
+// DEBUG STOP
 
 
 // ************************************************************************************************
@@ -149,6 +154,13 @@ function ready(prevClickCallback, playPauseClickCallback, nextClickCallback, mut
 
   addSettingsObserver('autoplay',   updateAutoplayState);
   addSettingsObserver('masterMute', updateMuteState);
+
+  addListener(EVENT.MEDIA_LOADING,     setLoadState);
+  addListener(EVENT.MEDIA_PLAYING,     setPlayState);
+  addListener(EVENT.MEDIA_PAUSED ,     setPauseState);
+  addListener(EVENT.AUTOPLAY_BLOCKED,  setPauseState);
+  addListener(EVENT.PLAYBACK_BLOCKED,  setPauseState);
+  addListener(EVENT.MEDIA_UNAVAILABLE, setPauseState);
 }
 
 
@@ -256,8 +268,8 @@ function setTimerText(element, seconds)
 {
   const timeString = new Date(seconds * 1000).toISOString();
   element.textContent = (seconds > (60 * 60))
-                          ? timeString.substr(11, 8)
-                          : timeString.substr(14, 5);
+                          ? timeString.slice(11, 19)
+                          : timeString.slice(14, 19);
 }
 
 function clearTimer()
@@ -287,6 +299,8 @@ function setLoadState()
 
 function setPlayState()
 {
+//debug.log(`setPlayState():  ${++playState}`);
+
   ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
   ctrl.playPause.setState(STATE.PLAYING);
   ctrl.playPause.icon.textContent = 'pause_circle_filled';
@@ -297,6 +311,8 @@ function setPlayState()
 
 function setPauseState()
 {
+//debug.log(`setPauseState(): ${++pauseState}`);
+
   ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
   ctrl.playPause.setState(STATE.PAUSED);
   ctrl.playPause.icon.textContent = 'play_circle_filled';

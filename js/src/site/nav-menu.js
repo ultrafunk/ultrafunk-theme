@@ -55,10 +55,13 @@ const navMenu = (() =>
   {
     const menuElement = event.target.closest('li.menu-item.menu-item-object-uf_channel');
 
-    if ((menuElement !== null) && noPlayback())
+    if (menuElement !== null)
     {
-      event?.preventDefault();
-      utils.navToUrl(utils.getPrefPlayerUrl(menuElement.querySelector('a').href));
+      if (document.body.matches('.single.track') || noPlayback())
+      {
+        event?.preventDefault();
+        utils.navToUrl(utils.getPrefPlayerUrl(menuElement.querySelector('a').href));
+      }
     }
   }
 

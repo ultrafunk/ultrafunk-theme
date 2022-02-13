@@ -56,6 +56,8 @@ function init(mediaPlayers, crossfadeClickCallback)
     ctrl.crossfadePreset.forEach(element => setCrossfadePreset(element, settings.gallery.trackCrossfadeDefPreset));
     ctrl.crossfadeTo.clickCallback = crossfadeClickCallback;
   }
+
+  playbackEvents.addListener(playbackEvents.EVENT.READY, ready);
 }
 
 function ready()

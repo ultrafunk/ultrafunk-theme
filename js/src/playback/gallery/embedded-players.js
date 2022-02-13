@@ -5,12 +5,12 @@
 //
 
 
-import * as debugLogger  from '../../shared/debuglogger.js';
-import * as eventLogger  from '../eventlogger.js';
-import * as mediaPlayers from '../mediaplayers.js';
-import { EVENT }         from '../playback-events.js';
-import { playbackTimer } from './gallery-playback-timer.js';
-import { settings }      from '../../shared/session-data.js';
+import * as debugLogger    from '../../shared/debuglogger.js';
+import * as eventLogger    from '../eventlogger.js';
+import * as mediaPlayers   from '../mediaplayers.js';
+import * as playbackEvents from '../playback-events.js';
+import { settings }        from '../../shared/session-data.js';
+import { playbackTimer }   from './gallery-playback-timer.js';
 
 
 export {
@@ -29,7 +29,7 @@ const eventLog = new eventLogger.Playback(10);
 const m = {
   players:         {},
   playbackState:   null,
-  eventHandler:    null,
+  embeddedEvent:   null,
   loadEventsTotal: 0,
   loadEventsCount: 1,
 };
@@ -49,7 +49,7 @@ function init(players, playbackState, embeddedEventHandler)
 {
   m.players       = players;
   m.playbackState = playbackState;
-  m.eventHandler  = embeddedEventHandler;
+  m.embeddedEvent = embeddedEventHandler;
 
   // The total number of loadEvents include 3 stages before embedded players are loaded
   m.loadEventsTotal = 3 + parseInt(document.body.getAttribute('data-gallery-track-count'));
@@ -66,9 +66,9 @@ function getLoadingPercent()
 function updatePlayersReady()
 {
   if (m.loadEventsCount >= m.loadEventsTotal)
-    m.eventHandler(EVENT.READY, { resetProgressBar: true });
+    m.embeddedEvent(playbackEvents.EVENT.READY, { resetProgressBar: true });
   else
-    m.eventHandler(EVENT.LOADING, getLoadingPercent());
+    playbackEvents.dispatch(playbackEvents.EVENT.LOADING, getLoadingPercent());
 }
 
 
@@ -147,7 +147,7 @@ function onPlayerError(player, mediaUrl)
     m.players.stop();
   
   eventLog.add(eventSource, eventLogger.EVENT.PLAYER_ERROR, player.getUid());
-  m.eventHandler(EVENT.MEDIA_UNAVAILABLE, getPlayerErrorData(player, mediaUrl));
+  m.embeddedEvent(playbackEvents.EVENT.MEDIA_UNAVAILABLE, getPlayerErrorData(player, mediaUrl));
 }
 
 function getPlayerErrorData(player, mediaUrl)
@@ -173,12 +173,12 @@ function getPlayerErrorData(player, mediaUrl)
 function initYouTubeAPI()
 {
   debug.log('initYouTubeAPI()');
-  m.eventHandler(EVENT.LOADING, getLoadingPercent());
+  playbackEvents.dispatch(playbackEvents.EVENT.LOADING, getLoadingPercent());
 
   window.onYouTubeIframeAPIReady = function()
   {
     debug.log('onYouTubeIframeAPIReady()');
-    m.eventHandler(EVENT.LOADING, getLoadingPercent());
+    playbackEvents.dispatch(playbackEvents.EVENT.LOADING, getLoadingPercent());
   
     // ToDo: THIS SHOULD NOT BE TRIGGERED HERE ONLY?
     getAllPlayers();
@@ -219,7 +219,7 @@ function onYouTubeStateUnstarted(event)
   debug.log(`onYouTubePlayerStateChange: UNSTARTED (uID: ${event.target.h.id})`);
   
   if (eventLog.ytAutoplayBlocked(event.target.h.id, 3000))
-    m.eventHandler(EVENT.AUTOPLAY_BLOCKED);
+    m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
 }
 
 function onYouTubeStateBuffering(event)
@@ -231,7 +231,7 @@ function onYouTubeStateBuffering(event)
     const player = m.players.playerFromUid(event.target.h.id);
     player.mute(settings.playback.masterMute);
     player.setVolume(settings.playback.masterVolume);
-    m.eventHandler(EVENT.MEDIA_LOADING);
+    playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
   }
 }
 
@@ -272,7 +272,7 @@ function onYouTubeStateEnded(event)
   if (m.players.isCurrent(event.target.h.id))
   {
     playbackTimer.stop(true);
-    m.eventHandler(EVENT.MEDIA_ENDED);
+    m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
   }
   else
   {
@@ -298,7 +298,7 @@ function onYouTubePlayerError(event)
 function initSoundCloudAPI()
 {
   debug.log('initSoundCloudAPI()');
-  m.eventHandler(EVENT.LOADING, getLoadingPercent());
+  playbackEvents.dispatch(playbackEvents.EVENT.LOADING, getLoadingPercent());
 }
 
 function onSoundCloudPlayerEventReady()
@@ -342,12 +342,12 @@ function onSoundCloudPlayerEventPause(event)
   if (eventLog.scAutoplayBlocked(event.soundId, 3000))
   {
     playbackTimer.stop(false);
-    m.eventHandler(EVENT.AUTOPLAY_BLOCKED);
+    m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
   }
   else if (eventLog.scWidgetPlayBlocked(event.soundId, 30000))
   {
     playbackTimer.stop(false);
-    m.eventHandler(EVENT.PLAYBACK_BLOCKED, { currentTrack: m.players.trackFromUid(event.soundId), numTracks: m.players.getNumTracks() });
+    m.embeddedEvent(playbackEvents.EVENT.PLAYBACK_BLOCKED, { currentTrack: m.players.trackFromUid(event.soundId), numTracks: m.players.getNumTracks() });
   }
   else
   {
@@ -377,7 +377,7 @@ function onSoundCloudPlayerEventFinish(event)
   if (m.players.isCurrent(event.soundId))
   {
     playbackTimer.stop(true);
-    m.eventHandler(EVENT.MEDIA_ENDED);
+    m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
   }
   else
   {

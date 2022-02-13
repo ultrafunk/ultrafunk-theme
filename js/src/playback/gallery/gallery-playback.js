@@ -1,5 +1,5 @@
 //
-// Gallery player module
+// Gallery playback module
 //
 // https://ultrafunk.com
 //
@@ -7,12 +7,13 @@
 
 import * as debugLogger       from '../../shared/debuglogger.js';
 import * as eventLogger       from '../eventlogger.js';
-import * as mediaPlayers      from '../mediaplayers.js';
 import * as embeddedPlayers   from './embedded-players.js';
 import * as playbackEvents    from '../playback-events.js';
+import * as galleryEvents     from './gallery-events.js';
 import * as playbackControls  from '../playback-controls.js';
 import * as crossfadeControls from './crossfade-controls.js';
 import { playbackTimer }      from './gallery-playback-timer.js';
+import { galleryPlayers }     from './gallery-players.js';
 import { CROSSFADE_TYPE }     from './crossfade.js';
 import { settings }           from '../../shared/session-data.js';
 
@@ -30,7 +31,7 @@ export {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('gallery-player');
+const debug = debugLogger.newInstance('gallery-playback');
 
 const m = {
   eventLog: null,
@@ -53,9 +54,9 @@ function init()
 
   m.eventLog = embeddedPlayers.eventLog;
 
-  playbackEvents.init();
+  galleryEvents.init();
   
-  m.players = mediaPlayers.getInstance();
+  m.players = galleryPlayers();
   m.players.init(playTrack);
 
   playbackControls.init(m.players, seekClick);
@@ -279,53 +280,35 @@ function crossfadeInit(crossfadeType, crossfadePreset, crossfadeInUid = null)
 
 
 // ************************************************************************************************
-// Embedded players event handler (proxy for playbackEvents.dispatch())
+// Embedded players event handler proxy for playbackEvents.dispatch()
 // ************************************************************************************************
 
 function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
 {
-  if (debug.isDebug() && (embeddedEvent !== playbackEvents.EVENT.LOADING) && (embeddedEvent !== playbackEvents.EVENT.MEDIA_LOADING))
-  {
-    debug.log(`embeddedEventHandler(): ${embeddedEvent}`);
-    if (embeddedEventData !== null) debug.log(embeddedEventData);
-  }
+  debug.log(`embeddedEventHandler() - event: ${debug.getObjectKeyForValue(playbackEvents.EVENT, embeddedEvent)}`);
+  if (embeddedEventData !== null) debug.log(embeddedEventData);
 
   switch(embeddedEvent)
   {
-    case playbackEvents.EVENT.LOADING:
-      playbackEvents.dispatch(playbackEvents.EVENT.LOADING, embeddedEventData);
-      break;
-
-    case playbackEvents.EVENT.MEDIA_LOADING:
-      playbackControls.setLoadState();
-      break;
-    
-    case playbackEvents.EVENT.READY:
-      playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
-      crossfadeControls.ready();
-      playbackEvents.dispatch(playbackEvents.EVENT.READY, embeddedEventData);
-      playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
-      break;
-
     case playbackEvents.EVENT.MEDIA_ENDED:
       nextTrack(true);
       break;
 
+    case playbackEvents.EVENT.READY:
+      playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
+      playbackEvents.dispatch(playbackEvents.EVENT.READY, embeddedEventData);
+      playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
+      break;
+
     case playbackEvents.EVENT.AUTOPLAY_BLOCKED:
-      playbackControls.setPauseState();
       playbackEvents.dispatch(playbackEvents.EVENT.AUTOPLAY_BLOCKED, null, { 'togglePlayPause': togglePlayPause });
       break;
 
     case playbackEvents.EVENT.PLAYBACK_BLOCKED:
-      playbackControls.setPauseState();
-      playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_BLOCKED, embeddedEventData, { 'skipToTrack': skipToTrack });
-      break;
-
     case playbackEvents.EVENT.MEDIA_UNAVAILABLE:
-      playbackControls.setPauseState();
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_UNAVAILABLE, embeddedEventData, { 'skipToTrack': skipToTrack });
+      playbackEvents.dispatch(embeddedEvent, embeddedEventData, { 'skipToTrack': skipToTrack });
       break;
-    }
+  }
 }
 
 
@@ -348,14 +331,10 @@ const playbackState = (() =>
     {
       if (syncState === STATE.PLAY)
       {
-        m.players.crossfade.start();
-        playbackControls.setPlayState();
         playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING, getStatus());
       }
       else if (syncState === STATE.PAUSE)
       {
-        m.players.crossfade.stop();
-        playbackControls.setPauseState();
         playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PAUSED, getStatus());
       }
     }

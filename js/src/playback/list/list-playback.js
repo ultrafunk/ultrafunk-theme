@@ -1,5 +1,5 @@
 //
-// List-player module
+// List playback module
 //
 // https://ultrafunk.com
 //
@@ -10,6 +10,7 @@ import * as eventLogger       from '../eventlogger.js';
 import * as playbackControls  from '../playback-controls.js';
 import * as listControls      from './list-controls.js';
 import * as mediaPlayers      from '../mediaplayers.js';
+import * as playbackEvents    from '../playback-events.js';
 import * as utils             from '../../shared/utils.js';
 import { KEY }                from '../../shared/storage.js';
 import { STATE }              from '../element-wrappers.js';
@@ -19,18 +20,13 @@ import { response, settings } from '../../shared/session-data.js';
 import {
   TRACK_TYPE,
   playerScrollTo,
+  autoplayNavTo,
 } from '../shared-gallery-list.js';
 
 import {
   showSnackbar,
   dismissSnackbar,
 } from '../../shared/snackbar.js';
-
-import {
-  EVENT,
-  dispatch,
-  autoplayNavTo,
-} from '../playback-events.js';
 
 
 export {
@@ -46,7 +42,7 @@ export {
 /*************************************************************************************************/
 
 
-const debug    = debugLogger.newInstance('list-player');
+const debug    = debugLogger.newInstance('list-playback');
 const eventLog = new eventLogger.Playback(10);
 
 const m = {
@@ -363,7 +359,7 @@ function onYouTubePlayerReady()
   listControls.ready(m.player);
 
   toggleMute(true);
-  dispatch(EVENT.READY, { resetProgressBar: false });
+  playbackEvents.dispatch(playbackEvents.EVENT.READY, { resetProgressBar: false });
   loadOrCueCurrentTrack(m.autoplayData?.autoplay === true);
 }
 
@@ -372,7 +368,7 @@ function onYouTubePlayerStateChange(event)
   debug.log(`onYouTubePlayerStateChange(): ${event.data} - trackId: ${m.currentTrackId}`);
   eventLog.add(eventLogger.SOURCE.YOUTUBE, event.data, m.currentTrackId);
 
-  // Set playback controls state to YouTube state so we have a single source of truth = controls.isPlaying()
+  // Set playback controls state to YouTube state so we have a single source of truth = playbackControls.isPlaying()
   if (event.data !== YT.PlayerState.PLAYING) // eslint-disable-line no-undef
     playbackControls.setPauseState();
 
@@ -402,16 +398,13 @@ function onYouTubePlayerStateChange(event)
 
     // eslint-disable-next-line no-undef
     case YT.PlayerState.BUFFERING:
-      playbackControls.setLoadState();
-      listControls.setCurrentTrackState(STATE.LOADING);
+      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
       break;
     
     // eslint-disable-next-line no-undef
     case YT.PlayerState.PLAYING:
       onYouTubeStatePlaying(event);
-      playbackTimer.start();
-      playbackControls.setPlayState();
-      listControls.setCurrentTrackState(STATE.PLAYING);
+      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
       break;
 
     // eslint-disable-next-line no-undef

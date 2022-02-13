@@ -7,6 +7,7 @@
 
 import * as debugLogger       from '../../shared/debuglogger.js';
 import * as upNextModal       from './up-next-modal.js';
+import * as playbackEvents    from '../playback-events.js';
 import { STATE }              from '../element-wrappers.js';
 import { TRACK_TYPE }         from '../shared-gallery-list.js';
 import { loadTracks }         from './list-tracks-rest.js';
@@ -41,7 +42,7 @@ export {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('list-player-controls');
+const debug = debugLogger.newInstance('list-controls');
 
 const m = {
   tracklist:         null,
@@ -93,6 +94,9 @@ function ready(player)
 {
   m.player = player;
   m.currentElement.classList.add('current');
+
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_LOADING, () => setCurrentTrackState(STATE.LOADING));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING, () => setCurrentTrackState(STATE.PLAYING));
 
   if (settings.list.showLoadMoreTracks)
     initLoadMoreTracks();

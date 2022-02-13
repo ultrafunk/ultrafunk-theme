@@ -6,6 +6,7 @@
 
 
 import * as playbackControls from '../playback-controls.js';
+import * as playbackEvents   from '../playback-events.js';
 import { settings }          from '../../shared/session-data.js';
 
 
@@ -29,17 +30,20 @@ const playbackTimer = (() =>
   let isVisible      = true;
   let player         = null;
 
-  document.addEventListener('visibilitychange', () =>
-  {
-    isVisible = (document.visibilityState === 'visible') ? true : false;
-  });
-
   return {
-    ready(listPlayer) { player = listPlayer; },
+    ready,
     start,
     stop,
     update,
   };
+
+  function ready(listPlayer)
+  {
+    player = listPlayer;
+    
+    playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING, () => start());
+    document.addEventListener('visibilitychange', () => { isVisible = (document.visibilityState === 'visible') ? true : false; });
+  }
   
   function start()
   {

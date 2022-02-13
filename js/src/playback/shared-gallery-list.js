@@ -5,6 +5,7 @@
 //
 
 
+import * as debugLogger       from '../shared/debuglogger.js';
 import { KEY, setCookie }     from '../shared/storage.js';
 import { showUpNextModal }    from './list/up-next-modal.js';
 import { response, settings } from '../shared/session-data.js';
@@ -25,6 +26,7 @@ export {
   isGalleryPlayer,
   isListPlayer,
   shuffleClickNavTo,
+  autoplayNavTo,
   playerScrollTo,
   playerOnKeyScroll,
 };
@@ -32,6 +34,8 @@ export {
 
 /*************************************************************************************************/
 
+
+const debug = debugLogger.newInstance('shared-gallery-list');
 
 const PLAYER_TYPE = {
   NONE:    0,
@@ -80,6 +84,17 @@ function shuffleClickNavTo(event)
   event?.preventDefault();
   setCookie(KEY.UF_RESHUFFLE, 'true');
   navToUrl(getPrefPlayerUrl(response.shufflePath));
+}
+
+function autoplayNavTo(destUrl, continueAutoplay = false)
+{
+  debug.log(`autoplayNavTo(): ${destUrl} - continueAutoplay: ${continueAutoplay}`);
+  
+  if (destUrl)
+  {
+    sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: continueAutoplay, trackId: null, position: 0 }));
+    navToUrl(destUrl);
+  }
 }
 
 

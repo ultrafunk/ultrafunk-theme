@@ -5,16 +5,16 @@
 //
 
 
-import * as debugLogger    from '../shared/debuglogger.js';
-import * as eventLogger    from './eventlogger.js';
-import * as galleryPlayer  from './gallery/gallery-player.js';
-import * as listPlayer     from './list/list-player.js';
-import * as playbackEvents from './playback-events.js';
-import * as screenWakeLock from './screen-wakelock.js';
-import * as utils          from '../shared/utils.js';
-import * as footerToggles  from './footer-toggles.js';
-import { toggleRepeat }    from './playback-controls.js';
-import { showSnackbar }    from '../shared/snackbar.js';
+import * as debugLogger     from '../shared/debuglogger.js';
+import * as eventLogger     from './eventlogger.js';
+import * as galleryPlayback from './gallery/gallery-playback.js';
+import * as listPlayback    from './list/list-playback.js';
+import * as playbackEvents  from './playback-events.js';
+import * as screenWakeLock  from './screen-wakelock.js';
+import * as utils           from '../shared/utils.js';
+import * as footerToggles   from './footer-toggles.js';
+import { toggleRepeat }     from './playback-controls.js';
+import { showSnackbar }     from '../shared/snackbar.js';
 
 import {
   response,
@@ -30,6 +30,7 @@ import {
   playerScrollTo,
   playerOnKeyScroll,
   shuffleClickNavTo,
+  autoplayNavTo,
 } from './shared-gallery-list.js';
 
 
@@ -60,9 +61,9 @@ document.addEventListener('DOMContentLoaded', () =>
   getSessionData();
 
   if (hasGalleryPlayer())
-    m.player = galleryPlayer;
+    m.player = galleryPlayback;
   else if (hasListPlayer())
-    m.player = listPlayer;
+    m.player = listPlayback;
 
   if (m.player !== null)
     initShared();
@@ -312,7 +313,7 @@ function showSnackbarHint(hintKey, hintText, snackbarTimeout = 0)
 function prevNextNavTo(event, destUrl)
 {
   event?.preventDefault();
-  playbackEvents.autoplayNavTo(destUrl, m.player.getStatus().isPlaying);
+  autoplayNavTo(destUrl, m.player.getStatus().isPlaying);
 }
 
 

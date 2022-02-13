@@ -5,7 +5,6 @@
 //
 
 
-import * as debugLogger         from '../../shared/debuglogger.js';
 import { autoplay }             from '../footer-toggles.js';
 import { settings }             from '../../shared/session-data.js';
 import { isPlaying }            from '../playback-controls.js';
@@ -38,8 +37,6 @@ export {
 
 /*************************************************************************************************/
 
-
-const debug = debugLogger.newInstance('up-next-modal');
 
 const m = {
   setCurrentTrack: null,

@@ -6,8 +6,8 @@
 
 
 import * as playbackControls from '../playback-controls.js';
+import * as playbackEvents   from '../playback-events.js';
 import { CROSSFADE_TYPE }    from './crossfade.js';
-import { EVENT, dispatch }   from '../playback-events.js';
 import { settings }          from '../../shared/session-data.js';
 
 
@@ -36,12 +36,6 @@ const playbackTimer = (() =>
   let getStatus      = null;
   let crossfadeInit  = null;
 
-  // Can be called on IIFE execution since it has no other dependencies
-  document.addEventListener('visibilitychange', () =>
-  {
-    isVisible = (document.visibilityState === 'visible') ? true : false;
-  });
-
   return {
     init,
     start,
@@ -54,6 +48,8 @@ const playbackTimer = (() =>
     players       = galleryPlayers;
     getStatus     = galleryGetStatus;
     crossfadeInit = galleryCrossfadeInit;
+
+    document.addEventListener('visibilitychange', () => { isVisible = (document.visibilityState === 'visible') ? true : false; });
   }
   
   function start()
@@ -79,7 +75,7 @@ const playbackTimer = (() =>
     if (mediaEnded)
     {
       updateCallback(0);
-      dispatch(EVENT.MEDIA_ENDED, getStatus());
+      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED, getStatus());
     }
 
     lastPosSeconds = 0;
@@ -111,7 +107,7 @@ const playbackTimer = (() =>
       if (remainingSeconds <= settings.playback.timeRemainingSeconds)
       {
         playbackControls.blinkPlayPause(true);
-        dispatch(EVENT.MEDIA_TIME_REMAINING, { timeRemainingSeconds: remainingSeconds });
+        playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_TIME_REMAINING, { timeRemainingSeconds: remainingSeconds });
       }
       else
       {

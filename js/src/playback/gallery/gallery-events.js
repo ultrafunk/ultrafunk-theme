@@ -1,0 +1,211 @@
+//
+// Gallery playback events module
+//
+// https://ultrafunk.com
+//
+
+
+import * as debugLogger          from '../../shared/debuglogger.js';
+import { KEY }                   from '../../shared/storage.js';
+import { replaceClass }          from '../../shared/utils.js';
+import { response, settings }    from '../../shared/session-data.js';
+import { EVENT, addListener }    from '../playback-events.js';
+import { updateProgressPercent } from '../playback-controls.js';
+
+import {
+  playerScrollTo,
+  autoplayNavTo,
+} from '../shared-gallery-list.js';
+
+import {
+  showSnackbar,
+  dismissSnackbar,
+} from '../../shared/snackbar.js';
+
+
+export { init };
+
+
+/*************************************************************************************************/
+
+
+const debug = debugLogger.newInstance('gallery-events');
+
+const m = {
+  snackbarId:      0,
+  nowPlayingIcons: null,
+};
+
+const config = {
+  nowPlayingIconsSelector: 'h2.entry-title',
+};
+
+
+// ************************************************************************************************
+// 
+// ************************************************************************************************
+
+function init()
+{
+  debug.log('init()');
+  
+  m.nowPlayingIcons = document.querySelectorAll(config.nowPlayingIconsSelector);
+
+  addListener(EVENT.MEDIA_PLAYING,     mediaPlaying);
+  addListener(EVENT.MEDIA_PAUSED,      mediaPaused);
+  addListener(EVENT.MEDIA_ENDED,       mediaEnded);
+  addListener(EVENT.MEDIA_SHOW,        mediaShow);
+  addListener(EVENT.CONTINUE_AUTOPLAY, continueAutoplay);
+  addListener(EVENT.RESUME_AUTOPLAY,   resumeAutoplay);
+  addListener(EVENT.AUTOPLAY_BLOCKED,  autoplayBlocked);
+  addListener(EVENT.PLAYBACK_BLOCKED,  playbackBlocked);
+  addListener(EVENT.MEDIA_UNAVAILABLE, mediaUnavailable);
+}
+
+
+// ************************************************************************************************
+// 
+// ************************************************************************************************
+
+function mediaPlaying(playbackEvent)
+{
+  debug.log(playbackEvent);
+  
+  // If autoplayBlocked() snackbar is still visible, dismiss it when playback starts
+  dismissSnackbar(m.snackbarId);
+
+  if (playbackEvent.data.numTracks > 1)
+  {
+    const nowPlayingIcon = document.querySelector(`#${playbackEvent.data.trackId} ${config.nowPlayingIconsSelector}`);
+
+    resetNowPlayingIcons(nowPlayingIcon);
+    replaceClass(nowPlayingIcon, 'playing-paused', 'now-playing-icon');
+
+    if (settings.gallery.animateNowPlayingIcon)
+      nowPlayingIcon.classList.add('playing-animate');
+  }
+
+  /*
+  if (settings.mobile.keepScreenOn)
+    screenWakeLock.enable();
+  */
+}
+
+function mediaPaused(playbackEvent)
+{
+  debug.log(playbackEvent);
+
+  if (playbackEvent.data.numTracks > 1)
+    document.querySelector(`#${playbackEvent.data.trackId} ${config.nowPlayingIconsSelector}`).classList.add('playing-paused');
+
+  /*
+  if (settings.mobile.keepScreenOn)
+    screenWakeLock.disable();
+  */
+}
+
+function mediaEnded(playbackEvent)
+{
+  debug.log(playbackEvent);
+
+  updateProgressPercent(0);
+
+  if ((playbackEvent !== null) && (playbackEvent.data.numTracks > 1))
+    resetNowPlayingIcons();
+}
+
+function mediaShow(playbackEvent)
+{
+  debug.log(playbackEvent);
+
+  updateProgressPercent(0);
+
+  if (playbackEvent.data.scrollToMedia)
+    playerScrollTo(playbackEvent.data.trackId);
+}
+
+function continueAutoplay(playbackEvent)
+{
+  debug.log(playbackEvent);
+  autoplayNavTo(response.nextPage, true);
+}
+
+function resumeAutoplay(playbackEvent)
+{
+  const autoplayData = JSON.parse(sessionStorage.getItem(KEY.UF_AUTOPLAY));
+  sessionStorage.removeItem(KEY.UF_AUTOPLAY);
+
+  debug.log(playbackEvent);
+  debug.log(`RESUME_AUTOPLAY: ${(autoplayData !== null) ? JSON.stringify(autoplayData) : 'NO'}`);
+
+  if (autoplayData !== null)
+  {
+    const iframeId = document.getElementById(autoplayData.trackId)?.querySelector('iframe').id;
+    playbackEvent.callback.resumeAutoplay(autoplayData, iframeId);
+  }
+}
+
+function autoplayBlocked(playbackEvent)
+{
+  debug.log(playbackEvent);
+  m.snackbarId = showSnackbar('Autoplay blocked, Play to continue', 0, 'play', () => playbackEvent.callback.togglePlayPause());
+}
+
+function playbackBlocked(playbackEvent)
+{
+  debug.log(playbackEvent);
+  showSnackbar('Unable to play track, skipping to next', 5, 'Stop', () => {}, () => playbackEventErrorTryNext(playbackEvent));
+}
+
+function mediaUnavailable(playbackEvent)
+{
+  debug.log(playbackEvent);
+
+  if (isPremiumTrack(playbackEvent.data.trackId))
+  {
+    showSnackbar('YouTube Premium track, skipping', 5, 'help',  () => (window.location.href = '/channel/premium/'), () => playbackEventErrorTryNext(playbackEvent));
+  }
+  else
+  {
+    showSnackbar('Unable to play track, skipping to next', 5, 'Stop', () => {}, () => playbackEventErrorTryNext(playbackEvent));
+    debugLogger.logErrorOnServer('EVENT_MEDIA_UNAVAILABLE', playbackEvent.data);
+  }
+}
+
+
+// ************************************************************************************************
+// 
+// ************************************************************************************************
+
+function resetNowPlayingIcons(nowPlayingElement)
+{
+  m.nowPlayingIcons.forEach(element =>
+  {
+    if (element !== nowPlayingElement)
+      element.classList.remove('now-playing-icon', 'playing-animate', 'playing-paused');
+  });
+}
+
+function playbackEventErrorTryNext(playbackEvent)
+{
+  if (playbackEvent.data.currentTrack < playbackEvent.data.numTracks)
+  {
+    // Only supports skipping FORWARD for now...
+    playbackEvent.callback.skipToTrack(playbackEvent.data.currentTrack + 1, true);
+  }
+  else
+  {
+    if (response.nextPage !== null)
+      autoplayNavTo(response.nextPage, true);
+  }
+}
+
+function isPremiumTrack(trackId)
+{
+  const postWithId = document.getElementById(trackId);
+
+  if (postWithId !== null)
+    return postWithId.classList.contains('uf_channel-premium');
+  
+  return false;
+}
