@@ -275,7 +275,11 @@ function windowEventBlur()
 function playbackDetailsClick()
 {
   playerScrollTo(m.player.getStatus().trackId);
-  showSnackbarHint('showTrackDetailsHint', '<b>Tip:</b> Click or tap Artist &amp; Title to show current track');
+
+  if (isListPlayer() && settings.list.showUpNextModal)
+    showSnackbarHint('showUpNextModalHint', '<b>Tip:</b> Click or tap Artist &amp; Title to show Up Next queue');
+  else
+    showSnackbarHint('showTrackDetailsHint', '<b>Tip:</b> Click or tap Artist &amp; Title to show current track');
 }
 
 function playbackThumbnailClick()

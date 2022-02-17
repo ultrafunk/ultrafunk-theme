@@ -40,7 +40,7 @@ const galleryPerPageValues       = [...Array(22).keys()].map(i => i + 3);
 const galleryPerPageValueStrings = [...Array(22).keys()].map(i => `${i + 3}`);
 
 const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 4, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 6, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -79,6 +79,7 @@ const settingsSchema = {
   },
   tips: {
     showTrackDetailsHint:          { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
+    showUpNextModalHint:           { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
     showGalleryTrackThumbnailHint: { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
     showListTrackThumbnailHint:    { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
     showTrackTimerHint:            { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
@@ -130,6 +131,7 @@ const defaultSettings = {
   },
   tips: {
     showTrackDetailsHint:          settingsSchema.tips.showTrackDetailsHint.default,
+    showUpNextModalHint:           settingsSchema.tips.showUpNextModalHint.default,
     showGalleryTrackThumbnailHint: settingsSchema.tips.showGalleryTrackThumbnailHint.default,
     showListTrackThumbnailHint:    settingsSchema.tips.showListTrackThumbnailHint.default,
     showTrackTimerHint:            settingsSchema.tips.showTrackTimerHint.default,

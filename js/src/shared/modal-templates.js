@@ -5,8 +5,7 @@
 //
 
 
-import { TRACK_TYPE }   from '../playback/shared-gallery-list.js';
-import { escAttribute } from './utils.js';
+import { TRACK_TYPE } from '../playback/shared-gallery-list.js';
 
 
 export {
@@ -14,7 +13,6 @@ export {
   getTemplateHtml,
   insertSingleChoiceListHtml,
   getModalTrackHtml,
-  getModalTrackHtmlEsc,
 };
 
 
@@ -35,7 +33,7 @@ function getTemplateHtml()
       <div id="${config.id}-container">
         <div class="${config.id}-header">
           <div class="${config.id}-title"></div>
-          <div class="${config.id}-close-icon"><span class="material-icons" title="Dismiss">close</span></div>
+          <div class="${config.id}-close-icon"><span class="material-icons" title="Dismiss (esc)">close</span></div>
         </div>
         <div class="${config.id}-body"></div>
       </div>
@@ -77,9 +75,4 @@ function getModalTrackHtml(element, trackArtist, trackTitle)
         <span class="light-text">${trackTitle}</span>
       </div>
     </div>`;
-}
-
-function getModalTrackHtmlEsc(element, artistAttribute, titleAttribute)
-{
-  return getModalTrackHtml(element, escAttribute(element, artistAttribute), escAttribute(element, titleAttribute));
 }

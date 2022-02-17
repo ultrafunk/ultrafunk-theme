@@ -217,11 +217,12 @@ function header_site_branding() : void
 
 function header_playback_controls() : void
 {
-  $player_type_title = is_list_player() ? 'List Player - Click / Tap for Gallery player (p)' : 'Gallery Player - Click / Tap for List player (p)';
+  $player_type_title    = is_list_player() ? 'List Player - Click / Tap for Gallery player (p)'   : 'Gallery Player - Click / Tap for List player (p)';
+  $player_details_title = is_list_player() ? "Show current track / queued tracks (backquote '|')" : "Show current track (backquote '|')";
   
   ?>
   <div id="playback-controls">
-    <div class="playback-details-control state-disabled" title="Show current track (backquote '|')">
+    <div class="playback-details-control state-disabled" title="<?php echo $player_details_title; ?>">
       <span class="playback-details-artist"></span><br><span class="playback-details-title"></span>
     </div>
     <div class="playback-thumbnail-control state-disabled" title="<?php echo (is_list_player() ? 'Show player' : 'Double click / tap: Toggle Fullscreen (f)'); ?>">

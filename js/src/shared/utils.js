@@ -196,9 +196,6 @@ function navToUrl(destUrl)
   {
     debug.error(`navToUrl() - Invalid destUrl: ${destUrl}`);
     showSnackbar('Error navigating to URL!', 0, 'Reload', () => location.reload());
-  
-  // ToDo: Goto 404 error page instead of showSnackbar()?
-  //window.location.href = '/';
   }
 }
 

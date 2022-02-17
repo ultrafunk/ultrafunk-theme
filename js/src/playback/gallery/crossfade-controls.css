@@ -68,6 +68,11 @@ body.autoplay-off.tracks .crossfade-controls {
   cursor: default;
 }
 
+
+/**************************************************************************************************
+*  Responsive
+***************************************************************************************************/
+
 @media screen and (max-width: 500px) {
 
   .crossfade-preset-control {

@@ -12,7 +12,7 @@ import { settings }     from '../../shared/session-data.js';
 export {
   VOLUME,
   TYPE as CROSSFADE_TYPE,
-  getInstance,
+  crossfade,
 };
 
 
@@ -54,9 +54,9 @@ const config = {
 // Crossfade closure
 // ************************************************************************************************
 
-const getInstance = ((mediaPlayers) =>
+const crossfade = ((galleryPlayers) =>
 {
-  const players       = mediaPlayers;
+  const players       = galleryPlayers;
   let fadeState       = STATE.NONE;
   let intervalId      = -1;
   let fadeOutPlayer   = null;

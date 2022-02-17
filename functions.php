@@ -91,16 +91,17 @@ function ultrafunk_scripts() : void
   }
   else
   {
+    wp_enqueue_script('interaction-script', get_theme_file_uri('/js/src/playback/interaction.js'), [], $version);
+    wp_enqueue_script('index-script', get_theme_file_uri('/js/src/index.js'), [], $version);
+    wp_enqueue_style('ultrafunk-style', get_stylesheet_uri(), [], $version);
     wp_enqueue_style('modal-style', get_theme_file_uri('/js/src/shared/modal.css'), [], $version);
     wp_enqueue_style('snackbar-style', get_theme_file_uri('/js/src/shared/snackbar.css'), [], $version);
     wp_enqueue_style('playback-controls-style', get_theme_file_uri('/js/src/playback/playback-controls.css'), [], $version);
     wp_enqueue_style('crossfade-controls-style', get_theme_file_uri('/js/src/playback/gallery/crossfade-controls.css'), [], $version);
-    wp_enqueue_script('interaction-script', get_theme_file_uri('/js/src/playback/interaction.js'), [], $version);
-    wp_enqueue_script('index-script', get_theme_file_uri('/js/src/index.js'), [], $version);
-    wp_enqueue_style('ultrafunk-style', get_stylesheet_uri(), [], $version);
-    wp_enqueue_style('termlist-style', get_theme_file_uri('/js/src/site/termlist.css'), [], $version);
     wp_enqueue_style('gallery-layout-style', get_theme_file_uri('/js/src/playback/gallery/gallery-player.css'), [], $version);
     wp_enqueue_style('list-player-style', get_theme_file_uri('/js/src/playback/list/list-player.css'), [], $version);
+    wp_enqueue_style('up-next-modal-style', get_theme_file_uri('/js/src/playback/list/up-next-modal.css'), [], $version);
+    wp_enqueue_style('termlist-style', get_theme_file_uri('/js/src/site/termlist.css'), [], $version);
   }
 
   \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Theme\Functions\get_session_vars());

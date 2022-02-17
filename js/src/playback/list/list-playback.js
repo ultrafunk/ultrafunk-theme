@@ -376,19 +376,7 @@ function onYouTubePlayerStateChange(event)
   {
     // eslint-disable-next-line no-undef
     case YT.PlayerState.UNSTARTED:
-      {
-        if (eventLog.ytAutoplayBlocked(m.currentTrackId, 3000))
-        {
-          listControls.setCurrentTrackState(STATE.PAUSED);
-          m.currentSnackbarId = showSnackbar('Autoplay blocked, Play to continue', 0, 'play', () => m.player.play(onYouTubePlayerError));
-        }
-
-        if (m.playerReady === false)
-        {
-          m.playerReady = true;
-          playbackControls.updateProgressPercent(0);
-        }
-      }
+      onYouTubeStateUnstarted();
       break;
 
     // eslint-disable-next-line no-undef
@@ -417,6 +405,26 @@ function onYouTubePlayerStateChange(event)
       playbackTimer.stop(true);
       advanceToNextTrack(settings.playback.autoplay);
       break;
+  }
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function onYouTubeStateUnstarted()
+{
+  if (eventLog.ytAutoplayBlocked(m.currentTrackId, 3000))
+  {
+    listControls.setCurrentTrackState(STATE.PAUSED);
+    m.currentSnackbarId = showSnackbar('Autoplay blocked, Play to continue', 0, 'play', () => m.player.play(onYouTubePlayerError));
+  }
+
+  if (m.playerReady === false)
+  {
+    m.playerReady = true;
+    playbackControls.updateProgressPercent(0);
   }
 }
 

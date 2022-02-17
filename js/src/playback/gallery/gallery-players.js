@@ -21,7 +21,7 @@ const debug = debugLogger.newInstance('gallery-players');
 
 
 // ************************************************************************************************
-// Media players closure
+// Gallery players closure
 // ************************************************************************************************
 
 const galleryPlayers = (() =>
@@ -33,21 +33,19 @@ const galleryPlayers = (() =>
   let playerIndex    = 0;
 
   return {
-  // Objects
     indexMap,
-  // Functions
-    init,
     get crossfade()                 { return crossfade;                       },
-    add,
-    getPlayerIndex()                { return playerIndex;                     },
-    setPlayerIndex(nextPlayerIndex) { playerIndex = nextPlayerIndex;          },
     get current()                   { return mediaPlayers[playerIndex];       },
     get next()                      { return mediaPlayers[playerIndex + 1];   },
+    getPlayerIndex()                { return playerIndex;                     },
+    setPlayerIndex(nextPlayerIndex) { playerIndex = nextPlayerIndex;          },
     getNumTracks()                  { return mediaPlayers.length;             },
     getCurrentTrack()               { return playerIndex + 1;                 },
     playerFromUid(uId)              { return mediaPlayers[indexMap.get(uId)]; },
     trackFromUid(uId)               { return (indexMap.get(uId) + 1);         },
     isCurrent(uId)                  { return (uId === this.current.getUid()); },
+    init,
+    add,
     uIdFromIframeId,
     stop,
     mute,
@@ -62,7 +60,7 @@ const galleryPlayers = (() =>
     debug.log('init()');
 
     playTrack = playTrackCallback;
-    crossfade = crossfadeModule.getInstance(this);
+    crossfade = crossfadeModule.crossfade(this);
 
     addListener(EVENT.MEDIA_PLAYING, () => crossfade.start());
     addListener(EVENT.MEDIA_PAUSED,  () => crossfade.stop());

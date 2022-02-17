@@ -1,0 +1,197 @@
+/*
+* Up Next modal dialog UI - extends modal.css
+*
+* https://ultrafunk.com
+* 
+*/
+
+.modal-type-tracklist {
+  min-height: 717px;
+}
+
+.modal-type-tracklist .modal-header-entry {
+  padding-top: 14px;
+}
+
+.modal-tracklist-entry {
+  font-size: 15px;
+  line-height: 20px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.modal-tracklist-entry:last-child {
+  margin-bottom: 5px;
+}
+
+.modal-tracklist-entry .modal-track-thumbnail::before {
+  font-family: "Material Icons";
+  font-size: 30px;
+  line-height: 40px;
+  content: "\e037";
+  text-align: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-tracklist-entry.playing-track .modal-track-thumbnail::before {
+  content: "\e0c3";
+}
+
+.modal-tracklist-entry:hover .modal-track-thumbnail::before,
+.modal-tracklist-entry .modal-track-thumbnail:hover::before {
+  opacity: 1;
+}
+
+.modal-tracklist-entry .modal-track-thumbnail {
+  margin-right: 10px;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.modal-tracklist-entry .modal-track-thumbnail img {
+  width: 40px;
+  height: 40px;
+}
+
+.modal-tracklist-entry .modal-track-thumbnail.type-youtube img {
+  height: 54px;
+  margin-top: -7px;
+}
+
+.modal-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-track-thumbnail {
+  margin-right: 15px;
+  width: 50px;
+  min-width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: var(--button-border-radius);
+  cursor: pointer;
+}
+
+.modal-track-thumbnail img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  user-select: none;      
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.modal-track-thumbnail.type-youtube img {
+  height: 68px;
+  margin-top: -9px;
+}
+
+.modal-track-artist-title {
+  width: 100%;
+}
+
+.modal-track-buttons {
+  display: inline-flex;
+  margin-right: -10px;
+  margin-left: 15px;
+}
+
+@media not all and (pointer: fine) {
+
+  .modal-track-buttons {
+    display: none;
+  }
+
+}
+
+#modal-item-1 .modal-track-buttons {
+  display: none;
+}
+
+.modal-track-buttons .material-icons {
+  font-size: 30px;
+  margin: 0;
+}
+
+.modal-track-buttons .drag-drop-button {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+}
+
+
+/**************************************************************************************************
+*  Responsive
+***************************************************************************************************/
+
+@media screen and (max-width: 500px) {
+  
+  .modal-type-tracklist {
+    min-height: 550px;
+  }
+
+  .modal-type-tracklist .modal-header-entry {
+    padding-top: 10px;
+  }
+
+  .modal-tracklist-entry {
+    font-size: 14px;
+    line-height: 18px;
+  }
+  
+  .modal-tracklist-entry .modal-track-thumbnail::before {
+    font-size: 26px;
+    line-height: 36px;
+  }
+
+  .modal-tracklist-entry .modal-track-thumbnail {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+  }
+  
+  .modal-tracklist-entry .modal-track-thumbnail img {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .modal-tracklist-entry .modal-track-thumbnail.type-youtube img {
+    height: 48px;
+    margin-top: -6px;
+  }
+
+  .modal-track-thumbnail {
+    margin-right: 12px;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+  }    
+
+  .modal-track-thumbnail img {
+    width: 40px;
+  }
+
+  .modal-track-thumbnail.type-youtube img {
+    height: 54px;
+    margin-top: -7px;
+  }    
+
+  .modal-type-tracklist #modal-item-10 {
+    margin-bottom: 5px;
+  }
+
+  .modal-type-tracklist #modal-item-11,
+  .modal-type-tracklist #modal-item-12 {
+    display: none;
+  }
+
+}

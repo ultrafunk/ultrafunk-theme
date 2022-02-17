@@ -5,12 +5,17 @@
 //
 
 
-import { autoplay }             from '../footer-toggles.js';
-import { settings }             from '../../shared/session-data.js';
-import { isPlaying }            from '../playback-controls.js';
-import { addListener }          from '../../shared/utils.js';
-import { showSnackbar }         from '../../shared/snackbar.js';
-import { getModalTrackHtmlEsc } from '../../shared/modal-templates.js';
+import * as debugLogger from '../../shared/debuglogger.js';
+import { autoplay }     from '../footer-toggles.js';
+import { settings }     from '../../shared/session-data.js';
+import { isPlaying }    from '../playback-controls.js';
+import { TRACK_TYPE }   from '../shared-gallery-list.js';
+import { showSnackbar } from '../../shared/snackbar.js';
+
+import {
+  addListener,
+  escAttribute,
+}  from '../../shared/utils.js';
 
 import {
   queryTrackId,
@@ -38,10 +43,14 @@ export {
 /*************************************************************************************************/
 
 
+const debug = debugLogger.newInstance('up-next-modal');
+
 const m = {
   setCurrentTrack: null,
   modalDialogId:   null,
   upNextModalId:   0,
+  dragStartY:      0,
+  dragEntryId:     null,
 };
 
 
@@ -73,6 +82,7 @@ function showUpNextModal()
     m.upNextModalId = getModalId();
 
     addTitleListener();
+    addDragDropListeners();
   }
   else
   {
@@ -98,6 +108,7 @@ function updateUpNextModal(isPlaying)
     else
     {
       updateModalBody(m.upNextModalId, getEntries(isPlaying));
+      addDragDropListeners();
     }
   }
 }
@@ -118,7 +129,7 @@ function getEntries(isPlaying)
     clickId: trackElement.id,
     class:   `tracklist-entry ${isPlaying ? 'playing-track' : 'cued-track'}`,
     title:   `${isPlaying ? 'Go To Track' : 'Play Track'}`,
-    content: getModalTrackHtmlEsc(trackElement, 'data-track-artist', 'data-track-title'),
+    content: getUpNextTrackHtml(trackElement, 'data-track-artist', 'data-track-title'),
   });
 
   modalEntries.push({ class: 'header-entry', content: 'Up Next' });
@@ -133,8 +144,8 @@ function getEntries(isPlaying)
     modalEntries.push({
       clickId: trackElement.id,
       class:   'tracklist-entry',
-      title:   'Play Track',
-      content: getModalTrackHtmlEsc(trackElement, 'data-track-artist', 'data-track-title'),
+      title:   'Click: Play Track / Drag: Move Track',
+      content: getUpNextTrackHtml(trackElement, 'data-track-artist', 'data-track-title', true),
     });
   }
 
@@ -148,4 +159,79 @@ function addTitleListener()
     autoplay.toggle();
     event.target.closest('span').innerHTML = `Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b>`;
   });
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function addDragDropListeners()
+{
+  document.querySelectorAll('.modal-tracklist-entry')?.forEach((element) =>
+  {
+    if (element.id !== 'modal-item-1')
+    {
+      element.addEventListener('dragstart', dragStart);
+      element.addEventListener('dragover',  dragOver);
+      element.addEventListener('drop',      dragDrop);
+    }
+  });
+}
+
+function dragStart(event)
+{
+  m.dragStartY  = event.clientY;
+  m.dragEntryId = event.target.closest('div.modal-tracklist-entry').id;
+  event.dataTransfer.effectAllowed = 'move';
+}
+
+function dragOver(event)
+{
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'move';
+  return false;
+}
+
+function dragDrop(event)
+{
+  event.preventDefault();
+
+  const insertPos = (event.clientY  > m.dragStartY) ? 'afterend' : 'beforebegin';
+  
+  // Modal tracks drag & drop reorder
+  const dragModalTrack = document.getElementById(m.dragEntryId);
+  const dropModalTrack = event.target.closest('div.modal-tracklist-entry');
+  dropModalTrack.insertAdjacentElement(insertPos, dragModalTrack);
+
+  // List player tracks drag & drop reorder = sync track lists
+  const dragListTrack = document.getElementById(dragModalTrack.getAttribute('data-click-id'));
+  const dropListTrack = document.getElementById(dropModalTrack.getAttribute('data-click-id'));
+  dropListTrack.insertAdjacentElement(insertPos, dragListTrack);
+
+  return false;
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function getUpNextTrackHtml(element, trackArtistAttr, trackTitleAttr, isDraggable = false)
+{
+  const trackTypeClass = (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE) ? 'type-youtube' : 'type-soundcloud';
+
+  return `
+    <div class="modal-track" ${isDraggable ? 'draggable="true"' : ''}>
+      <div class="modal-track-thumbnail ${trackTypeClass}">
+        <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">
+      </div>
+      <div class="modal-track-artist-title text-nowrap-ellipsis">
+        <span><b>${escAttribute(element, trackArtistAttr)}</b></span><br>
+        <span class="light-text">${escAttribute(element, trackTitleAttr)}</span>
+      </div>
+      <div class="modal-track-buttons">
+        <div class="drag-drop-button" title="Drag to Move Track"><span class="material-icons">drag_handle</span></div>
+      </div>
+    </div>`;
 }
