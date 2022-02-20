@@ -15,7 +15,7 @@ import { showSnackbar } from '../../shared/snackbar.js';
 import {
   addListener,
   escAttribute,
-}  from '../../shared/utils.js';
+} from '../../shared/utils.js';
 
 import {
   queryTrackId,
@@ -63,8 +63,33 @@ function init(setCurrentTrackFunc)
   m.setCurrentTrack = setCurrentTrackFunc;
 }
 
+function loadDragDropTouch()
+{
+  if (('ontouchstart' in window) && (document.getElementById('drag-drop-touch') === null))
+  {
+    debug.log('Loading drag-drop-touch.js...');
+
+    const tag = document.createElement('script');
+    tag.type  = 'text/javascript';
+    tag.id    = 'drag-drop-touch';
+    tag.src   = debug.isDebug()
+                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.40.4'
+                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.40.4';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  }
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
 function showUpNextModal()
 {
+  // Only load this dependency IF we actually need it...
+  loadDragDropTouch();
+
   const modalEntries = getEntries(isPlaying());
 
   if (modalEntries.length > 2)
@@ -200,14 +225,14 @@ function dragDrop(event)
   const insertPos = (event.clientY  > m.dragStartY) ? 'afterend' : 'beforebegin';
   
   // Modal tracks drag & drop reorder
-  const dragModalTrack = document.getElementById(m.dragEntryId);
-  const dropModalTrack = event.target.closest('div.modal-tracklist-entry');
-  dropModalTrack.insertAdjacentElement(insertPos, dragModalTrack);
+  const modalDragSource = document.getElementById(m.dragEntryId);
+  const modalDropTarget = event.target.closest('div.modal-tracklist-entry');
+  modalDropTarget.insertAdjacentElement(insertPos, modalDragSource);
 
   // List player tracks drag & drop reorder = sync track lists
-  const dragListTrack = document.getElementById(dragModalTrack.getAttribute('data-click-id'));
-  const dropListTrack = document.getElementById(dropModalTrack.getAttribute('data-click-id'));
-  dropListTrack.insertAdjacentElement(insertPos, dragListTrack);
+  const listTrackSource = document.getElementById(modalDragSource.getAttribute('data-click-id'));
+  const listTrackTarget = document.getElementById(modalDropTarget.getAttribute('data-click-id'));
+  listTrackTarget.insertAdjacentElement(insertPos, listTrackSource);
 
   return false;
 }

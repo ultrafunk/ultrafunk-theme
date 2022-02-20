@@ -218,7 +218,7 @@ function header_site_branding() : void
 function header_playback_controls() : void
 {
   $player_type_title    = is_list_player() ? 'List Player - Click / Tap for Gallery player (p)'   : 'Gallery Player - Click / Tap for List player (p)';
-  $player_details_title = is_list_player() ? "Show current track / queued tracks (backquote '|')" : "Show current track (backquote '|')";
+  $player_details_title = is_list_player() ? "Show current track / Queued tracks (backquote '|')" : "Show current track (backquote '|')";
   
   ?>
   <div id="playback-controls">

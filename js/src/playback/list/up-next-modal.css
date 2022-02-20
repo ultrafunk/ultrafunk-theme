@@ -105,14 +105,6 @@
   margin-left: 15px;
 }
 
-@media not all and (pointer: fine) {
-
-  .modal-track-buttons {
-    display: none;
-  }
-
-}
-
 #modal-item-1 .modal-track-buttons {
   display: none;
 }
@@ -146,6 +138,10 @@
   .modal-tracklist-entry {
     font-size: 14px;
     line-height: 18px;
+  }
+  
+  .modal-tracklist-entry:nth-of-type(10) {
+    margin-bottom: 5px;
   }
   
   .modal-tracklist-entry .modal-track-thumbnail::before {
@@ -185,8 +181,18 @@
     margin-top: -7px;
   }    
 
-  .modal-type-tracklist #modal-item-10 {
-    margin-bottom: 5px;
+  .modal-track-buttons {
+    margin-right: -5px;
+    margin-left: 10px;
+  }
+  
+  .modal-track-buttons .material-icons {
+    font-size: 26px;
+  }
+  
+  .modal-track-buttons .drag-drop-button {
+    width: 26px;
+    height: 26px;
   }
 
   .modal-type-tracklist #modal-item-11,
