@@ -73,8 +73,8 @@ function loadDragDropTouch()
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
     tag.src   = debug.isDebug()
-                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.40.4'
-                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.40.4';
+                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.40.5'
+                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.40.5';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
@@ -102,6 +102,15 @@ function showUpNextModal()
         getCurrentTrackElement().scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
       else
         m.setCurrentTrack(nextTrackId, true, false);
+    },
+    (event) => 
+    {
+      if (event.target.closest('#modal-item-1'))
+        return true;
+      else if (event.target.classList.contains('modal-track-thumbnail'))
+        return true;
+
+      return false;
     });
 
     m.upNextModalId = getModalId();
@@ -169,7 +178,6 @@ function getEntries(isPlaying)
     modalEntries.push({
       clickId: trackElement.id,
       class:   'tracklist-entry',
-      title:   'Click: Play Track / Drag: Move Track',
       content: getUpNextTrackHtml(trackElement, 'data-track-artist', 'data-track-title', true),
     });
   }
@@ -197,11 +205,19 @@ function addDragDropListeners()
   {
     if (element.id !== 'modal-item-1')
     {
+      element.addEventListener('mousedown', mouseDown);
       element.addEventListener('dragstart', dragStart);
       element.addEventListener('dragover',  dragOver);
       element.addEventListener('drop',      dragDrop);
     }
   });
+}
+
+// Disable drag & drop for track play button (modal-track-thumbnail)
+function mouseDown(event)
+{
+  if (event.target.classList.contains('modal-track-thumbnail'))
+    event.preventDefault();
 }
 
 function dragStart(event)
@@ -248,15 +264,21 @@ function getUpNextTrackHtml(element, trackArtistAttr, trackTitleAttr, isDraggabl
 
   return `
     <div class="modal-track" ${isDraggable ? 'draggable="true"' : ''}>
-      <div class="modal-track-thumbnail ${trackTypeClass}">
+      <div class="modal-track-thumbnail ${trackTypeClass}" ${isDraggable ? 'title="Click to Play Track"' : ''}">
         <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">
       </div>
-      <div class="modal-track-artist-title text-nowrap-ellipsis">
+      <div class="modal-track-artist-title text-nowrap-ellipsis" ${isDraggable ? 'title="Drag to Move Track"' : ''}">
         <span><b>${escAttribute(element, trackArtistAttr)}</b></span><br>
         <span class="light-text">${escAttribute(element, trackTitleAttr)}</span>
       </div>
-      <div class="modal-track-buttons">
-        <div class="drag-drop-button" title="Drag to Move Track"><span class="material-icons">drag_handle</span></div>
-      </div>
+      ${isDraggable ? getModalTrackButtons() : ''}
+    </div>`;
+}
+
+function getModalTrackButtons()
+{
+  return `
+    <div class="modal-track-buttons">
+      <div class="drag-drop-button" title="Drag to Move Track"><span class="material-icons">drag_handle</span></div>
     </div>`;
 }

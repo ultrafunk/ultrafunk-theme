@@ -31,8 +31,9 @@ export {
 const debug = debugLogger.newInstance('modal');
 
 const m = {
-  selectedClick: null,
-  modalId:       0,
+  onEntryClicked: null,
+  onClickClose:   null,
+  modalId:        0,
 };
 
 const elements = {
@@ -46,11 +47,12 @@ const elements = {
 //
 // ************************************************************************************************
 
-function showModal(typeString, title, singleChoiceList, selectedClickCallback)
+function showModal(typeString, title, singleChoiceList = [], onEntryClickedCallback = () => {}, onClickCloseCallback = () => true)
 {
   init();
   
-  m.selectedClick = selectedClickCallback;
+  m.onEntryClicked = onEntryClickedCallback;
+  m.onClickClose   = onClickCloseCallback;
   setSingleChoiceList(singleChoiceList);
 
   elements.container.classList = `modal-type-${typeString}`;
@@ -145,10 +147,13 @@ function setSingleChoiceList(singleChoiceList)
   });
 }
 
-function singleChoiceListClick()
+function singleChoiceListClick(event)
 {
-  closeModal();
-  setTimeout(() => m.selectedClick(this.getAttribute('data-click-id')), 150);
+  if (m.onClickClose(event) === true)
+  {
+    closeModal();
+    setTimeout(() => m.onEntryClicked(this.getAttribute('data-click-id'), event), 150);
+  }
 }
 
 function keyDown(event)
