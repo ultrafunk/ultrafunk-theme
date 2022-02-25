@@ -31,9 +31,10 @@ export {
 const debug = debugLogger.newInstance('modal');
 
 const m = {
-  onEntryClicked: null,
-  onClickClose:   null,
-  modalId:        0,
+  onEntryClicked:   null,
+  onClickClose:     null,
+  modalId:          0,
+  isTouchDraggable: false,
 };
 
 const elements = {
@@ -76,6 +77,8 @@ function isShowingModal(showingModalId = -1)
 
 function closeModal()
 {
+  document.body.removeEventListener('touchmove', blockTouchScroll, { passive: false });
+  document.body.removeEventListener('touchstart', setIsTouchDraggable);
   elements.overlay.removeEventListener('keydown', keyDown);
   elements.overlay.classList.replace('show', 'hide');
 }
@@ -164,11 +167,29 @@ function keyDown(event)
     closeModal();
 }
 
-function disablePageScrolling(disable)
+function disablePageScrolling(disableScrolling)
 {
   const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-//document.documentElement.style.touchAction  = disable ? 'none'   : '';
-  document.documentElement.style.overflowY    = disable ? 'hidden' : '';
-  document.documentElement.style.paddingRight = disable ? `${scrollbarWidth}px` : '';
-  document.getElementById('site-header').style.paddingRight = disable ? `${scrollbarWidth}px` : '';
+  
+  document.documentElement.style.overflowY    = disableScrolling ? 'hidden' : '';
+  document.documentElement.style.paddingRight = disableScrolling ? `${scrollbarWidth}px` : '';
+  document.getElementById('site-header').style.paddingRight = disableScrolling ? `${scrollbarWidth}px` : '';
+
+  if (disableScrolling && ('ontouchstart' in window))
+  {
+    document.body.addEventListener('touchstart', setIsTouchDraggable);
+    document.body.addEventListener('touchmove',  blockTouchScroll, { passive: false });
+  }
+}
+
+function setIsTouchDraggable(event)
+{
+  const draggableAttr = event.target.closest('.modal-track')?.getAttribute('draggable');
+  m.isTouchDraggable  = (draggableAttr === 'true') ? true : false;
+}
+
+function blockTouchScroll(event)
+{
+  if (m.isTouchDraggable === false)
+    event.preventDefault();
 }
