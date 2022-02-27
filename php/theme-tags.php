@@ -89,7 +89,7 @@ function pre_wp_head() : void
 
 function meta_description() : void
 {
-  $meta_description = '<meta name="description" content="Ultrafunk is a free and open interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres you may like." />' . PHP_EOL;
+  $meta_description = '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
 
   if (is_front_page() && !is_paged() && !is_shuffle(PLAYER_TYPE::GALLERY))
     echo $meta_description;
@@ -163,9 +163,9 @@ function body_attributes() : void
   else if (is_search())
     $classes[] = 'search' . (($wp_query->have_posts() === false) ? ' no-matches' : '');
   else if (is_termlist())
-    $classes[] = 'termlist'; // . \array_key_last(get_request_params()['request_type']);
+    $classes[] = 'termlist';
   else if (is_list_player())
-    $classes[] = 'list-player'; // . \array_key_last(get_request_params()['request_type']);
+    $classes[] = 'list-player';
   else if (is_tax('uf_artist'))
     $classes[] = 'artist';
   else if (is_tax('uf_channel'))
@@ -422,22 +422,6 @@ function content_pagination() : void
   
   echo $title_pagination;
 }
-
-/*
-function gallery_layout_tag_start()
-{
-  $term_type = '';
-  $term_id   = '';
-  
-  if (get_queried_object() !== null)
-  {
-    $term_type = (get_queried_object()->taxonomy === 'uf_channel') ? 'channels' : 'artists';
-    $term_id   = get_queried_object()->term_id;
-  }
-
-  ?><gallery-layout data-term-type="<?php echo $term_type; ?>" data-term-id="<?php echo $term_id; ?>"><?php
-}
-*/
 
 function entry_title() : void
 {

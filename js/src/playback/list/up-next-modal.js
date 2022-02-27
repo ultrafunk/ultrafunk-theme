@@ -73,8 +73,8 @@ function loadDragDropTouch()
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
     tag.src   = debug.isDebug()
-                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.40.6'
-                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.40.6';
+                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.40.7'
+                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.40.7';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
@@ -124,11 +124,11 @@ function showUpNextModal()
   }
 }
 
-function updateUpNextModal(isPlaying)
+function updateUpNextModal(isPlayingTrack)
 {
   if (isShowingModal(m.upNextModalId))
   {
-    updateModalTitle(m.upNextModalId, getTitle(isPlaying));
+    updateModalTitle(m.upNextModalId, getTitle(isPlayingTrack));
     addTitleListener();
   
     const modalEntry = getModalEntry(1);
@@ -136,33 +136,33 @@ function updateUpNextModal(isPlaying)
     if (modalEntry.getAttribute('data-click-id') === getCurrentTrackElement().id)
     {
       modalEntry.classList.remove('playing-track', 'cued-track');
-      modalEntry.classList.add(`${isPlaying ? 'playing-track' : 'cued-track'}`);
-      modalEntry.title = `${isPlaying ? 'Go To Track' : 'Play Track'}`;
+      modalEntry.classList.add(`${isPlayingTrack ? 'playing-track' : 'cued-track'}`);
+      modalEntry.title = `${isPlayingTrack ? 'Go To Track' : 'Play Track'}`;
     }
     else
     {
-      updateModalBody(m.upNextModalId, getEntries(isPlaying));
+      updateModalBody(m.upNextModalId, getEntries(isPlayingTrack));
       addDragDropListeners();
     }
   }
 }
 
-function getTitle(isPlaying)
+function getTitle(isPlayingTrack)
 {
-  return `${isPlaying ? 'Playing' : 'Cued'}
+  return `${isPlayingTrack ? 'Playing' : 'Cued'}
             <span class="light-text lowercase-text toggle-element" title="Toggle Autoplay">
             Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b></span>`;
 }
 
-function getEntries(isPlaying)
+function getEntries(isPlayingTrack)
 {
   const modalEntries = [];
   let trackElement   = getCurrentTrackElement();
 
   modalEntries.push({
     clickId: trackElement.id,
-    class:   `tracklist-entry ${isPlaying ? 'playing-track' : 'cued-track'}`,
-    title:   `${isPlaying ? 'Go To Track' : 'Play Track'}`,
+    class:   `tracklist-entry ${isPlayingTrack ? 'playing-track' : 'cued-track'}`,
+    title:   `${isPlayingTrack ? 'Go To Track' : 'Play Track'}`,
     content: getUpNextTrackHtml(trackElement, 'data-track-artist', 'data-track-title'),
   });
 

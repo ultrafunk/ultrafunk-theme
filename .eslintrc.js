@@ -11,6 +11,8 @@ module.exports = {
     "prefer-const": ["error"],
     "default-param-last": ["error"],
     "no-label-var": ["error"],
+    "no-shadow": ["error"],
+    "no-duplicate-imports": ["error"]
   },
   "env": {
     "browser": true,

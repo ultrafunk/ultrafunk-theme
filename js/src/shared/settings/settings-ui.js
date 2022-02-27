@@ -5,16 +5,16 @@
 //
 
 
-import * as debugLogger from '../debuglogger.js?ver=1.40.6';
-import { addListener }  from '../utils.js?ver=1.40.6';
-import { showSnackbar } from '../snackbar.js?ver=1.40.6';
+import * as debugLogger from '../debuglogger.js?ver=1.40.7';
+import { addListener }  from '../utils.js?ver=1.40.7';
+import { showSnackbar } from '../snackbar.js?ver=1.40.7';
 
 import {
   KEY,
   deleteCookie,
   readJson,
   writeJson,
-} from '../storage.js?ver=1.40.6';
+} from '../storage.js?ver=1.40.7';
 
 import {
   TYPE_INTEGER,
@@ -22,7 +22,7 @@ import {
   TYPE_STRING,
   settingsSchema,
   defaultSettings,
-} from './settings.js?ver=1.40.6';
+} from './settings.js?ver=1.40.7';
 
 
 /*************************************************************************************************/
@@ -41,7 +41,7 @@ const config = {
   updatedEvent: new Event('settingsUpdated'),
 };
 
-const settings = [
+const settingsSections = [
   { name: 'Playback',       id: 'playback', schema: settingsSchema.playback },
   { name: 'List Player',    id: 'list',     schema: settingsSchema.list     },
   { name: 'Gallery Player', id: 'gallery',  schema: settingsSchema.gallery  },
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () =>
 
     if (m.settings !== null)
     {
-      settings.forEach(entry => setCurrentSettings(m.settings[entry.id], entry.schema));
+      settingsSections.forEach(entry => setCurrentSettings(m.settings[entry.id], entry.schema));
 
       insertSettingsHtml();
       m.container.style.opacity = 1;
@@ -185,10 +185,10 @@ function getValueStringsIndex(schemaEntry, findValue)
 
 function insertSettingsHtml()
 {
-  let html = `\n<h3>${settings[0].name}</h3>\n<table id="${settings[0].id}-settings" class="settings">\n<tbody>`;
-  Object.entries(settings[0].schema).forEach(row => (html += addTableRow(settings[0].id, row)));
+  let html = `\n<h3>${settingsSections[0].name}</h3>\n<table id="${settingsSections[0].id}-settings" class="settings">\n<tbody>`;
+  Object.entries(settingsSections[0].schema).forEach(row => (html += addTableRow(settingsSections[0].id, row)));
 
-  settings.slice(1).forEach(entry =>
+  settingsSections.slice(1).forEach(entry =>
   {
     html += `\n</tbody>\n</table>\n<h3>${entry.name}</h3>\n<table id="${entry.id}-settings" class="settings">\n<tbody>`;
     Object.entries(entry.schema).forEach(row => (html += addTableRow(entry.id, row)));
@@ -270,8 +270,8 @@ function settingClicked(event)
   if (clickedSetting !== null)
   {
     const settingsId = clickedSetting.id.split(':')[0];
-    const index      = settings.findIndex(entry => (entry.id === settingsId));
-    updateRowData(clickedSetting, m.settings[settings[index].id], settings[index].schema);
+    const index      = settingsSections.findIndex(entry => (entry.id === settingsId));
+    updateRowData(clickedSetting, m.settings[settingsSections[index].id], settingsSections[index].schema);
   }
 }
 
@@ -283,7 +283,7 @@ function settingsSaveClick()
 
 function settingsResetClick()
 {
-  settings.forEach(entry =>
+  settingsSections.forEach(entry =>
   {
     setDefaultSettings(m.settings[entry.id], entry.schema);
     updateSettingsDOM(m.settings[entry.id], entry.schema, entry.id);

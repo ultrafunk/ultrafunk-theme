@@ -84,11 +84,6 @@ function mediaPlaying(playbackEvent)
     if (settings.gallery.animateNowPlayingIcon)
       nowPlayingIcon.classList.add('playing-animate');
   }
-
-  /*
-  if (settings.mobile.keepScreenOn)
-    screenWakeLock.enable();
-  */
 }
 
 function mediaPaused(playbackEvent)
@@ -97,11 +92,6 @@ function mediaPaused(playbackEvent)
 
   if (playbackEvent.data.numTracks > 1)
     document.querySelector(`#${playbackEvent.data.trackId} ${config.nowPlayingIconsSelector}`).classList.add('playing-paused');
-
-  /*
-  if (settings.mobile.keepScreenOn)
-    screenWakeLock.disable();
-  */
 }
 
 function mediaEnded(playbackEvent)

@@ -353,9 +353,9 @@ const fullscreenElement = (() =>
     document.dispatchEvent(fseEvent);
   }
 
-  function enter(fullscreenElement)
+  function enter(element)
   {
-    fullscreenElement.requestFullscreen();
+    element.requestFullscreen();
   }
   
   function exit()
@@ -367,10 +367,10 @@ const fullscreenElement = (() =>
     }
   }
 
-  function toggle(fullscreenElement)
+  function toggle(element)
   {
     if (fseTarget === null)
-      enter(fullscreenElement);
+      enter(element);
     else
       exit();
   }

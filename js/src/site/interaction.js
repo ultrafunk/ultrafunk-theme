@@ -169,20 +169,20 @@ function trackThumbnailClick(modalId, artistTitle)
 // Site theme and layout settings helpers
 // ************************************************************************************************
 
-function getCurrentSetting(settings, currentId, defaultSetting)
+function getCurrentSetting(settingsObject, currentId, defaultSetting)
 {
-  const setting = Object.values(settings).find(value => (value.id === currentId));
+  const setting = Object.values(settingsObject).find(value => (value.id === currentId));
   return ((setting !== undefined) ? setting : defaultSetting);
 }
 
-function getNextSetting(settings, currentSetting)
+function getNextSetting(settingsObject, currentSetting)
 {
-  const index = Object.values(settings).findIndex(value => (value.id === currentSetting.id));
-  const keys  = Object.keys(settings);
+  const index = Object.values(settingsObject).findIndex(value => (value.id === currentSetting.id));
+  const keys  = Object.keys(settingsObject);
   
   return (((index + 1) < keys.length)
-           ? settings[keys[index + 1]]
-           : settings[keys[0]]);
+           ? settingsObject[keys[index + 1]]
+           : settingsObject[keys[0]]);
 }
 
 

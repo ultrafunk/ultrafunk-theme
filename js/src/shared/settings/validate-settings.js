@@ -35,24 +35,24 @@ function validateSettings(settings, schema)
 
   return invalidCount;
 
-  function validateRecursive(settings, schema)
+  function validateRecursive(settingsObject, schemaObject)
   {
-    for (const key in settings)
+    for (const key in settingsObject)
     {
-      if (settings && schema && (typeof settings[key] === 'object') && (typeof schema[key] === 'object'))
+      if (settingsObject && schemaObject && (typeof settingsObject[key] === 'object') && (typeof schemaObject[key] === 'object'))
       {
-        validateRecursive(settings[key], schema[key]);
+        validateRecursive(settingsObject[key], schemaObject[key]);
       }
       else
       {
-        if (schema[key] !== undefined)
+        if (schemaObject[key] !== undefined)
         {
-          if (isEntryInvalid(settings, schema[key], settings[key], key))
+          if (isEntryInvalid(settingsObject, schemaObject[key], settingsObject[key], key))
             invalidCount++;
         }
         else
         {
-          throw(`'${key}' ${(typeof settings[key] === 'object') ? 'object' : 'property'} is not in schema`);
+          throw(`'${key}' ${(typeof settingsObject[key] === 'object') ? 'object' : 'property'} is not in schema`);
         }
       }
     }

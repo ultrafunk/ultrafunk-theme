@@ -45,11 +45,6 @@ const debug = debugLogger.newInstance('playback-controls');
 const m     = { players: {} };
 const ctrl  = {};
 
-// DEBUG START
-// let playState  = 0;
-// let pauseState = 0;
-// DEBUG STOP
-
 
 // ************************************************************************************************
 // Init and make ready all controls
@@ -299,8 +294,6 @@ function setLoadState()
 
 function setPlayState()
 {
-//debug.log(`setPlayState():  ${++playState}`);
-
   ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
   ctrl.playPause.setState(STATE.PLAYING);
   ctrl.playPause.icon.textContent = 'pause_circle_filled';
@@ -311,8 +304,6 @@ function setPlayState()
 
 function setPauseState()
 {
-//debug.log(`setPauseState(): ${++pauseState}`);
-
   ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
   ctrl.playPause.setState(STATE.PAUSED);
   ctrl.playPause.icon.textContent = 'play_circle_filled';

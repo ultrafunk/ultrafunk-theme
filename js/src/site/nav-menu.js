@@ -23,7 +23,7 @@ export { navMenu };
 const navMenu = (() =>
 {
   const observer = new ResizeObserver(observerCallback);
-  let siteHeader = null, navMenu = null, modalOverlay = null;
+  let siteHeader = null, navMenuOuter = null, modalOverlay = null;
   let isVisible = false;
 
   window.addEventListener('load', () =>
@@ -33,8 +33,8 @@ const navMenu = (() =>
   });
 
   return {
-    isVisible()   { return isVisible;           },
-    scrolledTop() { navMenu.style.display = ''; },
+    isVisible()   { return isVisible;                },
+    scrolledTop() { navMenuOuter.style.display = ''; },
     init,
     toggle,
   };
@@ -42,13 +42,13 @@ const navMenu = (() =>
   function init()
   {
     siteHeader   = document.getElementById('site-header');
-    navMenu      = document.querySelector('#site-navigation .nav-menu-outer');
+    navMenuOuter = document.querySelector('#site-navigation .nav-menu-outer');
     modalOverlay = document.getElementById('nav-menu-modal-overlay');
 
     utils.addListenerAll('.nav-menu-toggle', 'click', toggle);
     modalOverlay.addEventListener('click', toggle);
     modalOverlay.addEventListener('transitionend', transitionEnd);
-    observer.observe(navMenu.querySelector('.menu-primary-menu-container'));
+    observer.observe(navMenuOuter.querySelector('.menu-primary-menu-container'));
   }
 
   function menuClickUsePrefPlayer(event)
@@ -70,9 +70,9 @@ const navMenu = (() =>
     if (siteHeader.classList.contains('sticky-nav-up'))
     {
       if (isVisible)
-        navMenu.style.display = 'none';
+        navMenuOuter.style.display = 'none';
       else
-        navMenu.style.display = 'flex';
+        navMenuOuter.style.display = 'flex';
     }
     else
     {
@@ -89,16 +89,10 @@ const navMenu = (() =>
     {
       modalOverlay.className = '';
       modalOverlay.classList.add('show');
-      /*
-      siteHeader.classList.add('no-backdrop-blur');
-      */
       setTimeout(() => modalOverlay.classList.add('fadein'), 50);
     }
     else
     {
-      /*
-      siteHeader.classList.remove('no-backdrop-blur');
-      */
       modalOverlay.classList.add('fadeout');
     }
   }
@@ -107,12 +101,8 @@ const navMenu = (() =>
   {
     if (isVisible === false)
     {
-      modalOverlay.className = '';
-      navMenu.style.display  = '';
-      /*
-      //ToDo: This is probably not needed...?
-      siteHeader.classList.remove('no-backdrop-blur');
-      */
+      modalOverlay.className     = '';
+      navMenuOuter.style.display = '';
     }
   }
 })();
