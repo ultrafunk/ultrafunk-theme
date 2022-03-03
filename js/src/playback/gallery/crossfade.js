@@ -9,9 +9,6 @@ import * as debugLogger from '../../shared/debuglogger.js';
 import { settings }     from '../../shared/session-data.js';
 
 
-export { TYPE as CROSSFADE_TYPE };
-
-
 /*************************************************************************************************/
 
 
@@ -27,6 +24,8 @@ const TYPE = {
   AUTO:  1,
   TRACK: 2,
 };
+
+export { TYPE as CROSSFADE_TYPE };
 
 const CURVE = {
   NONE:        0,

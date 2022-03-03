@@ -132,7 +132,7 @@ function documentEventKeyDown(event)
       case 'L':
         if (searchNotFocused() && notSettingsPage())
         {
-          interaction.mProps.galleryLayout.toggle(event);
+          interaction.galleryLayout.toggle(event);
           resize.trigger();
         }
         break;
@@ -149,7 +149,7 @@ function documentEventKeyDown(event)
       case 'T':
         if (searchNotFocused() && notSettingsPage())
         {
-          interaction.mProps.siteTheme.toggle(event);
+          interaction.siteTheme.toggle(event);
         }
         break;
 

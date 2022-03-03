@@ -5,19 +5,15 @@
 //
 
 
+const INTEGER = 1;
+const BOOLEAN = 2;
+const STRING  = 3;
+
 export {
   INTEGER as TYPE_INTEGER,
   BOOLEAN as TYPE_BOOLEAN,
   STRING  as TYPE_STRING,
 };
-
-
-/*************************************************************************************************/
-
-
-const INTEGER = 1;
-const BOOLEAN = 2;
-const STRING  = 3;
 
 export const PREF_PLAYER = {
   NONE:    0,

@@ -19,20 +19,14 @@ import {
 } from './share-modal.js';
 
 
-export { m as mProps };
-
-
 /*************************************************************************************************/
 
 
-const debug         = debugLogger.newInstance('site-interaction');
+const debug = debugLogger.newInstance('site-interaction');
 const htmlClassList = document.documentElement.classList;
 
-// Only const top level variables in modules + m.prop namespace for clarity
-const m = {
-  siteTheme:     null,
-  galleryLayout: null,
-};
+export let siteTheme     = {};
+export let galleryLayout = {};
 
 
 // ************************************************************************************************
@@ -43,8 +37,8 @@ export function init()
 {
   debug.log('init()');
 
-  m.siteTheme     = new SiteThemeToggle('footer-site-theme-toggle');
-  m.galleryLayout = new GalleryLayoutToggle('footer-gallery-layout-toggle');
+  siteTheme     = new SiteThemeToggle('footer-site-theme-toggle');
+  galleryLayout = new GalleryLayoutToggle('footer-gallery-layout-toggle');
 
   utils.addListenerAll('.entry-meta-controls .track-share-control', 'click', (event) => sharePlayClick(event.target));
   document.getElementById('tracklist')?.addEventListener( 'click', listPlayerClick);
@@ -59,8 +53,8 @@ export function init()
 
 export function settingsUpdated()
 {
-  m.siteTheme.setCurrent();
-  m.galleryLayout.setCurrent();
+  siteTheme.setCurrent();
+  galleryLayout.setCurrent();
 }
 
 

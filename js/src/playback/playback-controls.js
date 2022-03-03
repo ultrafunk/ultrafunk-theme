@@ -166,7 +166,7 @@ export function updateTimerAndProgress(positionMilliseconds, positionSeconds, du
     updateProgressBar(positionMilliseconds / (durationSeconds * 1000));
 }
 
-export function progressSeekClick(event)
+function progressSeekClick(event)
 {
   if (ctrl.timer.durationSeconds > 0)
   {
