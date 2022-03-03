@@ -9,11 +9,7 @@ import * as debugLogger from '../../shared/debuglogger.js';
 import { settings }     from '../../shared/session-data.js';
 
 
-export {
-  VOLUME,
-  TYPE as CROSSFADE_TYPE,
-  crossfade,
-};
+export { TYPE as CROSSFADE_TYPE };
 
 
 /*************************************************************************************************/
@@ -21,7 +17,7 @@ export {
 
 const debug = debugLogger.newInstance('crossfade');
 
-const VOLUME = {
+export const VOLUME = {
   MIN:   0,
   MAX: 100,
 };
@@ -54,7 +50,7 @@ const config = {
 // Crossfade closure
 // ************************************************************************************************
 
-const crossfade = ((galleryPlayers) =>
+export const crossfade = ((galleryPlayers) =>
 {
   const players       = galleryPlayers;
   let fadeState       = STATE.NONE;

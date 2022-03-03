@@ -5,15 +5,6 @@
 //
 
 
-export {
-  newInstance,
-  logErrorOnServer,
-};
-
-
-/*************************************************************************************************/
-
-
 const DEBUG = false;
 
 
@@ -81,7 +72,7 @@ class ProdBuild extends DebugLog
 // DebugLog class support functions
 // ************************************************************************************************
 
-function newInstance(moduleName)
+export function newInstance(moduleName)
 {
   return ((DEBUG === true)
            ? new DevBuild(moduleName)
@@ -95,7 +86,7 @@ function padString(string, maxLength, padChar)
            : string.padEnd(maxLength, padChar));
 }
 
-function logErrorOnServer(errorCategory, errorData)
+export function logErrorOnServer(errorCategory, errorData)
 {
   const eventAction = errorData.mediaUrl + ' | ' + errorData.mediaTitle;
   

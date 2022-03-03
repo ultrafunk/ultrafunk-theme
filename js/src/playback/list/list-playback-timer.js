@@ -10,9 +10,6 @@ import * as playbackEvents   from '../playback-events.js';
 import { settings }          from '../../shared/session-data.js';
 
 
-export { playbackTimer };
-
-
 /*************************************************************************************************/
 
 
@@ -23,7 +20,7 @@ const config = { updateTimerInterval: 250 }; // Milliseconds between each timer 
 // Playback timer and event handling module
 // ************************************************************************************************
 
-const playbackTimer = (() =>
+export const playbackTimer = (() =>
 {
   let intervalId     = -1;
   let lastPosSeconds = 0;

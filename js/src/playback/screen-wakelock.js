@@ -10,13 +10,6 @@ import { showSnackbar } from '../shared/snackbar.js';
 import { settings }     from '../shared/session-data.js';
 
 
-export {
-  enable,
-//disable,
-  stateVisible,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -33,7 +26,7 @@ function isSupported()
   return (('wakeLock' in navigator) && ('request' in navigator.wakeLock));
 }
 
-async function enable()
+export async function enable()
 {
   if (isSupported())
   {
@@ -59,7 +52,7 @@ async function enable()
 }
 
 /*
-function disable()
+export function disable()
 {
   debug.log('disable()');
 
@@ -68,7 +61,7 @@ function disable()
 }
 */
 
-function stateVisible()
+export function stateVisible()
 {
   debug.log('stateVisible()');
 

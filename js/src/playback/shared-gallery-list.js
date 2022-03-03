@@ -17,33 +17,18 @@ import {
 } from '../shared/utils.js';
 
 
-export {
-  PLAYER_TYPE,
-  TRACK_TYPE,
-  hasGalleryPlayer,
-  hasListPlayer,
-  noPlayback,
-  isGalleryPlayer,
-  isListPlayer,
-  shuffleClickNavTo,
-  autoplayNavTo,
-  playerScrollTo,
-  playerOnKeyScroll,
-};
-
-
 /*************************************************************************************************/
 
 
 const debug = debugLogger.newInstance('shared-gallery-list');
 
-const PLAYER_TYPE = {
+export const PLAYER_TYPE = {
   NONE:    0,
   GALLERY: 1,
   LIST:    2,
 };
 
-const TRACK_TYPE = {
+export const TRACK_TYPE = {
   NONE:       0,
   YOUTUBE:    1,
   SOUNDCLOUD: 2,
@@ -59,34 +44,34 @@ const isPlayer = {
 //
 // ************************************************************************************************
 
-function hasGalleryPlayer()
+export function hasGalleryPlayer()
 {
   isPlayer.gallery = (document.body.getAttribute('data-player-type') === 'gallery');
   return isPlayer.gallery;
 }
 
-function hasListPlayer()
+export function hasListPlayer()
 {
   isPlayer.list = (document.body.getAttribute('data-player-type') === 'list');
   return isPlayer.list;
 }
 
-function noPlayback()
+export function noPlayback()
 {
   return ((isPlayer.gallery === false) && (isPlayer.list === false));
 }
 
-function isGalleryPlayer() { return isPlayer.gallery; }
-function isListPlayer()    { return isPlayer.list;    }
+export function isGalleryPlayer() { return isPlayer.gallery; }
+export function isListPlayer()    { return isPlayer.list;    }
 
-function shuffleClickNavTo(event)
+export function shuffleClickNavTo(event)
 {
   event?.preventDefault();
   setCookie(KEY.UF_RESHUFFLE, 'true');
   navToUrl(getPrefPlayerUrl(response.shufflePath));
 }
 
-function autoplayNavTo(destUrl, continueAutoplay = false)
+export function autoplayNavTo(destUrl, continueAutoplay = false)
 {
   debug.log(`autoplayNavTo(): ${destUrl} - continueAutoplay: ${continueAutoplay}`);
   
@@ -102,7 +87,7 @@ function autoplayNavTo(destUrl, continueAutoplay = false)
 //
 // ************************************************************************************************
 
-function playerScrollTo(trackId = 0)
+export function playerScrollTo(trackId = 0)
 {
   isListPlayer() ? listPlayerScrollTo(trackId) : galleryPlayerScrollTo(trackId);
 }
@@ -182,7 +167,7 @@ function galleryPlayerScrollTo(trackId)
 //
 // ************************************************************************************************
 
-function playerOnKeyScroll(event)
+export function playerOnKeyScroll(event)
 {
   if (isListPlayer() && (event.shiftKey === true) && (window.innerWidth > 1350))
   {

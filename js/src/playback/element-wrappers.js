@@ -5,17 +5,7 @@
 //
 
 
-export {
-  STATE,
-  ElementWrapper,
-  ElementsWrapper,
-};
-
-
-/*************************************************************************************************/
-
-
-const STATE = {
+export const STATE = {
   UNKNOWN:  { ID:  0, CLASS: 'state-unknown'  },
   DISABLED: { ID: 10, CLASS: 'state-disabled' },
   ENABLED:  { ID: 20, CLASS: 'state-enabled'  },
@@ -26,12 +16,11 @@ const STATE = {
 };
 
 
-
 // ************************************************************************************************
 //
 // ************************************************************************************************
 
-const ElementWrapper = function(elmentSelector, parentElement = document, initialState = STATE.DISABLED)
+export const ElementWrapper = function(elmentSelector, parentElement = document, initialState = STATE.DISABLED)
 {
   const element   = parentElement.querySelector(elmentSelector);
   let   state     = initialState;
@@ -72,7 +61,7 @@ const ElementWrapper = function(elmentSelector, parentElement = document, initia
   }
 };
 
-const ElementsWrapper = function(elmentsSelector, parentElement = document)
+export const ElementsWrapper = function(elmentsSelector, parentElement = document)
 {
   const elements = parentElement.querySelectorAll(elmentsSelector);
 

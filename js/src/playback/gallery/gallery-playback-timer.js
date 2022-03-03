@@ -11,9 +11,6 @@ import { CROSSFADE_TYPE }    from './crossfade.js';
 import { settings }          from '../../shared/session-data.js';
 
 
-export { playbackTimer };
-
-
 /*************************************************************************************************/
 
 
@@ -27,7 +24,7 @@ const config = {
 // Playback timer and event handling module
 // ************************************************************************************************
 
-const playbackTimer = (() =>
+export const playbackTimer = (() =>
 {
   let intervalId     = -1;
   let lastPosSeconds = 0;

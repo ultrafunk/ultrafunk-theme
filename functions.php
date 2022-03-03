@@ -22,11 +22,6 @@ function ultrafunk_theme_setup() : void
 add_action('after_setup_theme', 'ultrafunk_theme_setup');
 
 //
-// Remove comments Feed from header since comments are always disabled
-//
-add_filter('feed_links_show_comments_feed', '__return_false');
-
-//
 // Add custom footer logo
 //
 function ultrafunk_customizer_setting(object $wp_customize) : void
@@ -72,9 +67,9 @@ function ultrafunk_limit_archives(array $args) : array
 add_filter('widget_archives_args', 'ultrafunk_limit_archives');
 
 //
-// Enqueue scripts and styles.
+// Enqueue styles
 //
-function ultrafunk_scripts() : void
+function ultrafunk_enqueue_styles() : void
 {
   global $ultrafunk_is_prod_build;
   $version = \Ultrafunk\Theme\Constants\VERSION;
@@ -84,15 +79,11 @@ function ultrafunk_scripts() : void
 
   if ($ultrafunk_is_prod_build)
   {
-    wp_enqueue_script('interaction-script', get_theme_file_uri('/js/dist/playback/interaction.js'), [], $version);
-    wp_enqueue_script('index-script', get_theme_file_uri('/js/dist/index.js'), [], $version);
     wp_enqueue_style('ultrafunk-style', get_theme_file_uri('style.min.css'), [], $version);
     wp_enqueue_style('bundle-style', get_theme_file_uri('/js/dist/css/bundle.min.css'), [], $version);
   }
   else
   {
-    wp_enqueue_script('interaction-script', get_theme_file_uri('/js/src/playback/interaction.js'), [], $version);
-    wp_enqueue_script('index-script', get_theme_file_uri('/js/src/index.js'), [], $version);
     wp_enqueue_style('ultrafunk-style', get_stylesheet_uri(), [], $version);
     wp_enqueue_style('modal-style', get_theme_file_uri('/js/src/shared/modal.css'), [], $version);
     wp_enqueue_style('snackbar-style', get_theme_file_uri('/js/src/shared/snackbar.css'), [], $version);
@@ -103,23 +94,8 @@ function ultrafunk_scripts() : void
     wp_enqueue_style('up-next-modal-style', get_theme_file_uri('/js/src/playback/list/up-next-modal.css'), [], $version);
     wp_enqueue_style('termlist-style', get_theme_file_uri('/js/src/site/termlist.css'), [], $version);
   }
-
-  \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Theme\Functions\get_session_vars());
-  echo '<script>const UF_RESPONSE_DATA = ' . json_encode(\Ultrafunk\Plugin\Globals\get_session_vars()) . '</script>' . PHP_EOL;
 }
-add_action('wp_enqueue_scripts', 'ultrafunk_scripts');
-
-//
-// Customize enqueued script tags when needeed
-//
-function ultrafunk_modify_script_tag(string $tag, string $handle, string $source) : string
-{
-  if (($handle === 'interaction-script') || ($handle === 'index-script'))
-    $tag = str_ireplace('<script ', '<script type="module" ', $tag);
-
-  return $tag;
-}
-add_filter('script_loader_tag', 'ultrafunk_modify_script_tag', 10, 3);
+add_action('wp_enqueue_scripts', 'ultrafunk_enqueue_styles');
 
 
 /**************************************************************************************************************************/

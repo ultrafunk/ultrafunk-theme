@@ -13,34 +13,13 @@ import { showSnackbar }     from './snackbar.js';
 import { getYouTubeImgUrl } from '../playback/mediaplayers.js';
 
 
-export {
-  SITE_URL,
-  MATCH,
-  addListener,
-  addListenerAll,
-  getCssPropString,
-  getCssPropValue,
-  matchesMedia,
-  replaceClass,
-  escHtml,
-  escAttribute,
-  stripHtml,
-  stripAttribute,
-  navToUrl,
-  getListPlayerUrl,
-  getGalleryPlayerUrl,
-  getPrefPlayerUrl,
-  getThumbnailData,
-};
-
-
 /*************************************************************************************************/
 
 
 const debug = debugLogger.newInstance('utils');
 
-const SITE_URL      = debug.isDebug() ? 'https://wordpress.ultrafunk.com'      : 'https://ultrafunk.com';
-const SITE_URL_LIST = debug.isDebug() ? 'https://wordpress.ultrafunk.com/list' : 'https://ultrafunk.com/list';
+export const SITE_URL = debug.isDebug() ? 'https://wordpress.ultrafunk.com'      : 'https://ultrafunk.com';
+const SITE_URL_LIST   = debug.isDebug() ? 'https://wordpress.ultrafunk.com/list' : 'https://ultrafunk.com/list';
 
 const validUrlRegEx = debug.isDebug()
                         ? /^https:\/\/wordpress\.ultrafunk\.com[/?=%A-Za-z0-9\-_.~+]*$/
@@ -48,7 +27,7 @@ const validUrlRegEx = debug.isDebug()
 
 const DOMParserInstance = new DOMParser();
 
-const MATCH = {
+export const MATCH = {
   SITE_MIN_WIDTH_WIDE:   1,
   SITE_MAX_WIDTH:        2,
   SITE_MAX_WIDTH_MOBILE: 3,
@@ -63,20 +42,20 @@ const siteMaxWidthMobile = window.matchMedia(`(max-width: ${getCssPropString('--
 // Misc. shared utility functions
 // ************************************************************************************************
 
-function addListener(selectors, type, listener, data = null)
+export function addListener(selectors, type, listener, data = null)
 {
   document.querySelector(selectors)?.addEventListener(type, (event) => listener(event, data));
 }
 
 // Plain JS function equivalent to jQuery(selectors).eventX();
 // Adds event listeners of 'type' to all matching selectors 
-function addListenerAll(selectors, type, listener, data = null)
+export function addListenerAll(selectors, type, listener, data = null)
 {
   const elementList = document.querySelectorAll(selectors);
   elementList.forEach(element => element.addEventListener(type, (event) => listener(event, data)));
 }
 
-function getCssPropString(prop, element = document.documentElement)
+export function getCssPropString(prop, element = document.documentElement)
 {
   let string = getComputedStyle(element).getPropertyValue(prop);
 
@@ -88,7 +67,7 @@ function getCssPropString(prop, element = document.documentElement)
   return string;
 }
 
-function getCssPropValue(prop, element = document.documentElement)
+export function getCssPropValue(prop, element = document.documentElement)
 {
   const string = getCssPropString(prop, element);
   let value    = NaN;
@@ -103,7 +82,7 @@ function getCssPropValue(prop, element = document.documentElement)
 }
 
 // Match against live CSS media queries defined in style.css
-function matchesMedia(matchMedia)
+export function matchesMedia(matchMedia)
 {
   switch (matchMedia)
   {
@@ -120,7 +99,7 @@ function matchesMedia(matchMedia)
   return false;
 }
 
-function replaceClass(element, removeClass, addClass)
+export function replaceClass(element, removeClass, addClass)
 {
   element.classList.remove(removeClass);
   element.classList.add(addClass);
@@ -142,12 +121,12 @@ const entityMap = {
   '/': '&#x2F;',
 };
 
-function escHtml(string)
+export function escHtml(string)
 {
   return String(string).replace(/[&<>"'`=/]/g, (s) => entityMap[s]);
 }
 
-function escAttribute(element, attribute)
+export function escAttribute(element, attribute)
 {
   const value = element.getAttribute(attribute);
 
@@ -160,7 +139,7 @@ function escAttribute(element, attribute)
 //
 // ToDo: Replace with DOMPurify or the HTML Sanitizer API: https://github.com/WICG/sanitizer-api
 //
-function stripHtml(string)
+export function stripHtml(string)
 {
   const firstPass  = DOMParserInstance.parseFromString(string, 'text/html');
   const secondPass = DOMParserInstance.parseFromString(firstPass.body.textContent, 'text/html');
@@ -170,7 +149,7 @@ function stripHtml(string)
   return secondPass.body.textContent;
 }
 
-function stripAttribute(element, attribute)
+export function stripAttribute(element, attribute)
 {
   const value = element.getAttribute(attribute);
 
@@ -185,7 +164,7 @@ function stripAttribute(element, attribute)
 // 
 // ************************************************************************************************
 
-function navToUrl(destUrl)
+export function navToUrl(destUrl)
 {
   if (destUrl && (destUrl.match(validUrlRegEx) !== null))
   {
@@ -199,17 +178,17 @@ function navToUrl(destUrl)
   }
 }
 
-function getListPlayerUrl(destUrl)
+export function getListPlayerUrl(destUrl)
 {
   return destUrl.replace(SITE_URL, SITE_URL_LIST);
 }
 
-function getGalleryPlayerUrl(destUrl)
+export function getGalleryPlayerUrl(destUrl)
 {
   return destUrl.replace(SITE_URL_LIST, SITE_URL);  
 }
 
-function getPrefPlayerUrl(destUrl)
+export function getPrefPlayerUrl(destUrl)
 {
   if (destUrl)
   {
@@ -228,7 +207,7 @@ function getPrefPlayerUrl(destUrl)
   return destUrl;
 }
 
-function getThumbnailData(metaData)
+export function getThumbnailData(metaData)
 {
   if (metaData.track_source_type === TRACK_TYPE.YOUTUBE)
     return getYouTubeImgUrl(metaData.track_source_data);

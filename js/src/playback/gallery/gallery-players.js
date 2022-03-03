@@ -11,9 +11,6 @@ import { settings }           from '../../shared/session-data.js';
 import { EVENT, addListener } from '../playback-events.js';
 
 
-export { galleryPlayers };
-
-
 /*************************************************************************************************/
 
 
@@ -24,7 +21,7 @@ const debug = debugLogger.newInstance('gallery-players');
 // Gallery players closure
 // ************************************************************************************************
 
-const galleryPlayers = (() =>
+export const galleryPlayers = (() =>
 {
   let playTrack      = null;
   let crossfade      = null;

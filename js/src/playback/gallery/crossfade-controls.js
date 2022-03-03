@@ -18,12 +18,6 @@ import {
 } from '../element-wrappers.js';
 
 
-export {
-  init,
-  ready,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -42,7 +36,7 @@ const config = {
 // Init and make ready all controls
 // ************************************************************************************************
 
-function init(mediaPlayers, crossfadeClickCallback)
+export function init(mediaPlayers, crossfadeClickCallback)
 {
   debug.log('init()');
 
@@ -60,7 +54,7 @@ function init(mediaPlayers, crossfadeClickCallback)
   playbackEvents.addListener(playbackEvents.EVENT.READY, ready);
 }
 
-function ready()
+export function ready()
 {
   debug.log('ready()');
 

@@ -16,15 +16,6 @@ import {
 } from './termlist-templates.js';
 
 
-export {
-  loadTermlist,
-  readCache,
-  writeCache,
-  deleteCache,
-  hasCache,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -36,7 +27,7 @@ const m     = { termCache: {} };
 // Fetch data via REST API and update DOM with results
 // ************************************************************************************************
 
-function loadTermlist(termlistContainer, termlistEntry, termlistBody)
+export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
 {
   const termType      = stripAttribute(termlistContainer, 'data-term-type');
   const termId        = parseInt(termlistEntry.getAttribute('data-term-id'));
@@ -190,7 +181,7 @@ function fetchMeta(termType, termId, termIds, maxItems, callback)
 // Term cache functions
 // ************************************************************************************************
 
-function readCache()
+export function readCache()
 {
   m.termCache = JSON.parse(sessionStorage.getItem(KEY.UF_TERMLIST_CACHE));
   
@@ -198,17 +189,17 @@ function readCache()
     m.termCache = {};
 }
 
-function writeCache()
+export function writeCache()
 {
   sessionStorage.setItem(KEY.UF_TERMLIST_CACHE, JSON.stringify(m.termCache));
 }
 
-function deleteCache()
+export function deleteCache()
 {
   sessionStorage.removeItem(KEY.UF_TERMLIST_CACHE);
 }
 
-function hasCache()
+export function hasCache()
 {
   return (Object.keys(m.termCache).length > 0);
 }

@@ -20,24 +20,6 @@ import {
 } from './element-wrappers.js';
 
 
-export {
-  REPEAT,
-  init,
-  ready,
-  updateTimerAndProgress,
-  updateProgressPercent,
-  isPlaying,
-  setPlayState,
-  setPauseState,
-  blinkPlayPause,
-  getSetTrackData,
-  updatePrevState,
-  updateNextState,
-  getRepeatMode,
-  repeatClick as toggleRepeat,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -50,7 +32,7 @@ const ctrl  = {};
 // Init and make ready all controls
 // ************************************************************************************************
 
-function init(mediaPlayers, seekClickCallback)
+export function init(mediaPlayers, seekClickCallback)
 {
   debug.log('init()');
 
@@ -108,7 +90,7 @@ function init(mediaPlayers, seekClickCallback)
   }
 }
 
-function ready(prevClickCallback, playPauseClickCallback, nextClickCallback, muteClickCallback)
+export function ready(prevClickCallback, playPauseClickCallback, nextClickCallback, muteClickCallback)
 {
   debug.log('ready()');
 
@@ -139,7 +121,7 @@ function ready(prevClickCallback, playPauseClickCallback, nextClickCallback, mut
   ctrl.nextTrack.addListener('click', () => nextClickCallback());
 
   ctrl.repeat.setState(STATE.ENABLED);
-  ctrl.repeat.addListener('click', repeatClick);
+  ctrl.repeat.addListener('click', toggleRepeat);
 
   ctrl.shuffle.setState(STATE.ENABLED);
 
@@ -163,7 +145,7 @@ function ready(prevClickCallback, playPauseClickCallback, nextClickCallback, mut
 // Progress bar and position seek
 // ************************************************************************************************
 
-function updateProgressPercent(progressPercent)
+export function updateProgressPercent(progressPercent)
 {
   updateProgressBar(progressPercent / 100);
 }
@@ -173,7 +155,7 @@ function updateProgressBar(scaleX)
   ctrl.progressBar.style.transform = `scaleX(${scaleX})`;
 }
 
-function updateTimerAndProgress(positionMilliseconds, positionSeconds, durationSeconds)
+export function updateTimerAndProgress(positionMilliseconds, positionSeconds, durationSeconds)
 {
   setTimer(positionSeconds, durationSeconds);
 
@@ -184,7 +166,7 @@ function updateTimerAndProgress(positionMilliseconds, positionSeconds, durationS
     updateProgressBar(positionMilliseconds / (durationSeconds * 1000));
 }
 
-function progressSeekClick(event)
+export function progressSeekClick(event)
 {
   if (ctrl.timer.durationSeconds > 0)
   {
@@ -280,7 +262,7 @@ function clearTimer()
 // Playback controls (prev, play/pause and next)
 // ************************************************************************************************
 
-function isPlaying()
+export function isPlaying()
 {
   // ToDo: This might not be the best place to save / check playback state...?
   return ((ctrl.playPause.state.ID === STATE.PLAYING.ID) ? true : false);    
@@ -292,7 +274,7 @@ function setLoadState()
     ctrl.thumbnail.addClass(STATE.LOADING.CLASS);
 }
 
-function setPlayState()
+export function setPlayState()
 {
   ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
   ctrl.playPause.setState(STATE.PLAYING);
@@ -302,14 +284,14 @@ function setPlayState()
   setDetails(m.players.getTrackData());
 }
 
-function setPauseState()
+export function setPauseState()
 {
   ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
   ctrl.playPause.setState(STATE.PAUSED);
   ctrl.playPause.icon.textContent = 'play_circle_filled';
 }
 
-function blinkPlayPause(toggleBlink)
+export function blinkPlayPause(toggleBlink)
 {
   if (toggleBlink)
     ctrl.playPause.toggleClass('time-remaining-warning');
@@ -317,7 +299,7 @@ function blinkPlayPause(toggleBlink)
     ctrl.playPause.removeClass('time-remaining-warning');
 }
 
-function getSetTrackData()
+export function getSetTrackData()
 {
   const trackData = m.players.getTrackData();
 
@@ -327,7 +309,7 @@ function getSetTrackData()
   return trackData;
 }
 
-function updatePrevState()
+export function updatePrevState()
 {
   const trackData = getSetTrackData();
   
@@ -338,7 +320,7 @@ function updatePrevState()
     ctrl.nextTrack.setState(STATE.ENABLED);
 }
 
-function updateNextState()
+export function updateNextState()
 {
   const trackData = getSetTrackData();
 
@@ -353,7 +335,7 @@ function updateNextState()
 // Repeat control
 // ************************************************************************************************
 
-const REPEAT = { OFF: 0, ALL: 1, ONE: 2 };
+export const REPEAT = { OFF: 0, ALL: 1, ONE: 2 };
 
 const repeatModes = [
   { title: 'Repeat Off', icon: 'repeat'     },
@@ -361,12 +343,12 @@ const repeatModes = [
   { title: 'Repeat One', icon: 'repeat_one' },
 ];
 
-function getRepeatMode()
+export function getRepeatMode()
 {
   return parseInt(ctrl.repeat.getAttribute('data-repeat-mode'));
 }
 
-function repeatClick()
+export function toggleRepeat()
 {
   const index = ((getRepeatMode() + 1) < repeatModes.length)
                   ? (getRepeatMode() + 1)

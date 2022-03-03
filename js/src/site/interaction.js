@@ -19,11 +19,7 @@ import {
 } from './share-modal.js';
 
 
-export {
-  init,
-  settingsUpdated,
-  m as mProps,
-};
+export { m as mProps };
 
 
 /*************************************************************************************************/
@@ -43,7 +39,7 @@ const m = {
 //
 // ************************************************************************************************
 
-function init()
+export function init()
 {
   debug.log('init()');
 
@@ -61,7 +57,7 @@ function init()
   });
 }
 
-function settingsUpdated()
+export function settingsUpdated()
 {
   m.siteTheme.setCurrent();
   m.galleryLayout.setCurrent();

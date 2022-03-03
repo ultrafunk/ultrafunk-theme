@@ -9,12 +9,6 @@ import * as debugLogger        from './debuglogger.js';
 import { MATCH, matchesMedia } from './utils.js';
 
 
-export {
-  showSnackbar,
-  dismissSnackbar,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -51,7 +45,7 @@ const elements = {
 // 
 // ************************************************************************************************
 
-function showSnackbar(message, timeout = 5, actionText = null, actionClickCallback = null, afterCloseCallback = () => {})
+export function showSnackbar(message, timeout = 5, actionText = null, actionClickCallback = null, afterCloseCallback = () => {})
 {
   debug.log(`showSnackbar(): ${message} (${timeout} sec.)`);
 
@@ -97,7 +91,7 @@ function showSnackbar(message, timeout = 5, actionText = null, actionClickCallba
   return ++m.snackbarId;
 }
 
-function dismissSnackbar(dismissId = 0)
+export function dismissSnackbar(dismissId = 0)
 {
   if (isShowing())
   {

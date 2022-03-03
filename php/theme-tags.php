@@ -15,8 +15,6 @@ use Ultrafunk\Plugin\Constants\ {
 
 use const Ultrafunk\Theme\Constants\THEME_ENV;
 
-use function Ultrafunk\Plugin\Shared\console_log;
-
 use function Ultrafunk\Plugin\Globals\ {
   is_termlist,
   is_list_player,
@@ -99,16 +97,29 @@ function meta_description() : void
     echo $meta_description;
 }
 
+function scripts_styles() : void
+{
+  global $ultrafunk_is_prod_build;
+  $template_uri = esc_url(get_template_directory_uri());
+  $js_path      = $ultrafunk_is_prod_build ? '/js/dist/' : '/js/src/';
+
+  \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Theme\Functions\get_session_vars());
+
+  ?>
+  <script><?php echo 'const UF_RESPONSE_DATA = ' . json_encode(\Ultrafunk\Plugin\Globals\get_session_vars()); ?></script>
+  <script type="module" src="<?php echo $template_uri . $js_path . 'playback/interaction.js?ver='      . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
+  <script type="module" src="<?php echo $template_uri . $js_path . 'index.js?ver='                     . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
+  <noscript><link rel="stylesheet" href="<?php echo $template_uri . '/inc/css/style-noscript.css?ver=' . \Ultrafunk\Theme\Constants\VERSION; ?>" media="all" /></noscript>
+  <?php
+  
+  if (!is_page() && !is_list_player() && !is_termlist())
+    echo '<script defer src="https://w.soundcloud.com/player/api.js"></script>' . PHP_EOL;
+}
+
 function head() : void
 {
   meta_description();
-
-  if (!is_page() && !is_list_player() && !is_termlist())
-    echo '<script defer src="https://w.soundcloud.com/player/api.js"></script>' . PHP_EOL;
-
-  ?>
-  <noscript><link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri()); ?>/inc/css/style-noscript.css" media="all" /></noscript>
-  <?php
+  scripts_styles();
 
   if (WP_DEBUG)
   {

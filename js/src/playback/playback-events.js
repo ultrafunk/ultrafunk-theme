@@ -9,19 +9,12 @@ import * as debugLogger          from '../shared/debuglogger.js';
 import { updateProgressPercent } from './playback-controls.js';
 
 
-export {
-  EVENT,
-  addListener,
-  dispatch,
-};
-
-
 /*************************************************************************************************/
 
 
 const debug = debugLogger.newInstance('playback-events');
 
-const EVENT = {
+export const EVENT = {
   LOADING:              'loading',
   READY:                'ready',
   MEDIA_LOADING:        'mediaLoading',
@@ -58,13 +51,13 @@ const eventListeners = {
 // 
 // ************************************************************************************************
 
-function addListener(playbackEvent, playbackEventListener)
+export function addListener(playbackEvent, playbackEventListener)
 {
   if (playbackEvent in eventListeners)
     eventListeners[playbackEvent].push(playbackEventListener);
 }
 
-function dispatch(playbackEvent, playbackEventData = null, playbackEventCallback = null)
+export function dispatch(playbackEvent, playbackEventData = null, playbackEventCallback = null)
 {
   eventListeners[playbackEvent].forEach(eventListener =>
   {

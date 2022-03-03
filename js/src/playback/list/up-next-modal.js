@@ -33,13 +33,6 @@ import {
 } from '../../shared/modal.js';
 
 
-export {
-  init,
-  showUpNextModal,
-  updateUpNextModal,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -58,7 +51,7 @@ const m = {
 //
 // ************************************************************************************************
 
-function init(setCurrentTrackFunc)
+export function init(setCurrentTrackFunc)
 {
   m.setCurrentTrack = setCurrentTrackFunc;
 }
@@ -73,8 +66,8 @@ function loadDragDropTouch()
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
     tag.src   = debug.isDebug()
-                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.40.7'
-                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.40.7';
+                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.40.8'
+                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.40.8';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
@@ -85,7 +78,7 @@ function loadDragDropTouch()
 //
 // ************************************************************************************************
 
-function showUpNextModal()
+export function showUpNextModal()
 {
   // Only load this dependency IF we actually need it...
   loadDragDropTouch();
@@ -124,7 +117,7 @@ function showUpNextModal()
   }
 }
 
-function updateUpNextModal(isPlayingTrack)
+export function updateUpNextModal(isPlayingTrack)
 {
   if (isShowingModal(m.upNextModalId))
   {

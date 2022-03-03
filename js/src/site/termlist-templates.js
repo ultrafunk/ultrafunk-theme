@@ -11,17 +11,11 @@ import {
 } from "../shared/utils.js";
 
 
-export {
-  insertTermlistHtml,
-  insertTermLinksHtml,
-};
-
-
 // ************************************************************************************************
 // Render fetched track and meta-data as HTML
 // ************************************************************************************************
 
-function insertTermlistHtml(header, termSlug, termData, destElement)
+export function insertTermlistHtml(header, termSlug, termData, destElement)
 {
   let html = `<b>${header}</b>`;
 
@@ -50,7 +44,7 @@ function insertTermlistHtml(header, termSlug, termData, destElement)
   destElement.innerHTML = html;
 }
 
-function insertTermLinksHtml(header, termData, destElement)
+export function insertTermLinksHtml(header, termData, destElement)
 {
   let html = `<b>${header}</b><br>`;
   termData.forEach(item => (html += `<a href="${getPrefPlayerUrl(item.link)}">${item.name}</a>, `));

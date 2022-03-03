@@ -14,28 +14,13 @@ import {
 } from './settings/validate-settings.js';
 
 
-export {
-  KEY,
-  YEAR_IN_SECONDS,
-  isAvailable,
-  setCookie,
-  deleteCookie,
-  getValue,
-  setValue,
-  readJson,
-  writeJson,
-  readWriteSettingsProxy,
-  addSettingsObserver,
-};
-
-
 /*************************************************************************************************/
 
 
 const debug     = debugLogger.newInstance('storage');
 const observers = {};
 
-const KEY = {
+export const KEY = {
 //sessionStorage keys
   UF_AUTOPLAY:         'uf_autoplay',
   UF_TERMLIST_CACHE:   'uf_termlist_cache',
@@ -51,6 +36,7 @@ const KEY = {
 //UF_LIST_PER_PAGE:    'uf_list_per_page',
   UF_GALLERY_PER_PAGE: 'uf_gallery_per_page',
   UF_PREFERRED_PLAYER: 'uf_preferred_player',
+  UF_SHUFFLE_UID:      'uf_shuffle_uid',
 //Temp document.cookie keys
   UF_RESHUFFLE:        'uf_reshuffle',
 };
@@ -70,14 +56,14 @@ const DEPRECATED_KEYS = {
   ULTRAFUNK_UID:       'ultrafunk_uid',
 };
 
-const YEAR_IN_SECONDS = (60 * 60 * 24 * 365);
+export const YEAR_IN_SECONDS = (60 * 60 * 24 * 365);
 
 
 // ************************************************************************************************
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
 // ************************************************************************************************
 
-function isAvailable(storageType)
+export function isAvailable(storageType)
 {
   let storage;
 
@@ -111,12 +97,12 @@ function isAvailable(storageType)
 // Set and delete cookie key => value pairs
 // ************************************************************************************************
 
-function setCookie(keyName, keyValue = '', maxAge = YEAR_IN_SECONDS, path = '/')
+export function setCookie(keyName, keyValue = '', maxAge = YEAR_IN_SECONDS, path = '/')
 {
   document.cookie = `${keyName}=${keyValue}; Max-Age=${maxAge}; Path=${path}; Secure; SameSite=Strict`;
 }
 
-function deleteCookie(keyName, path = '/')
+export function deleteCookie(keyName, path = '/')
 {
   document.cookie = `${keyName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
 }
@@ -126,7 +112,7 @@ function deleteCookie(keyName, path = '/')
 // get / set local storage key => value pairs
 // ************************************************************************************************
 
-function getValue(keyName, defaultValue = null, setDefault = false)
+export function getValue(keyName, defaultValue = null, setDefault = false)
 {
   const keyValue = localStorage.getItem(keyName);
 
@@ -141,7 +127,7 @@ function getValue(keyName, defaultValue = null, setDefault = false)
   return keyValue;
 }
 
-function setValue(keyName, keyValue)
+export function setValue(keyName, keyValue)
 {
   try
   {
@@ -158,7 +144,7 @@ function setValue(keyName, keyValue)
 // Read (parse) and write (stringify) JSON data from local storage
 // ************************************************************************************************
 
-function readJson(keyName, defaultValue = null, setDefault = false)
+export function readJson(keyName, defaultValue = null, setDefault = false)
 {
   debug.log(`readJson(): ${keyName} - ${defaultValue} - ${setDefault}`);
   
@@ -191,7 +177,7 @@ function readJson(keyName, defaultValue = null, setDefault = false)
   return parsedKeyValue;
 }
 
-function writeJson(keyName, keyData)
+export function writeJson(keyName, keyData)
 {
   debug.log(`writeJson(): ${keyName} - ${keyData}`);
 
@@ -312,7 +298,7 @@ function validateSettings(settingsKey, settingsObject, defaultSettings)
 // Read and write settings proxy
 // ************************************************************************************************
 
-function readWriteSettingsProxy(settingsKey, defaultSettings = null, setDefault = false)
+export function readWriteSettingsProxy(settingsKey, defaultSettings = null, setDefault = false)
 {
   const parsedJson = readJson(settingsKey, defaultSettings, setDefault);
 
@@ -414,7 +400,7 @@ const onSettingsChange = (settingsKey, settingsObject) =>
 // Add and call settings observers on property changes
 // ************************************************************************************************
 
-function addSettingsObserver(property, observer)
+export function addSettingsObserver(property, observer)
 {
   debug.log(`addSettingsObserver() for property: ${property}`);
 

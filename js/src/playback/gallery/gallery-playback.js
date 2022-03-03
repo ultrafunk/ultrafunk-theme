@@ -18,16 +18,6 @@ import { CROSSFADE_TYPE }     from './crossfade.js';
 import { settings }           from '../../shared/session-data.js';
 
 
-export {
-  init,
-  togglePlayPause,
-  prevTrack,
-  nextTrack,
-  toggleMute,
-  getStatus,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -48,7 +38,7 @@ const config = {
 // Init
 // ************************************************************************************************
 
-function init()
+export function init()
 {
   debug.log('init()');
 
@@ -70,7 +60,7 @@ function init()
 // Playback controls click handlers + state
 // ************************************************************************************************
 
-function togglePlayPause()
+export function togglePlayPause()
 {
   if (playbackControls.isPlaying())
   {
@@ -84,7 +74,7 @@ function togglePlayPause()
   }
 }
 
-function prevTrack()
+export function prevTrack()
 {
   debug.log(`prevTrack() - prevTrack: ${m.players.getCurrentTrack() - 1} - numTracks: ${m.players.getNumTracks()}`);
 
@@ -109,7 +99,7 @@ function prevTrack()
   }
 }
 
-function nextTrack(isMediaEnded = false)
+export function nextTrack(isMediaEnded = false)
 {
   const isLastTrack = ((m.players.getCurrentTrack() + 1) > m.players.getNumTracks());
 
@@ -174,7 +164,7 @@ function seekClick(positionSeconds)
   m.players.current.seekTo(positionSeconds);
 }
 
-function toggleMute()
+export function toggleMute()
 {
   settings.playback.masterMute = (settings.playback.masterMute === true) ? false : true;
   m.players.mute();
@@ -230,7 +220,7 @@ function resumeAutoplay(autoplayData, iframeId = null)
   }
 }
 
-function getStatus()
+export function getStatus()
 {
   return {
     isPlaying:    playbackControls.isPlaying(),

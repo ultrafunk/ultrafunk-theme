@@ -14,17 +14,6 @@ import {
 } from './modal-templates.js';
 
 
-export {
-  showModal,
-  isShowingModal,
-  closeModal,
-  getModalId,
-  getModalEntry,
-  updateModalTitle,
-  updateModalBody,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -48,7 +37,7 @@ const elements = {
 //
 // ************************************************************************************************
 
-function showModal(typeString, title, singleChoiceList = [], onEntryClickedCallback = () => {}, onClickCloseCallback = () => true)
+export function showModal(typeString, title, singleChoiceList = [], onEntryClickedCallback = () => {}, onClickCloseCallback = () => true)
 {
   init();
   
@@ -70,12 +59,12 @@ function showModal(typeString, title, singleChoiceList = [], onEntryClickedCallb
   return config.id;
 }
 
-function isShowingModal(showingModalId = -1)
+export function isShowingModal(showingModalId = -1)
 {
   return ((showingModalId === m.modalId) && (elements.container !== null) && (elements.overlay.classList.contains('show')));
 }
 
-function closeModal()
+export function closeModal()
 {
   document.body.removeEventListener('touchmove', blockTouchScroll, { passive: false });
   document.body.removeEventListener('touchstart', setIsTouchDraggable);
@@ -83,23 +72,23 @@ function closeModal()
   elements.overlay.classList.replace('show', 'hide');
 }
 
-function getModalId()
+export function getModalId()
 {
   return m.modalId;
 }
 
-function getModalEntry(entryNum)
+export function getModalEntry(entryNum)
 {
   return document.getElementById(`modal-item-${entryNum}`);
 }
 
-function updateModalTitle(updateModalId, updateTitle)
+export function updateModalTitle(updateModalId, updateTitle)
 {
   if (updateModalId === m.modalId)
     elements.container.querySelector(`.${config.id}-title`).innerHTML = updateTitle;
 }
 
-function updateModalBody(updateModalId, updateSingleChoiceList)
+export function updateModalBody(updateModalId, updateSingleChoiceList)
 {
   if (updateModalId === m.modalId)
     setSingleChoiceList(updateSingleChoiceList);

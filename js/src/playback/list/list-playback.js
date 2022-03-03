@@ -29,16 +29,6 @@ import {
 } from '../../shared/snackbar.js';
 
 
-export {
-  init,
-  togglePlayPause,
-  prevTrack,
-  nextTrack,
-  toggleMute,
-  getStatus,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -59,7 +49,7 @@ const m = {
 //
 // ************************************************************************************************
 
-function init()
+export function init()
 {
   debug.log('init()');
 
@@ -176,7 +166,7 @@ function loadOrCueCurrentTrack(playTrack)
 //
 // ************************************************************************************************
 
-function togglePlayPause()
+export function togglePlayPause()
 {
   if (m.currentTrackId === null)
   {
@@ -191,7 +181,7 @@ function togglePlayPause()
   }
 }
 
-function toggleMute(setCurrentSetting = false)
+export function toggleMute(setCurrentSetting = false)
 {
   if (setCurrentSetting === false)
     settings.playback.masterMute = (settings.playback.masterMute === true) ? false : true;
@@ -202,7 +192,7 @@ function toggleMute(setCurrentSetting = false)
     m.player.embedded.unMute();
 }
 
-function prevTrack()
+export function prevTrack()
 {
   const prevTrackId = listControls.getPrevPlayableId();
   const position    = m.player.embedded.getCurrentTime();
@@ -219,7 +209,7 @@ function prevTrack()
   }
 }
 
-function nextTrack()
+export function nextTrack()
 {
   const nextTrackId = listControls.getNextPlayableId();
 
@@ -288,7 +278,7 @@ function stopSkipToNextTrack()
   listControls.setCurrentTrackState(STATE.PAUSED);
 }
 
-function getStatus()
+export function getStatus()
 {
   const currentTrack = listControls.queryTrack('div.track-entry.current');
 

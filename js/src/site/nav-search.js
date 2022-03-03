@@ -8,14 +8,11 @@
 import * as utils from '../shared/utils.js';
 
 
-export { navSearch };
-
-
 // ************************************************************************************************
 // Main navigation search handling
 // ************************************************************************************************
 
-const navSearch = (() =>
+export const navSearch = (() =>
 {
   const allowKeyboardShortcutsEvent = new Event('allowKeyboardShortcuts');
   const denyKeyboardShortcutsEvent  = new Event('denyKeyboardShortcuts');

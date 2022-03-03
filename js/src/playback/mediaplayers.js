@@ -9,15 +9,6 @@ import * as debugLogger from '../shared/debuglogger.js';
 import { VOLUME }       from './gallery/crossfade.js';
 
 
-export {
-  YouTube,
-  SoundCloud,
-  Playlist,
-  getYouTubeImgUrl,
-  youTubeVideoIdRegEx,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -83,7 +74,7 @@ class MediaPlayer
 // YouTube child class
 // ************************************************************************************************
 
-class YouTube extends MediaPlayer
+export class YouTube extends MediaPlayer
 {
   constructor(trackId, iframeId, embeddedPlayer, trackSourceUrl)
   {
@@ -153,7 +144,7 @@ class YouTube extends MediaPlayer
 // SoundCloud child class
 // ************************************************************************************************
 
-class SoundCloud extends MediaPlayer
+export class SoundCloud extends MediaPlayer
 {
   constructor(trackId, iframeId, embeddedPlayer, iframeSrc)
   {
@@ -268,7 +259,7 @@ class SoundCloud extends MediaPlayer
 // Playlist child class
 // ************************************************************************************************
 
-class Playlist extends MediaPlayer
+export class Playlist extends MediaPlayer
 {
   constructor(embeddedPlayer)
   {
@@ -320,10 +311,10 @@ class Playlist extends MediaPlayer
 // ************************************************************************************************
 
 // Default / fallback track thumbnail object
-const defThumbnailObj     = { src: '/wp-content/themes/ultrafunk/inc/img/photo_filled_grey.png', class: 'type-default', uid: '' };
-const youTubeVideoIdRegEx = /[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/;
+const defThumbnailObj = { src: '/wp-content/themes/ultrafunk/inc/img/photo_filled_grey.png', class: 'type-default', uid: '' };
+export const youTubeVideoIdRegEx = /[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/;
 
-function getYouTubeImgUrl(trackSourceUrl)
+export function getYouTubeImgUrl(trackSourceUrl)
 {
   const youTubeVideoId = trackSourceUrl.match(youTubeVideoIdRegEx);
 

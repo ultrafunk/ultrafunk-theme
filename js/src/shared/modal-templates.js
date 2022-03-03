@@ -8,25 +8,17 @@
 import { TRACK_TYPE } from '../playback/shared-gallery-list.js';
 
 
-export {
-  config,
-  getTemplateHtml,
-  insertSingleChoiceListHtml,
-  getModalTrackHtml,
-};
-
-
 /*************************************************************************************************/
 
 
-const config = { id: 'modal-dialog' };
+export const config = { id: 'modal-dialog' };
 
 
 // ************************************************************************************************
 //
 // ************************************************************************************************
 
-function getTemplateHtml()
+export function getTemplateHtml()
 {
   return `
     <div id="${config.id}" tabindex="-1">
@@ -40,7 +32,7 @@ function getTemplateHtml()
     </div>`;
 }
 
-function insertSingleChoiceListHtml(singleChoiceList, insertElement)
+export function insertSingleChoiceListHtml(singleChoiceList, insertElement)
 {
   let listHtml = '';
 
@@ -61,7 +53,7 @@ function insertSingleChoiceListHtml(singleChoiceList, insertElement)
   insertElement.innerHTML = listHtml;
 }
 
-function getModalTrackHtml(element, trackArtist, trackTitle)
+export function getModalTrackHtml(element, trackArtist, trackTitle)
 {
   const trackTypeClass = (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE) ? 'type-youtube' : 'type-soundcloud';
 

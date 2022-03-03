@@ -27,27 +27,19 @@ import {
 } from '../shared/storage.js';
 
 
-export {
-  init,
-  playerType,
-  crossfade,
-  autoplay,
-};
-
-
 /*************************************************************************************************/
 
 
-let playerType = null;
-let crossfade  = null;
-let autoplay   = null;
+export let playerType = null;
+export let crossfade  = null;
+export let autoplay   = null;
 
 
 // ************************************************************************************************
 //
 // ************************************************************************************************
 
-function init(getPlayerStatus)
+export function init(getPlayerStatus)
 {
   playerType = new PlayerTypeToggle('footer-player-type-toggle', getPlayerStatus);
 

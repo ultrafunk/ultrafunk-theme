@@ -15,9 +15,6 @@ import { PREF_PLAYER }        from '../shared/settings/settings.js';
 import { response, settings } from '../shared/session-data.js';
 
 
-export { init };
-
-
 /*************************************************************************************************/
 
 
@@ -29,7 +26,7 @@ const m     = { listContainer: null };
 // Setup module
 // ************************************************************************************************
 
-function init()
+export function init()
 {
   debug.log('init()');
 

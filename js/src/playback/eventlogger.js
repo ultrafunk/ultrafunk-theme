@@ -8,20 +8,12 @@
 import * as debugLogger from '../shared/debuglogger.js';
 
 
-export {
-  SOURCE,
-  EVENT,
-  Interaction,
-  Playback,
-};
-
-
 /*************************************************************************************************/
 
 
 const debug = debugLogger.newInstance('eventlogger');
 
-const SOURCE = {
+export const SOURCE = {
 // Default source
   UNKNOWN: 1000,
 // interaction.js event sources
@@ -33,7 +25,7 @@ const SOURCE = {
   ULTRAFUNK:  50,
 };
 
-const EVENT = {
+export const EVENT = {
 // Default event
   UNKNOWN:         -2000,
 // interaction.js event types
@@ -142,7 +134,7 @@ class EventLog
 // Interaction child class
 // ************************************************************************************************
 
-class Interaction extends EventLog
+export class Interaction extends EventLog
 {
   constructor(maxEntries) { super(maxEntries); }
 
@@ -166,7 +158,7 @@ class Interaction extends EventLog
 // Playback child class
 // ************************************************************************************************
 
-class Playback extends EventLog
+export class Playback extends EventLog
 {
   constructor(maxEntries) { super(maxEntries); }
 

@@ -18,9 +18,6 @@ import {
 } from './list-track-templates.js';
 
 
-export { loadTracks };
-
-
 /*************************************************************************************************/
 
 
@@ -36,7 +33,7 @@ const m = {
 // 
 // ************************************************************************************************
 
-async function loadTracks(termType, termId)
+export async function loadTracks(termType, termId)
 {
   const loadingPage = parseInt(responseData.currentPage + 1);
   const trackData   = await fetchTracks(termType, termId, loadingPage, parseInt(responseData.listPerPage));

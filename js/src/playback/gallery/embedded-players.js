@@ -13,18 +13,11 @@ import { settings }        from '../../shared/session-data.js';
 import { playbackTimer }   from './gallery-playback-timer.js';
 
 
-export {
-  eventLog,
-  init,
-  onPlayerError,
-};
-
-
 /*************************************************************************************************/
 
 
-const debug    = debugLogger.newInstance('embedded-players');
-const eventLog = new eventLogger.Playback(10);
+const debug = debugLogger.newInstance('embedded-players');
+export const eventLog = new eventLogger.Playback(10);
 
 const m = {
   players:         {},
@@ -45,7 +38,7 @@ const config = {
 //
 // ************************************************************************************************
 
-function init(players, playbackState, embeddedEventHandler)
+export function init(players, playbackState, embeddedEventHandler)
 {
   m.players       = players;
   m.playbackState = playbackState;
@@ -133,7 +126,7 @@ function getAllPlayers()
 // Helper functions for the YouTube and SoundCloud MediaPlayer classes
 // ************************************************************************************************
 
-function onPlayerError(player, mediaUrl)
+export function onPlayerError(player, mediaUrl)
 {
   debug.log('onPlayerError()');
   debug.log(player);

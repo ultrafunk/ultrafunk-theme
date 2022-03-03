@@ -10,12 +10,6 @@ import { showModal }    from '../shared/modal.js';
 import { showSnackbar } from '../shared/snackbar.js';
 
 
-export {
-  shareModal,
-  copyTextToClipboard,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -26,7 +20,7 @@ const debug = debugLogger.newInstance('share-modal');
 // Share Modal Dialog module
 // ************************************************************************************************
 
-const shareModal = (() =>
+export const shareModal = (() =>
 {
   const filterBodyTextRegEx = /\s{1,}[\u002D\u00B7\u2013]\s{1,}/i;
   let title, bodyText, filterBodyText, bodyHtml, url, sourceUid, verb;
@@ -119,7 +113,7 @@ const shareModal = (() =>
 //
 // ************************************************************************************************
 
-function copyTextToClipboard(clipboardText, successMessage = 'Text copied to clipboard', errorMessage = 'Unable to copy text to clipboard')
+export function copyTextToClipboard(clipboardText, successMessage = 'Text copied to clipboard', errorMessage = 'Unable to copy text to clipboard')
 {
   navigator.clipboard.writeText(clipboardText).then(() =>
   {

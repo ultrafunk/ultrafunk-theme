@@ -14,13 +14,6 @@ import {
 } from '../../shared/utils.js';
 
 
-export {
-  getPageSeparatorHtml,
-  getTrackEntryHtml,
-  insertTrackLinksHtml,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -31,7 +24,7 @@ const debug = debugLogger.newInstance('list-track-templates');
 // 
 // ************************************************************************************************
 
-function getPageSeparatorHtml(responseData, loadingPage)
+export function getPageSeparatorHtml(responseData, loadingPage)
 {
   const pageUrl = responseData.nextPage.replace(/\/page\/(?!0)\d{1,6}\/$/i, `/page/${loadingPage}/`);
   
@@ -43,7 +36,7 @@ function getPageSeparatorHtml(responseData, loadingPage)
     </div>`;
 }
 
-function getTrackEntryHtml(track)
+export function getTrackEntryHtml(track)
 {
   const isYouTubeTrack = (track.meta.track_source_type === TRACK_TYPE.YOUTUBE);
   const thumbnailData  = getThumbnailData(track.meta);
@@ -98,7 +91,7 @@ function getTrackEntryHtml(track)
     </div>`;
 }
 
-function insertTrackLinksHtml(trackData, trackLinksSelector, linkIdsAttribute, linksMap)
+export function insertTrackLinksHtml(trackData, trackLinksSelector, linkIdsAttribute, linksMap)
 {
   trackData.forEach(track =>
   {

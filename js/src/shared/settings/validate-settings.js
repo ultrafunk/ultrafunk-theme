@@ -14,9 +14,6 @@ import {
 } from './settings.js';
 
 
-export { validateSettings };
-
-
 /*************************************************************************************************/
 
 
@@ -27,7 +24,7 @@ const debug = debugLogger.newInstance('validate-settings');
 // Validation
 // ************************************************************************************************
 
-function validateSettings(settings, schema)
+export function validateSettings(settings, schema)
 {
   let invalidCount = 0;
 

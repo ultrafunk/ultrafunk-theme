@@ -13,14 +13,11 @@ import {
 } from '../playback/shared-gallery-list.js';
 
 
-export { navMenu };
-
-
 // ************************************************************************************************
 // Main navigation menu handling
 // ************************************************************************************************
 
-const navMenu = (() =>
+export const navMenu = (() =>
 {
   const observer = new ResizeObserver(observerCallback);
   let siteHeader = null, navMenuOuter = null, modalOverlay = null;

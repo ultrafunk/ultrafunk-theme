@@ -86,18 +86,6 @@ document.addEventListener('settingsUpdated', () =>
   interaction.settingsUpdated();
   storage.setCookie(storage.KEY.UF_GALLERY_PER_PAGE, settings.gallery.tracksPerPage,    (storage.YEAR_IN_SECONDS * 5));
   storage.setCookie(storage.KEY.UF_PREFERRED_PLAYER, settings.playback.preferredPlayer, (storage.YEAR_IN_SECONDS * 5));
-  /*
-  {
-    const userSettings = JSON.stringify(
-    {
-      preferred_player: settings.playback.preferredPlayer,
-      gallery_per_page: settings.gallery.tracksPerPage,
-      list_per_page:    25,
-    });
-
-    storage.setCookie(storage.KEY.UF_USER_SETTINGS, userSettings, (storage.YEAR_IN_SECONDS * 5));
-  }
-  */
 });
 
 

@@ -9,11 +9,6 @@ export {
   INTEGER as TYPE_INTEGER,
   BOOLEAN as TYPE_BOOLEAN,
   STRING  as TYPE_STRING,
-  PREF_PLAYER,
-  settingsSchema,
-  defaultSettings,
-  presetsSchema,
-  presetList,
 };
 
 
@@ -24,7 +19,7 @@ const INTEGER = 1;
 const BOOLEAN = 2;
 const STRING  = 3;
 
-const PREF_PLAYER = {
+export const PREF_PLAYER = {
   NONE:    0,
   GALLERY: 1,
   LIST:    2,
@@ -39,7 +34,7 @@ const PREF_PLAYER = {
 const galleryPerPageValues       = [...Array(22).keys()].map(i => i + 3);
 const galleryPerPageValueStrings = [...Array(22).keys()].map(i => `${i + 3}`);
 
-const settingsSchema = {
+export const settingsSchema = {
   version: { description: '', type: INTEGER, values: [1, 999999], default: 6, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
@@ -91,7 +86,7 @@ const settingsSchema = {
   }
 };
 
-const defaultSettings = {
+export const defaultSettings = {
   version: settingsSchema.version.default,
   playback: {
     preferredPlayer:      settingsSchema.playback.preferredPlayer.default,
@@ -148,7 +143,7 @@ const defaultSettings = {
 // Presets
 // ************************************************************************************************
 
-const presetsSchema = {
+export const presetsSchema = {
   version: { description: '', type: INTEGER, values: [1, 999999], default: 1, valueStrings: [] },
   crossfade: [
     {
@@ -184,7 +179,7 @@ const presetsSchema = {
   ],
 };
 
-const presetList = {
+export const presetList = {
   version: presetsSchema.version.default,
   crossfade: [
     {

@@ -14,28 +14,20 @@ import {
 } from './storage.js';
 
 
-export {
-  response,
-  settings,
-  getSessionData,
-  readSettings,
-};
-
-
 /*************************************************************************************************/
 
 
 const debug = debugLogger.newInstance('session-data');
 
-let response = {};
-let settings = {};
+export let response = {};
+export let settings = {};
 
 
 // ************************************************************************************************
 //
 // ************************************************************************************************
 
-function getSessionData()
+export function getSessionData()
 {
   debug.log('UF_RESPONSE_DATA');
   response = UF_RESPONSE_DATA; // eslint-disable-line no-undef
@@ -44,7 +36,7 @@ function getSessionData()
   readSettings();
 }
 
-function readSettings()
+export function readSettings()
 {
   settings = readWriteSettingsProxy(KEY.UF_SETTINGS, defaultSettings, true);
   debug.log(settings);

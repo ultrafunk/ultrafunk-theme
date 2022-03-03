@@ -20,25 +20,6 @@ import {
 } from '../../shared/utils.js';
 
 
-export {
-  init,
-  ready,
-  queryTrack,
-  queryTrackAll,
-  queryTrackId,
-  getCurrentTrackElement,
-  getTrackType,
-  getPrevPlayableId,
-  getNextPlayableId,
-  setCuedTrack,
-  loadMoreTracks,
-  setCurrentTrackState,
-  setNextTrackState,
-  setTrackMessage,
-  updateTrackDetails,
-};
-
-
 /*************************************************************************************************/
 
 
@@ -59,7 +40,7 @@ const m = {
 //
 // ************************************************************************************************
 
-function init(setCurrentTrackFunc)
+export function init(setCurrentTrackFunc)
 {
   debug.log('init()');
 
@@ -90,7 +71,7 @@ function init(setCurrentTrackFunc)
   });
 }
 
-function ready(player)
+export function ready(player)
 {
   m.player = player;
   m.currentElement.classList.add('current');
@@ -115,27 +96,27 @@ function observerCallback(entries)
 //
 // ************************************************************************************************
 
-function queryTrack(selectors)
+export function queryTrack(selectors)
 {
   return m.tracklist.querySelector(selectors);
 }
 
-function queryTrackAll(selectors)
+export function queryTrackAll(selectors)
 {
   return m.tracklist.querySelectorAll(selectors);
 }
 
-function queryTrackId(id)
+export function queryTrackId(id)
 {
   return document.getElementById(id);
 }
 
-function getCurrentTrackElement()
+export function getCurrentTrackElement()
 {
   return m.currentElement;
 }
 
-function getTrackType(element)
+export function getTrackType(element)
 {
   const trackType = element.getAttribute('data-track-type');
 
@@ -145,7 +126,7 @@ function getTrackType(element)
   return TRACK_TYPE.NONE;
 }
 
-function getPrevPlayableId()
+export function getPrevPlayableId()
 {
   let destElement = (m.currentElement !== null)
                       ? m.currentElement.previousElementSibling
@@ -157,7 +138,7 @@ function getPrevPlayableId()
   return ((destElement !== null) ? destElement.id : null);
 }
 
-function getNextPlayableId(startElement = m.currentElement)
+export function getNextPlayableId(startElement = m.currentElement)
 {
   let destElement = (startElement !== null)
                       ? startElement.nextElementSibling
@@ -169,7 +150,7 @@ function getNextPlayableId(startElement = m.currentElement)
   return ((destElement !== null) ? destElement.id : null);
 }
 
-function setCuedTrack(trackId)
+export function setCuedTrack(trackId)
 {
   m.currentElement = queryTrackId(trackId);
   m.tracklistObserver.observe(m.currentElement);
@@ -293,7 +274,7 @@ function initLoadMoreTracks()
   }
 }
 
-async function loadMoreTracks()
+export async function loadMoreTracks()
 {
   let tracksLoaded = false;
   
@@ -337,7 +318,7 @@ function clearTrackState(element)
   element.classList.remove('current', STATE.LOADING.CLASS, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
 }
 
-function setCurrentTrackState(newState)
+export function setCurrentTrackState(newState)
 {
   if (m.currentState.ID !== newState.ID)
   {
@@ -362,7 +343,7 @@ function setCurrentTrackState(newState)
   }
 }
 
-function setNextTrackState(nextTrackId, isPointerClick)
+export function setNextTrackState(nextTrackId, isPointerClick)
 {
   clearTrackState(m.currentElement);
 
@@ -374,13 +355,13 @@ function setNextTrackState(nextTrackId, isPointerClick)
   m.currentElement.classList.add('current');
 }
 
-function setTrackMessage(message)
+export function setTrackMessage(message)
 {
   m.currentElement.querySelector('.track-message').textContent   = message;
   m.currentElement.querySelector('.track-message').style.display = 'block';
 }
 
-function updateTrackDetails()
+export function updateTrackDetails()
 {
   const sourceUid = m.currentElement.getAttribute('data-track-source-uid');
   
