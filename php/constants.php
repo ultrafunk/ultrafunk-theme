@@ -11,7 +11,7 @@ namespace Ultrafunk\Theme\Constants;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.40.9';
+const VERSION = '1.40.10';
 
 const THEME_ENV = [
   'menu_item_all_id'         => WP_DEBUG ?  115 :  115,
