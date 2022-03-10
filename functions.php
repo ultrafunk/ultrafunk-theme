@@ -102,14 +102,22 @@ add_action('wp_enqueue_scripts', 'ultrafunk_enqueue_styles');
 
 
 //
-// Get Ultrafunk theme specific stuff...
+// Load Ultrafunk theme files, skip if (WP_INSTALLING  === true) because plugins are NOT loaded,
+// and this theme needs stuff from the Ultrafunk plugin to work!
 //
-require get_template_directory() . '/php/constants.php';
-require get_template_directory() . '/php/theme-widgets.php';
-
-if (is_admin() === false)
+if (defined('WP_INSTALLING') && WP_INSTALLING)
 {
-  require get_template_directory() . '/php/build-env.php';
-  require get_template_directory() . '/php/theme-functions.php';
-  require get_template_directory() . '/php/theme-tags.php';
+  return;
+}
+else
+{
+  require get_template_directory() . '/php/constants.php';
+  require get_template_directory() . '/php/theme-widgets.php';
+  
+  if (is_admin() === false)
+  {
+    require get_template_directory() . '/php/build-env.php';
+    require get_template_directory() . '/php/theme-functions.php';
+    require get_template_directory() . '/php/theme-tags.php';
+  }
 }
