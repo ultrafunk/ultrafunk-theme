@@ -79,6 +79,8 @@
   padding: 0px 0px 0px 12px;
   width: 40px;
   height: 40px;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 

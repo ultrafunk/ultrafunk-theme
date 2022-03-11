@@ -80,6 +80,8 @@
   align-items: center;
   justify-content: space-between;
   border-radius: var(--button-border-radius);
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 
@@ -152,6 +154,8 @@
   padding: 10px;
   text-decoration: none;
   color: var(--primary-icon-color);
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 
@@ -166,6 +170,8 @@
   height: 30px;
   padding: 10px;
   color: var(--primary-icon-color);
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 
@@ -296,6 +302,8 @@
   display: inline-block;
   overflow: hidden;
   position: relative;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   background-color: var(--track-thumbnail-even-placeholder-color);
 }

@@ -111,13 +111,40 @@ if (defined('WP_INSTALLING') && WP_INSTALLING)
 }
 else
 {
-  require get_template_directory() . '/php/constants.php';
-  require get_template_directory() . '/php/theme-widgets.php';
-  
-  if (is_admin() === false)
+  // Check if the needed (companion) Ultrafunk plugin is installed and active
+  if (function_exists("\Ultrafunk\Plugin\activate") === false)
   {
-    require get_template_directory() . '/php/build-env.php';
-    require get_template_directory() . '/php/theme-functions.php';
-    require get_template_directory() . '/php/theme-tags.php';
+    if (is_admin())
+    {
+      add_action('admin_notices', function()
+      {
+        ?>
+        <div class="notice notice-warning is-dismissible">
+          <p>The <b><a href="https://github.com/ultrafunk/ultrafunk-theme/">Ultrafunk theme</a></b> requires the
+          <b><a href="https://github.com/ultrafunk/ultrafunk-plugin/">Ultrafunk plugin</a></b> to function!
+          <a href="/wp-admin/plugins.php">Show installed plugins</a></p>
+        </div>
+        <?php
+      });
+    }
+    else
+    {
+      add_filter('wp_php_error_message', function(string $message) : string
+      {
+        return $message . "<p>Ultrafunk theme and / or plugin not properly installed!</p>";
+      }, 10, 1);
+    }
+  }
+  else
+  {
+    require get_template_directory() . '/php/constants.php';
+    require get_template_directory() . '/php/theme-widgets.php';
+    
+    if (is_admin() === false)
+    {
+      require get_template_directory() . '/php/build-env.php';
+      require get_template_directory() . '/php/theme-functions.php';
+      require get_template_directory() . '/php/theme-tags.php';
+    }
   }
 }

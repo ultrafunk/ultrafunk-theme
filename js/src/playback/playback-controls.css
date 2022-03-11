@@ -97,6 +97,8 @@ body.autoplay-off .progress-bar-control {
   margin-right: 10px;
   padding: 5px 10px;
   color: var(--primary-icon-color);
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   cursor: pointer;
 }
@@ -181,6 +183,8 @@ body.autoplay-off .progress-bar-control {
   text-align: right;
   margin-right: 10px;
   color: var(--primary-icon-color);
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   min-width: 38px;
   cursor: pointer;
@@ -218,6 +222,8 @@ body.single.track .playback-player-type-control {
   opacity: 0.3;
   pointer-events: none;
   cursor: default;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 
@@ -237,6 +243,8 @@ body.single.track .playback-player-type-control {
 .playback-shuffle-control,
 .playback-mute-control {
   display: inline-block;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 

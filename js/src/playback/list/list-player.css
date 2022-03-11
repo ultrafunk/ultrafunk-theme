@@ -225,6 +225,8 @@ body.list-player {
   height: 40px;
   width: 40px;
   object-fit: cover;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   image-rendering: -webkit-optimize-contrast;
 }
@@ -239,7 +241,6 @@ body.list-player {
 }
 
 .artist-title a {
-  width: 100%;
   color: var(--primary-font-color);
   text-decoration: none;
 }
@@ -274,6 +275,8 @@ body.list-player {
   width: 30px;
   height: 30px;
   padding: 5px;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   border-radius: var(--button-border-radius);
 }
@@ -395,6 +398,8 @@ body.list-player {
   color: var(--primary-icon-color);
   font-size: 30px;
   padding: 8px;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 
@@ -437,6 +442,8 @@ body.list-player {
   padding: 12px 0;
   color: var(--site-theme-icon-color);
   background-color: var(--track-load-more-color);
+  -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   overflow: hidden;
 }
