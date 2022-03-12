@@ -112,7 +112,7 @@ if (defined('WP_INSTALLING') && WP_INSTALLING)
 else
 {
   // Check if the needed (companion) Ultrafunk plugin is installed and active
-  if (function_exists("\Ultrafunk\Plugin\activate") === false)
+  if (defined('\Ultrafunk\Plugin\Constants\VERSION') === false)
   {
     if (is_admin())
     {
@@ -131,7 +131,8 @@ else
     {
       add_filter('wp_php_error_message', function(string $message) : string
       {
-        return $message . "<p>Ultrafunk theme and / or plugin not properly installed!</p>";
+        return $message . '<p>The <b><a href="https://github.com/ultrafunk/ultrafunk-theme/">Ultrafunk theme</a></b> requires the
+                           <b><a href="https://github.com/ultrafunk/ultrafunk-plugin/">Ultrafunk plugin</a></b> to function!';
       }, 10, 1);
     }
   }
