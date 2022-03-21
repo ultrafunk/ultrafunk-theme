@@ -11,6 +11,7 @@ import { TRACK_TYPE }   from '../shared-gallery-list.js';
 import {
   getListPlayerUrl,
   getThumbnailData,
+  escHtml,
 } from '../../shared/utils.js';
 
 
@@ -40,6 +41,8 @@ export function getTrackEntryHtml(track)
 {
   const isYouTubeTrack = (track.meta.track_source_type === TRACK_TYPE.YOUTUBE);
   const thumbnailData  = getThumbnailData(track.meta);
+  const trackArtist    = escHtml(track.meta.track_artist);
+  const trackTitle     = escHtml(track.meta.track_title);
 
   const youTubeTrackThumbnailUrl = debug.isDebug()
                                      ? "/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png"
@@ -50,8 +53,8 @@ export function getTrackEntryHtml(track)
                               : '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png';
 
   const trackArtistTitle = isYouTubeTrack
-                             ? `<span><b>${track.meta.track_artist}</b></span><br><span>${track.meta.track_title}</span>`
-                             : `<a href="${track.link}"><span><b>${track.meta.track_artist}</b></span><br><span>${track.meta.track_title}</span></a>`;
+                             ? `<span><b>${trackArtist}</b></span><br><span>${trackTitle}</span>`
+                             : `<a href="${track.link}"><span><b>${trackArtist}</b></span><br><span>${trackTitle}</span></a>`;
   
   const trackPlayNext = isYouTubeTrack
                           ? `<div class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></div>`
@@ -60,8 +63,8 @@ export function getTrackEntryHtml(track)
   return `
     <div id="${track.uid}" class="track-entry ${thumbnailData.class}"
       data-track-id="track-${track.id}"
-      data-track-artist="${track.meta.track_artist}"
-      data-track-title="${track.meta.track_title}"
+      data-track-artist="${trackArtist}"
+      data-track-title="${trackTitle}"
       data-track-url="${track.link}"
       data-track-type="${track.meta.track_source_type}"
       data-track-thumbnail-url="${trackThumbnailUrl}"
