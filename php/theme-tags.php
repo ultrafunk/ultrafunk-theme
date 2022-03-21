@@ -202,7 +202,7 @@ function body_attributes() : void
 
 function get_search_query() : string
 {
-  return isset($_GET['s']) ? esc_attr(urldecode($_GET['s'])) : \get_search_query();
+  return isset($_GET['s']) ? esc_attr(wp_unslash($_GET['s'])) : \get_search_query();
 }
 
 function search_form() : void
