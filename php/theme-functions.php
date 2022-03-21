@@ -15,11 +15,12 @@ use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 use const Ultrafunk\Theme\Constants\THEME_ENV;
 
 use function Ultrafunk\Plugin\Shared\ {
-  console_log,
+//console_log,
   get_shuffle_transient_name,
 };
 
 use function Ultrafunk\Plugin\Globals\ {
+  is_custom_query,
   is_shuffle,
   is_termlist,
   is_list_player,
@@ -119,28 +120,18 @@ add_filter('rest_uf_track_query', '\Ultrafunk\Theme\Functions\modify_rest_uf_tra
 //
 // Set custom post type(s) as default
 //
-function set_get_posts_type(object $query) : void
+function pre_get_posts(object $query) : void
 {
   if (!is_admin() && $query->is_main_query())
   {
     if ($query->is_home() || $query->is_date())
       $query->set('post_type', ['uf_track']);
-  }
-}
-add_action('pre_get_posts', '\Ultrafunk\Theme\Functions\set_get_posts_type');
-
-//
-// Set number of posts (tracks) per page for Search + Shuffle based on user setting
-//
-function set_posts_per_page(object $query) : void
-{
-  if (!is_admin() && $query->is_main_query())
-  {
-    if ($query->is_search || is_shuffle(PLAYER_TYPE::GALLERY))
+    
+    if ($query->is_search() || is_shuffle(PLAYER_TYPE::GALLERY))
       $query->set('posts_per_page', get_globals_prop('gallery_per_page'));
   }
 }
-add_action('pre_get_posts', '\Ultrafunk\Theme\Functions\set_posts_per_page', 1);
+add_action('pre_get_posts', '\Ultrafunk\Theme\Functions\pre_get_posts');
 
 //
 // Show custom post type(s) for archive pages
@@ -158,7 +149,9 @@ add_filter('getarchives_where', '\Ultrafunk\Theme\Functions\custom_getarchives_w
 //
 function modify_search_query(object $query) : void
 {
-  if (!is_admin() && $query->is_main_query() && $query->is_search)
+  $modify_query = $query->is_main_query() || is_custom_query();
+
+  if (!is_admin() && $modify_query && $query->is_search())
   {
     // https://www.w3.org/wiki/Common_HTML_entities_used_for_typography
     $search  = ['&ndash;', '&mdash;', '&lsquo;', '&rsquo;', '&prime;', '&Prime;', '&ldquo;', '&rdquo;', '&quot;'];
@@ -176,6 +169,18 @@ function modify_search_query(object $query) : void
   }
 }
 add_action('parse_query', '\Ultrafunk\Theme\Functions\modify_search_query');
+
+//
+// Filter out all custom query search results that are not tracks (uf_track)
+//
+function posts_results_filter(array $posts, object $query) : array
+{
+  if (!is_admin() && is_custom_query() && $query->is_search())
+    return array_filter($posts, function($entry) { return ($entry->post_type === 'uf_track'); });
+
+  return $posts;
+}
+add_filter('posts_results', '\Ultrafunk\Theme\Functions\posts_results_filter', 10, 2);
 
 //
 // Get current title from context
@@ -197,12 +202,15 @@ function get_title() : string
   else if (is_termlist())
   {
     $title = is_termlist('artists')
-               ? ('Artists: ' . strtoupper($params['request_data']['first_letter']))
+               ? ('Artists: ' . strtoupper($params['data']['first_letter']))
                : 'All Channels';
   }
   else if (is_list_player())
   {
-    $title = $params['title_parts']['title'];
+    if (is_list_player('search'))
+      $title = 'Search Results for "' . $params['title_parts']['title'] . '"';
+    else
+      $title = $params['title_parts']['title'];
   }
   else if (is_tax())
   {
@@ -301,18 +309,6 @@ function disable_iframe_lazy_loading(bool $default, string $tag_name, string $co
 add_filter('wp_lazy_loading_enabled', '\Ultrafunk\Theme\Functions\disable_iframe_lazy_loading', 10, 3);
 
 //
-// Customize the default WordPress search form
-//
-function style_search_form(string $form) : string
-{
-  if (stripos($form, '<input type="search"') !== false)
-    $form = str_ireplace('<input type="search"', '<input type="search" required', $form);
-  
-  return $form;
-}
-add_filter('get_search_form', '\Ultrafunk\Theme\Functions\style_search_form'); 
-
-//
 // Get shuffle menu item URL from current context
 //
 function get_shuffle_path() : string
@@ -358,7 +354,7 @@ function get_shuffle_path() : string
 //
 function get_shuffle_title() : string
 {
-  if (is_list_player() && !is_list_player('date'))
+  if (is_list_player() && !is_list_player('date') && !is_list_player('search'))
     return ('Shuffle: ' . get_request_params()['title_parts']['title']);
 
   $title = '';
@@ -383,7 +379,7 @@ function setup_nav_menu_item(object $menu_item) : object
   
     if (is_list_player())
     {
-      $data = get_request_params()['request_data'];
+      $data = get_request_params()['data'];
   
       if ($menu_item->ID === $menu_item_all_id)
         $menu_item->url = '/list/';

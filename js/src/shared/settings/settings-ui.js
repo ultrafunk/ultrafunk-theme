@@ -5,16 +5,16 @@
 //
 
 
-import * as debugLogger from '../debuglogger.js?ver=1.40.12';
-import { addListener }  from '../utils.js?ver=1.40.12';
-import { showSnackbar } from '../snackbar.js?ver=1.40.12';
+import * as debugLogger from '../debuglogger.js?ver=1.41.0';
+import { addListener }  from '../utils.js?ver=1.41.0';
+import { showSnackbar } from '../snackbar.js?ver=1.41.0';
 
 import {
   KEY,
   deleteCookie,
   readJson,
   writeJson,
-} from '../storage.js?ver=1.40.12';
+} from '../storage.js?ver=1.41.0';
 
 import {
   TYPE_INTEGER,
@@ -22,7 +22,7 @@ import {
   TYPE_STRING,
   settingsSchema,
   defaultSettings,
-} from './settings.js?ver=1.40.12';
+} from './settings.js?ver=1.41.0';
 
 
 /*************************************************************************************************/

@@ -19,16 +19,6 @@ use function Ultrafunk\Plugin\Globals\ {
 
 function render_template(object $request_handler) : void
 {
-  $terms = get_terms([
-    'taxonomy'     => $request_handler->taxonomy,
-    'orderby'      => 'name',
-    'order'        => 'ASC',
-    'hide_empty'   => true,
-    'number'       => $request_handler->item_count,
-  //'offset'       => (($request_handler->item_count * $request_handler->current_page) - $request_handler->item_count),
-    'first_letter' => (isset($request_handler->first_letter) ? $request_handler->first_letter : null),
-  ]);
-
   if (is_termlist('artists'))
   {
     ?><div class="artist-letters-container"><?php
@@ -45,27 +35,27 @@ function render_template(object $request_handler) : void
     ?></div><?php
   }
 
-  if (!empty($terms))
+  if (!empty($request_handler->query_data))
   {
     ?>
     <term-list id="termlist-container" class="entry-content <?php echo "term-$request_handler->term_type"; ?>" data-term-type="<?php echo $request_handler->term_type; ?>">
       <?php if (is_termlist('channels')) { ?>
         <div class="termlist-title"><b>All Channels</b> (tracks)</div>
       <?php } ?>
-      <?php termlist_entries($request_handler, $terms); ?>
+      <?php termlist_entries($request_handler); ?>
     </term-list>
     <?php
   //\Ultrafunk\Plugin\Shared\request_pagination($request_handler);
   }
 }
 
-function termlist_entries(object $request_handler, array $terms) : void
+function termlist_entries(object $request_handler) : void
 {
   $odd_even  = is_termlist('artists') ? 1 : 0;
   $home_url  = get_cached_home_url();
   $term_path = $request_handler->term_path;
 
-  foreach($terms as $term)
+  foreach($request_handler->query_data as $term)
   {
     $row_class = (($odd_even++ % 2) === 1) ? 'odd' : 'even';
     $term_name = esc_html($term->name);

@@ -218,6 +218,7 @@ body.autoplay-off .progress-bar-control {
 }
 
 body.search .playback-player-type-control,
+body.list-player-search .playback-player-type-control,
 body.single.track .playback-player-type-control {
   opacity: 0.3;
   pointer-events: none;

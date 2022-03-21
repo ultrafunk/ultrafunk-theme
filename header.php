@@ -26,7 +26,7 @@ use \Ultrafunk\Theme\Tags as ultrafunk;
 <header id="site-header" class="hide-nav-menu">
   <?php ultrafunk\header_progress_controls(); ?>
   <div class="site-header-container">
-    <div id="search-container"><?php get_search_form(); ?></div>
+    <div id="search-container"><?php ultrafunk\search_form(); ?></div>
     <div class="site-branding-container">
       <?php
       ultrafunk\header_site_branding();

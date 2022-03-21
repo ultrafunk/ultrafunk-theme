@@ -16,7 +16,7 @@ namespace Ultrafunk\Theme\Templates\None;
   <?php } else { ?>
     <h1 class="entry-header">Sorry, unable to find the content you were looking for...</h1>
   <?php } ?>
-  <?php echo get_search_form(); ?>
+  <?php \Ultrafunk\Theme\Tags\search_form(); ?>
   <p><b>Ultrafunk past projects:</b> ProTracker, Sonitus:fx DX / VST audio plug-ins, Popcorn email client,
   Organic One speaker system, Ultrafunk DSP platform and more can be found here:
   <a href="https://old.ultrafunk.com">https://old.ultrafunk.com</a></p>

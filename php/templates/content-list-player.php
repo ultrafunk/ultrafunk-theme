@@ -13,7 +13,6 @@ use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 use function Ultrafunk\Plugin\Globals\get_cached_home_url;
 
 use function Ultrafunk\Plugin\Shared\ {
-  console_log,
   request_pagination,
   get_track_data,
 };
@@ -24,9 +23,7 @@ use function Ultrafunk\Plugin\Shared\ {
 
 function render_template(object $request_handler) : void
 {
-  $tracks = get_posts($request_handler->query_args);
-
-  if (!empty($tracks))
+  if (!empty($request_handler->query_data))
   {
     ?>
     <div id="list-player-container" class="player-container">
@@ -39,7 +36,7 @@ function render_template(object $request_handler) : void
         data-term-type="<?php echo $request_handler->term_type       ?? ''; ?>"
         data-term-id="<?php  echo $request_handler->wp_term->term_id ?? ''; ?>"
         >
-        <?php tracklist_entries($request_handler, $tracks); ?>
+        <?php tracklist_entries($request_handler); ?>
         <div id="tracklist-load-more">
           <div class="load-more-title">Load more tracks...<span class="light-text"></span></div>
           <div class="load-more-loader">
@@ -62,12 +59,12 @@ function term_links(array $tags, string $path, $track_artist_id = -1) : void
   }
 }
 
-function tracklist_entries(object $request_handler, array $tracks) : void
+function tracklist_entries(object $request_handler) : void
 {
   global $ultrafunk_is_prod_build;
   $home_url = get_cached_home_url();
 
-  foreach($tracks as $track)
+  foreach($request_handler->query_data as $track)
   {
     $track_artist     = esc_html($track->track_artist);
     $track_title      = esc_html($track->track_title);

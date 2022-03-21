@@ -107,11 +107,11 @@ function scripts_styles() : void
 
   ?>
   <script><?php echo 'const UF_RESPONSE_DATA = ' . json_encode(\Ultrafunk\Plugin\Globals\get_session_vars()); ?></script>
-  <script type="module" src="<?php echo $template_uri . $js_path . 'playback/interaction.js?ver='      . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
-  <script type="module" src="<?php echo $template_uri . $js_path . 'index.js?ver='                     . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
+  <script type="module" src="<?php echo $template_uri . $js_path  . 'playback/interaction.js?ver='     . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
+  <script type="module" src="<?php echo $template_uri . $js_path  . 'index.js?ver='                    . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
   <noscript><link rel="stylesheet" href="<?php echo $template_uri . '/inc/css/style-noscript.css?ver=' . \Ultrafunk\Theme\Constants\VERSION; ?>" media="all" /></noscript>
   <?php
-  
+
   if (!is_page() && !is_list_player() && !is_termlist())
     echo '<script defer src="https://w.soundcloud.com/player/api.js"></script>' . PHP_EOL;
 }
@@ -176,7 +176,7 @@ function body_attributes() : void
   else if (is_termlist())
     $classes[] = 'termlist';
   else if (is_list_player())
-    $classes[] = 'list-player';
+    $classes[] = 'list-player' . (is_list_player('search') ? ' list-player-search' : '');
   else if (is_tax('uf_artist'))
     $classes[] = 'artist';
   else if (is_tax('uf_channel'))
@@ -198,6 +198,24 @@ function body_attributes() : void
 
   if ($gallery_track_count > 0)
     echo " data-player-type=\"gallery\" data-gallery-track-count=\"$gallery_track_count\"";
+}
+
+function get_search_query() : string
+{
+  return isset($_GET['s']) ? esc_attr($_GET['s']) : \get_search_query();
+}
+
+function search_form() : void
+{
+  ?>
+  <form role="search" method="get" class="search-form" action="<?php echo get_cached_home_url(is_list_player() ? '/list/search/' : '/'); ?>">
+    <label>
+      <span class="screen-reader-text">Search for:</span>
+      <input type="search" required="" class="search-field" placeholder="Search …" value="<?php echo get_search_query(); ?>" name="s">
+    </label>
+    <input type="submit" class="search-submit" value="Search">
+  </form>
+  <?php
 }
 
 function header_progress_controls() : void
@@ -319,7 +337,7 @@ function header_nav_bars() : void
   <?php
 }
 
-function get_wp_pagination(string $before = ' ( ', string $separator = ' / ', string $after = ' ) ') : string
+function get_pagination(string $before = ' ( ', string $separator = ' / ', string $after = ' ) ') : string
 {
   global $wp_query;
   $pagination = '';
@@ -340,7 +358,7 @@ function get_search_hits() : string
     if ($wp_query->max_num_pages <= 1)
       return ' (' . $wp_query->found_posts . ' hits)';
     else
-      return ' (' . $wp_query->found_posts . ' hits - page ' . get_wp_pagination('', ' of ', ')');
+      return ' (' . $wp_query->found_posts . ' hits - page ' . get_pagination('', ' of ', ')');
   }
 
   return '';
@@ -350,7 +368,7 @@ function nav_bar_title() : void
 {
   $prefix     = is_shuffle(PLAYER_TYPE::GALLERY) ? '<b>Shuffle: </b>' : '<b>Channel: </b>';
   $title      = esc_html(get_title());
-  $pagination = esc_html(get_wp_pagination());
+  $pagination = esc_html(get_pagination());
   $params     = get_request_params();
 
   if (is_single())
@@ -370,7 +388,7 @@ function nav_bar_title() : void
     $prefix     = is_termlist('artists') ? '<b>All Artists</b>' : '<b>All Channels</b>';
     $title      = '';
     $pagination = '';
-    $data       = $params['request_data'];
+    $data       = $params['data'];
   
     if ($params['max_pages'] > 1)
       $prefix = $prefix . ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )';
@@ -382,6 +400,7 @@ function nav_bar_title() : void
   else if (is_list_player())
   {
     $prefix     = '<b>' . $params['title_parts']['prefix'] . ': </b>';
+    $title      = is_list_player('search') ? get_search_query() : $title;
     $pagination = ($params['max_pages'] > 1)
                     ? ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )'
                     : '';
@@ -408,30 +427,13 @@ function nav_bar_title() : void
 
 function content_pagination() : void
 {
-  $prefix = is_shuffle(PLAYER_TYPE::GALLERY) ? 'Shuffle: ' : 'Channel: ';
-  $title  = esc_html(get_title());
-  
-  if (is_search())
-  {
-    $prefix = 'Search results: ';
-    $title  = get_search_query();
-  }
-  else if (is_tax())
-  {
-    $prefix = is_tax('uf_channel') ? '<b>Channel: </b>' : '<b>Artist: </b>';
-  }
-
-  $title_pagination = get_the_posts_pagination([
+  the_posts_pagination([
     'mid_size'           => 4,
-    'screen_reader_text' => ' ',
+    'screen_reader_text' => 'Pagination',
     'prev_text'          => '&#10094;&#10094; Prev.',
     'next_text'          => 'Next &#10095;&#10095;',
     'type'               => 'list',
   ]);
-  
-  $title_pagination = str_ireplace('<h2 class="screen-reader-text">', sprintf('<h2 class="screen-reader-text">%s<span class="light-text">%s</span>', $prefix, $title), $title_pagination);
-  
-  echo $title_pagination;
 }
 
 function entry_title() : void
@@ -560,8 +562,8 @@ function perf_results() : void
     if (($perf_data['create_rnd_transient'] !== 0) || ($perf_data['get_rnd_transient'] !== 0))
       $results .= ' - cRnd: ' . $perf_data['create_rnd_transient'] . ' ms - gRnd: ' . $perf_data['get_rnd_transient'] . ' ms';
 
-    if ($perf_data['RouteRequest'] !== 0)
-      $results .= ' - RouteRequest: ' . $perf_data['RouteRequest'] . ' ms';
+    if ($perf_data['route_request'] !== 0)
+      $results .= ' - RouteRequest: ' . $perf_data['route_request'] . ' ms';
 
     echo '<!-- ' . esc_html($results) . ' -->';
   }
