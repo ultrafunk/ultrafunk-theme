@@ -259,10 +259,10 @@ function arrowUpDownClick(targetElement, isArrowUpClick)
 
 function initLoadMoreTracks()
 {
-  if (response.requestType.all     ||
-      response.requestType.channel ||
-      response.requestType.artist  ||
-      response.requestType.shuffle)
+  if (response.params.all     ||
+      response.params.channel ||
+      response.params.artist  ||
+      response.params.shuffle)
   {
     if ((response.nextPage !== null) && (response.currentPage < response.maxPages))
     {

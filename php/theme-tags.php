@@ -16,6 +16,7 @@ use Ultrafunk\Plugin\Constants\ {
 use const Ultrafunk\Theme\Constants\THEME_ENV;
 
 use function Ultrafunk\Plugin\Globals\ {
+  is_request,
   is_termlist,
   is_list_player,
   is_shuffle,
@@ -200,18 +201,20 @@ function body_attributes() : void
     echo " data-player-type=\"gallery\" data-gallery-track-count=\"$gallery_track_count\"";
 }
 
-function get_search_query() : string
+function get_search_string() : string
 {
-  return isset($_GET['s']) ? esc_attr(wp_unslash($_GET['s'])) : \get_search_query();
+  return isset($_GET['s']) ? esc_attr(wp_unslash($_GET['s'])) : '';
 }
 
 function search_form() : void
 {
+  $is_list_player_search = (is_list_player() || is_request('response', 'list_player', 'search'));
+  
   ?>
-  <form role="search" method="get" class="search-form" action="<?php echo get_cached_home_url(is_list_player() ? '/list/search/' : '/'); ?>">
+  <form role="search" method="get" class="search-form" action="<?php echo get_cached_home_url($is_list_player_search ? '/list/search/' : '/'); ?>">
     <label>
       <span class="screen-reader-text">Search for:</span>
-      <input type="search" required="" class="search-field" placeholder="Search …" value="<?php echo get_search_query(); ?>" name="s">
+      <input type="search" required="" class="search-field" placeholder="Search …" value="<?php echo get_search_string(); ?>" name="s">
     </label>
     <input type="submit" class="search-submit" value="Search">
   </form>
@@ -400,7 +403,7 @@ function nav_bar_title() : void
   else if (is_list_player())
   {
     $prefix     = '<b>' . $params['title_parts']['prefix'] . ': </b>';
-    $title      = is_list_player('search') ? get_search_query() : $title;
+    $title      = is_list_player('search') ? get_search_string() : $title;
     $pagination = ($params['max_pages'] > 1)
                     ? ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )'
                     : '';
@@ -414,7 +417,7 @@ function nav_bar_title() : void
   else if (is_search())
   {
     $prefix     = '<b>Search: </b>';
-    $title      = get_search_query();
+    $title      = get_search_string();
     $pagination = esc_html(get_search_hits());
   }
   else if (is_tax())

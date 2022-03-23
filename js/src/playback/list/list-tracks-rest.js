@@ -91,12 +91,12 @@ function getShuffleParams()
 {
   let shuffleParams = '';
 
-  if (responseData.requestType.shuffle)
+  if (responseData.params.shuffle)
   {
-    shuffleParams = `&shuffle=true&shuffle_type=${responseData.requestType.shuffle_type}`;
+    shuffleParams = `&shuffle=true&shuffle_type=${responseData.params.shuffle_type}`;
 
-    if (responseData.requestType.shuffle_slug !== null)
-      shuffleParams += `&shuffle_slug=${responseData.requestType.shuffle_slug}`;
+    if (responseData.params.shuffle_slug !== null)
+      shuffleParams += `&shuffle_slug=${responseData.params.shuffle_slug}`;
 
     debug.log(`getShuffleParams(): ${shuffleParams}`);
   }
