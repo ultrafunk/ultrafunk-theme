@@ -22,8 +22,8 @@ export const SITE_URL = debug.isDebug() ? 'https://wordpress.ultrafunk.com'     
 const SITE_URL_LIST   = debug.isDebug() ? 'https://wordpress.ultrafunk.com/list' : 'https://ultrafunk.com/list';
 
 const validUrlRegEx = debug.isDebug()
-                        ? /^https:\/\/wordpress\.ultrafunk\.com[/?=%A-Za-z0-9\-_.~+]*$/
-                        : /^https:\/\/ultrafunk\.com[/?=%A-Za-z0-9\-_.~+]*$/;
+                        ? /^https:\/\/wordpress\.ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/
+                        : /^https:\/\/ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/;
 
 const DOMParserInstance = new DOMParser();
 

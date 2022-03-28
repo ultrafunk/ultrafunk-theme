@@ -161,7 +161,7 @@ function modify_search_query(object $query) : void
     $new_query_string = str_replace($search, $replace, $new_query_string);
     $new_query_string = html_entity_decode($new_query_string);
 
-    // Category R&B needs special handling...
+    //Search string "R&B" needs special handling to match "R&amp;B"
     $new_query_string = str_ireplace('r&b', 'r&amp;b', $new_query_string);
 
     if ($new_query_string !== $query->query['s'])
@@ -171,16 +171,18 @@ function modify_search_query(object $query) : void
 add_action('parse_query', '\Ultrafunk\Theme\Functions\modify_search_query');
 
 //
-// Filter out all custom query search results that are not tracks (uf_track)
+// Filter out all list-player search results that are not tracks (uf_track)
 //
-function posts_results_filter(array $posts, object $query) : array
+function filter_posts_results(array $posts, object $query) : array
 {
-  if (!is_admin() && is_custom_query() && $query->is_search())
+  $filter_results = (is_custom_query() || (\defined('REST_REQUEST') && REST_REQUEST));
+
+  if (!is_admin() && $filter_results && $query->is_search())
     return array_filter($posts, function($entry) { return ($entry->post_type === 'uf_track'); });
 
   return $posts;
 }
-add_filter('posts_results', '\Ultrafunk\Theme\Functions\posts_results_filter', 10, 2);
+add_filter('posts_results', '\Ultrafunk\Theme\Functions\filter_posts_results', 10, 2);
 
 //
 // Get current title from context

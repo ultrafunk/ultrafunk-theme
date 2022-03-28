@@ -262,7 +262,8 @@ function initLoadMoreTracks()
   if (response.params.all     ||
       response.params.channel ||
       response.params.artist  ||
-      response.params.shuffle)
+      response.params.shuffle ||
+      response.params.search)
   {
     if ((response.nextPage !== null) && (response.currentPage < response.maxPages))
     {

@@ -84,36 +84,27 @@ export async function loadTracks(termType, termId)
 
 
 // ************************************************************************************************
-// Fetch tracks + terms
+// Fetch tracks
 // ************************************************************************************************
-
-function getShuffleParams()
-{
-  let shuffleParams = '';
-
-  if (responseData.params.shuffle)
-  {
-    shuffleParams = `&shuffle=true&shuffle_type=${responseData.params.shuffle_type}`;
-
-    if (responseData.params.shuffle_slug !== null)
-      shuffleParams += `&shuffle_slug=${responseData.params.shuffle_slug}`;
-
-    debug.log(`getShuffleParams(): ${shuffleParams}`);
-  }
-
-  return shuffleParams;
-}
 
 function fetchTracks(termType = '', termId = '', page = 1, tracksPerPage = 25)
 {
   debug.log(`fetchTracks() - termType: ${(termType.length === 0) ? 'N/A' : termType} - termId: ${(termId.length === 0) ? 'N/A' : termId} - page: ${page} - tracksPerPage: ${tracksPerPage}`);
 
-  let termQueryArgs = '';
+  let queryParams       = '';
+  const queryPagination = `page=${page}&per_page=${tracksPerPage}`;
+  const queryFields     = '&_fields=id,link,artists,channels,meta'; // ToDo: &_fields=id,type,link,artists,channels,meta`;
+  
+  if (responseData.params.channel || responseData.params.artist)
+    queryParams = getTermQueryParams(termType, termId);
+  else if (responseData.params.shuffle)
+    queryParams = getShuffleQueryParams();
+  else if (responseData.params.search)
+    queryParams = getSearchQueryParams();
 
-  if ((termType.length !== 0) && (termId.length !== 0))
-    termQueryArgs = `${termType}=${parseInt(termId)}&`;
+  debug.log(`fetchTracks(): /wp-json/wp/v2/tracks?${queryParams}${queryPagination}${queryFields}`);
 
-  return fetch(`/wp-json/wp/v2/tracks?${termQueryArgs}page=${page}&per_page=${tracksPerPage}&_fields=id,link,artists,channels,meta${getShuffleParams()}`)
+  return fetch(`/wp-json/wp/v2/tracks?${queryParams}${queryPagination}${queryFields}`)
   .then(response => 
   {
     if (!response.ok)
@@ -130,6 +121,47 @@ function fetchTracks(termType = '', termId = '', page = 1, tracksPerPage = 25)
     return null;
   });
 }
+
+function getTermQueryParams(termType, termId)
+{
+  if ((termType.length !== 0) && (termId.length !== 0))
+    return `${termType}=${parseInt(termId)}&`;
+
+  return '';
+}
+
+function getShuffleQueryParams()
+{
+  let shuffleParams = `shuffle=true&shuffle_type=${responseData.params.shuffle_type}&`;
+
+  if (responseData.params.shuffle_slug !== null)
+    shuffleParams += `shuffle_slug=${responseData.params.shuffle_slug}&`;
+
+  return shuffleParams;
+}
+
+//
+// ToDo: wpessid=4021;
+//
+function getSearchQueryParams()
+{
+  let searchString   = '';
+  const searchParams = new URLSearchParams(window.location.search);
+
+  if (searchParams.has('s'))
+  {
+    searchString = encodeURIComponent(searchParams.get('s'));
+  //Search string "R&B" needs special handling to match "R&amp;B"
+    searchString = searchString.replace(/r%26b/i, 'r%26amp;b');
+  }
+
+  return `search=${searchString}&orderby=relevance&wpessid=true&`;
+}
+
+
+// ************************************************************************************************
+// Fetch terms
+// ************************************************************************************************
 
 function fetchTerms(termType, termIds, maxItems = 50)
 {

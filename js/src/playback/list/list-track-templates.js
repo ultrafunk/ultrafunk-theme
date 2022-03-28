@@ -27,8 +27,8 @@ const debug = debugLogger.newInstance('list-track-templates');
 
 export function getPageSeparatorHtml(responseData, loadingPage)
 {
-  const pageUrl = responseData.nextPage.replace(/\/page\/(?!0)\d{1,6}\/$/i, `/page/${loadingPage}/`);
-  
+  const pageUrl = responseData.nextPage.replace(/\/page\/(?!0)\d{1,6}\//i, `/page/${loadingPage}/`);
+
   return `
     <div id="tracklist-page-${loadingPage}" class="tracklist-page-separator" data-page-number="${loadingPage}">
       <span class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</span>
