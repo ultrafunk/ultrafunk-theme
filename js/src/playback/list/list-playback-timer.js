@@ -88,12 +88,18 @@ export const playbackTimer = (() =>
          settings.playback.timeRemainingWarning &&
         (lastPosSeconds !== positionSeconds))
     {
-      lastPosSeconds = positionSeconds;
+      const remainingSeconds = durationSeconds - positionSeconds;
+      lastPosSeconds         = positionSeconds;
 
-      if ((durationSeconds - positionSeconds) <= settings.playback.timeRemainingSeconds)
+      if (remainingSeconds <= settings.playback.timeRemainingSeconds)
+      {
         playbackControls.blinkPlayPause(true);
+        playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_TIME_REMAINING, { timeRemainingSeconds: remainingSeconds });
+      }
       else
+      {
         playbackControls.blinkPlayPause(false);
+      }
     }
   }
 })();

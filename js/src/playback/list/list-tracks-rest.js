@@ -93,7 +93,7 @@ function fetchTracks(termType = '', termId = '', page = 1, tracksPerPage = 25)
 
   let queryParams       = '';
   const queryPagination = `page=${page}&per_page=${tracksPerPage}`;
-  const queryFields     = '&_fields=id,link,artists,channels,meta'; // ToDo: &_fields=id,type,link,artists,channels,meta`;
+  const queryFields     = '&_fields=id,link,artists,channels,meta';
   
   if (responseData.params.channel || responseData.params.artist)
     queryParams = getTermQueryParams(termType, termId);

@@ -393,6 +393,7 @@ function onYouTubePlayerStateChange(event)
     // eslint-disable-next-line no-undef
     case YT.PlayerState.ENDED:
       playbackTimer.stop(true);
+      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED);
       advanceToNextTrack(settings.playback.autoplay);
       break;
   }
