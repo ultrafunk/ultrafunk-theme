@@ -6,6 +6,7 @@
 
 
 import * as debugLogger from './debuglogger.js';
+import { settings }     from './session-data.js';
 
 import {
   config,
@@ -47,9 +48,12 @@ export function showModal(typeString, title, singleChoiceList = [], onEntryClick
 
   elements.container.classList = `modal-type-${typeString}`;
   elements.container.querySelector(`.${config.id}-title`).innerHTML = title;
+
+  elements.overlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
   elements.overlay.classList.add('show');
   elements.overlay.addEventListener('keydown', keyDown);
   elements.overlay.focus();
+
   disablePageScrolling(true);
 
   m.modalId++;

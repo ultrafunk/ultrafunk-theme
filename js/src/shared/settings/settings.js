@@ -31,7 +31,7 @@ const galleryPerPageValues       = [...Array(22).keys()].map(i => i + 3);
 const galleryPerPageValueStrings = [...Array(22).keys()].map(i => `${i + 3}`);
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 6, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 8, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -45,7 +45,7 @@ export const settingsSchema = {
   },
   list: {
     moveTrackOnPlayNext: { description: 'Move Track on Play as Next',        type: BOOLEAN, values: [true, false], default: true, valueStrings: ['ON', 'OFF'] },
-    showUpNextModal:     { description: 'Show Up Next modal',                type: BOOLEAN, values: [true, false], default: true, valueStrings: ['ON', 'OFF'] },
+    showUpNextModal:     { description: 'Show Up Next Modal',                type: BOOLEAN, values: [true, false], default: true, valueStrings: ['ON', 'OFF'] },
     showLoadMoreTracks:  { description: 'Show "Load More Tracks..." prompt', type: BOOLEAN, values: [true, false], default: true, valueStrings: ['ON', 'OFF'] },
   },
   gallery: {
@@ -64,9 +64,10 @@ export const settingsSchema = {
     showTrackThumbnail: { description: 'Show Track Thumbnail',        type: BOOLEAN, values: [true, false], default: true,  valueStrings: ['ON', 'OFF'] },
   },
   site: {
-    keyboardShortcuts: { description: 'Keyboard Shortcuts',                    type: BOOLEAN, values: [true, false],             default: true,   valueStrings: ['ON', 'OFF'] },
-    theme:             { description: 'Theme',                                 type: STRING,  values: ['light', 'dark', 'auto'], default: 'auto', valueStrings: ['Light', 'Dark', 'Auto / System'] },
-    smoothScrolling:   { description: 'Use Smooth Scrolling (where possible)', type: BOOLEAN, values: [true, false],             default: true,   valueStrings: ['ON', 'OFF'] },
+    keyboardShortcuts:   { description: 'Keyboard Shortcuts',                    type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
+    theme:               { description: 'Theme',                                 type: STRING,  values: ['light', 'dark', 'auto'],            default: 'auto', valueStrings: ['Light', 'Dark', 'Auto / System'] },
+    smoothScrolling:     { description: 'Use Smooth Scrolling (where possible)', type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
+    modalOverlayOpacity: { description: 'Modal Dialog overlay opacity',          type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 70,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
   },
   tips: {
     showTrackDetailsHint:          { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
@@ -116,9 +117,10 @@ export const defaultSettings = {
     showTrackThumbnail: settingsSchema.mobile.showTrackThumbnail.default,
   },
   site: {
-    keyboardShortcuts: settingsSchema.site.keyboardShortcuts.default,
-    theme:             settingsSchema.site.theme.default,
-    smoothScrolling:   settingsSchema.site.smoothScrolling.default,
+    keyboardShortcuts:   settingsSchema.site.keyboardShortcuts.default,
+    theme:               settingsSchema.site.theme.default,
+    smoothScrolling:     settingsSchema.site.smoothScrolling.default,
+    modalOverlayOpacity: settingsSchema.site.modalOverlayOpacity.default,
   },
   tips: {
     showTrackDetailsHint:          settingsSchema.tips.showTrackDetailsHint.default,
