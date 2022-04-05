@@ -35,17 +35,15 @@ use function Ultrafunk\Theme\Functions\ {
 /**************************************************************************************************************************/
 
 
-function get_user_layout_class() : string
+function user_layout_class() : void
 {
   if (!is_singular() && !is_search() && !is_404())
   {
     global $wp_query;
 
     if (isset($wp_query) && ($wp_query->post_count >= 3))
-      return 'user-layout';
+      echo 'user-layout';
   }
-
-  return '';
 }
 
 function pre_wp_head() : void
@@ -426,6 +424,19 @@ function nav_bar_title() : void
   }
 
   echo '<div class="navbar-title">' . $prefix . $title . $pagination . '</div>';
+}
+
+function single_track_nav_link(bool $is_prev, mixed $post, string $text) : void
+{
+  if (($post !== null) && ($post !== ''))
+  {
+    ?>
+    <div class="<?php echo ($is_prev ? 'nav-previous' : 'nav-next'); ?>">
+      <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_prev ? 'prev' : 'next'); ?>"><b><?php echo $text; ?></b><br>
+      <span class="<?php echo ($is_prev ? 'prev-track-artist-title' : 'next-track-artist-title'); ?>"><?php echo esc_html($post->post_title); ?></span></a>
+    </div>
+    <?php
+  }
 }
 
 function content_pagination() : void

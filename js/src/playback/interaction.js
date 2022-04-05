@@ -102,10 +102,10 @@ function initListeners()
 {
   utils.addListener('.playback-shuffle-control span', 'click', shuffleClickNavTo);
 
-  utils.addListenerAll('span.navbar-arrow-back',           'click', prevNextNavTo, response.prevPage);
-  utils.addListenerAll('span.navbar-arrow-fwd',            'click', prevNextNavTo, response.nextPage);
-  utils.addListener('nav.post-navigation .nav-previous a', 'click', prevNextNavTo, response.prevPage);
-  utils.addListener('nav.post-navigation .nav-next a',     'click', prevNextNavTo, response.nextPage);
+  utils.addListenerAll('span.navbar-arrow-back',            'click', prevNextNavTo, response.prevPage);
+  utils.addListenerAll('span.navbar-arrow-fwd',             'click', prevNextNavTo, response.nextPage);
+  utils.addListener('nav.track-navigation .nav-previous a', 'click', prevNextNavTo, response.prevPage);
+  utils.addListener('nav.track-navigation .nav-next a',     'click', prevNextNavTo, response.nextPage);
   
   document.addEventListener('keydown', documentEventKeyDown);
   window.addEventListener('blur', windowEventBlur);

@@ -10,7 +10,7 @@ use \Ultrafunk\Theme\Tags as ultrafunk;
 
 ?>
 <!doctype html>
-<html <?php language_attributes(); ?> class="<?php echo ultrafunk\get_user_layout_class(); ?>">
+<html <?php language_attributes(); ?> class="<?php ultrafunk\user_layout_class(); ?>">
 <head>
   <meta charset="<?php bloginfo('charset'); ?>">
   <meta name="viewport" content="width=device-width, initial-scale=1">

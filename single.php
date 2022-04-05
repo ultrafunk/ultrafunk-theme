@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * Single post template
+ * Single track template
  *
  */
 
@@ -12,10 +12,18 @@ if (have_posts())
   {
     the_post();
     get_template_part('php/templates/content', 'track');
-    the_post_navigation([
-      'prev_text' => '<b>&#10094;&#10094; PREVIOUS TRACK</b><br><span class="prev-track-artist-title">%title</span>',
-      'next_text' => '<b>NEXT TRACK &#10095;&#10095;</b><br><span class="next-track-artist-title">%title</span>',
-    ]);
+
+    ?>
+    <nav class="navigation track-navigation" aria-label="Tracks">
+      <h2 class="screen-reader-text">Track navigation</h2>
+      <div class="nav-links">
+        <?php
+        \Ultrafunk\Theme\Tags\single_track_nav_link(true,  get_next_post(),     '&#10094;&#10094; PREVIOUS TRACK');
+        \Ultrafunk\Theme\Tags\single_track_nav_link(false, get_previous_post(), 'NEXT TRACK &#10095;&#10095;');
+        ?>
+      </div>
+    </nav>
+    <?php
   }
 }
 

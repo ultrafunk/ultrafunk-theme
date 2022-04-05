@@ -145,6 +145,7 @@ else
     {
       require get_template_directory() . '/php/build-env.php';
       require get_template_directory() . '/php/theme-functions.php';
+      require get_template_directory() . '/php/theme-filters.php';
       require get_template_directory() . '/php/theme-tags.php';
     }
   }

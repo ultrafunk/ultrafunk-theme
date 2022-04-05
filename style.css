@@ -4,7 +4,7 @@ Theme URI:    https://github.com/ultrafunk/ultrafunk-theme
 Author:       Ultrafunk
 Author URI:   https://ultrafunk.com
 Description:  ultrafunk.com WordPress theme
-Version:      1.41.7
+Version:      1.41.8
 Tested up to: 5.9
 Requires PHP: 8.0
 License:      MIT License
@@ -587,7 +587,7 @@ nav.navigation.pagination {
   margin: 94px auto 100px auto;
 }
 
-nav.navigation.post-navigation {
+nav.navigation.track-navigation {
   margin: 100px auto;
 }
 
@@ -637,36 +637,36 @@ nav .nav-links ul {
   display: block;
 }
 
-.post-navigation .nav-links {
+.track-navigation .nav-links {
   display: flex;
   width: 100%;
 }
 
-.post-navigation .nav-previous,
-.post-navigation .nav-next {
+.track-navigation .nav-previous,
+.track-navigation .nav-next {
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.post-navigation .nav-previous {
+.track-navigation .nav-previous {
   margin-right: 20px;
 }
 
-.post-navigation .nav-next {
+.track-navigation .nav-next {
   margin-left: 20px;
   text-align: right;
 }
 
-.post-navigation .nav-previous a,
-.post-navigation .nav-next a {
+.track-navigation .nav-previous a,
+.track-navigation .nav-next a {
   color: var(--primary-font-color);
   text-decoration: none;
 }
 
-.post-navigation .nav-previous a:hover,
-.post-navigation .nav-next a:hover {
+.track-navigation .nav-previous a:hover,
+.track-navigation .nav-next a:hover {
   color: var(--link-hover-color);
   text-decoration: underline;
 }
@@ -1495,18 +1495,18 @@ body.no-playback .sticky-nav-up .site-header-container {
     line-height: 31px;
   }
 
-  .post-navigation .nav-previous,
-  .post-navigation .nav-next {
+  .track-navigation .nav-previous,
+  .track-navigation .nav-next {
     white-space: unset;
     overflow: unset;
     text-overflow: unset;
   }
   
-  .post-navigation .nav-previous{
+  .track-navigation .nav-previous{
     margin-right: 12px;
   }
   
-  .post-navigation .nav-next {
+  .track-navigation .nav-next {
     margin-left: 12px;
   }
 
@@ -1907,15 +1907,15 @@ body.no-playback .sticky-nav-up .site-header-container {
     margin: 64px auto 70px auto;
   }
   
-  nav.navigation.post-navigation {
+  nav.navigation.track-navigation {
     margin: 60px auto 55px auto;
   }
 
-  .post-navigation .nav-previous{
+  .track-navigation .nav-previous{
     margin-right: 7px;
   }
   
-  .post-navigation .nav-next {
+  .track-navigation .nav-next {
     margin-left: 7px;
   }
 
