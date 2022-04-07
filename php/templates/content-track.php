@@ -8,19 +8,12 @@
 namespace Ultrafunk\Theme\Templates\Track;
 
 
-use function Ultrafunk\Theme\Functions\get_next_track_id;
-
-
-/**************************************************************************************************************************/
-
-
 ?>
 
 <single-track id="track-<?php the_ID(); ?>" class=""
   data-track-artist="<?php echo esc_html($post->track_artist); ?>"
   data-track-title="<?php echo esc_html($post->track_title); ?>"
   data-track-source-data="<?php echo esc_html($post->track_source_data); ?>"
-  data-next-track-id="<?php echo get_next_track_id(); ?>"
   >
   <header class="entry-header">
     <?php \Ultrafunk\Theme\Tags\entry_title(); ?>

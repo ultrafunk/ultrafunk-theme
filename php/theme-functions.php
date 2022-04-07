@@ -86,19 +86,6 @@ function get_session_vars() : array
 }
 
 //
-// Get the next track ID = next post ID (orderby: from New to Old)
-//
-function get_next_track_id() : mixed
-{
-  $next_post = get_previous_post();
-
-  if (($next_post !== null) && ($next_post !== ''))
-    return intval($next_post->ID);
-
-  return '';
-}
-
-//
 // Get current title from context
 //
 function get_title() : string

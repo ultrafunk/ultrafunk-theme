@@ -77,7 +77,7 @@ export const shareModal = (() =>
         break;
 
       case 'shareOnEmailId':
-        window.location.href = `mailto:?subject=${encodeURIComponent(bodyText)}&body=${url}%0d%0a`;
+        window.location.href = `mailto:?subject=${encodeURIComponent(bodyText)}&body=${encodeURI(url)}%0d%0a`;
         break;
 
       case 'amazonMusicId':

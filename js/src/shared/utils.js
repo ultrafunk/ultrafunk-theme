@@ -214,3 +214,25 @@ export function getThumbnailData(metaData)
 
   return { src: '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png', class: 'type-soundcloud', uid: '' };
 }
+
+export async function fetchRest(endpoint, query, path = '/wp-json/wp/v2/')
+{
+  debug.log(`fetchRest(): ${path}${endpoint}?${query}`);
+
+  return fetch(`${path}${endpoint}?${query}`)
+  .then(response => 
+  {
+    if (!response.ok)
+    {
+      debug.error(response);
+      return null;
+    }
+
+    return response.json();
+  })
+  .catch(reason =>
+  {
+    debug.warn(reason);
+    return null;
+  });
+}

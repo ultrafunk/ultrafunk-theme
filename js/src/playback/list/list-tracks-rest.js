@@ -6,6 +6,7 @@
 
 
 import * as debugLogger from '../../shared/debuglogger.js';
+import { fetchRest }    from '../../shared/utils.js';
 
 import {
   response as responseData
@@ -84,42 +85,30 @@ export async function loadTracks(termType, termId)
 
 
 // ************************************************************************************************
-// Fetch tracks
+// Fetch tracks + terms
 // ************************************************************************************************
 
 function fetchTracks(termType = '', termId = '', page = 1, tracksPerPage = 25)
 {
   debug.log(`fetchTracks() - termType: ${(termType.length === 0) ? 'N/A' : termType} - termId: ${(termId.length === 0) ? 'N/A' : termId} - page: ${page} - tracksPerPage: ${tracksPerPage}`);
 
-  let queryParams       = '';
-  const queryPagination = `page=${page}&per_page=${tracksPerPage}`;
-  const queryFields     = '&_fields=id,link,artists,channels,meta';
+  let params       = '';
+  const pagination = `page=${page}&per_page=${tracksPerPage}`;
+  const fields     = '&_fields=id,link,artists,channels,meta';
   
   if (responseData.params.channel || responseData.params.artist)
-    queryParams = getTermQueryParams(termType, termId);
+    params = getTermQueryParams(termType, termId);
   else if (responseData.params.shuffle)
-    queryParams = getShuffleQueryParams();
+    params = getShuffleQueryParams();
   else if (responseData.params.search)
-    queryParams = getSearchQueryParams();
+    params = getSearchQueryParams();
 
-  debug.log(`fetchTracks(): /wp-json/wp/v2/tracks?${queryParams}${queryPagination}${queryFields}`);
+  return fetchRest('tracks', `${params}${pagination}${fields}`);
+}
 
-  return fetch(`/wp-json/wp/v2/tracks?${queryParams}${queryPagination}${queryFields}`)
-  .then(response => 
-  {
-    if (!response.ok)
-    {
-      debug.error(response);
-      return null;
-    }
-    
-    return response.json();
-  })
-  .catch(reason =>
-  {
-    debug.warn(reason);
-    return null;
-  });
+function fetchTerms(termType, termIds, maxItems = 50)
+{
+  return fetchRest(termType, `include=${termIds}&per_page=${maxItems}&_fields=id,link,name`);
 }
 
 function getTermQueryParams(termType, termId)
@@ -156,31 +145,4 @@ function getSearchQueryParams()
   }
 
   return `search=${searchString}&orderby=relevance&wpessid=true&`;
-}
-
-
-// ************************************************************************************************
-// Fetch terms
-// ************************************************************************************************
-
-function fetchTerms(termType, termIds, maxItems = 50)
-{
-  debug.log(`fetchTerms() - termType: ${termType} - termIds: ${(termIds.length > 0) ? termIds : 'Empty'} - maxItems: ${maxItems}`);
-
-  return fetch(`/wp-json/wp/v2/${termType}?include=${termIds}&per_page=${maxItems}&_fields=id,link,name`)
-  .then(response => 
-  {
-    if (!response.ok)
-    {
-      debug.error(response);
-      return null;
-    }
-    
-    return response.json();
-  })
-  .catch(reason =>
-  {
-    debug.warn(reason);
-    return null;
-  });
 }
