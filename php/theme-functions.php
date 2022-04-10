@@ -134,7 +134,7 @@ function get_title() : string
 }
 
 //
-// Get shuffle menu item URL from current context
+// Get shuffle URL from current context
 //
 function get_shuffle_path() : string
 {
@@ -175,7 +175,7 @@ function get_shuffle_path() : string
 }
 
 //
-// Get shuffle menu item title from current context
+// Get shuffle title from current context
 //
 function get_shuffle_title() : string
 {

@@ -33,6 +33,7 @@ const m = {
   currentElement:    null,
   currentState:      STATE.UNKNOWN,
   prevActionButtons: null,
+  playerWrapper:     null,
 };
 
 
@@ -48,6 +49,7 @@ export function init(setCurrentTrackFunc)
 
   m.tracklist         = document.getElementById('tracklist');
   m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
+  m.playerWrapper     = document.querySelector('.wp-block-embed__wrapper');
 
   m.tracklist.addEventListener('click', (event) =>
   {
@@ -344,6 +346,14 @@ export function setCurrentTrackState(newState)
   }
 }
 
+function setPlayerAspectRatio()
+{
+  if (m.currentElement.classList.contains('is-video'))
+    m.playerWrapper.classList.replace('aspect-ratio-1_1', 'aspect-ratio-16_9');
+  else
+    m.playerWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
+}
+
 export function setNextTrackState(nextTrackId, isPointerClick)
 {
   clearTrackState(m.currentElement);
@@ -369,6 +379,7 @@ export function updateTrackDetails()
   m.player.setArtist(m.currentElement.getAttribute('data-track-artist'));
   m.player.setTitle(m.currentElement.getAttribute('data-track-title'));
   m.player.setThumbnail(sourceUid);
+  setPlayerAspectRatio();
 
   return sourceUid;
 }

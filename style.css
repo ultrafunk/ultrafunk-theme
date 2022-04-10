@@ -4,7 +4,7 @@ Theme URI:    https://github.com/ultrafunk/ultrafunk-theme
 Author:       Ultrafunk
 Author URI:   https://ultrafunk.com
 Description:  ultrafunk.com WordPress theme
-Version:      1.41.9
+Version:      1.41.10
 Tested up to: 5.9
 Requires PHP: 8.0
 License:      MIT License
@@ -78,7 +78,7 @@ Tags:         entertainment, portfolio, grid-layout, one-column, two-columns, th
   --form-input-autofill-box-shadow: 0 0 0 50px #fff inset;
 
   --iframe-placeholder-color: #eee;
-  --iframe-placeholder-icon: url(inc/img/player_placeholder_icon_light.png);
+  --iframe-placeholder-icon: url(/wp-content/themes/ultrafunk/inc/img/player_placeholder_icon_light.png);
 
   --date-page-border-color: #888;
   --page-numbers-background: rgba(127, 127, 127, 0.15);
@@ -124,7 +124,7 @@ Tags:         entertainment, portfolio, grid-layout, one-column, two-columns, th
   --form-input-autofill-box-shadow: 0 0 0 50px #222 inset;
 
   --iframe-placeholder-color: #333;
-  --iframe-placeholder-icon: url(inc/img/player_placeholder_icon_dark.png);
+  --iframe-placeholder-icon: url(/wp-content/themes/ultrafunk/inc/img/player_placeholder_icon_dark.png);
 
   --date-page-border-color: #bbb;
   --page-numbers-background: rgba(127, 127, 127, 0.25);
@@ -669,6 +669,11 @@ nav .nav-links ul {
 .track-navigation .nav-next a:hover {
   color: var(--link-hover-color);
   text-decoration: underline;
+}
+
+.track-navigation .nav-previous b,
+.track-navigation .nav-next b {
+  text-transform: uppercase;
 }
 
 .prev-track-artist-title, 

@@ -79,7 +79,7 @@ function ultrafunk_enqueue_styles() : void
 
   if ($ultrafunk_is_prod_build)
   {
-    wp_enqueue_style('ultrafunk-style', get_theme_file_uri('style.min.css'), [], $version);
+    wp_enqueue_style('ultrafunk-style', get_theme_file_uri('/inc/css/style.min.css'), [], $version);
     wp_enqueue_style('bundle-style', get_theme_file_uri('/js/dist/css/bundle.min.css'), [], $version);
   }
   else

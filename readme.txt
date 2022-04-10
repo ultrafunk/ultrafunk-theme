@@ -22,3 +22,6 @@ PHP version 8.0 or greater
 [Theme Check](https://wordpress.org/plugins/theme-check/) (WordPress Plugin from The WordPress Theme Review Team)  
 [WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) (WordPress Plugin)  
 [WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) (WordPress Plugin)
+
+**Screenshot**  
+![Ultrafunk screenshot](https://ultrafunk.com/wp-content/themes/ultrafunk/screenshot.png)

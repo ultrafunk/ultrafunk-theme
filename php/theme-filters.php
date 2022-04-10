@@ -59,34 +59,6 @@ function rest_uf_track_query($args, $request)
 }
 add_filter('rest_uf_track_query', '\Ultrafunk\Theme\Filters\rest_uf_track_query', 10, 2);
 
-/*
-//
-// Add REST filter to respond with next track ID in response.
-//
-function rest_prepare_uf_track($response, $post, $request)
-{
-  if ($request->get_param('per_page') === 1)
-  {
-  //global $post;
-
-  //$next     = get_adjacent_post(false, '', false);
-  //$previous = get_adjacent_post(false, '', true);
-
-  //$response->data['next']     = (is_a($next,     'WP_Post')) ? array("id" => $next->ID,     "slug" => $next->post_name    ) : null;
-  //$response->data['previous'] = (is_a($previous, 'WP_Post')) ? array("id" => $previous->ID, "slug" => $previous->post_name) : null;
-
-    $response->data['next_track_id'] = 1234;
-  }
-
-  return $response;
-}
-add_filter('rest_prepare_uf_track', '\Ultrafunk\Theme\Filters\rest_prepare_uf_track', 10, 3);
-*/
-
-
-/**************************************************************************************************************************/
-
-
 //
 // Set custom post type(s) as default
 //

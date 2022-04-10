@@ -45,6 +45,15 @@ body.list-player {
   width: 100%;
 }
 
+.embedded-container .wp-block-embed__wrapper.aspect-ratio-16_9 {
+  margin: 0;
+}
+
+.embedded-container .wp-block-embed__wrapper.aspect-ratio-1_1 {
+  max-width: 56.25%;
+  margin: 0 auto;
+}
+
 #tracklist {
   width: 35.5%;
   max-height: 855px;
@@ -528,6 +537,15 @@ body.list-player .site-footer-container {
 
 }
 
+@media screen and (max-width: 1600px) {
+
+  .embedded-container .wp-block-embed__wrapper.aspect-ratio-1_1 {
+    padding-top: 69.25%;
+    max-width: 69.25%;
+  }
+
+}
+
 @media screen and (max-width: 1350px) {
 
   body.list-player .site-header-container,
@@ -554,6 +572,11 @@ body.list-player .site-footer-container {
     width: 100%;
   }
 
+  .embedded-container .wp-block-embed__wrapper.aspect-ratio-1_1 {
+    padding-top: 56.25%;
+    max-width: 56.25%;
+  }
+
   #tracklist {
     width: 100%;
     max-height: none;
@@ -571,6 +594,10 @@ body.list-player .site-footer-container {
     --site-max-width: calc(100% - 100px);
     --site-content-margin-top: 50px;
     --site-content-margin-bottom: 50px;
+  }
+
+  .embedded-container .wp-block-embed__wrapper.aspect-ratio-1_1 {
+    max-width: 100%;
   }
 
 }

@@ -1,6 +1,6 @@
 {
   "name": "ultrafunk-theme",
-  "version": "1.41.9",
+  "version": "1.41.10",
   "description": "WordPress theme",
   "homepage": "https://github.com/ultrafunk/ultrafunk-theme",
   "repository": "git@github.com:ultrafunk/ultrafunk-theme.git",
@@ -10,7 +10,7 @@
     "build-js": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting --minify --sourcemap js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
     "build-js-debug": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
     "build-js-css": "node_modules\\.bin\\esbuild --bundle --minify --sourcemap --loader:.png=dataurl js\\src\\css\\bundle.css --outfile=js\\dist\\css\\bundle.min.css",
-    "build-css": "node_modules\\.bin\\esbuild --minify --sourcemap style.css --outfile=style.min.css",
+    "build-css": "node_modules\\.bin\\esbuild --minify --sourcemap style.css --outfile=inc\\css\\style.min.css",
     "build-php-env": "node scripts\\build-php-env.mjs",
     "build-release": "scripts\\build-js.bat & npm run build-js-css & npm run build-css",
     "build-debug": "scripts\\build-js-debug.bat & npm run build-js-css & npm run build-css",
@@ -25,8 +25,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "^0.14.32",
-    "eslint": "^8.12.0"
+    "esbuild": "^0.14.34",
+    "eslint": "^8.13.0"
   },
   "eslintIgnore": ["js/dist/", "inc/js/", "misc/"]
 }
