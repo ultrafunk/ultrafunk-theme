@@ -94,21 +94,26 @@ export function getTrackEntryHtml(track)
     </div>`;
 }
 
-export function insertTrackLinksHtml(trackData, trackLinksSelector, linkIdsAttribute, linksMap)
+export function setTrackMeta(trackData, trackLinksSelector, linkIdsAttribute, linksMap, isChannels = false)
 {
   trackData.forEach(track =>
   {
     const linksElement = document.getElementById(track.uid).querySelector(trackLinksSelector);
     const linkIds      = linksElement.getAttribute(linkIdsAttribute)?.split(',');
     let   linksHtml    = '';
-    
+    let   isVideo      = false;
+
     linkIds?.forEach(linkId =>
     {
       const mapKey    = parseInt(linkId);
       const linkClass = (track.meta.track_artist_id === mapKey) ? 'primary' : 'secondary';
       linksHtml      +=`<a class="${linkClass}" href="${getListPlayerUrl(linksMap.get(mapKey).link)}">${linksMap.get(mapKey).name}</a>`;
+
+      if (isChannels && (linksMap.get(mapKey).name === 'Video'))
+        isVideo = true;
     });
 
+    document.getElementById(track.uid).classList.add(isVideo ? 'is-video' : 'is-audio');
     linksElement.insertAdjacentHTML('afterbegin', linksHtml);
   });
 }

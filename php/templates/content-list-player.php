@@ -25,12 +25,12 @@ function render_template(object $request_handler) : void
 {
   if (!empty($request_handler->query_data))
   {
-    $is_video = is_video(get_object_term_cache($request_handler->query_data[0]->ID, 'uf_channel'));
+    $is_first_video = is_video(get_object_term_cache($request_handler->query_data[0]->ID, 'uf_channel'));
 
     ?>
     <div id="list-player-container" class="player-container">
       <div class="embedded-container">
-        <div class="wp-block-embed__wrapper <?php echo ($is_video ? 'aspect-ratio-16_9' : 'aspect-ratio-1_1'); ?>">
+        <div class="wp-block-embed__wrapper <?php echo ($is_first_video ? 'aspect-ratio-16_9' : 'aspect-ratio-1_1'); ?>">
           <div id="youtube-player"></div>
         </div>
       </div>
@@ -86,10 +86,10 @@ function tracklist_entries(object $request_handler) : void
     $is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
     $artists          = get_object_term_cache($track->ID, 'uf_artist');
     $channels         = get_object_term_cache($track->ID, 'uf_channel');
-    $is_video_class   = (is_video($channels) === true) ? 'is-video' : 'is-audio';
+    $is_video_class   = is_video($channels) ? ' is-video' : ' is-audio';
 
     ?>
-    <div id="<?php echo uniqid(); ?>" class="track-entry <?php echo $track_data['css_class'] . ' ' . $is_video_class; ?>"
+    <div id="<?php echo uniqid(); ?>" class="track-entry <?php echo $track_data['css_class'] . $is_video_class; ?>"
       data-track-id="track-<?php echo $track->ID; ?>"
       data-track-artist="<?php echo $track_artist; ?>"
       data-track-title="<?php echo $track_title; ?>"

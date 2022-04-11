@@ -15,7 +15,7 @@ import {
 import {
   getPageSeparatorHtml,
   getTrackEntryHtml,
-  insertTrackLinksHtml,
+  setTrackMeta,
 } from './list-track-templates.js';
 
 
@@ -44,7 +44,7 @@ export async function loadTracks(termType, termId)
     const artistIds  = new Set();
     const channelIds = new Set();
     let tracksHtml   = getPageSeparatorHtml(responseData, loadingPage);
-  
+
     trackData.forEach((track, index) =>
     {
       track.artists.forEach(key => (m.artistsCache.has(key) === false) && artistIds.add(key));
@@ -74,8 +74,8 @@ export async function loadTracks(termType, termId)
     if (channelsData !== null)
       channelsData.forEach(entry => m.channelsCache.set(entry.id, { name: entry.name, link: entry.link }));
 
-    insertTrackLinksHtml(trackData, '.track-artists-links',  'data-track-artist-ids',  m.artistsCache);
-    insertTrackLinksHtml(trackData, '.track-channels-links', 'data-track-channel-ids', m.channelsCache);
+    setTrackMeta(trackData, '.track-artists-links',  'data-track-artist-ids',  m.artistsCache,  false);
+    setTrackMeta(trackData, '.track-channels-links', 'data-track-channel-ids', m.channelsCache, true);
 
     return true;
   }
