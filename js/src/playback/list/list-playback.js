@@ -147,7 +147,7 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
 function loadOrCueCurrentTrack(playTrack)
 {
   const sourceUid = listControls.updateTrackDetails();
-  
+
   if (playTrack)
   {
     m.player.embedded.loadVideoById(sourceUid);

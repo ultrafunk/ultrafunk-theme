@@ -62,7 +62,7 @@ export function getModalTrackHtml(element, trackArtist, trackTitle)
       <div class="modal-track-thumbnail ${trackTypeClass}">
         <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">
       </div>
-      <div class="modal-track-artist-title text-nowrap-ellipsis">
+      <div class="modal-track-artist-title">
         <span><b>${trackArtist}</b></span><br>
         <span class="light-text">${trackTitle}</span>
       </div>

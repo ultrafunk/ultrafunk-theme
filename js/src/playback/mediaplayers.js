@@ -300,6 +300,7 @@ export class Playlist extends MediaPlayer
       numTracks:    this.getNumTracks(),
       artist:       this.getArtist(),
       title:        this.getTitle(),
+      duration:     this.getDuration(),
       thumbnail:    { src: this.getThumbnailSrc(), class: this.getThumbnailClass() },
     };
   }

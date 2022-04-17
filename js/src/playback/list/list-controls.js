@@ -378,6 +378,7 @@ export function updateTrackDetails()
   
   m.player.setArtist(m.currentElement.getAttribute('data-track-artist'));
   m.player.setTitle(m.currentElement.getAttribute('data-track-title'));
+  m.player.setDuration(parseInt(m.currentElement.getAttribute('data-track-duration')));
   m.player.setThumbnail(sourceUid);
   setPlayerAspectRatio();
 

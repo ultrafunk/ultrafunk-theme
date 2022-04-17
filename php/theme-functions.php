@@ -9,6 +9,7 @@ namespace Ultrafunk\Theme\Functions;
 
 
 use SimpleXMLElement;
+
 use Ultrafunk\Plugin\Constants\PLAYER_TYPE;
 
 use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
@@ -42,7 +43,7 @@ function get_session_vars() : array
                        : PLUGIN_ENV['list_per_page'],
     'galleryPerPage' => (is_shuffle(PLAYER_TYPE::GALLERY) || is_shuffle(PLAYER_TYPE::LIST))
                           ? get_globals_prop('gallery_per_page')
-                          : \intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])),
+                          : intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])),
   ];
 
   // Return defaults because get_next_posts_link() returns results even when a 404 happens

@@ -9,6 +9,7 @@ import * as debugLogger from '../../shared/debuglogger.js';
 import { TRACK_TYPE }   from '../shared-gallery-list.js';
 
 import {
+  getTimeString,
   getListPlayerUrl,
   getThumbnailData,
   escHtml,
@@ -43,6 +44,7 @@ export function getTrackEntryHtml(track)
   const thumbnailData  = getThumbnailData(track.meta);
   const trackArtist    = escHtml(track.meta.track_artist);
   const trackTitle     = escHtml(track.meta.track_title);
+  const trackDuration  = parseInt(track.meta.track_duration);
 
   const youTubeTrackThumbnailUrl = debug.isDebug()
                                      ? "/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png"
@@ -65,6 +67,7 @@ export function getTrackEntryHtml(track)
       data-track-id="track-${track.id}"
       data-track-artist="${trackArtist}"
       data-track-title="${trackTitle}"
+      data-track-duration="${trackDuration}"
       data-track-url="${track.link}"
       data-track-type="${track.meta.track_source_type}"
       data-track-thumbnail-url="${trackThumbnailUrl}"
@@ -84,17 +87,24 @@ export function getTrackEntryHtml(track)
       <div class="track-actions">
         <div class="track-message"></div>
         <div class="track-action-buttons">
-          ${trackPlayNext}
           <div class="remove-button" title="Remove Track from List"><span class="material-icons">clear</span></div>
+          ${trackPlayNext}
           <div class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></div>
           <div class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></div>
         </div>
         <div class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></div>
       </div>
+      <div class="track-duration text-nowrap-ellipsis">${(isYouTubeTrack ? getTimeString(trackDuration) : 'N / A')}</div>
     </div>`;
 }
 
-export function setTrackMeta(trackData, trackLinksSelector, linkIdsAttribute, linksMap, isChannels = false)
+export function setTrackMeta(
+  trackData,
+  trackLinksSelector,
+  linkIdsAttribute,
+  linksMap,
+  isChannels = false
+)
 {
   trackData.forEach(track =>
   {

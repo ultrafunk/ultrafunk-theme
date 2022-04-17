@@ -12,7 +12,8 @@ module.exports = {
     "default-param-last": ["error"],
     "no-label-var": ["error"],
     "no-shadow": ["error"],
-    "no-duplicate-imports": ["error"]
+    "no-duplicate-imports": ["error"],
+    "max-params": ["warn", 4],
   },
   "env": {
     "browser": true,

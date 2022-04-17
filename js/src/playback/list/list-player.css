@@ -380,6 +380,13 @@ body.list-player {
 
 }
 
+.track-duration {
+  margin-left: 10px;
+  min-width: 44px;
+  width: 44px;
+  font-weight: 400;
+}
+
 .tracklist-page-separator {
   font-size: 20px;
   line-height: 30px;
@@ -691,6 +698,11 @@ body.list-player .site-footer-container {
     display: block;
   }
 
+  .track-duration {
+    min-width: 40px;
+    width: 40px;
+  }
+
   #tracklist-load-more {
     font-size: 15px;
     line-height: 27px;
@@ -721,6 +733,19 @@ body.list-player .site-footer-container {
 
   .tracklist-page-separator .arrow-up-button {
     margin-right: 6px;
+  }
+
+}
+
+@media screen and (max-width: 400px) {
+
+  .track-entry {
+    font-size: 13px;
+  }
+
+  .track-duration {
+    min-width: 36px;
+    width: 36px;
   }
 
 }

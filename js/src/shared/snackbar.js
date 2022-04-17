@@ -45,7 +45,13 @@ const elements = {
 // 
 // ************************************************************************************************
 
-export function showSnackbar(message, timeout = 5, actionText = null, actionClickCallback = null, afterCloseCallback = () => {})
+export function showSnackbar(
+  message,
+  timeout = 5,
+  actionText = null,
+  actionClickCallback = null,
+  afterCloseCallback = () => {}
+)
 {
   debug.log(`showSnackbar(): ${message} (${timeout} sec.)`);
 

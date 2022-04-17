@@ -72,6 +72,11 @@ function is_video(array $channels) : bool
   return false;
 }
 
+function getTimeString(int $seconds) : string
+{
+  return (($seconds > (60 * 60)) ? gmdate("H:i:s", $seconds) : gmdate("i:s", $seconds));
+}
+
 function tracklist_entries(object $request_handler) : void
 {
   global $ultrafunk_is_prod_build;
@@ -81,6 +86,7 @@ function tracklist_entries(object $request_handler) : void
   {
     $track_artist     = esc_html($track->track_artist);
     $track_title      = esc_html($track->track_title);
+    $track_duration   = intval($track->track_duration);
     $track_url        = esc_url("$home_url/track/$track->post_name/");
     $track_data       = get_track_data($track);
     $is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
@@ -93,6 +99,7 @@ function tracklist_entries(object $request_handler) : void
       data-track-id="track-<?php echo $track->ID; ?>"
       data-track-artist="<?php echo $track_artist; ?>"
       data-track-title="<?php echo $track_title; ?>"
+      data-track-duration="<?php echo $track_duration; ?>"
       data-track-url="<?php echo $track_url; ?>"
       data-track-type="<?php echo $track_data['track_type']; ?>"
       data-track-thumbnail-url="<?php echo $track_data['thumnail_src']; ?>"
@@ -136,6 +143,7 @@ function tracklist_entries(object $request_handler) : void
         </div>
         <div class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></div>
       </div>
+      <div class="track-duration text-nowrap-ellipsis"><?php echo ($is_youtube_track ? getTimeString($track_duration) : 'N / A'); ?></div>
     </div>
     <?php
   }

@@ -105,6 +105,15 @@ export function replaceClass(element, removeClass, addClass)
   element.classList.add(addClass);
 }
 
+export function getTimeString(seconds)
+{
+  const timeString = new Date(seconds * 1000).toISOString();
+
+  return (seconds > (60 * 60))
+    ? timeString.slice(11, 19)
+    : timeString.slice(14, 19);
+}
+
 
 // ************************************************************************************************
 // https://github.com/janl/mustache.js/blob/master/mustache.js#L59

@@ -9,6 +9,7 @@ import * as debugLogger        from '../shared/debuglogger.js';
 import { settings }            from '../shared/session-data.js';
 import { EVENT, addListener }  from './playback-events.js';
 import { addSettingsObserver } from '../shared/storage.js';
+import { getTimeString }       from '../shared/utils.js';
 
 import {
   playerType as playerTypeToggle
@@ -199,7 +200,7 @@ function setDetails(trackData)
   ctrl.details.artist.textContent = trackData.artist || ''; // Artist will contain the post title if all else fails
   ctrl.details.title.textContent  = trackData.title  || '';
   setThumbnail(trackData.thumbnail);
-  setTimer(-1, -1);
+  setTimer(-1, trackData.duration);
 }
 
 function setThumbnail(thumbnail)
@@ -223,7 +224,7 @@ function setTimer(positionSeconds, durationSeconds)
     if (settings.playback.autoplay === false)
       positionSeconds = (durationSeconds - positionSeconds);
     
-    setTimerText(ctrl.timer.position, positionSeconds);
+    ctrl.timer.position.textContent = getTimeString(positionSeconds);
   }
   else if ((positionSeconds === -1) && (ctrl.timer.positionSeconds === -1))
   {
@@ -233,20 +234,12 @@ function setTimer(positionSeconds, durationSeconds)
   if ((durationSeconds !== -1) && (ctrl.timer.durationSeconds !== durationSeconds))
   {
     ctrl.timer.durationSeconds = durationSeconds;
-    setTimerText(ctrl.timer.duration, durationSeconds);
+    ctrl.timer.duration.textContent = getTimeString(durationSeconds);
   }
   else if ((durationSeconds === -1) && (ctrl.timer.durationSeconds === -1))
   {
     ctrl.timer.duration.textContent = '00:00';
   }
-}
-
-function setTimerText(element, seconds)
-{
-  const timeString = new Date(seconds * 1000).toISOString();
-  element.textContent = (seconds > (60 * 60))
-                          ? timeString.slice(11, 19)
-                          : timeString.slice(14, 19);
 }
 
 function clearTimer()
@@ -375,10 +368,10 @@ function updateAutoplayState()
 {
   if ((isPlaying() === false) && (ctrl.timer.positionSeconds !== -1) && ((ctrl.timer.durationSeconds !== -1)))
   {
-    setTimerText(ctrl.timer.position, settings.playback.autoplay
-                                        ? ctrl.timer.positionSeconds
-                                        : (ctrl.timer.durationSeconds - ctrl.timer.positionSeconds));
+    ctrl.timer.position.textContent = settings.playback.autoplay
+                                        ? getTimeString(ctrl.timer.positionSeconds)
+                                        : getTimeString(ctrl.timer.durationSeconds - ctrl.timer.positionSeconds);
 
-    setTimerText(ctrl.timer.duration, ctrl.timer.durationSeconds);
+    ctrl.timer.duration.textContent = getTimeString(ctrl.timer.durationSeconds);
   }
 }

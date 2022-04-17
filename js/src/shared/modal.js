@@ -38,7 +38,13 @@ const elements = {
 //
 // ************************************************************************************************
 
-export function showModal(typeString, title, singleChoiceList = [], onEntryClickedCallback = () => {}, onClickCloseCallback = () => true)
+export function showModal(
+  typeString,
+  title,
+  singleChoiceList = [],
+  onEntryClickedCallback = () => {},
+  onClickCloseCallback = () => true
+)
 {
   init();
   

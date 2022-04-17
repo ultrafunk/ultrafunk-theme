@@ -95,6 +95,7 @@ export const galleryPlayers = (() =>
       numTracks:    this.getNumTracks(),
       artist:       this.current.getArtist(),
       title:        this.current.getTitle(),
+      duration:     -1,
       thumbnail:    { src: this.current.getThumbnailSrc(), class: this.current.getThumbnailClass() },
     };
   }

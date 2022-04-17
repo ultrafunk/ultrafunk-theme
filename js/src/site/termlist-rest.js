@@ -136,7 +136,13 @@ function fetchTermMeta(termData, termId, maxItems, callback)
   }
 }
 
-function fetchMeta(termType, termId, termIds, maxItems, callback)
+function fetchMeta(
+  termType,
+  termId,
+  termIds,
+  maxItems,
+  callback
+)
 {
   /*
   if ((termId in termCache) === false)

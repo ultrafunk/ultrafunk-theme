@@ -98,11 +98,12 @@ function sharePlayClick(element)
 
 function detailsClick(element)
 {
-  const trackArtist  = utils.stripAttribute(element, 'data-track-artist');
-  const trackTitle   = utils.stripAttribute(element, 'data-track-title');
-  const artists      = element.querySelector('.track-artists-links').querySelectorAll('a');
-  const channels     = element.querySelector('.track-channels-links').querySelectorAll('a');
-  const modalEntries = [];
+  const trackArtist   = utils.stripAttribute(element, 'data-track-artist');
+  const trackTitle    = utils.stripAttribute(element, 'data-track-title');
+  const trackDuration = parseInt(element.getAttribute('data-track-duration'));
+  const artists       = element.querySelector('.track-artists-links').querySelectorAll('a');
+  const channels      = element.querySelector('.track-channels-links').querySelectorAll('a');
+  const modalEntries  = [];
 
   modalEntries.push({
     class:   'track-details-entry',
@@ -136,7 +137,11 @@ function detailsClick(element)
     });
   });
 
-  const modalId = showModal('track-details', 'Track Details', modalEntries, (clickedId) =>
+  const modalId = showModal(
+    'track-details',
+    `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? utils.getTimeString(trackDuration) : 'N / A')}</span>`,
+    modalEntries,
+    (clickedId) =>
   {
     utils.navToUrl(modalEntries.find(item => (item.clickId === clickedId)).link);
   });
