@@ -36,7 +36,7 @@ use function Ultrafunk\Theme\Functions\ {
 //
 // Modify uf_track REST request to return random shuffle query data
 //
-function rest_uf_track_query($args, $request)
+function rest_uf_track_query(array $args, object $request) : array
 {
   if ($request->get_param('shuffle') === 'true')
   {

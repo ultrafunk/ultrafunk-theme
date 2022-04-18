@@ -52,11 +52,11 @@ function render_template(object $request_handler) : void
   }
 }
 
-function term_links(array $tags, string $path, $track_artist_id = -1) : void
+function term_links(array $tags, string $path, int $track_artist_id = -1) : void
 {
   foreach ($tags as $tag)
   {
-    $class = (($track_artist_id !== -1) && ($tag->term_id === (int)$track_artist_id)) ? 'primary' : 'secondary';    
+    $class = (($track_artist_id !== -1) && ($tag->term_id === $track_artist_id)) ? 'primary' : 'secondary';    
     echo "<a class='$class' href='/list/$path/$tag->slug/'>$tag->name</a>";
   }
 }
@@ -107,7 +107,7 @@ function tracklist_entries(object $request_handler) : void
         data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
       <?php } ?>
       >
-      <div class="track-artists-links"><?php term_links($artists, 'artist', $track->track_artist_id); ?></div>
+      <div class="track-artists-links"><?php term_links($artists, 'artist', (int)$track->track_artist_id); ?></div>
       <div class="track-channels-links"><?php term_links($channels, 'channel'); ?></div>
       <div class="track-details">
         <div class="thumbnail" <?php echo ($is_youtube_track ? 'title="Play Track"' : 'title="SoundCloud Track"'); ?>>

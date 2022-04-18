@@ -38,25 +38,25 @@ class MediaPlayer
     this.thumbnail.decoding = 'async';
   }
   
-  getTrackId()          { return this.trackId;                   }
-  getIframeId()         { return this.iframeId;                  }
-  getUid()              { return this.iframeId;                  }
-  getEmbeddedPlayer()   { return this.embeddedPlayer;            }
+  getTrackId()          { return this.trackId;        }
+  getIframeId()         { return this.iframeId;       }
+  getUid()              { return this.iframeId;       }
+  getEmbeddedPlayer()   { return this.embeddedPlayer; }
 
-  getPlayable()         { return this.playable;                  }
-  setPlayable(playable) { this.playable = playable;              }
+  getPlayable()         { return this.playable;     }
+  setPlayable(playable) { this.playable = playable; }
 
-  getDuration()         { return this.duration;                  }
-  setDuration(duration) { this.duration = duration;              }
+  getDuration()         { return this.duration;     }
+  setDuration(duration) { this.duration = duration; }
 
-  getArtist()           { return this.artist;                    }
-  setArtist(artist)     { this.artist = artist;                  }
+  getArtist()           { return this.artist;   }
+  setArtist(artist)     { this.artist = artist; }
 
-  getTitle()            { return this.title;                     }
-  setTitle(title)       { this.title = title;                    }
+  getTitle()            { return this.title;  }
+  setTitle(title)       { this.title = title; }
 
-  getThumbnailSrc()     { return this.thumbnailSrc;              }
-  getThumbnailClass()   { return this.thumbnailClass;            }
+  getThumbnailSrc()     { return this.thumbnailSrc;   }
+  getThumbnailClass()   { return this.thumbnailClass; }
 
   seekTo(position)      { this.embeddedPlayer.seekTo(position);  }
   setVolume(volume)     { this.embeddedPlayer.setVolume(volume); }

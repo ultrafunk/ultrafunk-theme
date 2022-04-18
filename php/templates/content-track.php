@@ -13,6 +13,7 @@ namespace Ultrafunk\Theme\Templates\Track;
 <single-track id="track-<?php the_ID(); ?>" class=""
   data-track-artist="<?php echo esc_html($post->track_artist); ?>"
   data-track-title="<?php echo esc_html($post->track_title); ?>"
+  data-track-duration="<?php echo intval($post->track_duration); ?>"
   data-track-source-data="<?php echo esc_html($post->track_source_data); ?>"
   >
   <header class="entry-header">

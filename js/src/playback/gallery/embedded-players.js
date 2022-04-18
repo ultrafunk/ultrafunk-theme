@@ -116,6 +116,7 @@ function getAllPlayers()
     {
       player.setTitle(entry.getAttribute('data-track-title'));
       player.setArtist(entry.getAttribute('data-track-artist'));
+      player.setDuration(parseInt(entry.getAttribute('data-track-duration')));
       m.players.add(player);
     }
   });
