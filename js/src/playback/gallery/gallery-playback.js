@@ -51,7 +51,7 @@ export function init()
 
   playbackControls.init(m.players, seekClick);
   crossfadeControls.init(m.players, crossfadeToClick);
-  playbackTimer.init(m.players, getStatus, crossfadeInit);
+  playbackTimer.init(m.players, crossfadeInit);
   embeddedPlayers.init(m.players, playbackState, embeddedEventHandler);
 }
 
@@ -85,7 +85,7 @@ export function prevTrack()
       if (positionMilliseconds > 5000)
       {
         m.players.current.seekTo(0);
-        playbackTimer.updateCallback(0);
+        playbackControls.updateTimerAndProgress(0, 0, m.players.current.getDuration());
       }
       else
       {
@@ -281,6 +281,7 @@ function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
   switch(embeddedEvent)
   {
     case playbackEvents.EVENT.MEDIA_ENDED:
+      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED, getStatus());
       nextTrack(true);
       break;
 

@@ -246,7 +246,7 @@ function onYouTubeStatePaused(event)
   if (m.players.isCurrent(event.target.h.id))
   {
     m.playbackState.syncAll(event.target.h.id, m.playbackState.STATE.PAUSE);
-    playbackTimer.stop(false);
+    playbackTimer.stop();
   }
   else
   {
@@ -265,7 +265,7 @@ function onYouTubeStateEnded(event)
 
   if (m.players.isCurrent(event.target.h.id))
   {
-    playbackTimer.stop(true);
+    playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
   }
   else
@@ -335,12 +335,12 @@ function onSoundCloudPlayerEventPause(event)
   
   if (eventLog.scAutoplayBlocked(event.soundId, 3000))
   {
-    playbackTimer.stop(false);
+    playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
   }
   else if (eventLog.scWidgetPlayBlocked(event.soundId, 30000))
   {
-    playbackTimer.stop(false);
+    playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.PLAYBACK_BLOCKED, { currentTrack: m.players.trackFromUid(event.soundId), numTracks: m.players.getNumTracks() });
   }
   else
@@ -353,7 +353,7 @@ function onSoundCloudPlayerEventPause(event)
         if (positionMilliseconds > 0)
         {
           m.playbackState.syncAll(event.soundId, m.playbackState.STATE.PAUSE);
-          playbackTimer.stop(false);
+          playbackTimer.stop();
         }
       });    
     }
@@ -370,7 +370,7 @@ function onSoundCloudPlayerEventFinish(event)
 
   if (m.players.isCurrent(event.soundId))
   {
-    playbackTimer.stop(true);
+    playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
   }
   else

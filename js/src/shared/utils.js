@@ -105,11 +105,11 @@ export function replaceClass(element, removeClass, addClass)
   element.classList.add(addClass);
 }
 
-export function getTimeString(seconds)
+export function getTimeString(seconds, includeHours = false)
 {
   const timeString = new Date(seconds * 1000).toISOString();
 
-  return (seconds > (60 * 60))
+  return ((seconds > 3600) || includeHours)
     ? timeString.slice(11, 19)
     : timeString.slice(14, 19);
 }

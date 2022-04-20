@@ -30,7 +30,6 @@ export const playbackTimer = (() =>
   let lastPosSeconds = 0;
   let isVisible      = true;
   let players        = null;
-  let getStatus      = null;
   let crossfadeInit  = null;
 
   return {
@@ -40,10 +39,9 @@ export const playbackTimer = (() =>
     updateCallback,
   };
 
-  function init(galleryPlayers, galleryGetStatus, galleryCrossfadeInit)
+  function init(galleryPlayers, galleryCrossfadeInit)
   {
     players       = galleryPlayers;
-    getStatus     = galleryGetStatus;
     crossfadeInit = galleryCrossfadeInit;
 
     document.addEventListener('visibilitychange', () => { isVisible = (document.visibilityState === 'visible') ? true : false; });
@@ -61,7 +59,7 @@ export const playbackTimer = (() =>
     config.updateTimerInterval);
   }
   
-  function stop(mediaEnded = false)
+  function stop()
   {
     if (intervalId !== -1)
     {
@@ -69,12 +67,6 @@ export const playbackTimer = (() =>
       intervalId = -1;
     }
     
-    if (mediaEnded)
-    {
-      updateCallback(0);
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED, getStatus());
-    }
-
     lastPosSeconds = 0;
     playbackControls.blinkPlayPause(false);
   }

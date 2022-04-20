@@ -205,7 +205,7 @@ export function prevTrack()
   else if (position !== 0)
   {
     m.player.embedded.seekTo(0);
-    playbackTimer.update(0, 0);
+    playbackControls.updateTimerAndProgress(0, 0, m.player.getDuration());
   }
 }
 
@@ -392,7 +392,7 @@ function onYouTubePlayerStateChange(event)
 
     // eslint-disable-next-line no-undef
     case YT.PlayerState.ENDED:
-      playbackTimer.stop(true);
+      playbackTimer.stop();
       playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED);
       advanceToNextTrack(settings.playback.autoplay);
       break;

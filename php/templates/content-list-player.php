@@ -74,7 +74,7 @@ function is_video(array $channels) : bool
 
 function getTimeString(int $seconds) : string
 {
-  return (($seconds > (60 * 60)) ? gmdate("H:i:s", $seconds) : gmdate("i:s", $seconds));
+  return (($seconds > 3600) ? gmdate("H:i:s", $seconds) : gmdate("i:s", $seconds));
 }
 
 function tracklist_entries(object $request_handler) : void

@@ -9,11 +9,15 @@ import * as debugLogger        from '../shared/debuglogger.js';
 import { settings }            from '../shared/session-data.js';
 import { EVENT, addListener }  from './playback-events.js';
 import { addSettingsObserver } from '../shared/storage.js';
-import { getTimeString }       from '../shared/utils.js';
 
 import {
   playerType as playerTypeToggle
 } from './footer-toggles.js';
+
+import {
+  getTimeString,
+  replaceClass,
+} from '../shared/utils.js';
 
 import {
   STATE,
@@ -66,8 +70,8 @@ export function init(mediaPlayers, seekClickCallback)
     ctrl.timer                 = new ElementWrapper('.playback-timer-control', playbackControls);
     ctrl.timer.position        = ctrl.timer.getElement('.playback-timer-position');
     ctrl.timer.duration        = ctrl.timer.getElement('.playback-timer-duration');
-    ctrl.timer.positionSeconds = -1;
-    ctrl.timer.durationSeconds = -1;
+    ctrl.timer.positionSeconds = -1; // Make sure initial value is set + shown when track plays
+    ctrl.timer.durationSeconds = -1; // Make sure initial value is set + shown when track plays
     
     ctrl.playerType = new ElementWrapper('.playback-player-type-control', playbackControls);
     ctrl.prevTrack  = new ElementWrapper('.playback-prev-control', playbackControls);
@@ -136,6 +140,7 @@ export function ready(prevClickCallback, playPauseClickCallback, nextClickCallba
   addListener(EVENT.MEDIA_LOADING,     setLoadState);
   addListener(EVENT.MEDIA_PLAYING,     setPlayState);
   addListener(EVENT.MEDIA_PAUSED ,     setPauseState);
+  addListener(EVENT.MEDIA_ENDED,       setMediaEndState);
   addListener(EVENT.AUTOPLAY_BLOCKED,  setPauseState);
   addListener(EVENT.PLAYBACK_BLOCKED,  setPauseState);
   addListener(EVENT.MEDIA_UNAVAILABLE, setPauseState);
@@ -199,8 +204,10 @@ function setDetails(trackData)
 
   ctrl.details.artist.textContent = trackData.artist || ''; // Artist will contain the post title if all else fails
   ctrl.details.title.textContent  = trackData.title  || '';
+  
   setThumbnail(trackData.thumbnail);
-  setTimer(-1, trackData.duration);
+  setTimerDisplayHoursMinutes(trackData.duration);
+  setTimer(0, trackData.duration);
 }
 
 function setThumbnail(thumbnail)
@@ -215,39 +222,39 @@ function setThumbnail(thumbnail)
   }
 }
 
+function setTimerDisplayHoursMinutes(durationSeconds)
+{
+  if (durationSeconds > 3600)
+    replaceClass(ctrl.timer.element, 'display-minutes', 'display-hours');
+  else
+    replaceClass(ctrl.timer.element, 'display-hours', 'display-minutes');
+}
+
 function setTimer(positionSeconds, durationSeconds)
 {
-  if ((positionSeconds !== -1) && (ctrl.timer.positionSeconds !== positionSeconds))
+  if (ctrl.timer.positionSeconds !== positionSeconds)
   {
     ctrl.timer.positionSeconds = positionSeconds;
 
     if (settings.playback.autoplay === false)
       positionSeconds = (durationSeconds - positionSeconds);
     
-    ctrl.timer.position.textContent = getTimeString(positionSeconds);
-  }
-  else if ((positionSeconds === -1) && (ctrl.timer.positionSeconds === -1))
-  {
-    ctrl.timer.position.textContent = '00:00';
+    ctrl.timer.position.textContent = getTimeString(positionSeconds, (durationSeconds > 3600));
   }
 
-  if ((durationSeconds !== -1) && (ctrl.timer.durationSeconds !== durationSeconds))
+  if (ctrl.timer.durationSeconds !== durationSeconds)
   {
-    ctrl.timer.durationSeconds = durationSeconds;
-    ctrl.timer.duration.textContent = getTimeString(durationSeconds);
-  }
-  else if ((durationSeconds === -1) && (ctrl.timer.durationSeconds === -1))
-  {
-    ctrl.timer.duration.textContent = '00:00';
+    ctrl.timer.durationSeconds      = durationSeconds;
+    ctrl.timer.duration.textContent = getTimeString(durationSeconds, (durationSeconds > 3600));
   }
 }
 
-function clearTimer()
+function clearTimer(trackData)
 {
-  ctrl.timer.position.textContent = '00:00';
-  ctrl.timer.duration.textContent = '00:00';
-  ctrl.timer.positionSeconds = 0;
-  ctrl.timer.durationSeconds = 0;
+  ctrl.timer.position.textContent = (trackData.duration > 3600) ? '00:00:00' : '00:00';
+  ctrl.timer.duration.textContent = (trackData.duration > 3600) ? '00:00:00' : '00:00';
+  ctrl.timer.positionSeconds = -1;
+  ctrl.timer.durationSeconds = -1;
 }
 
 
@@ -265,6 +272,12 @@ function setLoadState()
 {
   if (ctrl.thumbnail.state.ID === STATE.ENABLED.ID)
     ctrl.thumbnail.addClass(STATE.LOADING.CLASS);
+}
+
+function setMediaEndState()
+{
+  updateProgressBar(0);
+  setTimer(0, m.players.getTrackData().duration);
 }
 
 export function setPlayState()
@@ -296,7 +309,7 @@ export function getSetTrackData()
 {
   const trackData = m.players.getTrackData();
 
-  clearTimer();
+  clearTimer(trackData);
   setDetails(trackData);
 
   return trackData;
@@ -366,12 +379,15 @@ function updateMuteState()
 
 function updateAutoplayState()
 {
-  if ((isPlaying() === false) && (ctrl.timer.positionSeconds !== -1) && ((ctrl.timer.durationSeconds !== -1)))
+  const position = ctrl.timer.positionSeconds;
+  const duration = ctrl.timer.durationSeconds;
+
+  if ((isPlaying() === false) && (position !== -1) && ((duration !== -1)))
   {
     ctrl.timer.position.textContent = settings.playback.autoplay
-                                        ? getTimeString(ctrl.timer.positionSeconds)
-                                        : getTimeString(ctrl.timer.durationSeconds - ctrl.timer.positionSeconds);
+      ? getTimeString(position, (duration > 3600))
+      : getTimeString((duration - position), (duration > 3600));
 
-    ctrl.timer.duration.textContent = getTimeString(ctrl.timer.durationSeconds);
+    ctrl.timer.duration.textContent = getTimeString(duration, (duration > 3600));
   }
 }

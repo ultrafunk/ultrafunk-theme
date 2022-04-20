@@ -115,7 +115,7 @@ body.autoplay-off .progress-bar-control {
   width: 46px;
   min-width: 46px;
   height: 46px;
-  margin-right: 20px;
+  margin-right: 18px;
   display: inline-block;
   cursor: pointer;
   overflow: hidden;
@@ -186,8 +186,15 @@ body.autoplay-off .progress-bar-control {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  min-width: 38px;
   cursor: pointer;
+}
+
+.playback-timer-control.display-minutes {
+  min-width: 40px;
+}
+
+.playback-timer-control.display-hours {
+  min-width: 60px;
 }
 
 .playback-details-control.state-hidden,
@@ -517,9 +524,14 @@ body.autoplay-off .playing-animate::before {
   .playback-timer-control {
     font-size: 13px;
     line-height: 18px;
-    min-width: 33px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  }
+
+  .playback-timer-control.display-minutes {
+    min-width: 35px;
+  }
+
+  .playback-timer-control.display-hours {
+    min-width: 55px;
   }
 
   .playback-timer-control.show-on-mobile,

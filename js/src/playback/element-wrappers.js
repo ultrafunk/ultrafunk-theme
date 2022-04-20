@@ -27,8 +27,9 @@ export const ElementWrapper = function(elmentSelector, parentElement = document,
   const classList = element.classList;
 
   return {
-    get state() { return state;         },
-    get style() { return element.style; },
+    get element() { return element;       },
+    get state()   { return state;         },
+    get style()   { return element.style; },
 
     set elementTitle(title) { element.title = title; },
 

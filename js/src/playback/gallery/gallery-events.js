@@ -95,8 +95,6 @@ function mediaEnded(playbackEvent)
 {
   debug.log(playbackEvent);
 
-  updateProgressPercent(0);
-
   if ((playbackEvent !== null) && (playbackEvent.data.numTracks > 1))
     resetNowPlayingIcons();
 }

@@ -54,16 +54,13 @@ export const playbackTimer = (() =>
     config.updateTimerInterval);
   }
   
-  function stop(resetState = false)
+  function stop()
   {
     if (intervalId !== -1)
     {
       clearInterval(intervalId);
       intervalId = -1;
     }
-
-    if (resetState)
-      update(0, 0);
 
     lastPosSeconds = 0;
     playbackControls.blinkPlayPause(false);
