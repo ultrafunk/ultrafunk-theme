@@ -35,7 +35,7 @@ function render_template(object $request_handler) : void
     ?></div><?php
   }
 
-  if (!empty($request_handler->query_data))
+  if (!empty($request_handler->query_result))
   {
     ?>
     <term-list id="termlist-container" class="entry-content <?php echo "term-$request_handler->term_type"; ?>" data-term-type="<?php echo $request_handler->term_type; ?>">
@@ -55,7 +55,7 @@ function termlist_entries(object $request_handler) : void
   $home_url  = get_cached_home_url();
   $term_path = $request_handler->term_path;
 
-  foreach($request_handler->query_data as $term)
+  foreach($request_handler->query_result as $term)
   {
     $row_class = (($odd_even++ % 2) === 1) ? 'odd' : 'even';
     $term_name = esc_html($term->name);

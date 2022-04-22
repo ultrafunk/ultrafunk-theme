@@ -49,7 +49,7 @@ export const playbackTimer = (() =>
   
   function start()
   {
-    stop(false);
+    stop();
     
     intervalId = setInterval(() =>
     {

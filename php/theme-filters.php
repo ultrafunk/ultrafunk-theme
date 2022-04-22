@@ -120,7 +120,13 @@ function posts_results(array $posts, object $query) : array
   $filter_results = (is_custom_query() || (\defined('REST_REQUEST') && REST_REQUEST));
 
   if (!is_admin() && $filter_results && $query->is_search())
-    return array_filter($posts, function($entry) { return ($entry->post_type === 'uf_track'); });
+  {
+    // array_values(array_filter($posts)) to "repack" filter result array (= index starts at 0...)
+    return array_values(array_filter($posts, function($entry)
+    {
+      return ($entry->post_type === 'uf_track');
+    }));
+  }
 
   return $posts;
 }

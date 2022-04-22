@@ -23,9 +23,9 @@ use function Ultrafunk\Plugin\Shared\ {
 
 function render_template(object $request_handler) : void
 {
-  if (!empty($request_handler->query_data))
+  if (!empty($request_handler->query_result))
   {
-    $is_first_video = is_video(get_object_term_cache($request_handler->query_data[0]->ID, 'uf_channel'));
+    $is_first_video = is_video(get_object_term_cache($request_handler->query_result[0]->ID, 'uf_channel'));
 
     ?>
     <div id="list-player-container" class="player-container">
@@ -82,7 +82,7 @@ function tracklist_entries(object $request_handler) : void
   global $ultrafunk_is_prod_build;
   $home_url = get_cached_home_url();
 
-  foreach($request_handler->query_data as $track)
+  foreach($request_handler->query_result as $track)
   {
     $track_artist     = esc_html($track->track_artist);
     $track_title      = esc_html($track->track_title);
