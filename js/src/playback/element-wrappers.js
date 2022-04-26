@@ -5,6 +5,12 @@
 //
 
 
+import { replaceClass } from "../shared/utils.js";
+
+
+/*************************************************************************************************/
+
+
 export const STATE = {
   UNKNOWN:  { ID:  0, CLASS: 'state-unknown'  },
   DISABLED: { ID: 10, CLASS: 'state-disabled' },
@@ -36,9 +42,10 @@ export const ElementWrapper = function(elmentSelector, parentElement = document,
     getElement(selector)         { return element.querySelector(selector);    },
     addListener(event, listener) { element.addEventListener(event, listener); },
 
-    addClass(...cssClass)    { classList.add(...cssClass);    },
-    removeClass(...cssClass) { classList.remove(...cssClass); },
-    toggleClass(cssClass)    { classList.toggle(cssClass);    },
+    addClass(...cssClass)     { classList.add(...cssClass);         },
+    removeClass(...cssClass)  { classList.remove(...cssClass);      },
+    replaceClass(remove, add) { replaceClass(element, remove, add); },
+    toggleClass(cssClass)     { classList.toggle(cssClass);         },
 
     getAttribute(attribute)        { return element.getAttribute(attribute); },
     setAttribute(attribute, value) { element.setAttribute(attribute, value); },

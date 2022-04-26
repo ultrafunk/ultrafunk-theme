@@ -15,6 +15,7 @@ import { showSnackbar } from '../../shared/snackbar.js';
 import {
   addListener,
   escAttribute,
+  getTimeString,
 } from '../../shared/utils.js';
 
 import {
@@ -66,8 +67,8 @@ function loadDragDropTouch()
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
     tag.src   = debug.isDebug()
-                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.42.3'
-                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.42.3';
+                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.42.4'
+                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.42.4';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
@@ -257,12 +258,15 @@ function getUpNextTrackHtml(element, trackArtistAttr, trackTitleAttr, isDraggabl
 
   return `
     <div class="modal-track" ${isDraggable ? 'draggable="true"' : ''}>
-      <div class="modal-track-thumbnail ${trackTypeClass}" ${isDraggable ? 'title="Click to Play Track"' : ''}">
+      <div class="modal-track-thumbnail ${trackTypeClass}" ${isDraggable ? 'title="Click to Play Track"' : ''}>
         <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">
       </div>
-      <div class="modal-track-artist-title text-nowrap-ellipsis" ${isDraggable ? 'title="Drag to Move Track"' : ''}">
+      <div class="modal-track-artist-title text-nowrap-ellipsis" ${isDraggable ? 'title="Drag to Move Track"' : ''}>
         <span><b>${escAttribute(element, trackArtistAttr)}</b></span><br>
         <span class="light-text">${escAttribute(element, trackTitleAttr)}</span>
+      </div>
+      <div class="modal-track-duration text-nowrap-ellipsis" ${isDraggable ? 'title="Drag to Move Track"' : ''}>
+        ${getTimeString(parseInt(element.getAttribute('data-track-duration')))}
       </div>
       ${isDraggable ? getModalTrackButtons() : ''}
     </div>`;

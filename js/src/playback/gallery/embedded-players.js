@@ -193,7 +193,7 @@ function onYouTubePlayerReady()
 
 function onYouTubePlayerStateChange(event)
 {
-  eventLog.add(eventLogger.SOURCE.YOUTUBE, event.data, event.target.h.id);
+  eventLog.add(eventLogger.SOURCE.YOUTUBE, event.data, event.target.getIframe().id);
 
   switch (event.data)
   {
@@ -210,19 +210,19 @@ function onYouTubePlayerStateChange(event)
 
 function onYouTubeStateUnstarted(event)
 {
-  debug.log(`onYouTubePlayerStateChange: UNSTARTED (uID: ${event.target.h.id})`);
+  debug.log(`onYouTubePlayerStateChange: UNSTARTED (uID: ${event.target.getIframe().id})`);
   
-  if (eventLog.ytAutoplayBlocked(event.target.h.id, 3000))
+  if (eventLog.ytAutoplayBlocked(event.target.getIframe().id, 3000))
     m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
 }
 
 function onYouTubeStateBuffering(event)
 {
-  debug.log(`onYouTubePlayerStateChange: BUFFERING (uID: ${event.target.h.id})`);
+  debug.log(`onYouTubePlayerStateChange: BUFFERING (uID: ${event.target.getIframe().id})`);
 
   if (m.players.crossfade.isFading() === false)
   {
-    const player = m.players.playerFromUid(event.target.h.id);
+    const player = m.players.playerFromUid(event.target.getIframe().id);
     player.mute(settings.playback.masterMute);
     player.setVolume(settings.playback.masterVolume);
     playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
@@ -231,21 +231,21 @@ function onYouTubeStateBuffering(event)
 
 function onYouTubeStatePlaying(event)
 {
-  debug.log(`onYouTubePlayerStateChange: PLAYING   (uID: ${event.target.h.id})`);
+  debug.log(`onYouTubePlayerStateChange: PLAYING   (uID: ${event.target.getIframe().id})`);
   
   // Call order is important on play events for state handling: Always sync first!
-  m.playbackState.syncAll(event.target.h.id, m.playbackState.STATE.PLAY);
+  m.playbackState.syncAll(event.target.getIframe().id, m.playbackState.STATE.PLAY);
   m.players.current.setDuration(Math.round(event.target.getDuration()));
   playbackTimer.start();
 }
 
 function onYouTubeStatePaused(event)
 {
-  debug.log(`onYouTubePlayerStateChange: PAUSED    (uID: ${event.target.h.id})`);
+  debug.log(`onYouTubePlayerStateChange: PAUSED    (uID: ${event.target.getIframe().id})`);
 
-  if (m.players.isCurrent(event.target.h.id))
+  if (m.players.isCurrent(event.target.getIframe().id))
   {
-    m.playbackState.syncAll(event.target.h.id, m.playbackState.STATE.PAUSE);
+    m.playbackState.syncAll(event.target.getIframe().id, m.playbackState.STATE.PAUSE);
     playbackTimer.stop();
   }
   else
@@ -256,14 +256,14 @@ function onYouTubeStatePaused(event)
 
 function onYouTubeStateCued(event)
 {
-  debug.log(`onYouTubePlayerStateChange: CUED      (uID: ${event.target.h.id})`);
+  debug.log(`onYouTubePlayerStateChange: CUED      (uID: ${event.target.getIframe().id})`);
 }
 
 function onYouTubeStateEnded(event)
 {
-  debug.log(`onYouTubePlayerStateChange: ENDED     (uID: ${event.target.h.id})`);
+  debug.log(`onYouTubePlayerStateChange: ENDED     (uID: ${event.target.getIframe().id})`);
 
-  if (m.players.isCurrent(event.target.h.id))
+  if (m.players.isCurrent(event.target.getIframe().id))
   {
     playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
@@ -278,7 +278,7 @@ function onYouTubePlayerError(event)
 {
   debug.log('onYouTubePlayerError: ' + event.data);
 
-  const player = m.players.playerFromUid(event.target.h.id);
+  const player = m.players.playerFromUid(event.target.getIframe().id);
   player.setPlayable(false);
   onPlayerError(player, event.target.getVideoUrl());
 }

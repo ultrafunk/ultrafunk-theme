@@ -9,15 +9,11 @@ import * as debugLogger        from '../shared/debuglogger.js';
 import { settings }            from '../shared/session-data.js';
 import { EVENT, addListener }  from './playback-events.js';
 import { addSettingsObserver } from '../shared/storage.js';
+import { getTimeString }       from '../shared/utils.js';
 
 import {
   playerType as playerTypeToggle
 } from './footer-toggles.js';
-
-import {
-  getTimeString,
-  replaceClass,
-} from '../shared/utils.js';
 
 import {
   STATE,
@@ -224,10 +220,9 @@ function setThumbnail(thumbnail)
 
 function setTimerDisplayHoursMinutes(durationSeconds)
 {
-  if (durationSeconds > 3600)
-    replaceClass(ctrl.timer.element, 'display-minutes', 'display-hours');
-  else
-    replaceClass(ctrl.timer.element, 'display-hours', 'display-minutes');
+  (durationSeconds > 3600)
+    ? ctrl.timer.replaceClass('display-minutes', 'display-hours')
+    : ctrl.timer.replaceClass('display-hours', 'display-minutes');
 }
 
 function setTimer(positionSeconds, durationSeconds)

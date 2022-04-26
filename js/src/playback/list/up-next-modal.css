@@ -101,10 +101,21 @@
   width: 100%;
 }
 
+.modal-track-duration {
+  margin-left: 15px;
+  min-width: 44px;
+  width: 44px;
+  font-weight: 400;
+}
+
+#modal-item-1 .modal-track-duration {
+  text-align: right;
+}
+
 .modal-track-buttons {
   display: inline-flex;
   margin-right: -10px;
-  margin-left: 15px;
+  margin-left: 10px;
 }
 
 .modal-track-buttons .material-icons {
@@ -179,9 +190,14 @@
     margin-top: -7px;
   }    
 
+  .modal-track-duration {
+    min-width: 40px;
+    width: 40px;
+  }
+
   .modal-track-buttons {
     margin-right: -5px;
-    margin-left: 10px;
+    margin-left: 8px;
   }
   
   .modal-track-buttons .material-icons {
@@ -196,6 +212,19 @@
   .modal-type-tracklist #modal-item-11,
   .modal-type-tracklist #modal-item-12 {
     display: none;
+  }
+
+}
+
+@media screen and (max-width: 400px) {
+
+  .modal-track {
+    font-size: 13px;
+  }
+
+  .modal-track-duration {
+    min-width: 36px;
+    width: 36px;
   }
 
 }
