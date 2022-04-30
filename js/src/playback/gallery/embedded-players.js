@@ -84,9 +84,9 @@ function getAllPlayers()
       {
         events:
         {
-          onReady:       onYouTubePlayerReady,
-          onStateChange: onYouTubePlayerStateChange,
-          onError:       onYouTubePlayerError,
+          onReady:       (event) => onYouTubePlayerReady(event, iframe.id),
+          onStateChange: (event) => onYouTubePlayerStateChange(event, iframe.id),
+          onError:       (event) => onYouTubePlayerError(event, iframe.id),
         }
       });
 
@@ -102,7 +102,7 @@ function getAllPlayers()
       embeddedPlayer.bind(SC.Widget.Events.READY, () =>
       {
         player.setThumbnail(entry.querySelector('.track-share-control span'));
-        onSoundCloudPlayerEventReady();
+        onSoundCloudPlayerEventReady(player, iframe.id);
       });
 
       embeddedPlayer.bind(SC.Widget.Events.PLAY,   onSoundCloudPlayerEventPlay);
@@ -185,67 +185,68 @@ function initYouTubeAPI()
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
   
-function onYouTubePlayerReady()
+function onYouTubePlayerReady(event, iframeId)
 {
-  debug.log('onYouTubePlayerReady()');
+  const player = m.players.playerFromUid(iframeId);
+  debug.log(`onYouTubePlayerReady(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - ${player.getTitle()}`);
   updatePlayersReady();
 }
 
-function onYouTubePlayerStateChange(event)
+function onYouTubePlayerStateChange(event, iframeId)
 {
-  eventLog.add(eventLogger.SOURCE.YOUTUBE, event.data, event.target.getIframe().id);
+  eventLog.add(eventLogger.SOURCE.YOUTUBE, event.data, iframeId);
 
   switch (event.data)
   {
     /* eslint-disable */
-    case YT.PlayerState.UNSTARTED: onYouTubeStateUnstarted(event); break;
-    case YT.PlayerState.BUFFERING: onYouTubeStateBuffering(event); break;
-    case YT.PlayerState.PLAYING:   onYouTubeStatePlaying(event);   break;
-    case YT.PlayerState.PAUSED:    onYouTubeStatePaused(event);    break;
-    case YT.PlayerState.CUED:      onYouTubeStateCued(event);      break;
-    case YT.PlayerState.ENDED:     onYouTubeStateEnded(event);     break;
+    case YT.PlayerState.UNSTARTED: onYouTubeStateUnstarted(iframeId);      break;
+    case YT.PlayerState.BUFFERING: onYouTubeStateBuffering(iframeId);      break;
+    case YT.PlayerState.PLAYING:   onYouTubeStatePlaying(event, iframeId); break;
+    case YT.PlayerState.PAUSED:    onYouTubeStatePaused(iframeId);         break;
+    case YT.PlayerState.CUED:      onYouTubeStateCued(iframeId);           break;
+    case YT.PlayerState.ENDED:     onYouTubeStateEnded(iframeId);          break;
     /* eslint-enable */
   }
 }
 
-function onYouTubeStateUnstarted(event)
+function onYouTubeStateUnstarted(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: UNSTARTED (uID: ${event.target.getIframe().id})`);
+  debug.log(`onYouTubePlayerStateChange: UNSTARTED (uID: ${iframeId})`);
   
-  if (eventLog.ytAutoplayBlocked(event.target.getIframe().id, 3000))
+  if (eventLog.ytAutoplayBlocked(iframeId, 3000))
     m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
 }
 
-function onYouTubeStateBuffering(event)
+function onYouTubeStateBuffering(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: BUFFERING (uID: ${event.target.getIframe().id})`);
+  debug.log(`onYouTubePlayerStateChange: BUFFERING (uID: ${iframeId})`);
 
   if (m.players.crossfade.isFading() === false)
   {
-    const player = m.players.playerFromUid(event.target.getIframe().id);
+    const player = m.players.playerFromUid(iframeId);
     player.mute(settings.playback.masterMute);
     player.setVolume(settings.playback.masterVolume);
     playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
   }
 }
 
-function onYouTubeStatePlaying(event)
+function onYouTubeStatePlaying(event, iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: PLAYING   (uID: ${event.target.getIframe().id})`);
+  debug.log(`onYouTubePlayerStateChange: PLAYING   (uID: ${iframeId})`);
   
   // Call order is important on play events for state handling: Always sync first!
-  m.playbackState.syncAll(event.target.getIframe().id, m.playbackState.STATE.PLAY);
+  m.playbackState.syncAll(iframeId, m.playbackState.STATE.PLAY);
   m.players.current.setDuration(Math.round(event.target.getDuration()));
   playbackTimer.start();
 }
 
-function onYouTubeStatePaused(event)
+function onYouTubeStatePaused(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: PAUSED    (uID: ${event.target.getIframe().id})`);
+  debug.log(`onYouTubePlayerStateChange: PAUSED    (uID: ${iframeId})`);
 
-  if (m.players.isCurrent(event.target.getIframe().id))
+  if (m.players.isCurrent(iframeId))
   {
-    m.playbackState.syncAll(event.target.getIframe().id, m.playbackState.STATE.PAUSE);
+    m.playbackState.syncAll(iframeId, m.playbackState.STATE.PAUSE);
     playbackTimer.stop();
   }
   else
@@ -254,16 +255,16 @@ function onYouTubeStatePaused(event)
   }
 }
 
-function onYouTubeStateCued(event)
+function onYouTubeStateCued(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: CUED      (uID: ${event.target.getIframe().id})`);
+  debug.log(`onYouTubePlayerStateChange: CUED      (uID: ${iframeId})`);
 }
 
-function onYouTubeStateEnded(event)
+function onYouTubeStateEnded(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: ENDED     (uID: ${event.target.getIframe().id})`);
+  debug.log(`onYouTubePlayerStateChange: ENDED     (uID: ${iframeId})`);
 
-  if (m.players.isCurrent(event.target.getIframe().id))
+  if (m.players.isCurrent(iframeId))
   {
     playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
@@ -274,11 +275,11 @@ function onYouTubeStateEnded(event)
   }
 }
 
-function onYouTubePlayerError(event)
+function onYouTubePlayerError(event, iframeId)
 {
   debug.log('onYouTubePlayerError: ' + event.data);
 
-  const player = m.players.playerFromUid(event.target.getIframe().id);
+  const player = m.players.playerFromUid(iframeId);
   player.setPlayable(false);
   onPlayerError(player, event.target.getVideoUrl());
 }
@@ -295,9 +296,9 @@ function initSoundCloudAPI()
   playbackEvents.dispatch(playbackEvents.EVENT.LOADING, getLoadingPercent());
 }
 
-function onSoundCloudPlayerEventReady()
+function onSoundCloudPlayerEventReady(player, iframeId)
 {
-  debug.log('onSoundCloudPlayerEventReady()');
+  debug.log(`onSCPlayerEventReady(): ${iframeId} => ${player.getUid()} => ${player.getArtist()} - ${player.getTitle()}`);
   updatePlayersReady();
 }
 

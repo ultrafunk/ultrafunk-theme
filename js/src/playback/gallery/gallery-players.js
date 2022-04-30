@@ -6,7 +6,7 @@
 
 
 import * as debugLogger       from '../../shared/debuglogger.js';
-import * as crossfadeModule   from './crossfade.js';
+import { crossfadeClosure }   from './crossfade.js';
 import { settings }           from '../../shared/session-data.js';
 import { EVENT, addListener } from '../playback-events.js';
 
@@ -57,7 +57,7 @@ export const galleryPlayers = (() =>
     debug.log('init()');
 
     playTrack = playTrackCallback;
-    crossfade = crossfadeModule.crossfade(this);
+    crossfade = crossfadeClosure(this);
 
     addListener(EVENT.MEDIA_PLAYING, () => crossfade.start());
     addListener(EVENT.MEDIA_PAUSED,  () => crossfade.stop());

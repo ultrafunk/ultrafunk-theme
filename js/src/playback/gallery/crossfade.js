@@ -49,7 +49,7 @@ const config = {
 // Crossfade closure
 // ************************************************************************************************
 
-export const crossfade = ((galleryPlayers) =>
+export const crossfadeClosure = ((galleryPlayers) =>
 {
   const players       = galleryPlayers;
   let fadeState       = STATE.NONE;

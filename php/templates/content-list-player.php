@@ -52,31 +52,6 @@ function render_template(object $request_handler) : void
   }
 }
 
-function term_links(array $tags, string $path, int $track_artist_id = -1) : void
-{
-  foreach ($tags as $tag)
-  {
-    $class = (($track_artist_id !== -1) && ($tag->term_id === $track_artist_id)) ? 'primary' : 'secondary';    
-    echo "<a class='$class' href='/list/$path/$tag->slug/'>$tag->name</a>";
-  }
-}
-
-function is_video(array $channels) : bool
-{
-  foreach ($channels as $channel)
-  {
-    if ($channel->slug === 'video')
-      return true;
-  }
-
-  return false;
-}
-
-function getTimeString(int $seconds) : string
-{
-  return (($seconds > 3600) ? gmdate("H:i:s", $seconds) : gmdate("i:s", $seconds));
-}
-
 function tracklist_entries(object $request_handler) : void
 {
   global $ultrafunk_is_prod_build;
@@ -147,4 +122,33 @@ function tracklist_entries(object $request_handler) : void
     </div>
     <?php
   }
+}
+
+
+/**************************************************************************************************************************/
+
+
+function term_links(array $tags, string $path, int $track_artist_id = -1) : void
+{
+  foreach ($tags as $tag)
+  {
+    $class = (($track_artist_id !== -1) && ($tag->term_id === $track_artist_id)) ? 'primary' : 'secondary';    
+    echo "<a class='$class' href='/list/$path/$tag->slug/'>$tag->name</a>";
+  }
+}
+
+function is_video(array $channels) : bool
+{
+  foreach ($channels as $channel)
+  {
+    if ($channel->slug === 'video')
+      return true;
+  }
+
+  return false;
+}
+
+function getTimeString(int $seconds) : string
+{
+  return (($seconds > 3600) ? gmdate("H:i:s", $seconds) : gmdate("i:s", $seconds));
 }

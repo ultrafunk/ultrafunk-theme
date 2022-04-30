@@ -9,10 +9,10 @@ import * as utils from '../shared/utils.js';
 
 
 // ************************************************************************************************
-// Main navigation search handling
+// Main navigation search handling closure
 // ************************************************************************************************
 
-export const navSearch = (() =>
+const navSearchClosure = (() =>
 {
   const allowKeyboardShortcutsEvent = new Event('allowKeyboardShortcuts');
   const denyKeyboardShortcutsEvent  = new Event('denyKeyboardShortcuts');
@@ -138,4 +138,6 @@ export const navSearch = (() =>
     searchContainer.style.width  = `${position.width - position.left}px`;
     searchContainer.style.height = `${position.height}px`;
   }
-})();
+});
+
+export const navSearch = navSearchClosure();

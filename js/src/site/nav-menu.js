@@ -14,10 +14,10 @@ import {
 
 
 // ************************************************************************************************
-// Main navigation menu handling
+// Main navigation menu handling closure
 // ************************************************************************************************
 
-export const navMenu = (() =>
+const navMenuClosure = (() =>
 {
   const observer = new ResizeObserver(observerCallback);
   let siteHeader = null, navMenuOuter = null, modalOverlay = null;
@@ -102,4 +102,6 @@ export const navMenu = (() =>
       navMenuOuter.style.display = '';
     }
   }
-})();
+});
+
+export const navMenu = navMenuClosure();

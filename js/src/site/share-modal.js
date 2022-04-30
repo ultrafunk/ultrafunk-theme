@@ -17,10 +17,10 @@ const debug = debugLogger.newInstance('share-modal');
 
 
 // ************************************************************************************************
-// Share Modal Dialog module
+// Share Modal Dialog closure
 // ************************************************************************************************
 
-export const shareModal = (() =>
+const shareModalClosure = (() =>
 {
   const filterBodyTextRegEx = /\s{1,}[\u002D\u00B7\u2013]\s{1,}/i;
   let title, bodyText, filterBodyText, bodyHtml, url, sourceUid, verb;
@@ -106,7 +106,9 @@ export const shareModal = (() =>
         break;
     }
   }
-})();
+});
+
+export const shareModal = shareModalClosure();
 
 
 // ************************************************************************************************
