@@ -19,8 +19,12 @@ namespace Ultrafunk\Theme\Templates\Track;
   <header class="entry-header">
     <?php \Ultrafunk\Theme\Tags\entry_title(); ?>
     <div class="entry-meta">
-      <div class="entry-meta-artists"><b><a href="/artists/" title="Show All Artists">Artists</a>: </b><?php the_terms(get_the_ID(), 'uf_artist'); ?></div>
-      <div class="entry-meta-channels"><b><a href="/channels/" title="Show All Channels">Channels</a>: </b><?php the_terms(get_the_ID(), 'uf_channel'); ?></div>
+      <div class="entry-meta-artists">
+        <b><a href="/artists/" title="Show All Artists">Artists</a>: </b><span class="term-links"><?php the_terms(get_the_ID(), 'uf_artist'); ?></span>
+      </div>
+      <div class="entry-meta-channels">
+        <b><a href="/channels/" title="Show All Channels">Channels</a>: </b><span class="term-links"><?php the_terms(get_the_ID(), 'uf_channel'); ?></span>
+      </div>
       <?php \Ultrafunk\Theme\Tags\meta_controls($post); ?>
     </div>
   </header>

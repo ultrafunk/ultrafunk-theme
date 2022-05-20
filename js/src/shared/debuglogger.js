@@ -26,8 +26,6 @@ class DebugLog
 
 class DevBuild extends DebugLog
 {
-  constructor(moduleName) { super(moduleName); }
-
   log(data)
   {
     console.log(`${this.moduleName}:`, data);
@@ -60,8 +58,6 @@ class DevBuild extends DebugLog
 
 class ProdBuild extends DebugLog
 {
-  constructor(moduleName) { super(moduleName); }
-
   log()                  {}
   logEventLog()          {}
   getObjectKeyForValue() {}

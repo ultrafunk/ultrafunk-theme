@@ -58,6 +58,16 @@ document.addEventListener('DOMContentLoaded', () =>
   }
 
   setPreviousPageTitle();
+
+  /*
+  //
+  // DEV / debug-only: Content-Security-Policy-Report-Only: "require-trusted-types-for 'script'"
+  //
+  if (debug.isDebug())
+  {
+    document.addEventListener('securitypolicyviolation', console.warn.bind(console));
+  }
+  */
 });
 
 function initIndex()

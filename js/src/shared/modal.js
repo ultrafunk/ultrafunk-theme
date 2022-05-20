@@ -24,6 +24,7 @@ const m = {
   onEntryClicked:   null,
   onClickClose:     null,
   modalId:          0,
+  ignoreTouchMove:  false,
   isTouchDraggable: false,
 };
 
@@ -76,8 +77,8 @@ export function isShowingModal(showingModalId = -1)
 
 export function closeModal()
 {
-  document.body.removeEventListener('touchmove', blockTouchScroll, { passive: false });
-  document.body.removeEventListener('touchstart', setIsTouchDraggable);
+  document.body.removeEventListener('touchmove', touchMove, { passive: false });
+  document.body.removeEventListener('touchstart', touchStart);
   elements.overlay.removeEventListener('keydown', keyDown);
   elements.overlay.classList.replace('show', 'hide');
 }
@@ -170,25 +171,25 @@ function disablePageScrolling(disableScrolling)
 {
   const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
   
-  document.documentElement.style.overflowY    = disableScrolling ? 'hidden' : '';
-  document.documentElement.style.paddingRight = disableScrolling ? `${scrollbarWidth}px` : '';
+  document.documentElement.style.overflowY                  = disableScrolling ? 'hidden'              : '';
+  document.documentElement.style.paddingRight               = disableScrolling ? `${scrollbarWidth}px` : '';
   document.getElementById('site-header').style.paddingRight = disableScrolling ? `${scrollbarWidth}px` : '';
 
   if (disableScrolling && ('ontouchstart' in window))
   {
-    document.body.addEventListener('touchstart', setIsTouchDraggable);
-    document.body.addEventListener('touchmove',  blockTouchScroll, { passive: false });
+    document.body.addEventListener('touchstart', touchStart);
+    document.body.addEventListener('touchmove',  touchMove, { passive: false });
   }
 }
 
-function setIsTouchDraggable(event)
+function touchStart(event)
 {
-  const draggableAttr = event.target.closest('.modal-track')?.getAttribute('draggable');
-  m.isTouchDraggable  = (draggableAttr === 'true') ? true : false;
+  m.ignoreTouchMove  = (true   === event.target.classList.contains('modal-ignore-touchmove'));
+  m.isTouchDraggable = ('true' === event.target.closest('.modal-draggable-entry')?.getAttribute('draggable'));
 }
 
-function blockTouchScroll(event)
+function touchMove(event)
 {
-  if (m.isTouchDraggable === false)
+  if ((m.isTouchDraggable === false) || m.ignoreTouchMove)
     event.preventDefault();
 }

@@ -5,16 +5,16 @@
 //
 
 
-import * as debugLogger from '../debuglogger.js?ver=1.42.5';
-import { addListener }  from '../utils.js?ver=1.42.5';
-import { showSnackbar } from '../snackbar.js?ver=1.42.5';
+import * as debugLogger from '../debuglogger.js?ver=1.43.0';
+import { addListener }  from '../utils.js?ver=1.43.0';
+import { showSnackbar } from '../snackbar.js?ver=1.43.0';
 
 import {
   KEY,
   deleteCookie,
   readJson,
   writeJson,
-} from '../storage.js?ver=1.42.5';
+} from '../storage.js?ver=1.43.0';
 
 import {
   TYPE_INTEGER,
@@ -22,7 +22,7 @@ import {
   TYPE_STRING,
   settingsSchema,
   defaultSettings,
-} from './settings.js?ver=1.42.5';
+} from './settings.js?ver=1.43.0';
 
 
 /*************************************************************************************************/
@@ -49,7 +49,7 @@ const settingsSections = [
   { name: 'Site',           id: 'site',     schema: settingsSchema.site     },
 ];
 
-const errorTemplate = `<h3>An error occurred while reading Playback and Site settings</h3>
+const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and Site settings</h3>
   <p>This can be caused by several issues, but most likely it happened because of corrupt or malformed JSON data in the browsers Local Storage.</p>
   <p>Clearing all settings stored locally in the browser will probably fix the problem, click on the button below to do that.
   <b>Note:</b> All Playback and Site settings will be reset to default values.</p>
@@ -203,7 +203,7 @@ function addTableRow(idPrefix, entry)
 {
   const defaultValueString = entry[1].valueStrings[getValueStringsIndex(entry[1], entry[1].default)];
 
-  const html =
+  const html = /*html*/
     `\n<tr id="${idPrefix}:${entry[0]}" class="settings-entry" title="Default: ${defaultValueString}">
       <td class="description">${entry[1].description}</td>
       <td class="${getTypeValueClasses(entry[1])}">${entry[1].valueStrings[entry[1].current]}</td>

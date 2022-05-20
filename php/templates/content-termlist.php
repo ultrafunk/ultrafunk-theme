@@ -19,24 +19,11 @@ use function Ultrafunk\Plugin\Globals\ {
 
 function render_template(object $request_handler) : void
 {
-  if (is_termlist('artists'))
-  {
-    ?><div class="artist-letters-container"><?php
-
-    foreach($request_handler->letters_range as $letter)
-    {
-      ?>
-      <div class="entry-content artist-letter <?php echo ($request_handler->first_letter === $letter) ? 'current' : ''; ?>">
-        <a href="/artists/<?php echo $letter; ?>/"><?php echo $letter; ?></a>
-      </div>
-      <?php
-    }    
-
-    ?></div><?php
-  }
-
   if (!empty($request_handler->query_result))
   {
+    if (is_termlist('artists'))
+      artist_letters($request_handler);
+
     ?>
     <term-list id="termlist-container" class="entry-content <?php echo "term-$request_handler->term_type"; ?>" data-term-type="<?php echo $request_handler->term_type; ?>">
       <?php if (is_termlist('channels')) { ?>
@@ -87,7 +74,7 @@ function termlist_entries(object $request_handler) : void
           <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>
         </div>
         <div class="body-right">
-          <div class="permalink"><b>Permalink</b><br><a href="<?php echo "/$term_path/$term_slug/"; ?>"><?php echo $term_name?></a></div>
+          <div class="permalink"><b>Permalink</b><br><a href="<?php echo "/$term_path/$term_slug/"; ?>"><?php echo $term_name; ?></a></div>
           <?php if (is_termlist('artists')) { ?>
             <div class="artists"><b>Related Artists</b>
               <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>
@@ -101,4 +88,24 @@ function termlist_entries(object $request_handler) : void
     </div>
     <?php
   }
+}
+
+
+/**************************************************************************************************************************/
+
+
+function artist_letters($request_handler)
+{
+  ?><div class="artist-letters-container"><?php
+
+  foreach($request_handler->letters_range as $letter)
+  {
+    ?>
+    <div class="entry-content artist-letter <?php echo ($request_handler->first_letter === $letter) ? 'current' : ''; ?>">
+      <a href="/artists/<?php echo $letter; ?>/"><?php echo $letter; ?></a>
+    </div>
+    <?php
+  }    
+
+  ?></div><?php
 }

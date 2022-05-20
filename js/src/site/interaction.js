@@ -8,6 +8,7 @@
 import * as debugLogger      from '../shared/debuglogger.js';
 import * as utils            from '../shared/utils.js';
 import ToggleElement         from '../shared/toggle-element.js';
+import ElementClick          from '../shared/element-click.js';
 import { settings }          from '../shared/session-data.js';
 import { showModal }         from '../shared/modal.js';
 import { KEY, setValue }     from '../shared/storage.js';
@@ -25,6 +26,11 @@ import {
 const debug = debugLogger.newInstance('site-interaction');
 const htmlClassList = document.documentElement.classList;
 
+const m = {
+  metaUiElements: null,
+  listUiElements: null,
+};
+
 export let siteTheme     = {};
 export let galleryLayout = {};
 
@@ -37,17 +43,19 @@ export function init()
 {
   debug.log('init()');
 
-  siteTheme     = new SiteThemeToggle('footer-site-theme-toggle');
-  galleryLayout = new GalleryLayoutToggle('footer-gallery-layout-toggle');
+  m.metaUiElements = new MetaUiElements();
+  m.listUiElements = new ListUiElements();
+  siteTheme        = new SiteThemeToggle('footer-site-theme-toggle');
+  galleryLayout    = new GalleryLayoutToggle('footer-gallery-layout-toggle');
 
-  utils.addListenerAll('.entry-meta-controls .track-share-control', 'click', (event) => sharePlayClick(event.target));
-  document.getElementById('tracklist')?.addEventListener( 'click', listPlayerClick);
+  utils.addListenerAll('.entry-meta', 'click', (event) => m.metaUiElements.clickHandler(event));
+  document.getElementById('tracklist')?.addEventListener('click', (event) => m.listUiElements.clickHandler(event));
 
   window.addEventListener('load', () =>
   {
-    document.querySelector('.widget ul.uf_channel')?.addEventListener('click', widgetLinkClick);
-    document.querySelector('.widget ul.uf_artist')?.addEventListener('click', widgetLinkClick);
-    document.querySelector('.widget.widget_archive ul')?.addEventListener('click', widgetLinkClick);
+    document.querySelector('.widget ul.uf_channel')?.addEventListener('click', linkClick);
+    document.querySelector('.widget ul.uf_artist')?.addEventListener('click', linkClick);
+    document.querySelector('.widget.widget_archive ul')?.addEventListener('click', linkClick);
   });
 }
 
@@ -59,19 +67,34 @@ export function settingsUpdated()
 
 
 // ************************************************************************************************
-//
+// UI elements event handling
 // ************************************************************************************************
 
-function listPlayerClick(event)
+class MetaUiElements extends ElementClick
 {
-  const sharePlayButton = event.target.closest('div.share-play-button');
-  if (sharePlayButton !== null ) return sharePlayClick(sharePlayButton.closest('div.track-entry'));
+  elementClicked()
+  {
+    if (this.clicked('div.track-share-control'))
+      return sharePlayClick(this.event.target);
   
-  const detailsButton = event.target.closest('div.details-button');
-  if (detailsButton !== null) return detailsClick(detailsButton.closest('div.track-entry'));
+    if (this.clicked('span.term-links'))
+      return linkClick(this.event);
+  }
 }
 
-function widgetLinkClick(event)
+class ListUiElements extends ElementClick
+{
+  elementClicked()
+  {
+    if (this.clicked('div.share-play-button'))
+      return sharePlayClick(this.closest('div.track-entry'));
+    
+    if (this.clicked('div.details-button'))
+      return detailsClick(this.closest('div.track-entry'));
+  }
+}
+
+function linkClick(event)
 {
   if (event.target.matches('a'))
   {

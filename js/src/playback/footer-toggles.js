@@ -112,30 +112,38 @@ class PlayerTypeToggle extends ToggleElement
 
 class AutoplayToggle extends ToggleElement
 {
-  constructor(elementId) { super(elementId); }
-
   toggle()
   {
     settings.playback.autoplay = (settings.playback.autoplay === true) ? false : true;
-    showSnackbar(settings.playback.autoplay ? 'Autoplay enabled (<b>Shift</b> + <b>A</b> to disable)' : 'Autoplay disabled (<b>Shift</b> + <b>A</b> to enable)', 5);
+    
+    showSnackbar(settings.playback.autoplay
+      ? 'Autoplay enabled (<b>Shift</b> + <b>A</b> to disable)'
+      : 'Autoplay disabled (<b>Shift</b> + <b>A</b> to enable)', 5);
   }
 
   update()
   {
     this.value = settings.playback.autoplay ? 'ON' : 'OFF';
-    settings.playback.autoplay ? replaceClass(document.body, 'autoplay-off', 'autoplay-on') : replaceClass(document.body, 'autoplay-on', 'autoplay-off');
-    settings.playback.autoplay ? crossfade?.classList.remove('disabled')                    : crossfade?.classList.add('disabled');
+    
+    settings.playback.autoplay
+      ? replaceClass(document.body, 'autoplay-off', 'autoplay-on')
+      : replaceClass(document.body, 'autoplay-on', 'autoplay-off');
+    
+    settings.playback.autoplay
+      ? crossfade?.classList.remove('disabled')
+      : crossfade?.classList.add('disabled');
   }
 }
 
 class CrossfadeToggle extends ToggleElement
 {
-  constructor(elementId) { super(elementId); }
-
   toggle()
   {
     settings.gallery.autoCrossfade = (settings.gallery.autoCrossfade === true) ? false : true;
-    showSnackbar(settings.gallery.autoCrossfade ? 'Auto Crossfade enabled (<b>x</b> to disable)' : 'Auto Crossfade disabled (<b>x</b> to enable)', 5);
+    
+    showSnackbar(settings.gallery.autoCrossfade
+      ? 'Auto Crossfade enabled (<b>x</b> to disable)'
+      : 'Auto Crossfade disabled (<b>x</b> to enable)', 5);
   }
 
   update()

@@ -1,5 +1,6 @@
 # **Ultrafunk theme**
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CodeQL](https://github.com/ultrafunk/ultrafunk-theme/workflows/CodeQL/badge.svg)](https://github.com/ultrafunk/ultrafunk-theme/actions/workflows/codeql-analysis.yml)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ultrafunk/ultrafunk-theme.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ultrafunk/ultrafunk-theme/context:javascript)
 
@@ -14,8 +15,8 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 # Dependencies
 **Required:**  
 PHP version 8.0 or greater  
-[WordPress](https://wordpress.org/download/) version 5.9 or greater  
-[Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.42.X or greater  
+[WordPress](https://wordpress.org/download/) version 6.0 or greater  
+[Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.43.X or greater  
 [DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) in **/inc/js/drag-drop-touch.js** and **/inc/js/drag-drop-touch.min.js**  
 [ESBuild](https://github.com/evanw/esbuild/) (JavaScript / CSS bundler and minifier)  
 [Google Material Icons font](https://google.github.io/material-design-icons/#icon-font-for-the-web)  

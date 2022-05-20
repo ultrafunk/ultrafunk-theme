@@ -117,7 +117,7 @@ add_action('parse_query', '\Ultrafunk\Theme\Filters\parse_query');
 //
 function posts_results(array $posts, object $query) : array
 {
-  $filter_results = (is_custom_query() || (\defined('REST_REQUEST') && REST_REQUEST));
+  $filter_results = (is_custom_query() || (defined('REST_REQUEST') && REST_REQUEST));
 
   if (!is_admin() && $filter_results && $query->is_search())
   {

@@ -68,7 +68,7 @@ export function init(mediaPlayers, seekClickCallback)
     ctrl.timer.duration        = ctrl.timer.getElement('.playback-timer-duration');
     ctrl.timer.positionSeconds = -1; // Make sure initial value is set + shown when track plays
     ctrl.timer.durationSeconds = -1; // Make sure initial value is set + shown when track plays
-    
+      
     ctrl.playerType = new ElementWrapper('.playback-player-type-control', playbackControls);
     ctrl.prevTrack  = new ElementWrapper('.playback-prev-control', playbackControls);
     
@@ -196,6 +196,7 @@ function setDetails(trackData)
     ctrl.details.setState(STATE.ENABLED);
     ctrl.thumbnail.setState(STATE.ENABLED);
     ctrl.timer.setState(STATE.ENABLED);
+    clearTimer(trackData);
   }
 
   ctrl.details.artist.textContent = trackData.artist || ''; // Artist will contain the post title if all else fails
@@ -203,7 +204,7 @@ function setDetails(trackData)
   
   setThumbnail(trackData.thumbnail);
   setTimerDisplayHoursMinutes(trackData.duration);
-  setTimer(0, trackData.duration);
+  setTimer((isPlaying() ? ctrl.timer.positionSeconds : 0), trackData.duration);
 }
 
 function setThumbnail(thumbnail)
@@ -246,7 +247,10 @@ function setTimer(positionSeconds, durationSeconds)
 
 function clearTimer(trackData)
 {
-  ctrl.timer.position.textContent = (trackData.duration > 3600) ? '00:00:00' : '00:00';
+  ctrl.timer.position.textContent = settings.playback.autoplay
+    ? (trackData.duration > 3600) ? '00:00:00' : '00:00'
+    : getTimeString(trackData.duration, (trackData.duration > 3600));
+
   ctrl.timer.duration.textContent = (trackData.duration > 3600) ? '00:00:00' : '00:00';
   ctrl.timer.positionSeconds = -1;
   ctrl.timer.durationSeconds = -1;

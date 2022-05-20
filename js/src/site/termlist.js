@@ -8,6 +8,7 @@
 import * as debugLogger       from '../shared/debuglogger.js';
 import * as termlistRest      from './termlist-rest.js';
 import * as utils             from '../shared/utils.js';
+import ElementClick           from '../shared/element-click.js';
 import { shareModal }         from './share-modal.js';
 import { TRACK_TYPE }         from '../playback/shared-gallery-list.js';
 import { KEY, setCookie }     from '../shared/storage.js';
@@ -19,7 +20,11 @@ import { response, settings } from '../shared/session-data.js';
 
 
 const debug = debugLogger.newInstance('termlist-controls');
-const m     = { listContainer: null };
+
+const m = {
+  listContainer: null,
+  uiElements:    null,
+};
 
 
 // ************************************************************************************************
@@ -31,27 +36,9 @@ export function init()
   debug.log('init()');
 
   m.listContainer = document.getElementById('termlist-container');
+  m.uiElements    = new UiElements();
 
-  m.listContainer.addEventListener('click', (event) =>
-  {
-    const playButton = event.target.closest('div.play-button');
-    if (playButton !== null ) return playClick(event, utils.getPrefPlayerUrl(playButton.querySelector('a').href));
-
-    const shuffleButton = event.target.closest('div.shuffle-button');
-    if (shuffleButton !== null ) return shuffleClick(event, utils.getPrefPlayerUrl(shuffleButton.querySelector('a').href));
-
-    const shareFindButton = event.target.closest('div.share-find-button');
-    if (shareFindButton !== null ) return shareFindClick(shareFindButton);
-   
-    const termlistHeader = event.target.closest('div.termlist-header');
-    if (termlistHeader !== null ) return termlistHeaderClick(event);
-
-    const playTrackButton = event.target.closest('div.thumbnail');
-    if (playTrackButton !== null ) return playTrackClick(event, playTrackButton);
-
-    const linkElement = event.target.closest('a');
-    if (linkElement !== null) return linkClicked(event, linkElement);
-  });
+  m.listContainer.addEventListener('click', (event) => m.uiElements.clickHandler(event));
 
   restoreState();
 }
@@ -115,6 +102,30 @@ function restoreState()
 // ************************************************************************************************
 // Click event functions
 // ************************************************************************************************
+
+class UiElements extends ElementClick
+{
+  elementClicked()
+  {
+    if (this.clicked('div.play-button'))
+      return playClick(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
+  
+    if (this.clicked('div.shuffle-button'))
+      return shuffleClick(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
+  
+    if (this.clicked('div.share-find-button'))
+      return shareFindClick(this.element);
+  
+    if (this.clicked('div.termlist-header'))
+      return termlistHeaderClick(this.event);
+  
+    if (this.clicked('div.thumbnail'))
+      return playTrackClick(this.event, this.element);
+  
+    if (this.clicked('a'))
+      return linkClicked(this.event, this.element);
+  }
+}
 
 function playClick(event, destUrl, trackId = null)
 {

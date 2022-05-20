@@ -136,8 +136,6 @@ class EventLog
 
 export class Interaction extends EventLog
 {
-  constructor(maxEntries) { super(maxEntries); }
-
   doubleClicked(eventSource, eventType, deltaTime)
   {
     this.initMatch();
@@ -160,8 +158,6 @@ export class Interaction extends EventLog
 
 export class Playback extends EventLog
 {
-  constructor(maxEntries) { super(maxEntries); }
-
   ytAutoplayBlocked(uId, deltaTime)
   {
     this.initMatch();

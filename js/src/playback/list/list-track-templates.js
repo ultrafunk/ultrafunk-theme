@@ -30,7 +30,7 @@ export function getPageSeparatorHtml(responseData, loadingPage)
 {
   const pageUrl = responseData.nextPage.replace(/\/page\/(?!0)\d{1,6}\//i, `/page/${loadingPage}/`);
 
-  return `
+  return /*html*/ `
     <div id="tracklist-page-${loadingPage}" class="tracklist-page-separator" data-page-number="${loadingPage}">
       <span class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</span>
       <a href="${pageUrl}" title="Go to page ${loadingPage}">Page ${loadingPage} &#9660;</a>
@@ -62,7 +62,7 @@ export function getTrackEntryHtml(track)
                           ? `<div class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></div>`
                           : '';
 
-  return `
+  return /*html*/ `
     <div id="${track.uid}" class="track-entry ${thumbnailData.class}"
       data-track-id="track-${track.id}"
       data-track-artist="${trackArtist}"

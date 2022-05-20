@@ -20,7 +20,7 @@ export const config = { id: 'modal-dialog' };
 
 export function getTemplateHtml()
 {
-  return `
+  return /*html*/ `
     <div id="${config.id}" tabindex="-1">
       <div id="${config.id}-container">
         <div class="${config.id}-header">
@@ -57,7 +57,7 @@ export function getModalTrackHtml(element, trackArtist, trackTitle)
 {
   const trackTypeClass = (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE) ? 'type-youtube' : 'type-soundcloud';
 
-  return `
+  return /*html*/ `
     <div class="modal-track">
       <div class="modal-track-thumbnail ${trackTypeClass}">
         <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">

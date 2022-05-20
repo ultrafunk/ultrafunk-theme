@@ -146,7 +146,10 @@ export function escAttribute(element, attribute)
 }
 
 //
-// ToDo: Replace with DOMPurify or the HTML Sanitizer API: https://github.com/WICG/sanitizer-api
+// ToDo: escHtml() + stripHtml()
+// Replace with DOMPurify or the HTML Sanitizer API: https://github.com/WICG/sanitizer-api
+// Enhance / fix with: https://developer.mozilla.org/en-US/docs/Web/API/Trusted_Types_API
+//                     https://github.com/w3c/webappsec-trusted-types
 //
 export function stripHtml(string)
 {

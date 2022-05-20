@@ -21,67 +21,72 @@ const m     = { wakeLock: null };
 // 
 // ************************************************************************************************
 
+export function initScreenWakeLock()
+{
+  if (settings.mobile.keepScreenOn)
+    document.addEventListener('click', enableScreenWakeLock);
+}
+
+function enableScreenWakeLock()
+{
+  debug.log('enableScreenWakeLock()');
+
+  document.removeEventListener('click', enableScreenWakeLock);
+
+  enableWakeLock();
+
+  document.addEventListener('visibilitychange', () =>
+  {
+    if ((document.visibilityState === 'visible') && (settings.mobile.keepScreenOn))
+      setStateVisible();
+  });
+}
+
+function setStateVisible()
+{
+  if (isSupported() && (m.wakeLock === null))
+    requestWakeLock();
+}
+
+
+/*************************************************************************************************/
+
+
 function isSupported()
 {
   return (('wakeLock' in navigator) && ('request' in navigator.wakeLock));
 }
 
-export async function enable()
+async function enableWakeLock()
 {
   if (isSupported())
   {
     if (document.visibilityState === 'visible')
     {
-      /*
-      if (wakeLock !== null)
-        wakeLock.release();
-      */
-
-      if (await request() !== true)
+      if (await requestWakeLock() !== true)
       {
-        debug.log('enable(): Screen Wake Lock request failed');
-      //showSnackbar('Keep Screen On failed', 3);
+        debug.log('enableWakeLock(): Screen Wake Lock request failed');
+        showSnackbar('Keep Screen On failed', 3);
       }
     }
   }
   else
   {
-    debug.log('enable(): Screen Wake Lock is not supported');
+    debug.log('enableWakeLock(): Screen Wake Lock is not supported');
     showSnackbar('Keep Screen On is not supported', 5, 'Disable', () => (settings.mobile.keepScreenOn = false));
   }
 }
 
-/*
-export function disable()
-{
-  debug.log('disable()');
-
-  if (wakeLock !== null)
-    wakeLock.release();
-}
-*/
-
-export function stateVisible()
-{
-  debug.log('stateVisible()');
-
-  if (isSupported() && (m.wakeLock === null))
-    request();
-}
-
-async function request()
+async function requestWakeLock()
 {
   try
   {
     m.wakeLock = await navigator.wakeLock.request('screen');
-
-    debug.log('request(): Screen Wake Lock is Enabled');
-  //showSnackbar('Keep Screen On success', 3);
+    debug.log('requestWakeLock(): Screen Wake Lock is Enabled');
 
     m.wakeLock.addEventListener('release', () =>
     {
-      debug.log('request(): Screen Wake Lock was Released');
-    //showSnackbar('Keep Screen On was released', 3);
+      debug.log('requestWakeLock(): Screen Wake Lock was Released');
       m.wakeLock = null;
     });
 
@@ -89,7 +94,7 @@ async function request()
   }
   catch (exception)
   {
-    debug.error(`request(): ${exception.name} - ${exception.message}`);
+    debug.error(`requestWakeLock(): ${exception.name} - ${exception.message}`);
   }
 
   return false;

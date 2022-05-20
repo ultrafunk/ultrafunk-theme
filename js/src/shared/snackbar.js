@@ -15,16 +15,15 @@ import { MATCH, matchesMedia } from './utils.js';
 const debug = debugLogger.newInstance('snackbar');
 
 const m = {
-  snackbarId:       0,
-  actionClick:      null,
-  afterClose:       null,
-  visibleTimeoutId: -1,
-  fadeTimeoutId:    -1,
+  snackbarId:    0,
+  actionClick:   null,
+  afterClose:    null,
+  showTimeoutId: -1,
 };
 
 const config = { id: 'snackbar' };
 
-const template = `
+const template = /*html*/ `
   <div id="${config.id}">
     <div class="${config.id}-container">
       <div class="${config.id}-message"></div>
@@ -56,7 +55,7 @@ export function showSnackbar(
   debug.log(`showSnackbar(): ${message} (${timeout} sec.)`);
 
   init();
-  reset();
+  reset(false);
 
   elements.snackbar.querySelector(`.${config.id}-message`).innerHTML = message;
   elements.snackbar.classList.add('show');
@@ -78,22 +77,10 @@ export function showSnackbar(
     else
       elements.closeIcon.style.paddingLeft = '20px';
   }
-  
-  if (timeout !== 0)
-  {
-    m.visibleTimeoutId = setTimeout(() =>
-    {
-      elements.snackbar.classList.add('hide');
-      
-      m.fadeTimeoutId = setTimeout(() =>
-      {
-        elements.snackbar.className = '';
-        m.afterClose();
-      }, 450);
-    },
-    (timeout * 1000));
-  }
 
+  if (timeout !== 0)
+    m.showTimeoutId = setTimeout(() => elements.snackbar.classList.add('hide'), (timeout * 1000));
+  
   return ++m.snackbarId;
 }
 
@@ -102,10 +89,7 @@ export function dismissSnackbar(dismissId = 0)
   if (isShowing())
   {
     if ((m.snackbarId === 0) || (m.snackbarId === dismissId))
-    {
       elements.snackbar.classList.add('hide');
-      m.fadeTimeoutId = setTimeout(() => (elements.snackbar.className = ''), 450);
-    }
   }
 }
 
@@ -124,18 +108,27 @@ function init()
     elements.actionText = elements.snackbar.querySelector(`.${config.id}-action-text`);
     elements.closeIcon  = elements.snackbar.querySelector(`.${config.id}-close-icon`);
     
+    elements.snackbar.addEventListener('animationend', () =>
+    {
+      if (elements.snackbar.classList.contains('hide'))
+      {
+        reset(true);
+        m.afterClose();
+      }
+    });
+
     elements.closeIcon.addEventListener('click', () =>
     {
-      m.afterClose();
       reset(true);
+      m.afterClose();
     });
   }
 }
 
 function actionTextClick()
 {
-  m.actionClick();
   reset(true);
+  m.actionClick();
 }
 
 function isShowing()
@@ -147,21 +140,15 @@ function isShowing()
 
 function reset(hideSnackbar = false)
 {
-  if (m.visibleTimeoutId !== -1)
+  if (m.showTimeoutId !== -1)
   {
-    clearTimeout(m.visibleTimeoutId);
-    m.visibleTimeoutId = -1;
-  }
-
-  if (m.fadeTimeoutId !== -1)
-  {
-    clearTimeout(m.fadeTimeoutId);
-    m.fadeTimeoutId = -1;
+    clearTimeout(m.showTimeoutId);
+    m.showTimeoutId = -1;
   }
 
   if (elements.actionText !== null)
     elements.actionText.removeEventListener('click', actionTextClick);
 
   if (hideSnackbar)
-    elements.snackbar.classList.remove('show');
+    elements.snackbar.className = '';
 }

@@ -5,16 +5,16 @@
 //
 
 
-import * as debugLogger     from '../shared/debuglogger.js';
-import * as eventLogger     from './eventlogger.js';
-import * as galleryPlayback from './gallery/gallery-playback.js';
-import * as listPlayback    from './list/list-playback.js';
-import * as playbackEvents  from './playback-events.js';
-import * as screenWakeLock  from './screen-wakelock.js';
-import * as utils           from '../shared/utils.js';
-import * as footerToggles   from './footer-toggles.js';
-import { toggleRepeat }     from './playback-controls.js';
-import { showSnackbar }     from '../shared/snackbar.js';
+import * as debugLogger       from '../shared/debuglogger.js';
+import * as eventLogger       from './eventlogger.js';
+import * as galleryPlayback   from './gallery/gallery-playback.js';
+import * as listPlayback      from './list/list-playback.js';
+import * as playbackEvents    from './playback-events.js';
+import * as utils             from '../shared/utils.js';
+import * as footerToggles     from './footer-toggles.js';
+import { toggleRepeat }       from './playback-controls.js';
+import { showSnackbar }       from '../shared/snackbar.js';
+import { initScreenWakeLock } from './screen-wakelock.js';
 
 import {
   response,
@@ -88,6 +88,7 @@ function initShared()
   keyboardShortcuts.init();
 
   initListeners();
+  initScreenWakeLock();
 }
 
 function initPlaybackEvents()
@@ -213,16 +214,6 @@ function playbackEventReady()
   utils.addListener('.playback-details-control',   'click', playbackDetailsClick);
   utils.addListener('.playback-thumbnail-control', 'click', playbackThumbnailClick);
   utils.addListener('.playback-timer-control',     'click', playbackTimerClick);
-  
-  document.addEventListener('visibilitychange', () =>
-  {
-    if ((document.visibilityState === 'visible') && (settings.mobile.keepScreenOn))
-      screenWakeLock.stateVisible();
-  });
-
-  if (settings.mobile.keepScreenOn)
-    screenWakeLock.enable();
-
   m.isPlaybackReady = true;
 }
 
@@ -393,7 +384,17 @@ const keyboardShortcuts = (() =>
   function init()
   {
     allow = settings.playback.keyboardShortcuts;
-    document.addEventListener('allowKeyboardShortcuts', () => { if (settings.playback.keyboardShortcuts) allow = true;  });
-    document.addEventListener('denyKeyboardShortcuts',  () => { if (settings.playback.keyboardShortcuts) allow = false; });
+    
+    document.addEventListener('allowKeyboardShortcuts', () =>
+    {
+      if (settings.playback.keyboardShortcuts)
+        allow = true;
+    });
+    
+    document.addEventListener('denyKeyboardShortcuts', () =>
+    {
+      if (settings.playback.keyboardShortcuts)
+        allow = false;
+    });
   }
 })();

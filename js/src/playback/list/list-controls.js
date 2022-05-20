@@ -8,6 +8,7 @@
 import * as debugLogger       from '../../shared/debuglogger.js';
 import * as upNextModal       from './up-next-modal.js';
 import * as playbackEvents    from '../playback-events.js';
+import ElementClick           from '../../shared/element-click.js';
 import { STATE }              from '../element-wrappers.js';
 import { TRACK_TYPE }         from '../shared-gallery-list.js';
 import { loadTracks }         from './list-tracks-rest.js';
@@ -34,6 +35,7 @@ const m = {
   currentState:      STATE.UNKNOWN,
   prevActionButtons: null,
   playerWrapper:     null,
+  uiElements:        null,
 };
 
 
@@ -50,27 +52,9 @@ export function init(setCurrentTrackFunc)
   m.tracklist         = document.getElementById('tracklist');
   m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
   m.playerWrapper     = document.querySelector('.wp-block-embed__wrapper');
+  m.uiElements        = new UiElements(setCurrentTrackFunc);
 
-  m.tracklist.addEventListener('click', (event) =>
-  {
-    const playTrackButton = event.target.closest('div.thumbnail');
-    if (playTrackButton !== null) return setCurrentTrackFunc(playTrackButton.closest('div.track-entry').id, true, true);
-
-    const trackActionsToggle = event.target.closest('div.track-actions-toggle');
-    if (trackActionsToggle !== null) return trackActionsClick(trackActionsToggle.closest('div.track-entry'));
-  
-    const playNextButton = event.target.closest('div.play-next-button');
-    if (playNextButton !== null) return playNextClick(playNextButton.closest('div.track-entry'));
-
-    const removeButton = event.target.closest('div.remove-button');
-    if (removeButton !== null) return removeClick(removeButton.closest('div.track-entry'));
-
-    const arrowUpButton = event.target.closest('span.arrow-up-button');
-    if (arrowUpButton !== null) return arrowUpDownClick(arrowUpButton.closest('div.tracklist-page-separator'), true);
-
-    const arrowDownButton = event.target.closest('span.arrow-down-button');
-    if (arrowDownButton !== null) return arrowUpDownClick(arrowDownButton.closest('div.tracklist-page-separator'), false);
-  });
+  m.tracklist.addEventListener('click', (event) => m.uiElements.clickHandler(event));
 }
 
 export function ready(player)
@@ -162,6 +146,36 @@ export function setCuedTrack(trackId)
 // ************************************************************************************************
 //
 // ************************************************************************************************
+
+class UiElements extends ElementClick
+{
+  constructor(setCurrentTrackFunc)
+  {
+    super();
+    this.setCurrentTrack = setCurrentTrackFunc;
+  }
+
+  elementClicked()
+  {
+    if (this.clicked('div.thumbnail'))
+      return this.setCurrentTrack(this.closest('div.track-entry').id, true, true);
+  
+    if (this.clicked('div.track-actions-toggle'))
+      return trackActionsClick(this.closest('div.track-entry'));
+  
+    if (this.clicked('div.remove-button'))
+      return removeClick(this.closest('div.track-entry'));
+  
+    if (this.clicked('div.play-next-button'))
+      return playNextClick(this.closest('div.track-entry'));
+  
+    if (this.clicked('span.arrow-up-button'))
+      return arrowUpDownClick(this.closest('div.tracklist-page-separator'), true);
+  
+    if (this.clicked('span.arrow-down-button'))
+      return arrowUpDownClick(this.closest('div.tracklist-page-separator'), false);      
+  }
+}
 
 function trackActionsClick(element)
 {

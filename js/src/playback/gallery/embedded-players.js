@@ -91,6 +91,7 @@ function getAllPlayers()
       });
 
       player = new mediaPlayers.YouTube(entry.id, iframe.id, embeddedPlayer, entry.getAttribute('data-track-source-data'));
+      player.setDuration(parseInt(entry.getAttribute('data-track-duration')));
     }
     else if (config.soundCloudIframeIdRegEx.test(iframe.id))
     {
@@ -102,6 +103,7 @@ function getAllPlayers()
       embeddedPlayer.bind(SC.Widget.Events.READY, () =>
       {
         player.setThumbnail(entry.querySelector('.track-share-control span'));
+        embeddedPlayer.getDuration(durationMilliseconds => player.setDuration(Math.round(durationMilliseconds / 1000)));
         onSoundCloudPlayerEventReady(player, iframe.id);
       });
 
@@ -116,7 +118,6 @@ function getAllPlayers()
     {
       player.setTitle(entry.getAttribute('data-track-title'));
       player.setArtist(entry.getAttribute('data-track-artist'));
-      player.setDuration(parseInt(entry.getAttribute('data-track-duration')));
       m.players.add(player);
     }
   });
@@ -236,7 +237,6 @@ function onYouTubeStatePlaying(event, iframeId)
   
   // Call order is important on play events for state handling: Always sync first!
   m.playbackState.syncAll(iframeId, m.playbackState.STATE.PLAY);
-  m.players.current.setDuration(Math.round(event.target.getDuration()));
   playbackTimer.start();
 }
 
@@ -322,11 +322,7 @@ function onSoundCloudPlayerEventPlay(event)
     m.players.current.setVolume(settings.playback.masterVolume);
   }
 
-  m.players.current.getEmbeddedPlayer().getDuration(durationMilliseconds =>
-  {
-    m.players.current.setDuration(Math.round(durationMilliseconds / 1000));
-    playbackTimer.start();
-  });  
+  playbackTimer.start();
 }
 
 function onSoundCloudPlayerEventPause(event)

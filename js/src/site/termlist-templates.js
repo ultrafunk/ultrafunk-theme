@@ -23,7 +23,7 @@ export function insertTermlistHtml(header, termSlug, termData, destElement)
   {
     const thumbnailData = getThumbnailData(track.meta);
 
-    html += `
+    html += /*html*/ `
     <div class="track">
       <div class="thumbnail ${thumbnailData.class}"
         data-term-url="${track.link}"

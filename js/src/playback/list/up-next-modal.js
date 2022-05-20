@@ -67,8 +67,8 @@ function loadDragDropTouch()
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
     tag.src   = debug.isDebug()
-                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.42.5'
-                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.42.5';
+                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.43.0'
+                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.43.0';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
@@ -143,7 +143,7 @@ export function updateUpNextModal(isPlayingTrack)
 
 function getTitle(isPlayingTrack)
 {
-  return `${isPlayingTrack ? 'Playing' : 'Cued'}
+  return /*html*/ `${isPlayingTrack ? 'Playing' : 'Cued'}
             <span class="light-text lowercase-text toggle-element" title="Toggle Autoplay">
             Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b></span>`;
 }
@@ -256,9 +256,9 @@ function getUpNextTrackHtml(element, trackArtistAttr, trackTitleAttr, isDraggabl
 {
   const trackTypeClass = (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE) ? 'type-youtube' : 'type-soundcloud';
 
-  return `
-    <div class="modal-track" ${isDraggable ? 'draggable="true"' : ''}>
-      <div class="modal-track-thumbnail ${trackTypeClass}" ${isDraggable ? 'title="Click to Play Track"' : ''}>
+  return /*html*/ `
+    <div class="modal-track ${isDraggable ? 'modal-draggable-entry' : ''}" ${isDraggable ? 'draggable="true"' : ''}>
+      <div class="modal-track-thumbnail modal-ignore-touchmove ${trackTypeClass}" ${isDraggable ? 'title="Click to Play Track"' : ''}>
         <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">
       </div>
       <div class="modal-track-artist-title text-nowrap-ellipsis" ${isDraggable ? 'title="Drag to Move Track"' : ''}>
@@ -274,7 +274,7 @@ function getUpNextTrackHtml(element, trackArtistAttr, trackTitleAttr, isDraggabl
 
 function getModalTrackButtons()
 {
-  return `
+  return /*html*/ `
     <div class="modal-track-buttons">
       <div class="drag-drop-button" title="Drag to Move Track"><span class="material-icons">drag_handle</span></div>
     </div>`;
