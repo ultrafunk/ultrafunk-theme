@@ -140,6 +140,8 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
     m.currentTrackId = nextTrackId;
 
     listControls.setNextTrackState(nextTrackId, isPointerClick);
+    playbackControls.updateProgressPercent(0);
+
     loadOrCueCurrentTrack(playNextTrack);
   }
 }

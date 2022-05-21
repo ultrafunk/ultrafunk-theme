@@ -540,5 +540,25 @@ body.autoplay-off .playing-animate::before {
     margin-right: 4px;
     margin-left: 9px;
   }
-  
+
+  .playback-prev-control {
+    display: none;
+  }
+
+  .playback-prev-control.show-on-mobile {
+    display: inline-block;
+  }
+
+  .playback-prev-control.mobile-margin-3px {
+    margin-left: 3px;
+  }
+
+  .playback-play-pause-control.mobile-margin-6px {
+    margin-left: 6px;
+  }
+
+  .playback-play-pause-control.mobile-margin-10px {
+    margin-left: 10px;
+  }
+
 }

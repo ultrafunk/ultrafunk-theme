@@ -12,9 +12,13 @@ import * as listPlayback      from './list/list-playback.js';
 import * as playbackEvents    from './playback-events.js';
 import * as utils             from '../shared/utils.js';
 import * as footerToggles     from './footer-toggles.js';
-import { toggleRepeat }       from './playback-controls.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { initScreenWakeLock } from './screen-wakelock.js';
+
+import {
+  setPlaybackControlsCss,
+  toggleRepeat,
+} from './playback-controls.js';
 
 import {
   response,
@@ -79,6 +83,9 @@ document.addEventListener('DOMContentLoaded', () =>
 function initShared()
 {
   debug.log('initShared()');
+
+  // Set user settings CSS with JS as early as possible...
+  setPlaybackControlsCss();
 
   // Must be done before player.init() since events are used to relay player status updates
   initPlaybackEvents();

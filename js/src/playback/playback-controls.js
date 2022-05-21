@@ -9,7 +9,6 @@ import * as debugLogger        from '../shared/debuglogger.js';
 import { settings }            from '../shared/session-data.js';
 import { EVENT, addListener }  from './playback-events.js';
 import { addSettingsObserver } from '../shared/storage.js';
-import { getTimeString }       from '../shared/utils.js';
 
 import {
   playerType as playerTypeToggle
@@ -17,8 +16,14 @@ import {
 
 import {
   STATE,
-  ElementWrapper
+  ElementWrapper,
 } from './element-wrappers.js';
+
+import {
+  MATCH,
+  matchesMedia,
+  getTimeString,
+} from '../shared/utils.js';
 
 
 /*************************************************************************************************/
@@ -27,6 +32,32 @@ import {
 const debug = debugLogger.newInstance('playback-controls');
 const m     = { players: {} };
 const ctrl  = {};
+
+
+// ************************************************************************************************
+// Set user settings controlled CSS as early as possible before init() call
+// ************************************************************************************************
+
+export function setPlaybackControlsCss()
+{
+  ctrl.prevTrack = new ElementWrapper('.playback-prev-control');
+  ctrl.playPause = new ElementWrapper('.playback-play-pause-control');
+
+  if (matchesMedia(MATCH.SITE_MAX_WIDTH_MOBILE))
+  {
+    debug.log('setPlaybackControlsCss(): MATCH.SITE_MAX_WIDTH_MOBILE');
+
+    if (settings.mobile.showPrevTrackButton)
+      ctrl.prevTrack.addClass('show-on-mobile');
+
+    if (!settings.mobile.showPrevTrackButton && !settings.mobile.showTrackTimes)
+      ctrl.playPause.addClass('mobile-margin-10px');
+    else if (settings.mobile.showTrackTimes && !settings.mobile.showPrevTrackButton)
+      ctrl.playPause.addClass('mobile-margin-6px');
+    else if (settings.mobile.showPrevTrackButton && !settings.mobile.showTrackTimes)
+      ctrl.prevTrack.addClass('mobile-margin-3px');
+  }
+}
 
 
 // ************************************************************************************************
@@ -70,9 +101,7 @@ export function init(mediaPlayers, seekClickCallback)
     ctrl.timer.durationSeconds = -1; // Make sure initial value is set + shown when track plays
       
     ctrl.playerType = new ElementWrapper('.playback-player-type-control', playbackControls);
-    ctrl.prevTrack  = new ElementWrapper('.playback-prev-control', playbackControls);
-    
-    ctrl.playPause      = new ElementWrapper('.playback-play-pause-control', playbackControls);
+
     ctrl.playPause.icon = ctrl.playPause.getElement('span.material-icons');
     
     ctrl.nextTrack = new ElementWrapper('.playback-next-control', playbackControls);
@@ -172,9 +201,21 @@ function progressSeekClick(event)
 {
   if (ctrl.timer.durationSeconds > 0)
   {
-    const progressPercent = ((event.clientX / document.documentElement.clientWidth) * 100);
-    const seekPosSeconds  = Math.round((ctrl.timer.durationSeconds * progressPercent) / 100);
-    ctrl.progressSeek.clickCallback(seekPosSeconds);
+    let progressPercent = ((event.clientX / document.documentElement.clientWidth) * 100);
+    let seekPosSeconds  = Math.round((ctrl.timer.durationSeconds * progressPercent) / 100);
+
+    if (!settings.mobile.showPrevTrackButton      &&
+        matchesMedia(MATCH.SITE_MAX_WIDTH_MOBILE) &&
+        (progressPercent <= 20))
+    {
+      ctrl.progressSeek.clickCallback(0);
+      progressPercent = 0;
+      seekPosSeconds  = 0;
+    }
+    else
+    {
+      ctrl.progressSeek.clickCallback(seekPosSeconds);
+    }
 
     if (isPlaying() === false)
     {

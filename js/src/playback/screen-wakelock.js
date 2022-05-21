@@ -82,11 +82,11 @@ async function requestWakeLock()
   try
   {
     m.wakeLock = await navigator.wakeLock.request('screen');
-    debug.log('requestWakeLock(): Screen Wake Lock is Enabled');
+  //debug.log('requestWakeLock(): Screen Wake Lock is Enabled');
 
     m.wakeLock.addEventListener('release', () =>
     {
-      debug.log('requestWakeLock(): Screen Wake Lock was Released');
+    //debug.log('requestWakeLock(): Screen Wake Lock was Released');
       m.wakeLock = null;
     });
 
