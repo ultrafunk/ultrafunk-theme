@@ -101,7 +101,7 @@ function initShared()
 function initPlaybackEvents()
 {
   playbackEvents.addListener(playbackEvents.EVENT.READY,                playbackEventReady);
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_SHOW,           playbackEventMediaEnded);
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_NEXT,       playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,          playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_TIME_REMAINING, playbackEventMediaTimeRemaining);
 }
@@ -116,12 +116,13 @@ function initListeners()
   utils.addListener('nav.track-navigation .nav-next a',     'click', prevNextNavTo, response.nextPage);
   
   document.addEventListener('keydown', documentEventKeyDown);
+  document.addEventListener('keydown', documentEventMediaKeyDown);
   window.addEventListener('blur', windowEventBlur);
 }
 
 
 // ************************************************************************************************
-// Keyboard events handler and functions
+// Regular keyboard events handler
 // ************************************************************************************************
 
 function documentEventKeyDown(event)
@@ -206,6 +207,41 @@ function documentEventKeyDown(event)
       case 'x':
       case 'X':
         footerToggles.crossfade.toggle();
+        break;
+    }
+  }
+}
+
+
+// ************************************************************************************************
+// Keyboard media keys event handler
+// ************************************************************************************************
+
+function documentEventMediaKeyDown(event)
+{
+  if (m.isPlaybackReady && keyboardShortcuts.allow()) // && (event.repeat  === false)) does not function as expected on Firefox
+  {
+    switch(event.key)
+    {
+      case 'MediaPlayPause':
+        if (playbackEvents.hasPlaybackStarted === false)
+        {
+          debug.log('documentEventMediaKeyDown(): MediaPlayPause');
+          event.preventDefault();
+          m.player.togglePlayPause();
+        }
+        break;
+
+      case 'MediaTrackPrevious':
+        debug.log('documentEventMediaKeyDown(): MediaTrackPrevious');
+        event.preventDefault();
+        m.player.prevTrack();
+        break;
+      
+      case 'MediaTrackNext':
+        debug.log('documentEventMediaKeyDown(): MediaTrackNext');
+        event.preventDefault();
+        m.player.nextTrack();
         break;
     }
   }

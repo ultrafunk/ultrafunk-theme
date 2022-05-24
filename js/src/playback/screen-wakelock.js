@@ -66,7 +66,7 @@ async function enableWakeLock()
       if (await requestWakeLock() !== true)
       {
         debug.log('enableWakeLock(): Screen Wake Lock request failed');
-        showSnackbar('Keep Screen On failed', 3);
+        showSnackbar('Keep Screen On failed', 5, 'Disable', () => (settings.mobile.keepScreenOn = false));
       }
     }
   }

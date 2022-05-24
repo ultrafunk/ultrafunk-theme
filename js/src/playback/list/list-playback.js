@@ -138,10 +138,7 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
       m.player.embedded.stopVideo();
 
     m.currentTrackId = nextTrackId;
-
-    listControls.setNextTrackState(nextTrackId, isPointerClick);
-    playbackControls.updateProgressPercent(0);
-
+    playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_NEXT, { nextTrackId: nextTrackId, isPointerClick: isPointerClick });
     loadOrCueCurrentTrack(playNextTrack);
   }
 }
@@ -328,7 +325,7 @@ function initYouTubeAPI()
 
     m.player = new mediaPlayers.Playlist(embeddedPlayer);
     playbackControls.init(m.player, (positionSeconds) => m.player.embedded.seekTo(positionSeconds));
-    playbackControls.updateProgressPercent(33);
+    playbackEvents.dispatch(playbackEvents.EVENT.LOADING, { loadingPercent: 33 });
   };
 
   const tag = document.createElement('script');
@@ -346,7 +343,7 @@ function onYouTubePlayerReady()
     eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
 
   playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
-  playbackControls.updateProgressPercent(66);
+  playbackEvents.dispatch(playbackEvents.EVENT.LOADING, { loadingPercent: 66 });
   playbackTimer.ready(m.player);
   listControls.ready(m.player);
 
@@ -417,7 +414,7 @@ function onYouTubeStateUnstarted()
   if (m.playerReady === false)
   {
     m.playerReady = true;
-    playbackControls.updateProgressPercent(0);
+    playbackEvents.dispatch(playbackEvents.EVENT.LOADING, { loadingPercent: 0 });
   }
 }
 

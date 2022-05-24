@@ -118,8 +118,18 @@ function updateCrossfadeToState()
   ctrl.crossfadeTo.forEach((element, index) =>
   {
     if (currentTrack === (index + 1))
-      replaceClass(element, (isPlayingState ? STATE.ENABLED.CLASS : STATE.DISABLED.CLASS), (isPlayingState ? STATE.DISABLED.CLASS : STATE.ENABLED.CLASS));
+    {
+      replaceClass(element,
+        (isPlayingState ? STATE.ENABLED.CLASS  : STATE.DISABLED.CLASS),
+        (isPlayingState ? STATE.DISABLED.CLASS : STATE.ENABLED.CLASS)
+      );
+    }
     else
-      replaceClass(element, (isPlayingState ? STATE.DISABLED.CLASS : STATE.ENABLED.CLASS), (isPlayingState ? STATE.ENABLED.CLASS : STATE.DISABLED.CLASS));
+    {
+      replaceClass(element,
+        (isPlayingState ? STATE.DISABLED.CLASS : STATE.ENABLED.CLASS),
+        (isPlayingState ? STATE.ENABLED.CLASS  : STATE.DISABLED.CLASS)
+      );
+    }
   });
 }

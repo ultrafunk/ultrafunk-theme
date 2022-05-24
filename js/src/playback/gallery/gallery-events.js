@@ -5,12 +5,11 @@
 //
 
 
-import * as debugLogger          from '../../shared/debuglogger.js';
-import { KEY }                   from '../../shared/storage.js';
-import { replaceClass }          from '../../shared/utils.js';
-import { response, settings }    from '../../shared/session-data.js';
-import { EVENT, addListener }    from '../playback-events.js';
-import { updateProgressPercent } from '../playback-controls.js';
+import * as debugLogger       from '../../shared/debuglogger.js';
+import { KEY }                from '../../shared/storage.js';
+import { replaceClass }       from '../../shared/utils.js';
+import { response, settings } from '../../shared/session-data.js';
+import { EVENT, addListener } from '../playback-events.js';
 
 import {
   playerScrollTo,
@@ -51,7 +50,7 @@ export function init()
   addListener(EVENT.MEDIA_PLAYING,     mediaPlaying);
   addListener(EVENT.MEDIA_PAUSED,      mediaPaused);
   addListener(EVENT.MEDIA_ENDED,       mediaEnded);
-  addListener(EVENT.MEDIA_SHOW,        mediaShow);
+  addListener(EVENT.MEDIA_CUE_NEXT,    mediaCueNext);
   addListener(EVENT.CONTINUE_AUTOPLAY, continueAutoplay);
   addListener(EVENT.RESUME_AUTOPLAY,   resumeAutoplay);
   addListener(EVENT.AUTOPLAY_BLOCKED,  autoplayBlocked);
@@ -99,11 +98,9 @@ function mediaEnded(playbackEvent)
     resetNowPlayingIcons();
 }
 
-function mediaShow(playbackEvent)
+function mediaCueNext(playbackEvent)
 {
   debug.log(playbackEvent);
-
-  updateProgressPercent(0);
 
   if (playbackEvent.data.scrollToMedia)
     playerScrollTo(playbackEvent.data.trackId);
@@ -148,7 +145,10 @@ function mediaUnavailable(playbackEvent)
 
   if (isPremiumTrack(playbackEvent.data.trackId))
   {
-    showSnackbar('YouTube Premium track, skipping', 5, 'help',  () => (window.location.href = '/channel/premium/'), () => playbackEventErrorTryNext(playbackEvent));
+    showSnackbar('YouTube Premium track, skipping', 5, 'help',
+      () => (window.location.href = '/channel/premium/'),
+      () => playbackEventErrorTryNext(playbackEvent)
+    );
   }
   else
   {

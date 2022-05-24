@@ -175,13 +175,13 @@ function cueTrack(iframeId, scrollToMedia = true)
   debug.log(`cueTrack(): ${iframeId}`);
 
   m.players.setPlayerIndex(m.players.indexMap.get(iframeId));
-  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_SHOW, { scrollToMedia: scrollToMedia, trackId: m.players.current.getTrackId() });
+  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_NEXT, { scrollToMedia: scrollToMedia, trackId: m.players.current.getTrackId() });
   playbackControls.updateNextState();
 }
 
 function playTrack(playMedia, scrollToMedia = true)
 {
-  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_SHOW, { scrollToMedia: scrollToMedia, trackId: m.players.current.getTrackId() });
+  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_NEXT, { scrollToMedia: scrollToMedia, trackId: m.players.current.getTrackId() });
   
   if (playMedia)
     m.players.current.play(embeddedPlayers.onPlayerError);

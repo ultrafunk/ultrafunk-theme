@@ -13,6 +13,7 @@ import { updateProgressPercent } from './playback-controls.js';
 
 
 const debug = debugLogger.newInstance('playback-events');
+export let hasPlaybackStarted = false;
 
 export const EVENT = {
   LOADING:              'loading',
@@ -21,24 +22,24 @@ export const EVENT = {
   MEDIA_PLAYING:        'mediaPlaying',
   MEDIA_PAUSED:         'mediaPaused',
   MEDIA_ENDED:          'mediaEnded',
+  MEDIA_CUE_NEXT:       'mediaCueNext',
   MEDIA_TIME_REMAINING: 'mediaTimeRemaining',
-  MEDIA_SHOW:           'mediaShow',
-  MEDIA_UNAVAILABLE:    'mediaUnavailable',
   CONTINUE_AUTOPLAY:    'continueAutoplay',
   RESUME_AUTOPLAY:      'resumeAutoplay',
   AUTOPLAY_BLOCKED:     'autoplayBlocked',
   PLAYBACK_BLOCKED:     'playbackBlocked',
+  MEDIA_UNAVAILABLE:    'mediaUnavailable',
 };
 
 const eventListeners = {
-  [EVENT.LOADING]:              [ loading ],
+  [EVENT.LOADING]:              [ (event) => updateProgressPercent(event.data.loadingPercent) ],
   [EVENT.READY]:                [ ready ],
   [EVENT.MEDIA_LOADING]:        [],
-  [EVENT.MEDIA_PLAYING]:        [],
+  [EVENT.MEDIA_PLAYING]:        [ () => (hasPlaybackStarted = true) ],
   [EVENT.MEDIA_PAUSED]:         [],
   [EVENT.MEDIA_ENDED]:          [],
+  [EVENT.MEDIA_CUE_NEXT]:       [ () => (hasPlaybackStarted = false) ],
   [EVENT.MEDIA_TIME_REMAINING]: [],
-  [EVENT.MEDIA_SHOW]:           [],
   [EVENT.CONTINUE_AUTOPLAY]:    [],
   [EVENT.RESUME_AUTOPLAY]:      [],
   [EVENT.AUTOPLAY_BLOCKED]:     [],
@@ -73,12 +74,6 @@ export function dispatch(playbackEvent, playbackEventData = null, playbackEventC
 // ************************************************************************************************
 // Default event listeners
 // ************************************************************************************************
-
-function loading(playbackEvent)
-{
-//debug.log(playbackEvent);
-  updateProgressPercent(playbackEvent.data.loadingPercent);
-}
 
 function ready(playbackEvent)
 {
