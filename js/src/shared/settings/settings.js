@@ -31,7 +31,7 @@ const galleryPerPageValues       = [...Array(22).keys()].map(i => i + 3);
 const galleryPerPageValueStrings = [...Array(22).keys()].map(i => `${i + 3}`);
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 9, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 10, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -59,10 +59,10 @@ export const settingsSchema = {
     trackCrossfadeDefPreset: { description: 'Track Crossfade Def. Preset',       type: INTEGER, values: [0, 1, 2, 3, 4, 5],      default: 1,     valueStrings: ['10 sec EqPow (1)', '20 sec EqPow (2)', '30 sec EqPow (3)', '10 sec Linear (4)', '20 sec Linear (5)', '30 sec Linear (6)'] },
   },
   mobile: {
-    keepScreenOn:        { description: 'Keep Screen On when playing', type: BOOLEAN, values: [true, false], default: true, valueStrings: ['ON', 'OFF'] },
-    showTrackThumbnail:  { description: 'Show Track Thumbnail',        type: BOOLEAN, values: [true, false], default: true, valueStrings: ['ON', 'OFF'] },
-    showTrackTimes:      { description: 'Show Track Times',            type: BOOLEAN, values: [true, false], default: true, valueStrings: ['ON', 'OFF'] },
-    showPrevTrackButton: { description: 'Show Previous Track button',  type: BOOLEAN, values: [true, false], default: true, valueStrings: ['ON', 'OFF'] },
+    keepScreenOn:        { description: 'Keep Screen On when playing', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
+    showTrackThumbnail:  { description: 'Show Track Thumbnail',        type: BOOLEAN, values: [true, false], default: true,  valueStrings: ['ON', 'OFF'] },
+    showTrackTimes:      { description: 'Show Track Times',            type: BOOLEAN, values: [true, false], default: true,  valueStrings: ['ON', 'OFF'] },
+    showPrevTrackButton: { description: 'Show Previous Track button',  type: BOOLEAN, values: [true, false], default: true,  valueStrings: ['ON', 'OFF'] },
   },
   site: {
     keyboardShortcuts:   { description: 'Keyboard Shortcuts',                    type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
