@@ -28,13 +28,14 @@ export function getTemplateHtml()
           <div class="${config.id}-close-icon"><span class="material-icons" title="Dismiss (esc)">close</span></div>
         </div>
         <div class="${config.id}-body"></div>
+        <div class="${config.id}-footer"><div class="modal-dialog-close-button" title="Dismiss (esc)">Close</div></div>
       </div>
     </div>`;
 }
 
-export function insertSingleChoiceListHtml(singleChoiceList, insertElement)
+export function getSingleChoiceListHtml(singleChoiceList)
 {
-  let listHtml = '';
+  let html = '';
 
   singleChoiceList.forEach((entry, index) =>
   {
@@ -45,12 +46,12 @@ export function insertSingleChoiceListHtml(singleChoiceList, insertElement)
     entry.uid          = `modal-item-${index + 1}`;
   
     if (entry.clickId)
-      listHtml += `<div id="${entry.uid}" data-click-id="${entry.clickId}" class="modal-click-item ${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
+      html += `<div id="${entry.uid}" data-click-id="${entry.clickId}" class="modal-click-item ${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
     else
-      listHtml += `<div class="${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
+      html += `<div class="${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
   });
-  
-  insertElement.innerHTML = listHtml;
+
+  return html;
 }
 
 export function getModalTrackHtml(element, trackArtist, trackTitle)

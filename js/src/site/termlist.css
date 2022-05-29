@@ -197,13 +197,15 @@
 
   .termlist-icons .play-button,
   .termlist-icons .shuffle-button,
-  .termlist-icons .share-find-button {
+  .termlist-icons .share-find-button,
+  .termlist-icons .expand-toggle:hover {
     transition: background 100ms 0s ease-in;
   }
 
   .termlist-icons .play-button:active,
   .termlist-icons .shuffle-button:active,
-  .termlist-icons .share-find-button:active {
+  .termlist-icons .share-find-button:active,
+  .termlist-icons .expand-toggle:active {
     background-color: var(--control-highlight-color);
     border-radius: var(--button-border-radius);
     transition: background 0s;

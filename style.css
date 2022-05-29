@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.43.4
+Version:           1.43.5
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -39,7 +39,9 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
 
   --link-hover-color: #dd0000;
 
-  --site-theme-color: #0a1428;
+  --site-theme-color: rgb(10, 20, 40);
+  --site-theme-medium-color: rgb(30, 60, 120);
+  --site-theme-light-color: rgb(40, 80, 160);
   --site-theme-font-color: #efefef;
   --site-theme-icon-color: #fff;
 
@@ -177,31 +179,6 @@ body {
   transform: translateZ(0);
   background: var(--header-gradient-no-blur);
 }
-
-/*
-@supports (backdrop-filter: blur(15px)) {
-  
-  #site-header {
-    background: var(--header-bg-blur);
-    backdrop-filter: blur(20px);
-    transition: background 250ms;
-  }
-
-  #site-header.no-backdrop-blur {
-    background: var(--header-no-blur);
-    transition: background 250ms;
-  }
-    
-}
-
-@supports not (backdrop-filter: blur(15px)) {
-  
-  #site-header {
-    background: var(--header-gradient-no-blur);
-  }
-  
-}
-*/
 
 body.no-playback #progress-controls {
   display: none;
@@ -754,7 +731,7 @@ body.page-settings .footer-settings {
   -ms-user-select: none;
   user-select: none;
   padding: 8px 16px;
-  background-color: rgba(30, 80, 160, 1);
+  background-color: var(--site-theme-light-color);
   justify-content: space-between;
   align-items: center;
   border-radius: var(--button-border-radius);
@@ -771,7 +748,9 @@ body.page-settings .footer-settings {
 #footer-site-theme-toggle.disabled,
 #footer-gallery-layout-toggle.disabled,
 
-/* Handle button states here based on body classes set by server */
+/*
+* Handle button states here based on body classes set by server
+*/
 
 body.no-playback #footer-player-type-toggle,
 body.no-playback #footer-autoplay-toggle,
@@ -812,25 +791,37 @@ a:hover#footer-player-type-toggle {
   text-decoration: none;
 }
 
-#footer-settings-button:hover,
-#footer-player-type-toggle:hover,
-#footer-autoplay-toggle:hover,
-#footer-crossfade-toggle:hover,
-#footer-site-theme-toggle:hover,
-#footer-gallery-layout-toggle:hover {
-  background-color: rgba(30, 80, 160, 0.66);
-  cursor: pointer;
-}
+@media all and (pointer: fine) {
 
-@media not all and (pointer: fine) {
-
+  #footer-settings-button:hover,
+  #footer-player-type-toggle:hover,
   #footer-autoplay-toggle:hover,
   #footer-crossfade-toggle:hover,
   #footer-site-theme-toggle:hover,
   #footer-gallery-layout-toggle:hover {
-    background-color: rgba(30, 80, 160, 1);
+    background-color: var(--site-theme-medium-color);
+    cursor: pointer;
+  }
+
+}
+
+@media not all and (pointer: fine) {
+
+  #footer-autoplay-toggle,
+  #footer-crossfade-toggle,
+  #footer-site-theme-toggle,
+  #footer-gallery-layout-toggle {
+    transition: background 100ms 0s ease-in;
   }
   
+  #footer-autoplay-toggle:active,
+  #footer-crossfade-toggle:active,
+  #footer-site-theme-toggle:active,
+  #footer-gallery-layout-toggle:active {
+    background-color: var(--site-theme-medium-color);
+    transition: background 0s;
+  }
+
 }
 
 

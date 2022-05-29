@@ -16,8 +16,6 @@ body.list-player {
   --track-separator-color: #ddd;
   --track-current-color: #ddd;
   --track-thumbnail-placeholder-color: #ddd;
-  --track-load-more-color: rgb(30, 80, 160);
-  --track-load-more-hover-color: rgb(20, 40, 80);
   --tracklist-page-separator-color: #f1f1f1;
 }
 
@@ -25,8 +23,6 @@ body.list-player {
   --track-separator-color: #444;
   --track-current-color: #444;
   --track-thumbnail-placeholder-color: #444;
-  --track-load-more-color: rgb(30, 60, 120);
-  --track-load-more-hover-color: rgb(20, 40, 80);
   --tracklist-page-separator-color: #303030;
 }
 
@@ -457,27 +453,31 @@ body.list-player {
   text-align: center;
   padding: 12px 0;
   color: var(--site-theme-icon-color);
-  background-color: var(--track-load-more-color);
+  background-color: var(--site-theme-light-color);
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
   overflow: hidden;
 }
 
-#tracklist-load-more:hover {
-  cursor: pointer;
-  background-color: var(--track-load-more-hover-color);
+@media all and (pointer: fine) {
+
+  #tracklist-load-more:hover {
+    background-color: var(--site-theme-medium-color);
+    cursor: pointer;
+  }
+
 }
 
 @media not all and (pointer: fine) {
 
-  #tracklist-load-more:hover {
-    background-color: var(--track-load-more-color);
-    -webkit-tap-highlight-color: transparent;
+  #tracklist-load-more {
+    transition: background 100ms 0s ease-in;
   }
 
   #tracklist-load-more:active {
-    background-color: var(--track-load-more-hover-color);
+    background-color: var(--site-theme-medium-color);
+    transition: background 0s;
   }
 
 }

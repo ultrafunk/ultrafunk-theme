@@ -41,7 +41,7 @@ const shareModalClosure = (() =>
       verb           = 'Play'
     } = args);
 
-    return showModal('share', title, getSingleChoiceList(), singleChoiceListClick);
+    return showModal(title, getSingleChoiceList(), 'share', singleChoiceListClick);
   }
 
   function getSingleChoiceList()

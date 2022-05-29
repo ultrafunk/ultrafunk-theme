@@ -14,6 +14,7 @@ import * as playbackEvents    from '../playback-events.js';
 import * as utils             from '../../shared/utils.js';
 import { KEY }                from '../../shared/storage.js';
 import { STATE }              from '../element-wrappers.js';
+import { showModal }          from '../../shared/modal.js';
 import { playbackTimer }      from './list-playback-timer.js';
 import { response, settings } from '../../shared/session-data.js';
 
@@ -44,6 +45,11 @@ const m = {
   currentSnackbarId: 0,
 };
 
+const noPlayableTracksError = /*html*/ `
+  <p>The <b>List Player</b> only supports playing YouTube tracks, SoundCloud tracks will be automatically skipped over.</p>
+  <p>SoundCloud tracks must be played using the <b>Gallery Player</b> or by clicking / tapping on the track <b>Artist + Title</b> text link in the <b>List Player</b>.</p>
+  <p>To toggle between the <b>Gallery</b> and <b>List</b> players, please use the <b>Pref. Player: GALLERY / LIST</b> setting toggle button in the sites footer area.</p>`;
+
 
 // ************************************************************************************************
 //
@@ -58,7 +64,7 @@ export function init()
   if (cueInitialTrack() !== null)
     initYouTubeAPI();
   else
-    showSnackbar('No playable YouTube tracks!', 0, 'help', () => (window.location.href = "/help/#list-player"));
+    showSnackbar('No playable YouTube tracks!', 0, 'help', () => showModal('No playable tracks error', noPlayableTracksError));
 }
 
 

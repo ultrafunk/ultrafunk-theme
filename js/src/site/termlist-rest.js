@@ -11,8 +11,8 @@ import { showSnackbar }   from '../shared/snackbar.js';
 import { stripAttribute } from '../shared/utils.js';
 
 import {
-  insertTermlistHtml,
-  insertTermLinksHtml,
+  getTermlistHtml,
+  getTermLinksHtml,
 } from './termlist-templates.js';
 
 
@@ -41,7 +41,7 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
 
     if (termData !== null)
     {
-      insertTermlistHtml(header, termSlug, termData, element);
+      element.innerHTML = getTermlistHtml(header, termSlug, termData);
       termlistEntry.classList.add('data-fetched');
     }
     else
@@ -59,7 +59,7 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
                     : termlistBody.querySelector('.channels');
 
         if (metadata !== null)
-          insertTermLinksHtml(header, metadata, element);
+          element.innerHTML = getTermLinksHtml(header, metadata);
         else
           element.innerHTML = `<b>${header}</b><br>None found`;
       });

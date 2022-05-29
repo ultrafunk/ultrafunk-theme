@@ -125,7 +125,6 @@ table.settings td.current-value-false {
   .settings-clear,
   .settings-save,
   .settings-reset {
-    background-color: var(--button-background-color);
     transition: background 150ms 0s ease-in;
   }
 

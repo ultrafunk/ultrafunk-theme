@@ -67,8 +67,8 @@ function loadDragDropTouch()
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
     tag.src   = debug.isDebug()
-                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.43.4'
-                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.43.4';
+                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.43.5'
+                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.43.5';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
@@ -88,7 +88,7 @@ export function showUpNextModal()
 
   if (modalEntries.length > 2)
   {
-    m.modalDialogId = showModal('tracklist', getTitle(isPlaying()), modalEntries, (clickedId) =>
+    m.modalDialogId = showModal(getTitle(isPlaying()), modalEntries, 'tracklist', (clickedId) =>
     {
       const nextTrackId = modalEntries.find(item => (item.clickId === clickedId)).clickId;
 

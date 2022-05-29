@@ -11,7 +11,7 @@ import { settings }     from './session-data.js';
 import {
   config,
   getTemplateHtml,
-  insertSingleChoiceListHtml,
+  getSingleChoiceListHtml,
 } from './modal-templates.js';
 
 
@@ -24,6 +24,7 @@ const m = {
   onEntryClicked:   null,
   onClickClose:     null,
   modalId:          0,
+  isOverflowY:      false,
   ignoreTouchMove:  false,
   isTouchDraggable: false,
 };
@@ -40,21 +41,25 @@ const elements = {
 // ************************************************************************************************
 
 export function showModal(
-  typeString,
-  title,
-  singleChoiceList = [],
+  modalTitle = 'Modal Title',
+  modalBody  = 'Modal Body',
+  modalType  = null,
   onEntryClickedCallback = () => {},
   onClickCloseCallback = () => true
 )
 {
   init();
   
+  if (Array.isArray(modalBody) && (modalBody.length > 0))
+    setSingleChoiceList(modalBody);
+  else
+    elements.body.innerHTML = modalBody;  
+
   m.onEntryClicked = onEntryClickedCallback;
   m.onClickClose   = onClickCloseCallback;
-  setSingleChoiceList(singleChoiceList);
 
-  elements.container.classList = `modal-type-${typeString}`;
-  elements.container.querySelector(`.${config.id}-title`).innerHTML = title;
+  elements.container.classList = `modal-type-${(modalType !== null) ? modalType : 'default'}`;
+  elements.container.querySelector(`.${config.id}-title`).innerHTML = modalTitle;
 
   elements.overlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
   elements.overlay.classList.add('show');
@@ -65,7 +70,7 @@ export function showModal(
 
   m.modalId++;
 
-  debug.log(`showModal() - modalId: ${m.modalId} - typeString: ${typeString} - title: ${title}`);
+  debug.log(`showModal() - modalId: ${m.modalId} - modalType: ${(modalType !== null) ? modalType : 'default'} - modalTitle: ${modalTitle}`);
 
   return config.id;
 }
@@ -136,12 +141,13 @@ function init()
     });
 
     elements.overlay.querySelector(`.${config.id}-close-icon`).addEventListener('click', closeModal);
+    elements.overlay.querySelector(`.${config.id}-close-button`).addEventListener('click', closeModal);
   }
 }
 
 function setSingleChoiceList(singleChoiceList)
 {
-  insertSingleChoiceListHtml(singleChoiceList, elements.body);
+  elements.body.innerHTML = getSingleChoiceListHtml(singleChoiceList);
   
   singleChoiceList.forEach(entry =>
   {
@@ -184,12 +190,16 @@ function disablePageScrolling(disableScrolling)
 
 function touchStart(event)
 {
+  m.isOverflowY      = (elements.container.scrollHeight > elements.container.clientHeight);
   m.ignoreTouchMove  = (true   === event.target.classList.contains('modal-ignore-touchmove'));
   m.isTouchDraggable = ('true' === event.target.closest('.modal-draggable-entry')?.getAttribute('draggable'));
 }
 
 function touchMove(event)
 {
+  if (m.isOverflowY)
+    return;
+
   if ((m.isTouchDraggable === false) || m.ignoreTouchMove)
     event.preventDefault();
 }
