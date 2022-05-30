@@ -68,7 +68,7 @@ export const settingsSchema = {
     keyboardShortcuts:   { description: 'Keyboard Shortcuts',                    type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
     theme:               { description: 'Theme',                                 type: STRING,  values: ['light', 'dark', 'auto'],            default: 'auto', valueStrings: ['Light', 'Dark', 'Auto / System'] },
     smoothScrolling:     { description: 'Use Smooth Scrolling (where possible)', type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
-    modalOverlayOpacity: { description: 'Modal Dialog overlay opacity',          type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 70,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
+    modalOverlayOpacity: { description: 'Modal overlay opacity',                 type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 70,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
   },
   tips: {
     showTrackDetailsHint:          { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },

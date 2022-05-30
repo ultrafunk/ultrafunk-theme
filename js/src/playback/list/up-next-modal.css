@@ -132,10 +132,6 @@
 
 @media screen and (max-width: 500px) {
   
-  .modal-type-tracklist {
-    min-height: 550px;
-  }
-
   .modal-type-tracklist .modal-header-entry {
     padding-top: 10px;
   }

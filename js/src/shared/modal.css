@@ -58,13 +58,13 @@
 
 .modal-dialog-header {
   display: flex;
-  padding: 0 30px 5px 30px;
+  padding: 4px 30px 5px 30px;
   align-items: center;
   justify-content: space-between;
 }
 
 .modal-type-default .modal-dialog-header {
-  padding-top: 10px;
+  padding-top: 4px;
   padding-bottom: 18px;
 }
 
@@ -171,7 +171,7 @@
   display: none;
   justify-content: space-around;
   align-items: center;
-  margin: 30px 30px 15px;
+  margin: 30px 30px 15px 30px;
 }
 
 .modal-type-default .modal-dialog-footer {
@@ -298,14 +298,12 @@
   }
 
   .modal-dialog-footer {
-    margin-left: 15px;
-    margin-right: 15px;
-    margin-top: 25px;
+    margin: 25px 15px 9px 15px;
   }
   
   .modal-dialog-close-button {
-    font-size: 20px;
-    line-height: 25px;
+    font-size: 18px;
+    line-height: 20px;
   }
   
 }
