@@ -72,7 +72,7 @@ export function showModal(
 
   debug.log(`showModal() - modalId: ${m.modalId} - modalType: ${(modalType !== null) ? modalType : 'default'} - modalTitle: ${modalTitle}`);
 
-  return config.id;
+  return `${config.id}-container`;
 }
 
 export function isShowingModal(showingModalId = -1)
@@ -121,7 +121,7 @@ function init()
   {
     document.body.insertAdjacentHTML('beforeend', getTemplateHtml());
     
-    elements.overlay   = document.getElementById(config.id);
+    elements.overlay   = document.getElementById(`${config.id}-overlay`);
     elements.container = document.getElementById(`${config.id}-container`);
     elements.body      = elements.overlay.querySelector(`.${config.id}-body`);
 

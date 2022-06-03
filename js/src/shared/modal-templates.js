@@ -21,7 +21,7 @@ export const config = { id: 'modal-dialog' };
 export function getTemplateHtml()
 {
   return /*html*/ `
-    <div id="${config.id}" tabindex="-1">
+    <div id="${config.id}-overlay" tabindex="-1">
       <div id="${config.id}-container">
         <div class="${config.id}-header">
           <div class="${config.id}-title"></div>

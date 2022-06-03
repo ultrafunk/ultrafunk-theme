@@ -64,7 +64,7 @@ export function init()
   if (cueInitialTrack() !== null)
     initYouTubeAPI();
   else
-    showSnackbar('No playable YouTube tracks!', 0, 'help', () => showModal('No playable tracks error', noPlayableTracksError));
+    showSnackbar('No playable YouTube tracks!', 0, 'help', () => showModal('No playable tracks', noPlayableTracksError));
 }
 
 
@@ -100,7 +100,7 @@ function cueInitialTrack()
           if (listControls.getTrackType(trackElement) === TRACK_TYPE.YOUTUBE)
             m.currentTrackId = trackElement.id;
           else
-            showSnackbar('Cannot play SoundCloud track', 5, 'help', () => (window.location.href = "/help/#list-player"));
+            showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', noPlayableTracksError));
         }
         else
         {
@@ -130,7 +130,7 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
 
   if ((nextTrackType === TRACK_TYPE.SOUNDCLOUD) && isPointerClick)
   {
-    showSnackbar('Cannot play SoundCloud track', 5, 'help', () => (window.location.href = "/help/#list-player"));
+    showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', noPlayableTracksError));
     return;
   }
 

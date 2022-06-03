@@ -5,7 +5,8 @@
 //
 
 
-import * as utils from '../shared/utils.js';
+import * as utils   from '../shared/utils.js';
+import { settings } from '../shared/session-data.js';
 
 import {
   noPlayback,
@@ -85,6 +86,7 @@ const navMenuClosure = (() =>
     if (isVisible)
     {
       modalOverlay.className = '';
+      modalOverlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
       modalOverlay.classList.add('show');
       setTimeout(() => modalOverlay.classList.add('fadein'), 50);
     }

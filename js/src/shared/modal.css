@@ -17,7 +17,7 @@
   --item-click-background-hover-color: #666;
 }
 
-#modal-dialog {
+#modal-dialog-overlay {
   display: none;
   cursor: pointer;
   position: fixed;
@@ -26,14 +26,14 @@
   bottom: 0;
   left: 0;
   z-index: 2000;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   -webkit-tap-highlight-color: transparent;
   justify-content: center;
   align-items: center;
   outline: 0;
 }
 
-#modal-dialog:focus {
+#modal-dialog-overlay:focus {
   outline: 0;
 }
 
@@ -198,7 +198,7 @@
   cursor: pointer;
 }
 
-#modal-dialog.show {
+#modal-dialog-overlay.show {
   display: flex;
   animation: modal-dialog-show 250ms;
 }
@@ -208,7 +208,7 @@
   to   { opacity: 1; }
 }
 
-#modal-dialog.hide {
+#modal-dialog-overlay.hide {
   display: flex;
   animation: modal-dialog-hide 150ms;
 }

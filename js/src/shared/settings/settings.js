@@ -31,7 +31,7 @@ const galleryPerPageValues       = [...Array(22).keys()].map(i => i + 3);
 const galleryPerPageValueStrings = [...Array(22).keys()].map(i => `${i + 3}`);
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 10, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 11, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -68,7 +68,7 @@ export const settingsSchema = {
     keyboardShortcuts:   { description: 'Keyboard Shortcuts',                    type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
     theme:               { description: 'Theme',                                 type: STRING,  values: ['light', 'dark', 'auto'],            default: 'auto', valueStrings: ['Light', 'Dark', 'Auto / System'] },
     smoothScrolling:     { description: 'Use Smooth Scrolling (where possible)', type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
-    modalOverlayOpacity: { description: 'Modal overlay opacity',                 type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 70,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
+    modalOverlayOpacity: { description: 'Modal overlay opacity',                 type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
   },
   tips: {
     showTrackDetailsHint:          { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },

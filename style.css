@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.43.6
+Version:           1.43.7
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -39,7 +39,7 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
 
   --link-hover-color: #dd0000;
 
-  --site-theme-color: rgb(10, 20, 40);
+  --site-theme-dark-color: rgb(10, 20, 40);
   --site-theme-medium-color: rgb(30, 60, 120);
   --site-theme-light-color: rgb(40, 80, 160);
   --site-theme-font-color: #efefef;
@@ -400,13 +400,6 @@ body.no-playback #playback-controls {
 * Site header navigation menu
 ***************************************************************************************************/
 
-/*
-@keyframes navMenuOpen {
-  from { max-height: 0;      }
-    to { max-height: 1000px; }
-}
-*/
-
 @keyframes navMenuOpen {
   from { opacity: 0; max-height: 0;      }
     to { opacity: 1; max-height: 1000px; }
@@ -414,10 +407,6 @@ body.no-playback #playback-controls {
 
 .nav-menu-outer {
   width: 100%;
-  /*
-  display: flex;
-  justify-content: space-between;
-  */
   animation: navMenuOpen 0.4s;
 }
 
@@ -666,7 +655,7 @@ nav .nav-links ul {
 ***************************************************************************************************/
 
 #site-footer {
-  background-color: var(--site-theme-color);
+  background-color: var(--site-theme-dark-color);
   color: var(--site-theme-font-color);
   clear: both;
 }
@@ -849,17 +838,11 @@ a:hover#footer-player-type-toggle {
 }
 
 #nav-menu-modal-overlay.fadein {
-  opacity: 0.6;
-  /*
-  transition: opacity 250ms;
-  */
+  opacity: 1;
 }
 
 #nav-menu-modal-overlay.fadeout {
   opacity: 0;
-  /*
-  transition: opacity 350ms;
-  */
 }
 
 
