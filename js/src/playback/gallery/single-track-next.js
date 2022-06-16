@@ -15,6 +15,7 @@ import {
 } from '../../shared/session-data.js';
 
 import {
+  escHtml,
   fetchRest,
   getThumbnailData,
 } from '../../shared/utils.js';
@@ -135,7 +136,10 @@ function getTrackNavHtml(isNavPrev, navUrl, navTitle)
 
 function updateNavLinks(element, trackData)
 {
-  let trackNavHtml = getTrackNavHtml(true, encodeURIComponent(window.location.href), document.querySelector('h2.entry-title').textContent);
+  let trackNavHtml = getTrackNavHtml(true, 
+    encodeURIComponent(window.location.href),
+    escHtml(document.querySelector('h2.entry-title').textContent)
+  );
   
   response.prevPage = window.location.href;
   response.nextPage = null;
