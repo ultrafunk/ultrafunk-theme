@@ -36,6 +36,7 @@ export const galleryPlayers = (() =>
     get next()                      { return mediaPlayers[playerIndex + 1];   },
     getPlayerIndex()                { return playerIndex;                     },
     setPlayerIndex(nextPlayerIndex) { playerIndex = nextPlayerIndex;          },
+    getTrackType()                  { return this.current.getTrackType();     },
     getNumTracks()                  { return mediaPlayers.length;             },
     getCurrentTrack()               { return playerIndex + 1;                 },
     playerFromUid(uId)              { return mediaPlayers[indexMap.get(uId)]; },

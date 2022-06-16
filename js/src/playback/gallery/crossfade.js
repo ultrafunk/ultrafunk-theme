@@ -74,7 +74,7 @@ export const crossfadeClosure = ((galleryPlayers) =>
   {
     if ((fadeState === STATE.NONE) && (set(fadeInUid) === true))
     {
-      debug.log(`init() - type: ${debug.getObjectKeyForValue(TYPE, crossfadeType)} - fadeInUid: ${fadeInUid} - preset: ${crossfadePreset.length} sec ${debug.getObjectKeyForValue(CURVE, crossfadePreset.curve)} (Name: ${crossfadePreset.name})`);
+      debug.log(`init() - type: ${debug.getKeyForValue(TYPE, crossfadeType)} - fadeInUid: ${fadeInUid} - preset: ${crossfadePreset.length} sec ${debug.getKeyForValue(CURVE, crossfadePreset.curve)} (Name: ${crossfadePreset.name})`);
   
       fadeState       = STATE.INIT;
       fadeStartVolume = settings.playback.masterVolume;
@@ -124,7 +124,7 @@ export const crossfadeClosure = ((galleryPlayers) =>
   
   function stop()
   {
-    debug.log(`stop() - fadeState: ${debug.getObjectKeyForValue(STATE, fadeState)}`);
+    debug.log(`stop() - fadeState: ${debug.getKeyForValue(STATE, fadeState)}`);
   
     if (fadeState !== STATE.NONE)
     {
@@ -171,7 +171,7 @@ export const crossfadeClosure = ((galleryPlayers) =>
     fadeOutPlayer = players.current;
     fadeInPlayer  = (fadeInUid === null) ? players.next : players.playerFromUid(fadeInUid);
   
-    if (fadeOutPlayer.getPlayable() && fadeInPlayer.getPlayable())
+    if (fadeOutPlayer.getIsPlayable() && fadeInPlayer.getIsPlayable())
       return true;
   
     return false;

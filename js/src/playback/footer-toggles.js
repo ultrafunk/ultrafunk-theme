@@ -5,7 +5,7 @@
 //
 
 
-import ToggleElement          from '../shared/toggle-element.js';
+import ElementToggle          from '../shared/element-toggle.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { response, settings } from '../shared/session-data.js';
 
@@ -53,7 +53,7 @@ export function init(getPlayerStatus)
 // Footer player type toggle: Gallery or List
 // ************************************************************************************************
 
-class PlayerTypeToggle extends ToggleElement
+class PlayerTypeToggle extends ElementToggle
 {
   constructor(elementId, getPlayerStatus)
   {
@@ -110,7 +110,7 @@ class PlayerTypeToggle extends ToggleElement
 // Footer autoplay and crossfade toggles
 // ************************************************************************************************
 
-class AutoplayToggle extends ToggleElement
+class AutoplayToggle extends ElementToggle
 {
   toggle()
   {
@@ -135,7 +135,7 @@ class AutoplayToggle extends ToggleElement
   }
 }
 
-class CrossfadeToggle extends ToggleElement
+class CrossfadeToggle extends ElementToggle
 {
   toggle()
   {

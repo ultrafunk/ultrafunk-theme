@@ -6,7 +6,7 @@
 
 
 import * as debugLogger from '../../shared/debuglogger.js';
-import { TRACK_TYPE }   from '../shared-gallery-list.js';
+import { TRACK_TYPE }   from '../mediaplayers.js';
 
 import {
   getTimeString,
@@ -64,12 +64,12 @@ export function getTrackEntryHtml(track)
 
   return /*html*/ `
     <div id="${track.uid}" class="track-entry ${thumbnailData.class}"
+      data-track-type="${track.meta.track_source_type}"
       data-track-id="track-${track.id}"
       data-track-artist="${trackArtist}"
       data-track-title="${trackTitle}"
       data-track-duration="${trackDuration}"
       data-track-url="${track.link}"
-      data-track-type="${track.meta.track_source_type}"
       data-track-thumbnail-url="${trackThumbnailUrl}"
       data-track-source-uid ="${thumbnailData.uid}"
       >

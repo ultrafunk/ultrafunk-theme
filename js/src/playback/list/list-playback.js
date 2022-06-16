@@ -19,7 +19,6 @@ import { playbackTimer }      from './list-playback-timer.js';
 import { response, settings } from '../../shared/session-data.js';
 
 import {
-  TRACK_TYPE,
   playerScrollTo,
   autoplayNavTo,
 } from '../shared-gallery-list.js';
@@ -97,7 +96,7 @@ function cueInitialTrack()
 
         if (trackElement !== null)
         {
-          if (listControls.getTrackType(trackElement) === TRACK_TYPE.YOUTUBE)
+          if (listControls.getTrackType(trackElement) === mediaPlayers.TRACK_TYPE.YOUTUBE)
             m.currentTrackId = trackElement.id;
           else
             showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', noPlayableTracksError));
@@ -126,9 +125,9 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
 {
   const nextTrackType = listControls.getTrackType(listControls.queryTrackId(nextTrackId));
 
-  debug.log(`setCurrentTrack() - nextTrackType: ${debug.getObjectKeyForValue(TRACK_TYPE, nextTrackType)} - nextTrackId: ${nextTrackId} - playNextTrack: ${playNextTrack} - isPointerClick: ${isPointerClick}`);
+  debug.log(`setCurrentTrack() - nextTrackType: ${debug.getKeyForValue(mediaPlayers.TRACK_TYPE, nextTrackType)} - nextTrackId: ${nextTrackId} - playNextTrack: ${playNextTrack} - isPointerClick: ${isPointerClick}`);
 
-  if ((nextTrackType === TRACK_TYPE.SOUNDCLOUD) && isPointerClick)
+  if ((nextTrackType === mediaPlayers.TRACK_TYPE.SOUNDCLOUD) && isPointerClick)
   {
     showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', noPlayableTracksError));
     return;
@@ -145,11 +144,11 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
 
     m.currentTrackId = nextTrackId;
     playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_NEXT, { nextTrackId: nextTrackId, isPointerClick: isPointerClick });
-    loadOrCueCurrentTrack(playNextTrack);
+    cueOrPlayCurrentTrack(playNextTrack);
   }
 }
 
-function loadOrCueCurrentTrack(playTrack)
+function cueOrPlayCurrentTrack(playTrack)
 {
   const sourceUid = listControls.updateTrackDetails();
 
@@ -230,7 +229,7 @@ async function advanceToNextTrack(autoplay = false, isPlaybackError = false)
   const repeatMode  = isPlaybackError ? playbackControls.REPEAT.OFF : playbackControls.getRepeatMode();
   const nextTrackId = listControls.getNextPlayableId();
 
-  debug.log(`advanceToNextTrack() autoplay: ${autoplay} - isPlaybackError: ${isPlaybackError} - nextTrackId: ${nextTrackId} - repeatMode: ${debug.getObjectKeyForValue(playbackControls.REPEAT, repeatMode)}`);
+  debug.log(`advanceToNextTrack() autoplay: ${autoplay} - isPlaybackError: ${isPlaybackError} - nextTrackId: ${nextTrackId} - repeatMode: ${debug.getKeyForValue(playbackControls.REPEAT, repeatMode)}`);
 
   if (autoplay && (repeatMode === playbackControls.REPEAT.ONE))
   {
@@ -295,6 +294,7 @@ export function getStatus()
     return {
       isPlaying:    playbackControls.isPlaying(),
       currentTrack: (currentIndex + 1),
+      trackType:    mediaPlayers.TRACK_TYPE.YOUTUBE,
       position:     Math.ceil(m.player.embedded.getCurrentTime()),
       numTracks:    m.player.getNumTracks(),
       trackId:      allTracksList[currentIndex].getAttribute('data-track-id'),
@@ -355,7 +355,7 @@ function onYouTubePlayerReady()
 
   toggleMute(true);
   playbackEvents.dispatch(playbackEvents.EVENT.READY, { resetProgressBar: false });
-  loadOrCueCurrentTrack(m.autoplayData?.autoplay === true);
+  cueOrPlayCurrentTrack(m.autoplayData?.autoplay === true);
 }
 
 function onYouTubePlayerStateChange(event)
@@ -386,7 +386,7 @@ function onYouTubePlayerStateChange(event)
     
     // eslint-disable-next-line no-undef
     case YT.PlayerState.PLAYING:
-      onYouTubeStatePlaying(event);
+      onYouTubeStatePlaying();
       playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
       break;
 
@@ -424,10 +424,9 @@ function onYouTubeStateUnstarted()
   }
 }
 
-function onYouTubeStatePlaying(event)
+function onYouTubeStatePlaying()
 {
   dismissSnackbar(m.currentSnackbarId);
-  m.player.setDuration(Math.round(event.target.getDuration()));
 
   if (m.firstStatePlaying)
   {

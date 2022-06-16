@@ -7,9 +7,15 @@
 
 import * as debugLogger       from '../../shared/debuglogger.js';
 import { KEY }                from '../../shared/storage.js';
+import { TRACK_TYPE }         from '../mediaplayers.js';
 import { replaceClass }       from '../../shared/utils.js';
 import { response, settings } from '../../shared/session-data.js';
 import { EVENT, addListener } from '../playback-events.js';
+
+import {
+  isSingleTrackNext,
+  playNextSingleTrack,
+} from './single-track-next.js';
 
 import {
   playerScrollTo,
@@ -109,7 +115,11 @@ function mediaCueNext(playbackEvent)
 function continueAutoplay(playbackEvent)
 {
   debug.log(playbackEvent);
-  autoplayNavTo(response.nextPage, true);
+
+  if (isSingleTrackNext() && (playbackEvent.data.trackType === TRACK_TYPE.YOUTUBE))
+    playNextSingleTrack(true);
+  else
+    autoplayNavTo(response.nextPage, true);
 }
 
 function resumeAutoplay(playbackEvent)
@@ -180,8 +190,17 @@ function playbackEventErrorTryNext(playbackEvent)
   }
   else
   {
-    if (response.nextPage !== null)
+    if (isSingleTrackNext())
+    {
+      // ToDo: Make below behaviour consistent throughout instead of: playNextSingleTrack(true) or
+      //                                                              playNextSingleTrack(isPlaying()) ?
+      // Meaning settings.playback.autoplay must be TRUE for autoplay triggering on next track played...?
+      playNextSingleTrack(settings.playback.autoplay);
+    }
+    else if (response.nextPage !== null)
+    {
       autoplayNavTo(response.nextPage, true);
+    }
   }
 }
 

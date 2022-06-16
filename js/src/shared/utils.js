@@ -5,12 +5,15 @@
 //
 
 
-import * as debugLogger     from './debuglogger.js';
-import { settings }         from './session-data.js';
-import { TRACK_TYPE }       from '../playback/shared-gallery-list.js';
-import { PREF_PLAYER }      from './settings/settings.js';
-import { showSnackbar }     from './snackbar.js';
-import { getYouTubeImgUrl } from '../playback/mediaplayers.js';
+import * as debugLogger from './debuglogger.js';
+import { settings }     from './session-data.js';
+import { PREF_PLAYER }  from './settings/settings.js';
+import { showSnackbar } from './snackbar.js';
+
+import {
+  TRACK_TYPE,
+  getYouTubeImgUrl,
+} from '../playback/mediaplayers.js';
 
 
 /*************************************************************************************************/
@@ -42,17 +45,17 @@ const siteMaxWidthMobile = window.matchMedia(`(max-width: ${getCssPropString('--
 // Misc. shared utility functions
 // ************************************************************************************************
 
-export function addListener(selectors, type, listener, data = null)
+export function addListener(selectors, type, listener)
 {
-  document.querySelector(selectors)?.addEventListener(type, (event) => listener(event, data));
+  document.querySelector(selectors)?.addEventListener(type, listener);
 }
 
 // Plain JS function equivalent to jQuery(selectors).eventX();
 // Adds event listeners of 'type' to all matching selectors 
-export function addListenerAll(selectors, type, listener, data = null)
+export function addListenerAll(selectors, type, listener)
 {
   const elementList = document.querySelectorAll(selectors);
-  elementList.forEach(element => element.addEventListener(type, (event) => listener(event, data)));
+  elementList.forEach(element => element.addEventListener(type, listener));
 }
 
 export function getCssPropString(prop, element = document.documentElement)
@@ -107,11 +110,18 @@ export function replaceClass(element, removeClass, addClass)
 
 export function getTimeString(seconds, includeHours = false)
 {
-  const timeString = new Date(seconds * 1000).toISOString();
+  if (Number.isInteger(seconds))
+  {
+    const timeString = new Date(seconds * 1000).toISOString();
 
-  return ((seconds > 3600) || includeHours)
-    ? timeString.slice(11, 19)
-    : timeString.slice(14, 19);
+    return ((seconds > 3600) || includeHours)
+      ? timeString.slice(11, 19)
+      : timeString.slice(14, 19);
+  }
+  else
+  {
+    return includeHours ? '00:00:00' : '00:00';
+  }
 }
 
 
@@ -227,24 +237,48 @@ export function getThumbnailData(metaData)
   return { src: '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png', class: 'type-soundcloud', uid: '' };
 }
 
-export async function fetchRest(endpoint, query, path = '/wp-json/wp/v2/')
+
+// ************************************************************************************************
+// 
+// ************************************************************************************************
+
+export const FETCH_ERROR_TYPE = {
+  UNKNOWN: 0,
+  NETWORK: 1,
+};
+
+export async function fetchRest(endpoint, query, returnStatus = false, path = '/wp-json/wp/v2/')
 {
   debug.log(`fetchRest(): ${path}${endpoint}?${query}`);
 
   return fetch(`${path}${endpoint}?${query}`)
-  .then(response => 
+  .then(async (response) => 
   {
     if (!response.ok)
     {
-      debug.error(response);
+      debug.warn(response);
+
+      if (returnStatus)
+        return { status: { code: response.status, details: await response.json() }};
+
       return null;
     }
 
+    if (returnStatus)
+      return { status: { code: response.status }, data: await response.json() };
+    
     return response.json();
   })
   .catch(reason =>
   {
-    debug.warn(reason);
+    debug.error(reason);
+
+    if (returnStatus)
+    {
+      const errorType = (reason instanceof TypeError) ? FETCH_ERROR_TYPE.NETWORK : FETCH_ERROR_TYPE.UNKNOWN;
+      return { status: { code: 0, type: errorType, message: reason.message }};
+    }
+
     return null;
   });
 }

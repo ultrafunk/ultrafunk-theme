@@ -1,5 +1,5 @@
 //
-// ToggleElement UI / Proxy base class
+// ElementToggle UI / Proxy base class
 //
 // https://ultrafunk.com
 //
@@ -11,7 +11,7 @@ import { getCssPropString } from "./utils.js";
 /*************************************************************************************************/
 
 
-export default class ToggleElement
+export default class ElementToggle
 {
   constructor(elementId, updateOnConstruct = true)
   {

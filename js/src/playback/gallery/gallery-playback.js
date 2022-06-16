@@ -5,17 +5,18 @@
 //
 
 
-import * as debugLogger       from '../../shared/debuglogger.js';
-import * as eventLogger       from '../eventlogger.js';
-import * as embeddedPlayers   from './embedded-players.js';
-import * as playbackEvents    from '../playback-events.js';
-import * as galleryEvents     from './gallery-events.js';
-import * as playbackControls  from '../playback-controls.js';
-import * as crossfadeControls from './crossfade-controls.js';
-import { playbackTimer }      from './gallery-playback-timer.js';
-import { galleryPlayers }     from './gallery-players.js';
-import { CROSSFADE_TYPE }     from './crossfade.js';
-import { settings }           from '../../shared/session-data.js';
+import * as debugLogger         from '../../shared/debuglogger.js';
+import * as eventLogger         from '../eventlogger.js';
+import * as embeddedPlayers     from './embedded-players.js';
+import * as playbackEvents      from '../playback-events.js';
+import * as galleryEvents       from './gallery-events.js';
+import * as playbackControls    from '../playback-controls.js';
+import * as crossfadeControls   from './crossfade-controls.js';
+import { playbackTimer }        from './gallery-playback-timer.js';
+import { galleryPlayers }       from './gallery-players.js';
+import { CROSSFADE_TYPE }       from './crossfade.js';
+import { settings }             from '../../shared/session-data.js';
+import { singleTrackNextReady } from './single-track-next.js';
 
 
 /*************************************************************************************************/
@@ -125,9 +126,9 @@ export function nextTrack(isMediaEnded = false)
   else if (isMediaEnded)
   {
     playbackControls.setPauseState();
-    
+
     if (settings.playback.autoplay)
-      playbackEvents.dispatch(playbackEvents.EVENT.CONTINUE_AUTOPLAY);
+      playbackEvents.dispatch(playbackEvents.EVENT.CONTINUE_AUTOPLAY, { trackType: m.players.current.getTrackType() });
     else
       m.players.stop();
   }
@@ -139,7 +140,7 @@ function repeatPlayback(isMediaEnded, isLastTrack)
   {
     const repeatMode = playbackControls.getRepeatMode();
 
-    debug.log(`repeatPlayback(): ${debug.getObjectKeyForValue(playbackControls.REPEAT, repeatMode)}`);
+    debug.log(`repeatPlayback(): ${debug.getKeyForValue(playbackControls.REPEAT, repeatMode)}`);
 
     if (repeatMode === playbackControls.REPEAT.ONE)
     {
@@ -193,8 +194,6 @@ function skipToTrack(trackNum, playMedia = true)
 
   if ((playMedia === true) && (playbackControls.isPlaying() === false))
   {
-    // Reset eventlog to enable check for autoplay block
-    m.eventLog.clear();
     m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
     
     if (m.players.jumpToTrack(trackNum, playMedia))
@@ -220,11 +219,36 @@ function resumeAutoplay(autoplayData, iframeId = null)
   }
 }
 
+function cueOrPlaySingleTrackNextById(trackData, thumbnailData, playMedia = false)
+{
+  debug.log(`cueOrPlaySingleTrackNextById() - playMedia: ${playMedia}`);
+
+  m.players.current.setIsPlayable(true);
+  m.players.current.setArtistTitle(trackData.track_artist, trackData.track_title);
+  m.players.current.setDuration(parseInt(trackData.track_duration));
+  m.players.current.setThumbnail(thumbnailData);
+
+  playbackControls.updateProgressPercent(0);
+  playbackControls.getSetTrackData();
+
+  if (playMedia)
+  {
+    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
+    m.players.current.playTrackById(thumbnailData.uid);
+  }
+  else
+  {
+    m.players.current.cueTrackById(thumbnailData.uid);
+    m.players.current.isSingleTrackNextCued = true;
+  }
+}
+
 export function getStatus()
 {
   return {
     isPlaying:    playbackControls.isPlaying(),
     currentTrack: m.players.getCurrentTrack(),
+    trackType:    m.players.current.getTrackType(),
     position:     0,
     numTracks:    m.players.getNumTracks(),
     trackId:      m.players.current.getTrackId(),
@@ -275,7 +299,7 @@ function crossfadeInit(crossfadeType, crossfadePreset, crossfadeInUid = null)
 
 function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
 {
-  debug.log(`embeddedEventHandler() - event: ${debug.getObjectKeyForValue(playbackEvents.EVENT, embeddedEvent)}`);
+  debug.log(`embeddedEventHandler() - event: ${debug.getKeyForValue(playbackEvents.EVENT, embeddedEvent)}`);
   if (embeddedEventData !== null) debug.log(embeddedEventData);
 
   switch(embeddedEvent)
@@ -287,6 +311,7 @@ function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
 
     case playbackEvents.EVENT.READY:
       playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
+      singleTrackNextReady(cueOrPlaySingleTrackNextById);
       playbackEvents.dispatch(playbackEvents.EVENT.READY, embeddedEventData);
       playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
       break;
@@ -316,7 +341,7 @@ const playbackState = (() =>
   
   const syncAll = function syncAllRecursive(nextPlayerUid, syncState)
   {
-    debug.log(`playbackState.syncAll() - previousTrack: ${m.players.getPlayerIndex() + 1} - nextTrack: ${m.players.indexMap.get(nextPlayerUid) + 1} - syncState: ${debug.getObjectKeyForValue(STATE, syncState)}`);
+    debug.log(`playbackState.syncAll() - previousTrack: ${m.players.getPlayerIndex() + 1} - nextTrack: ${m.players.indexMap.get(nextPlayerUid) + 1} - syncState: ${debug.getKeyForValue(STATE, syncState)}`);
     
     if (m.players.isCurrent(nextPlayerUid))
     {

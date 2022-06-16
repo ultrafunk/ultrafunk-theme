@@ -8,7 +8,10 @@
 namespace Ultrafunk\Theme\Filters;
 
 
-use Ultrafunk\Plugin\Constants\PLAYER_TYPE;
+use Ultrafunk\Plugin\Constants\ {
+  PLAYER_TYPE,
+  TRACK_TYPE,
+};
 
 use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 use const Ultrafunk\Theme\Constants\THEME_ENV;
@@ -172,22 +175,24 @@ add_filter('document_title_parts', '\Ultrafunk\Theme\Filters\document_title_part
 //
 // Add uniqid and other custom options for SoundCloud and YouTube iframe embeds
 //
-function embed_oembed_html(string $cached_html) : string
+function embed_oembed_html(string $cache, string $url, array $attr, int $post_id) : string
 {
-  if (stripos($cached_html, 'youtube.com/') !== false)
+  $track_type = intval(get_post_meta($post_id, 'track_source_type', true));
+
+  if ($track_type === TRACK_TYPE::YOUTUBE)
   {
-    $cached_html = str_ireplace('<iframe', sprintf('<iframe id="youtube-uid-%s"', uniqid()), $cached_html);
-    $cached_html = str_ireplace('feature=oembed', sprintf('feature=oembed&enablejsapi=1&origin=%s', PLUGIN_ENV['site_url']), $cached_html);
+    $cache = str_ireplace('<iframe', sprintf('<iframe id="youtube-uid-%s"', uniqid()), $cache);
+    $cache = str_ireplace('feature=oembed', sprintf('feature=oembed&enablejsapi=1&origin=%s', PLUGIN_ENV['site_url']), $cache);
   }
-  else if (stripos($cached_html, 'soundcloud.com/') !== false)
+  else if ($track_type === TRACK_TYPE::SOUNDCLOUD)
   {
-    $cached_html = str_ireplace('<iframe', sprintf('<iframe id="soundcloud-uid-%s" allow="autoplay"', uniqid()), $cached_html);
-    $cached_html = str_ireplace('visual=true', 'visual=true&single_active=false', $cached_html);
+    $cache = str_ireplace('<iframe', sprintf('<iframe id="soundcloud-uid-%s" allow="autoplay"', uniqid()), $cache);
+    $cache = str_ireplace('visual=true', 'visual=true&single_active=false', $cache);
   }
   
-  return $cached_html;
+  return $cache;
 }
-add_filter('embed_oembed_html', '\Ultrafunk\Theme\Filters\embed_oembed_html', 10, 1);
+add_filter('embed_oembed_html', '\Ultrafunk\Theme\Filters\embed_oembed_html', 10, 4);
 
 //
 // Add noindex meta tag to all 404 and shuffle pages

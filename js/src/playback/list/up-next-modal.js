@@ -9,7 +9,7 @@ import * as debugLogger from '../../shared/debuglogger.js';
 import { autoplay }     from '../footer-toggles.js';
 import { settings }     from '../../shared/session-data.js';
 import { isPlaying }    from '../playback-controls.js';
-import { TRACK_TYPE }   from '../shared-gallery-list.js';
+import { TRACK_TYPE }   from '../mediaplayers.js';
 import { showSnackbar } from '../../shared/snackbar.js';
 
 import {
@@ -52,9 +52,9 @@ const m = {
 //
 // ************************************************************************************************
 
-export function init(setCurrentTrackFunc)
+export function init(setCurrentTrackCallback)
 {
-  m.setCurrentTrack = setCurrentTrackFunc;
+  m.setCurrentTrack = setCurrentTrackCallback;
 }
 
 function loadDragDropTouch()
@@ -67,8 +67,8 @@ function loadDragDropTouch()
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
     tag.src   = debug.isDebug()
-                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.43.7'
-                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.43.7';
+                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.44.0'
+                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.44.0';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }

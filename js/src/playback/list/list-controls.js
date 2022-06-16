@@ -10,7 +10,7 @@ import * as upNextModal       from './up-next-modal.js';
 import * as playbackEvents    from '../playback-events.js';
 import ElementClick           from '../../shared/element-click.js';
 import { STATE }              from '../element-wrappers.js';
-import { TRACK_TYPE }         from '../shared-gallery-list.js';
+import { TRACK_TYPE }         from '../mediaplayers.js';
 import { loadTracks }         from './list-tracks-rest.js';
 import { showSnackbar }       from '../../shared/snackbar.js';
 import { response, settings } from '../../shared/session-data.js';
@@ -31,7 +31,7 @@ const m = {
   tracklistObserver: null,
   tracklistLoadMore: null,
   player:            null,
-  currentElement:    null,
+  trackElement:      null,
   currentState:      STATE.UNKNOWN,
   prevActionButtons: null,
   playerWrapper:     null,
@@ -43,16 +43,16 @@ const m = {
 //
 // ************************************************************************************************
 
-export function init(setCurrentTrackFunc)
+export function init(setCurrentTrackCallback)
 {
   debug.log('init()');
 
-  upNextModal.init(setCurrentTrackFunc);
+  upNextModal.init(setCurrentTrackCallback);
 
   m.tracklist         = document.getElementById('tracklist');
   m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
   m.playerWrapper     = document.querySelector('.wp-block-embed__wrapper');
-  m.uiElements        = new UiElements(setCurrentTrackFunc);
+  m.uiElements        = new UiElements(setCurrentTrackCallback);
 
   m.tracklist.addEventListener('click', (event) => m.uiElements.clickHandler(event));
 }
@@ -60,7 +60,7 @@ export function init(setCurrentTrackFunc)
 export function ready(player)
 {
   m.player = player;
-  m.currentElement.classList.add('current');
+  m.trackElement.classList.add('current');
 
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_LOADING,  () => setCurrentTrackState(STATE.LOADING));
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING,  () => setCurrentTrackState(STATE.PLAYING));
@@ -72,10 +72,10 @@ export function ready(player)
 
 function observerCallback(entries)
 {
-  m.tracklistObserver.unobserve(m.currentElement);
+  m.tracklistObserver.unobserve(m.trackElement);
 
   if ((Math.ceil(entries[0].intersectionRatio * 100) / 100) !== 1)
-    m.tracklist.scrollTop = (m.currentElement.offsetTop - m.tracklist.offsetHeight) + m.currentElement.offsetHeight;    
+    m.tracklist.scrollTop = (m.trackElement.offsetTop - m.tracklist.offsetHeight) + m.trackElement.offsetHeight;    
 }
 
 
@@ -100,7 +100,7 @@ export function queryTrackId(id)
 
 export function getCurrentTrackElement()
 {
-  return m.currentElement;
+  return m.trackElement;
 }
 
 export function getTrackType(element)
@@ -115,8 +115,8 @@ export function getTrackType(element)
 
 export function getPrevPlayableId()
 {
-  let destElement = (m.currentElement !== null)
-                      ? m.currentElement.previousElementSibling
+  let destElement = (m.trackElement !== null)
+                      ? m.trackElement.previousElementSibling
                       : null;
 
   while ((destElement !== null) && (getTrackType(destElement) !== TRACK_TYPE.YOUTUBE))
@@ -125,7 +125,7 @@ export function getPrevPlayableId()
   return ((destElement !== null) ? destElement.id : null);
 }
 
-export function getNextPlayableId(startElement = m.currentElement)
+export function getNextPlayableId(startElement = m.trackElement)
 {
   let destElement = (startElement !== null)
                       ? startElement.nextElementSibling
@@ -139,8 +139,8 @@ export function getNextPlayableId(startElement = m.currentElement)
 
 export function setCuedTrack(trackId)
 {
-  m.currentElement = queryTrackId(trackId);
-  m.tracklistObserver.observe(m.currentElement);
+  m.trackElement = queryTrackId(trackId);
+  m.tracklistObserver.observe(m.trackElement);
 }
 
 
@@ -150,10 +150,10 @@ export function setCuedTrack(trackId)
 
 class UiElements extends ElementClick
 {
-  constructor(setCurrentTrackFunc)
+  constructor(setCurrentTrackCallback)
   {
     super();
-    this.setCurrentTrack = setCurrentTrackFunc;
+    this.setCurrentTrack = setCurrentTrackCallback;
   }
 
   elementClicked()
@@ -195,17 +195,17 @@ function trackActionsClick(element)
 
 function playNextClick(trackElement)
 {
-  if (m.currentElement !== null)
+  if (m.trackElement !== null)
   {
     const nextTrackElement = trackElement.cloneNode(true);
     
     clearTrackState(nextTrackElement);
     nextTrackElement.id = Date.now();
 
-    if (settings.list.moveTrackOnPlayNext && (trackElement !== m.currentElement))
-      removeClick(trackElement, false, () => addTrack(nextTrackElement, m.currentElement, 'afterend'));
+    if (settings.list.moveTrackOnPlayNext && (trackElement !== m.trackElement))
+      removeClick(trackElement, false, () => addTrack(nextTrackElement, m.trackElement, 'afterend'));
     else
-      addTrack(nextTrackElement, m.currentElement, 'afterend'); 
+      addTrack(nextTrackElement, m.trackElement, 'afterend'); 
 
     showSnackbar('Track will play next', 3);
   }
@@ -217,7 +217,7 @@ function playNextClick(trackElement)
 
 function removeClick(trackElement, allowUndo = true, animationEndCallback = () => {})
 {
-  if (trackElement !== m.currentElement)
+  if (trackElement !== m.trackElement)
   {
     const undoRemoveElement = trackElement.cloneNode(true);
     const undoPrevElement   = trackElement.previousElementSibling;
@@ -344,17 +344,17 @@ export function setCurrentTrackState(newState)
 
     if (newState.ID === STATE.LOADING.ID)
     {
-      m.currentElement.classList.remove(STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
-      m.currentElement.classList.add(STATE.LOADING.CLASS);
+      m.trackElement.classList.remove(STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
+      m.trackElement.classList.add(STATE.LOADING.CLASS);
     }
     else
     {
-      m.currentElement.classList.remove(STATE.LOADING.CLASS);
+      m.trackElement.classList.remove(STATE.LOADING.CLASS);
     
       if (newState.ID === STATE.PLAYING.ID)
-        replaceClass(m.currentElement, STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
+        replaceClass(m.trackElement, STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
       else
-        replaceClass(m.currentElement, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
+        replaceClass(m.trackElement, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
 
       upNextModal.updateUpNextModal((newState.ID === STATE.PLAYING.ID) ? true : false);
     }
@@ -363,7 +363,7 @@ export function setCurrentTrackState(newState)
 
 function setPlayerAspectRatio()
 {
-  if (m.currentElement.classList.contains('is-video'))
+  if (m.trackElement.classList.contains('is-video'))
     m.playerWrapper.classList.replace('aspect-ratio-1_1', 'aspect-ratio-16_9');
   else
     m.playerWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
@@ -371,29 +371,28 @@ function setPlayerAspectRatio()
 
 export function setNextTrackState(nextTrackId, isPointerClick)
 {
-  clearTrackState(m.currentElement);
+  clearTrackState(m.trackElement);
 
-  m.currentElement = queryTrackId(nextTrackId);
+  m.trackElement = queryTrackId(nextTrackId);
 
   if (isPointerClick === false)
-    m.tracklistObserver.observe(m.currentElement);
+    m.tracklistObserver.observe(m.trackElement);
 
-  m.currentElement.classList.add('current');
+  m.trackElement.classList.add('current');
 }
 
 export function setTrackMessage(message)
 {
-  m.currentElement.querySelector('.track-message').textContent   = message;
-  m.currentElement.querySelector('.track-message').style.display = 'block';
+  m.trackElement.querySelector('.track-message').textContent   = message;
+  m.trackElement.querySelector('.track-message').style.display = 'block';
 }
 
 export function updateTrackDetails()
 {
-  const sourceUid = m.currentElement.getAttribute('data-track-source-uid');
+  const sourceUid = m.trackElement.getAttribute('data-track-source-uid');
   
-  m.player.setArtist(m.currentElement.getAttribute('data-track-artist'));
-  m.player.setTitle(m.currentElement.getAttribute('data-track-title'));
-  m.player.setDuration(parseInt(m.currentElement.getAttribute('data-track-duration')));
+  m.player.setArtistTitle(m.trackElement.getAttribute('data-track-artist'), m.trackElement.getAttribute('data-track-title'));
+  m.player.setDuration(parseInt(m.trackElement.getAttribute('data-track-duration')));
   m.player.setThumbnail(sourceUid);
   setPlayerAspectRatio();
 

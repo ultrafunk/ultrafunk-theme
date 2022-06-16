@@ -28,12 +28,6 @@ export const PLAYER_TYPE = {
   LIST:    2,
 };
 
-export const TRACK_TYPE = {
-  NONE:       0,
-  YOUTUBE:    1,
-  SOUNDCLOUD: 2,
-};
-
 const isPlayer = {
   gallery: false,
   list:    false,

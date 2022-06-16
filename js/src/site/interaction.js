@@ -7,7 +7,7 @@
 
 import * as debugLogger      from '../shared/debuglogger.js';
 import * as utils            from '../shared/utils.js';
-import ToggleElement         from '../shared/toggle-element.js';
+import ElementToggle         from '../shared/element-toggle.js';
 import ElementClick          from '../shared/element-click.js';
 import { settings }          from '../shared/session-data.js';
 import { showModal }         from '../shared/modal.js';
@@ -208,7 +208,7 @@ function getNextSetting(settingsObject, currentSetting)
 // Site theme handling
 // ************************************************************************************************
 
-class SiteThemeToggle extends ToggleElement
+class SiteThemeToggle extends ElementToggle
 {
   constructor(elementId)
   {
@@ -275,7 +275,7 @@ class SiteThemeToggle extends ToggleElement
 // Gallery layout handling
 // ************************************************************************************************
 
-class GalleryLayoutToggle extends ToggleElement
+class GalleryLayoutToggle extends ElementToggle
 {
   constructor(elementId)
   {

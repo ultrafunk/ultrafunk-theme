@@ -7,6 +7,7 @@
 
 import * as utils   from '../shared/utils.js';
 import { settings } from '../shared/session-data.js';
+import { isSingleTrackNext } from '../playback/gallery/single-track-next.js';
 
 import {
   noPlayback,
@@ -55,7 +56,7 @@ const navMenuClosure = (() =>
 
     if (menuElement !== null)
     {
-      if (document.body.matches('.single.track') || noPlayback())
+      if (isSingleTrackNext() || noPlayback())
       {
         event?.preventDefault();
         utils.navToUrl(utils.getPrefPlayerUrl(menuElement.querySelector('a').href));

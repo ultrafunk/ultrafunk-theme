@@ -38,8 +38,8 @@ class DevBuild extends DebugLog
     for (let i = 0; i < eventLog.length; i++)
     {
       const data = {
-        eventSource: this.getObjectKeyForValue(eventSource, eventLog[i].eventSource),
-        eventType:   this.getObjectKeyForValue(eventType, eventLog[i].eventType),
+        eventSource: this.getKeyForValue(eventSource, eventLog[i].eventSource),
+        eventType:   this.getKeyForValue(eventType, eventLog[i].eventType),
         uId:         eventLog[i].uId,
         timeStamp:   eventLog[i].timeStamp,
       };
@@ -50,7 +50,7 @@ class DevBuild extends DebugLog
     this.log(entries);
   }
 
-  getObjectKeyForValue(object, value)
+  getKeyForValue(object, value)
   {
     return Object.keys(object).find(key => (object[key] === value));
   }
@@ -58,9 +58,9 @@ class DevBuild extends DebugLog
 
 class ProdBuild extends DebugLog
 {
-  log()                  {}
-  logEventLog()          {}
-  getObjectKeyForValue() {}
+  log()            {}
+  logEventLog()    {}
+  getKeyForValue() {}
 }
 
 

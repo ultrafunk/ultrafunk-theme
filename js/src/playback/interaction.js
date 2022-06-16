@@ -5,15 +5,17 @@
 //
 
 
-import * as debugLogger       from '../shared/debuglogger.js';
-import * as eventLogger       from './eventlogger.js';
-import * as galleryPlayback   from './gallery/gallery-playback.js';
-import * as listPlayback      from './list/list-playback.js';
-import * as playbackEvents    from './playback-events.js';
-import * as utils             from '../shared/utils.js';
-import * as footerToggles     from './footer-toggles.js';
-import { showSnackbar }       from '../shared/snackbar.js';
-import { initScreenWakeLock } from './screen-wakelock.js';
+import * as debugLogger        from '../shared/debuglogger.js';
+import * as eventLogger        from './eventlogger.js';
+import * as galleryPlayback    from './gallery/gallery-playback.js';
+import * as listPlayback       from './list/list-playback.js';
+import * as playbackEvents     from './playback-events.js';
+import * as utils              from '../shared/utils.js';
+import * as footerToggles      from './footer-toggles.js';
+import { showSnackbar }        from '../shared/snackbar.js';
+import { initScreenWakeLock }  from './screen-wakelock.js';
+import { playNextSingleTrack } from './gallery/single-track-next.js';
+import { TRACK_TYPE }          from './mediaplayers.js';
 
 import {
   setPlaybackControlsCss,
@@ -110,10 +112,10 @@ function initListeners()
 {
   utils.addListener('.playback-shuffle-control span', 'click', shuffleClickNavTo);
 
-  utils.addListenerAll('span.navbar-arrow-back',            'click', prevNextNavTo, response.prevPage);
-  utils.addListenerAll('span.navbar-arrow-fwd',             'click', prevNextNavTo, response.nextPage);
-  utils.addListener('nav.track-navigation .nav-previous a', 'click', prevNextNavTo, response.prevPage);
-  utils.addListener('nav.track-navigation .nav-next a',     'click', prevNextNavTo, response.nextPage);
+  utils.addListenerAll('span.navbar-arrow-back',            'click', (event) => prevNextNavTo(event, response.prevPage));
+  utils.addListenerAll('span.navbar-arrow-fwd',             'click', (event) => prevNextNavTo(event, response.nextPage));
+  utils.addListener('nav.track-navigation .nav-previous a', 'click', (event) => prevNextNavTo(event, response.prevPage));
+  utils.addListener('nav.track-navigation .nav-next a',     'click', (event) => prevNextNavTo(event, response.nextPage));
   
   document.addEventListener('keydown', documentEventKeyDown);
   document.addEventListener('keydown', documentEventMediaKeyDown);
@@ -192,6 +194,19 @@ function documentEventKeyDown(event)
         event.preventDefault();
         m.player.toggleMute();
         showSnackbar(settings.playback.masterMute ? 'Volume is muted (<b>m</b> to unmute)' : 'Volume is unmuted (<b>m</b> to mute)', 3);
+        break;
+
+      case 'n':
+      case 'N':
+        if (settings.experimental.singleTrackNextNoReload)
+        {
+          event.preventDefault();
+
+          if (m.player.getStatus().trackType === TRACK_TYPE.YOUTUBE)
+            playNextSingleTrack(m.player.getStatus().isPlaying);
+          else
+            prevNextNavTo(null, response.nextPage);
+        }
         break;
 
       case 'p':

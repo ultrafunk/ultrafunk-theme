@@ -5,7 +5,7 @@
 //
 
 
-import { TRACK_TYPE } from '../playback/shared-gallery-list.js';
+import { TRACK_TYPE } from '../playback/mediaplayers.js';
 
 
 /*************************************************************************************************/

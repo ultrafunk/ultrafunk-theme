@@ -71,12 +71,12 @@ function tracklist_entries(object $request_handler) : void
 
     ?>
     <div id="<?php echo uniqid(); ?>" class="track-entry <?php echo $track_data['css_class'] . $is_video_class; ?>"
+      data-track-type="<?php echo $track_data['track_type']; ?>"
       data-track-id="track-<?php echo $track->ID; ?>"
       data-track-artist="<?php echo $track_artist; ?>"
       data-track-title="<?php echo $track_title; ?>"
       data-track-duration="<?php echo $track_duration; ?>"
       data-track-url="<?php echo $track_url; ?>"
-      data-track-type="<?php echo $track_data['track_type']; ?>"
       data-track-thumbnail-url="<?php echo $track_data['thumnail_src']; ?>"
       <?php if ($is_youtube_track) { ?>
         data-track-source-uid="<?php echo $track_data['source_uid']; ?>"

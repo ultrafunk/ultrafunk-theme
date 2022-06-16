@@ -5,16 +5,16 @@
 //
 
 
-import * as debugLogger from '../debuglogger.js?ver=1.43.7';
-import { addListener }  from '../utils.js?ver=1.43.7';
-import { showSnackbar } from '../snackbar.js?ver=1.43.7';
+import * as debugLogger from '../debuglogger.js?ver=1.44.0';
+import { addListener }  from '../utils.js?ver=1.44.0';
+import { showSnackbar } from '../snackbar.js?ver=1.44.0';
 
 import {
   KEY,
   deleteCookie,
   readJson,
   writeJson,
-} from '../storage.js?ver=1.43.7';
+} from '../storage.js?ver=1.44.0';
 
 import {
   TYPE_INTEGER,
@@ -22,7 +22,7 @@ import {
   TYPE_STRING,
   settingsSchema,
   defaultSettings,
-} from './settings.js?ver=1.43.7';
+} from './settings.js?ver=1.44.0';
 
 
 /*************************************************************************************************/
@@ -42,11 +42,12 @@ const config = {
 };
 
 const settingsSections = [
-  { name: 'Playback',       id: 'playback', schema: settingsSchema.playback },
-  { name: 'List Player',    id: 'list',     schema: settingsSchema.list     },
-  { name: 'Gallery Player', id: 'gallery',  schema: settingsSchema.gallery  },
-  { name: 'Mobile',         id: 'mobile',   schema: settingsSchema.mobile   },
-  { name: 'Site',           id: 'site',     schema: settingsSchema.site     },
+  { name: 'Playback',       id: 'playback',     schema: settingsSchema.playback     },
+  { name: 'List Player',    id: 'list',         schema: settingsSchema.list         },
+  { name: 'Gallery Player', id: 'gallery',      schema: settingsSchema.gallery      },
+  { name: 'Mobile',         id: 'mobile',       schema: settingsSchema.mobile       },
+  { name: 'Site',           id: 'site',         schema: settingsSchema.site         },
+  { name: 'Experimental',   id: 'experimental', schema: settingsSchema.experimental },
 ];
 
 const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and Site settings</h3>

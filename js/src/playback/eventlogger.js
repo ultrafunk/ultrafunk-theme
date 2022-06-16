@@ -147,7 +147,7 @@ export class Interaction extends EventLog
       this.matchesDelta(1, deltaTime);
     }
 
-    return this.isPatternMatch(3, `${debug.getObjectKeyForValue(SOURCE, eventSource)} Double Clicked`);
+    return this.isPatternMatch(3, `${debug.getKeyForValue(SOURCE, eventSource)} Double Clicked`);
   }
 }
 

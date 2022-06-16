@@ -467,10 +467,10 @@ function meta_controls(object $post) : void
   <div class="entry-meta-controls">
     <div class="track-share-control">
       <span class="material-icons" title="Share track / Play On"
+        data-track-type="<?php echo $post->track_source_type; ?>"
         data-track-artist="<?php echo esc_html($post->track_artist); ?>"
         data-track-title="<?php echo esc_html($post->track_title); ?>"
         data-track-url="<?php echo esc_url(get_permalink()); ?>"
-        data-track-type="<?php echo $post->track_source_type; ?>"
         data-track-thumbnail-url="<?php echo $track_data['thumnail_src']; ?>"
         <?php if ($is_youtube_track) { ?>
           data-track-source-uid="<?php echo $track_data['source_uid']; ?>"

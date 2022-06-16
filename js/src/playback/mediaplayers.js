@@ -14,6 +14,12 @@ import { VOLUME }       from './gallery/crossfade.js';
 
 const debug = debugLogger.newInstance('mediaplayers');
 
+export const TRACK_TYPE = {
+  NONE:       0,
+  YOUTUBE:    1,
+  SOUNDCLOUD: 2,
+};
+
 
 // ************************************************************************************************
 // MediaPlayer parent class
@@ -23,10 +29,11 @@ class MediaPlayer
 {
   constructor(trackId, iframeId, embeddedPlayer)
   {
+    this.trackType      = TRACK_TYPE.NONE;
     this.trackId        = trackId;
     this.iframeId       = iframeId;
     this.embeddedPlayer = embeddedPlayer;
-    this.playable       = true;
+    this.isPlayable     = true;
 
     this.duration = 0;
     this.artist   = null;
@@ -37,14 +44,19 @@ class MediaPlayer
     this.thumbnail          = new Image();
     this.thumbnail.decoding = 'async';
   }
+
+  // Abstract methods to be overriden in child class if needed
+  cueTrackById()  {}
+  playTrackById() {}
   
+  getTrackType()        { return this.trackType;      }
   getTrackId()          { return this.trackId;        }
   getIframeId()         { return this.iframeId;       }
   getUid()              { return this.iframeId;       }
   getEmbeddedPlayer()   { return this.embeddedPlayer; }
 
-  getPlayable()         { return this.playable;     }
-  setPlayable(playable) { this.playable = playable; }
+  getIsPlayable()           { return this.isPlayable;       }
+  setIsPlayable(isPlayable) { this.isPlayable = isPlayable; }
 
   getDuration()         { return this.duration;     }
   setDuration(duration) { this.duration = duration; }
@@ -60,6 +72,12 @@ class MediaPlayer
 
   seekTo(position)      { this.embeddedPlayer.seekTo(position);  }
   setVolume(volume)     { this.embeddedPlayer.setVolume(volume); }
+
+  setArtistTitle(artist, title)
+  {
+    this.artist = artist;
+    this.title  = title;
+  }
 
   setThumbnail(thumbnail)
   {
@@ -79,45 +97,21 @@ export class YouTube extends MediaPlayer
   constructor(trackId, iframeId, embeddedPlayer, trackSourceUrl)
   {
     super(trackId, iframeId, embeddedPlayer);
-    this.previousPlayerState = -1;
+    this.trackType = TRACK_TYPE.YOUTUBE;
     super.setThumbnail(getYouTubeImgUrl(trackSourceUrl));
   }
 
-  pause() { this.embeddedPlayer.pauseVideo(); }
-  stop()  { this.embeddedPlayer.stopVideo();  }
-
-  //
-  // ToDo: Remove if no longer needed??
-  // Handles YouTube iframe API edge case that causes playVideo() to silently fail with no API errors
-  //
-  isPlaybackError(onErrorCallback)
-  {
-    debug.log(`YouTube.play() - current playerState: ${this.embeddedPlayer.getPlayerState()} - previous playerState: ${this.previousPlayerState} - playable: ${this.playable}`);
-
-    if ((this.embeddedPlayer.getPlayerState() === -1) && (this.previousPlayerState === -1) && (this.playable === true))
-    {
-      debug.warn(`MediaPlayer.YouTube.play() - Unable to play track: ${this.getArtist()} - "${this.getTitle()}" with videoId: ${this.embeddedPlayer.getVideoData().video_id} -- No YouTube API error given!`);
-
-      this.playable = false;
-      onErrorCallback(this, this.embeddedPlayer.getVideoUrl());
-
-      return true;
-    }
-
-    this.previousPlayerState = this.embeddedPlayer.getPlayerState();
-
-    return false;
-  }
+  cueTrackById(id)  { this.embeddedPlayer.cueVideoById(id);  }
+  playTrackById(id) { this.embeddedPlayer.loadVideoById(id); }
+  pause()           { this.embeddedPlayer.pauseVideo();      }
+  stop()            { this.embeddedPlayer.stopVideo();       }
 
   play(onErrorCallback)
   {
-    if (this.isPlaybackError(onErrorCallback) === false)
-    {
-      if (this.playable === true)
-        this.embeddedPlayer.playVideo();
-      else
-        onErrorCallback(this, this.embeddedPlayer.getVideoUrl());
-    }
+    if (this.isPlayable === true)
+      this.embeddedPlayer.playVideo();
+    else
+      onErrorCallback(this, this.embeddedPlayer.getVideoUrl());
   }
 
   getVolume(callback)
@@ -149,9 +143,10 @@ export class SoundCloud extends MediaPlayer
   constructor(trackId, iframeId, embeddedPlayer, iframeSrc)
   {
     super(trackId, iframeId, embeddedPlayer);
-    this.soundId = this.getSoundId(iframeSrc);
-    this.volume  = VOLUME.MAX;
-    this.muted   = false;
+    this.trackType = TRACK_TYPE.SOUNDCLOUD;
+    this.soundId   = this.getSoundId(iframeSrc);
+    this.volume    = VOLUME.MAX;
+    this.muted     = false;
   }
 
   getSoundId(iframeSrc)
@@ -195,7 +190,7 @@ export class SoundCloud extends MediaPlayer
   play(onErrorCallback)
   {
     // playable is set to FALSE if the widget fires SC.Widget.Events.ERROR (track does not exist)
-    if (this.playable === true)
+    if (this.isPlayable === true)
     {
       this.embeddedPlayer.getCurrentSound(soundObject =>
       {
@@ -264,6 +259,7 @@ export class Playlist extends MediaPlayer
   constructor(embeddedPlayer)
   {
     super(null, null, embeddedPlayer);
+    this.trackType    = TRACK_TYPE.YOUTUBE;
     this.numTracks    = 3;
     this.currentTrack = 2;
     this.playerState  = -1; // YT.PlayerState.UNSTARTED

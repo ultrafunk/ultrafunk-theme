@@ -10,7 +10,7 @@ import * as termlistRest      from './termlist-rest.js';
 import * as utils             from '../shared/utils.js';
 import ElementClick           from '../shared/element-click.js';
 import { shareModal }         from './share-modal.js';
-import { TRACK_TYPE }         from '../playback/shared-gallery-list.js';
+import { TRACK_TYPE }         from '../playback/mediaplayers.js';
 import { KEY, setCookie }     from '../shared/storage.js';
 import { PREF_PLAYER }        from '../shared/settings/settings.js';
 import { response, settings } from '../shared/session-data.js';

@@ -28,9 +28,7 @@ const m = {
 };
 
 const config = {
-  youTubeIframeIdRegEx:    /youtube-uid/i,
-  soundCloudIframeIdRegEx: /soundcloud-uid/i,
-  maxPlaybackStartDelay:   3, // VERY rough estimate of "max" network buffering delay in seconds (see also: maxBufferingDelay)
+  maxPlaybackStartDelay: 3, // VERY rough estimate of "max" network buffering delay in seconds (see also: maxBufferingDelay)
 };
 
 
@@ -75,10 +73,11 @@ function getAllPlayers()
 
   entries.forEach(entry => 
   {
-    const iframe = entry.querySelector('iframe');
-    let player   = null;
+    const trackType = parseInt(entry.getAttribute('data-track-type'));
+    const iframe    = entry.querySelector('iframe');
+    let player      = null;
 
-    if (config.youTubeIframeIdRegEx.test(iframe.id)) 
+    if (trackType === mediaPlayers.TRACK_TYPE.YOUTUBE) 
     {
       const embeddedPlayer = new YT.Player(iframe.id, // eslint-disable-line no-undef
       {
@@ -93,7 +92,7 @@ function getAllPlayers()
       player = new mediaPlayers.YouTube(entry.id, iframe.id, embeddedPlayer, entry.getAttribute('data-track-source-data'));
       player.setDuration(parseInt(entry.getAttribute('data-track-duration')));
     }
-    else if (config.soundCloudIframeIdRegEx.test(iframe.id))
+    else if (trackType === mediaPlayers.TRACK_TYPE.SOUNDCLOUD)
     {
       /* eslint-disable */
       const embeddedPlayer = SC.Widget(iframe.id);
@@ -116,8 +115,7 @@ function getAllPlayers()
 
     if (player !== null)
     {
-      player.setTitle(entry.getAttribute('data-track-title'));
-      player.setArtist(entry.getAttribute('data-track-artist'));
+      player.setArtistTitle(entry.getAttribute('data-track-artist'), entry.getAttribute('data-track-title'));
       m.players.add(player);
     }
   });
@@ -133,9 +131,9 @@ export function onPlayerError(player, mediaUrl)
   debug.log('onPlayerError()');
   debug.log(player);
 
-  const eventSource = (player instanceof mediaPlayers.SoundCloud)
-                        ? eventLogger.SOURCE.SOUNDCLOUD
-                        : eventLogger.SOURCE.YOUTUBE;
+  const eventSource = (player.getTrackType() === mediaPlayers.TRACK_TYPE.YOUTUBE)
+                        ? eventLogger.SOURCE.YOUTUBE
+                        : eventLogger.SOURCE.SOUNDCLOUD;
 
   // Stop the current track if it is not the one we are going to next
   if (m.players.isCurrent(player.getUid()) === false)
@@ -189,7 +187,14 @@ function initYouTubeAPI()
 function onYouTubePlayerReady(event, iframeId)
 {
   const player = m.players.playerFromUid(iframeId);
+  
   debug.log(`onYouTubePlayerReady(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - ${player.getTitle()}`);
+  
+  // YT.PlayerState.UNSTARTED (-1) here means the video is not available or playable anymore,
+  // so we set playbable to false for later use...
+  if (event.target.getPlayerState() === -1)
+    player.setIsPlayable(false);
+  
   updatePlayersReady();
 }
 
@@ -200,12 +205,12 @@ function onYouTubePlayerStateChange(event, iframeId)
   switch (event.data)
   {
     /* eslint-disable */
-    case YT.PlayerState.UNSTARTED: onYouTubeStateUnstarted(iframeId);      break;
-    case YT.PlayerState.BUFFERING: onYouTubeStateBuffering(iframeId);      break;
-    case YT.PlayerState.PLAYING:   onYouTubeStatePlaying(event, iframeId); break;
-    case YT.PlayerState.PAUSED:    onYouTubeStatePaused(iframeId);         break;
-    case YT.PlayerState.CUED:      onYouTubeStateCued(iframeId);           break;
-    case YT.PlayerState.ENDED:     onYouTubeStateEnded(iframeId);          break;
+    case YT.PlayerState.UNSTARTED: onYouTubeStateUnstarted(iframeId); break;
+    case YT.PlayerState.BUFFERING: onYouTubeStateBuffering(iframeId); break;
+    case YT.PlayerState.PLAYING:   onYouTubeStatePlaying(iframeId);   break;
+    case YT.PlayerState.PAUSED:    onYouTubeStatePaused(iframeId);    break;
+    case YT.PlayerState.CUED:      onYouTubeStateCued(iframeId);      break;
+    case YT.PlayerState.ENDED:     onYouTubeStateEnded(iframeId);     break;
     /* eslint-enable */
   }
 }
@@ -231,7 +236,7 @@ function onYouTubeStateBuffering(iframeId)
   }
 }
 
-function onYouTubeStatePlaying(event, iframeId)
+function onYouTubeStatePlaying(iframeId)
 {
   debug.log(`onYouTubePlayerStateChange: PLAYING   (uID: ${iframeId})`);
   
@@ -258,6 +263,18 @@ function onYouTubeStatePaused(iframeId)
 function onYouTubeStateCued(iframeId)
 {
   debug.log(`onYouTubePlayerStateChange: CUED      (uID: ${iframeId})`);
+
+  const player = m.players.playerFromUid(iframeId);
+  
+  if (('isSingleTrackNextCued' in player) && player.isSingleTrackNextCued)
+  {
+    delete player.isSingleTrackNextCued;
+
+    if (player.embeddedPlayer.getDuration() === 0)
+      player.setIsPlayable(false);
+
+    debug.log(`onYouTubePlayerStateChange: CUED      Duration: ${player.embeddedPlayer.getDuration()} - isPlayable: ${player.getIsPlayable()}`);
+  }
 }
 
 function onYouTubeStateEnded(iframeId)
@@ -280,7 +297,7 @@ function onYouTubePlayerError(event, iframeId)
   debug.log('onYouTubePlayerError: ' + event.data);
 
   const player = m.players.playerFromUid(iframeId);
-  player.setPlayable(false);
+  player.setIsPlayable(false);
   onPlayerError(player, event.target.getVideoUrl());
 }
 
@@ -317,7 +334,6 @@ function onSoundCloudPlayerEventPlay(event)
   {
     // Call order is important on play events for state handling: Always sync first!
     m.playbackState.syncAll(event.soundId, m.playbackState.STATE.PLAY);
-
     m.players.current.mute(settings.playback.masterMute);
     m.players.current.setVolume(settings.playback.masterVolume);
   }
@@ -382,6 +398,6 @@ function onSoundCloudPlayerEventError()
   {
     const player = m.players.playerFromUid(soundObject.id);
     debug.log(`onSoundCloudPlayerEvent: ERROR for track: ${m.players.trackFromUid(soundObject.id)}. ${player.getArtist()} - ${player.getTitle()} - [${player.getUid()} / ${player.getIframeId()}]`);
-    player.setPlayable(false);
+    player.setIsPlayable(false);
   });
 }

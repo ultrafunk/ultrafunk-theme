@@ -31,7 +31,7 @@ const galleryPerPageValues       = [...Array(22).keys()].map(i => i + 3);
 const galleryPerPageValueStrings = [...Array(22).keys()].map(i => `${i + 3}`);
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 11, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 14, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -49,14 +49,15 @@ export const settingsSchema = {
     showLoadMoreTracks:  { description: 'Show "Load More Tracks..." prompt', type: BOOLEAN, values: [true, false], default: true, valueStrings: ['ON', 'OFF'] },
   },
   gallery: {
-    layout:                  { description: 'Track Layout',                      type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
-    tracksPerPage:           { description: 'Tracks Per Page: Search & Shuffle', type: INTEGER, values: galleryPerPageValues,    default: 12,    valueStrings: galleryPerPageValueStrings },
-    autoCrossfade:           { description: 'Auto Crossfade to next track',      type: BOOLEAN, values: [true, false],           default: false, valueStrings: ['ON', 'OFF'] },
-    autoCrossfadeLength:     { description: 'Auto Crossfade Length',             type: INTEGER, values: [5, 10, 15, 20, 25, 30], default: 20,    valueStrings: ['5 sec', '10 sec', '15 sec', '20 sec', '25 sec', '30 sec'] },
-    autoCrossfadeCurve:      { description: 'Auto Crossfade Curve',              type: INTEGER, values: [1, 2],                  default: 2,     valueStrings: ['Equal Power', 'Linear'] },
-    autoScroll:              { description: 'Autoscroll to next track',          type: BOOLEAN, values: [true, false],           default: true,  valueStrings: ['ON', 'OFF'] },
-    animateNowPlayingIcon:   { description: 'Animate Now Playing Track Icon',    type: BOOLEAN, values: [true, false],           default: true,  valueStrings: ['ON', 'OFF'] },
-    trackCrossfadeDefPreset: { description: 'Track Crossfade Def. Preset',       type: INTEGER, values: [0, 1, 2, 3, 4, 5],      default: 1,     valueStrings: ['10 sec EqPow (1)', '20 sec EqPow (2)', '30 sec EqPow (3)', '10 sec Linear (4)', '20 sec Linear (5)', '30 sec Linear (6)'] },
+    layout:                  { description: 'Track Layout',                           type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
+  //singleTrackNextNoReload: { description: 'Play single tracks without page reload', type: BOOLEAN, values: [true, false],           default: false, valueStrings: ['ON', 'OFF'] },
+    tracksPerPage:           { description: 'Tracks Per Page: Search & Shuffle',      type: INTEGER, values: galleryPerPageValues,    default: 12,    valueStrings: galleryPerPageValueStrings },
+    autoCrossfade:           { description: 'Auto Crossfade to next track',           type: BOOLEAN, values: [true, false],           default: false, valueStrings: ['ON', 'OFF'] },
+    autoCrossfadeLength:     { description: 'Auto Crossfade Length',                  type: INTEGER, values: [5, 10, 15, 20, 25, 30], default: 20,    valueStrings: ['5 sec', '10 sec', '15 sec', '20 sec', '25 sec', '30 sec'] },
+    autoCrossfadeCurve:      { description: 'Auto Crossfade Curve',                   type: INTEGER, values: [1, 2],                  default: 2,     valueStrings: ['Equal Power', 'Linear'] },
+    autoScroll:              { description: 'Autoscroll to next track',               type: BOOLEAN, values: [true, false],           default: true,  valueStrings: ['ON', 'OFF'] },
+    animateNowPlayingIcon:   { description: 'Animate Now Playing Track Icon',         type: BOOLEAN, values: [true, false],           default: true,  valueStrings: ['ON', 'OFF'] },
+    trackCrossfadeDefPreset: { description: 'Track Crossfade Def. Preset',            type: INTEGER, values: [0, 1, 2, 3, 4, 5],      default: 1,     valueStrings: ['10 sec EqPow (1)', '20 sec EqPow (2)', '30 sec EqPow (3)', '10 sec Linear (4)', '20 sec Linear (5)', '30 sec Linear (6)'] },
   },
   mobile: {
     keepScreenOn:        { description: 'Keep Screen On when playing', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
@@ -69,6 +70,9 @@ export const settingsSchema = {
     theme:               { description: 'Theme',                                 type: STRING,  values: ['light', 'dark', 'auto'],            default: 'auto', valueStrings: ['Light', 'Dark', 'Auto / System'] },
     smoothScrolling:     { description: 'Use Smooth Scrolling (where possible)', type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
     modalOverlayOpacity: { description: 'Modal overlay opacity',                 type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
+  },
+  experimental: {
+    singleTrackNextNoReload: { description: '<b>Gallery:</b> Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   },
   tips: {
     showTrackDetailsHint:          { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
@@ -104,6 +108,7 @@ export const defaultSettings = {
   },
   gallery: {
     layout:                  settingsSchema.gallery.layout.default,
+  //singleTrackNextNoReload: settingsSchema.gallery.singleTrackNextNoReload.default,
     tracksPerPage:           settingsSchema.gallery.tracksPerPage.default,
     autoCrossfade:           settingsSchema.gallery.autoCrossfade.default,
     autoCrossfadeLength:     settingsSchema.gallery.autoCrossfadeLength.default,
@@ -123,6 +128,9 @@ export const defaultSettings = {
     theme:               settingsSchema.site.theme.default,
     smoothScrolling:     settingsSchema.site.smoothScrolling.default,
     modalOverlayOpacity: settingsSchema.site.modalOverlayOpacity.default,
+  },
+  experimental: {
+    singleTrackNextNoReload: settingsSchema.experimental.singleTrackNextNoReload.default,
   },
   tips: {
     showTrackDetailsHint:          settingsSchema.tips.showTrackDetailsHint.default,
