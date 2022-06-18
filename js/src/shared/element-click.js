@@ -22,7 +22,14 @@ export default class ElementClick
   clicked(selector)
   {
     this.element = this.event.target.closest(selector);
-    return this.element;
+
+    if (this.element !== null)
+    {
+      this.event.stopImmediatePropagation();
+      return true;
+    }
+    
+    return false;
   }
 
   closest(selector)

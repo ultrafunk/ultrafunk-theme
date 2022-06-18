@@ -51,12 +51,12 @@ export function init(mediaPlayers, crossfadeClickCallback)
     ctrl.crossfadeTo.clickCallback = crossfadeClickCallback;
   }
 
-  playbackEvents.addListener(playbackEvents.EVENT.READY, ready);
+  playbackEvents.addListener(playbackEvents.EVENT.PLAYBACK_READY, playbackReady);
 }
 
-export function ready()
+export function playbackReady()
 {
-  debug.log('ready()');
+  debug.log('playbackReady()');
 
   if ((ctrl.crossfadePreset.length > 1) && (ctrl.crossfadeTo.length > 1))
   {

@@ -5,17 +5,21 @@
 //
 
 
-import * as debugLogger        from '../shared/debuglogger.js';
-import * as eventLogger        from './eventlogger.js';
-import * as galleryPlayback    from './gallery/gallery-playback.js';
-import * as listPlayback       from './list/list-playback.js';
-import * as playbackEvents     from './playback-events.js';
-import * as utils              from '../shared/utils.js';
-import * as footerToggles      from './footer-toggles.js';
-import { showSnackbar }        from '../shared/snackbar.js';
-import { initScreenWakeLock }  from './screen-wakelock.js';
-import { playNextSingleTrack } from './gallery/single-track-next.js';
-import { TRACK_TYPE }          from './mediaplayers.js';
+import * as debugLogger       from '../shared/debuglogger.js';
+import * as eventLogger       from './eventlogger.js';
+import * as galleryPlayback   from './gallery/gallery-playback.js';
+import * as listPlayback      from './list/list-playback.js';
+import * as playbackEvents    from './playback-events.js';
+import * as utils             from '../shared/utils.js';
+import * as footerToggles     from './footer-toggles.js';
+import { showSnackbar }       from '../shared/snackbar.js';
+import { initScreenWakeLock } from './screen-wakelock.js';
+import { TRACK_TYPE }         from './mediaplayers.js';
+
+import {
+  isNextTrackLoading,
+  playNextSingleTrack,
+} from './gallery/single-track-next.js';
 
 import {
   setPlaybackControlsCss,
@@ -102,7 +106,7 @@ function initShared()
 
 function initPlaybackEvents()
 {
-  playbackEvents.addListener(playbackEvents.EVENT.READY,                playbackEventReady);
+  playbackEvents.addListener(playbackEvents.EVENT.PLAYBACK_READY,       playbackEventPlaybackReady);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_NEXT,       playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,          playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_TIME_REMAINING, playbackEventMediaTimeRemaining);
@@ -158,25 +162,11 @@ function documentEventKeyDown(event)
         break;
 
       case 'ArrowLeft':
-        {
-          event.preventDefault();
-          
-          if (event.shiftKey === true)
-            prevNextNavTo(null, response.prevPage);
-          else
-            m.player.prevTrack();
-        }
+        onKeyArrowLeft(event);
         break;
 
       case 'ArrowRight':
-        {
-          event.preventDefault();
-
-          if (event.shiftKey === true)
-            prevNextNavTo(null, response.nextPage);
-          else
-            m.player.nextTrack();
-        }
+        onKeyArrowRight(event);
         break;
 
       case 'A':
@@ -198,15 +188,7 @@ function documentEventKeyDown(event)
 
       case 'n':
       case 'N':
-        if (settings.experimental.singleTrackNextNoReload)
-        {
-          event.preventDefault();
-
-          if (m.player.getStatus().trackType === TRACK_TYPE.YOUTUBE)
-            playNextSingleTrack(m.player.getStatus().isPlaying);
-          else
-            prevNextNavTo(null, response.nextPage);
-        }
+        onKeySingleTrackNext(event);
         break;
 
       case 'p':
@@ -264,10 +246,55 @@ function documentEventMediaKeyDown(event)
 
 
 // ************************************************************************************************
+// Keyboard event handlers
+// ************************************************************************************************
+
+function onKeyArrowLeft(event)
+{
+  event.preventDefault();
+  
+  if (event.shiftKey === true)
+    prevNextNavTo(null, response.prevPage);
+  else
+    m.player.prevTrack();
+}
+
+function onKeyArrowRight(event)
+{
+  event.preventDefault();
+
+  if (event.shiftKey === true)
+    prevNextNavTo(null, response.nextPage);
+  else
+    m.player.nextTrack();
+}
+
+function onKeySingleTrackNext(event)
+{
+  if (settings.experimental.singleTrackNextNoReload)
+  {
+    event.preventDefault();
+
+    if (m.player.getStatus().trackType === TRACK_TYPE.YOUTUBE)
+    {
+      if (isNextTrackLoading() === false)
+        playNextSingleTrack(m.player.getStatus().isPlaying);
+      else
+        showSnackbar('Loading next track, please wait...', 3);
+    }
+    else
+    {
+      prevNextNavTo(null, response.nextPage);
+    }
+  }
+}
+
+
+// ************************************************************************************************
 // playbackEvent listeners
 // ************************************************************************************************
 
-function playbackEventReady()
+function playbackEventPlaybackReady()
 {
   utils.addListener('.playback-details-control',   'click', playbackDetailsClick);
   utils.addListener('.playback-thumbnail-control', 'click', playbackThumbnailClick);

@@ -6,6 +6,7 @@
 
 
 import * as debugLogger from '../../shared/debuglogger.js';
+import { KEY }          from '../../shared/storage.js';
 import { TRACK_TYPE }   from '../mediaplayers.js';
 import { showSnackbar } from '../../shared/snackbar.js';
 
@@ -30,6 +31,7 @@ const m = {
   cueOrPlayTrackById: null,
   trackDateTime:      null,
   nextTrack:          null,
+  isNextTrackLoading: false,
 };
 
 
@@ -42,6 +44,11 @@ export function isSingleTrackNext()
   return (document.body.matches('.single.track') && settings.experimental.singleTrackNextNoReload);
 }
 
+export function isNextTrackLoading()
+{
+  return m.isNextTrackLoading;
+}
+
 export function singleTrackNextReady(cueOrPlayTrackByIdCallback)
 {
   if (isSingleTrackNext())
@@ -50,11 +57,15 @@ export function singleTrackNextReady(cueOrPlayTrackByIdCallback)
 
     m.cueOrPlayTrackById = cueOrPlayTrackByIdCallback;
     m.trackDateTime      = document.querySelector('single-track').getAttribute('data-track-date-time');
+
+    addEventListener('popstate', () => location.reload());
   }
 }
 
 export async function playNextSingleTrack(playTrack = false)
 {
+  m.isNextTrackLoading = true;
+
   if (isSingleTrackNext())
   {
     const restResponse = await fetchNextTrack(m.nextTrack);
@@ -73,14 +84,22 @@ export async function playNextSingleTrack(playTrack = false)
       }
       else
       {
-        showSnackbar('SoundCloud track, skipping to next', 5, 'Play', () => (window.location.href = m.nextTrack.link), () => playNextSingleTrack(playTrack));
+        showSnackbar('SoundCloud track, skipping to next', 5, 'Play', () => 
+        {
+          sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: true, trackId: null, position: 0 }));
+          window.location.href = m.nextTrack.link;
+        },
+        () => playNextSingleTrack(playTrack));
       }
     }
     else
     {
-      showSnackbar('Failed to fetch track data!', 10, 'Retry', () => playNextSingleTrack(playTrack));
+      if (restResponse.status.code !== 200)
+        showSnackbar('Failed to fetch track data!', 10, 'Retry', () => playNextSingleTrack(playTrack));
     }
   }
+
+  m.isNextTrackLoading = false;
 }
 
 

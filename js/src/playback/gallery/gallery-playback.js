@@ -309,10 +309,10 @@ function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
       nextTrack(true);
       break;
 
-    case playbackEvents.EVENT.READY:
+    case playbackEvents.EVENT.PLAYBACK_READY:
       playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
       singleTrackNextReady(cueOrPlaySingleTrackNextById);
-      playbackEvents.dispatch(playbackEvents.EVENT.READY, embeddedEventData);
+      playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, embeddedEventData);
       playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
       break;
 

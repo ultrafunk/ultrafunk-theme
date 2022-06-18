@@ -57,9 +57,9 @@ function getLoadingPercent()
 function updatePlayersReady()
 {
   if (m.loadEventsCount >= m.loadEventsTotal)
-    m.embeddedEvent(playbackEvents.EVENT.READY, { resetProgressBar: true });
+    m.embeddedEvent(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: true });
   else
-    playbackEvents.dispatch(playbackEvents.EVENT.LOADING, getLoadingPercent());
+    playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, getLoadingPercent());
 }
 
 
@@ -166,12 +166,12 @@ function getPlayerErrorData(player, mediaUrl)
 function initYouTubeAPI()
 {
   debug.log('initYouTubeAPI()');
-  playbackEvents.dispatch(playbackEvents.EVENT.LOADING, getLoadingPercent());
+  playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, getLoadingPercent());
 
   window.onYouTubeIframeAPIReady = function()
   {
     debug.log('onYouTubeIframeAPIReady()');
-    playbackEvents.dispatch(playbackEvents.EVENT.LOADING, getLoadingPercent());
+    playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, getLoadingPercent());
   
     // ToDo: THIS SHOULD NOT BE TRIGGERED HERE ONLY?
     getAllPlayers();
@@ -266,6 +266,7 @@ function onYouTubeStateCued(iframeId)
 
   const player = m.players.playerFromUid(iframeId);
   
+  // Handle single track next loaded and checking for track duration, if it is 0, it is not playable
   if (('isSingleTrackNextCued' in player) && player.isSingleTrackNextCued)
   {
     delete player.isSingleTrackNextCued;
@@ -310,7 +311,7 @@ function onYouTubePlayerError(event, iframeId)
 function initSoundCloudAPI()
 {
   debug.log('initSoundCloudAPI()');
-  playbackEvents.dispatch(playbackEvents.EVENT.LOADING, getLoadingPercent());
+  playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, getLoadingPercent());
 }
 
 function onSoundCloudPlayerEventReady(player, iframeId)
