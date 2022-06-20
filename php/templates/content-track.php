@@ -8,15 +8,27 @@
 namespace Ultrafunk\Theme\Templates\Track;
 
 
-?>
+/**************************************************************************************************************************/
 
+
+$track_date_time = '';
+
+if (is_single())
+{
+  $next_post = get_next_post();
+
+  if (!empty($next_post))
+    $track_date_time = str_replace(' ', 'T', $next_post->post_date);
+}
+
+?>
 <single-track id="track-<?php the_ID(); ?>" class=""
   data-track-type="<?php echo intval($post->track_source_type); ?>"
   data-track-artist="<?php echo esc_html($post->track_artist); ?>"
   data-track-title="<?php echo esc_html($post->track_title); ?>"
   data-track-duration="<?php echo intval($post->track_duration); ?>"
   data-track-source-data="<?php echo esc_html($post->track_source_data); ?>"
-  data-track-date-time="<?php echo esc_html(str_replace(' ', 'T', $post->post_date)); ?>"
+  data-track-date-time="<?php echo esc_html($track_date_time); ?>"
   >
   <header class="entry-header">
     <?php \Ultrafunk\Theme\Tags\entry_title(); ?>

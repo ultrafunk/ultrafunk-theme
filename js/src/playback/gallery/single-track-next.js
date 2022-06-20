@@ -16,7 +16,6 @@ import {
 } from '../../shared/session-data.js';
 
 import {
-  escHtml,
   fetchRest,
   getThumbnailData,
 } from '../../shared/utils.js';
@@ -29,14 +28,14 @@ const debug = debugLogger.newInstance('single-track-next');
 
 const m = {
   cueOrPlayTrackById: null,
-  trackDateTime:      null,
-  nextTrack:          null,
+  startTrackDateTime: null,
+  loadTracksDateTime: null,
   isNextTrackLoading: false,
 };
 
 
 // ************************************************************************************************
-//
+// Exports
 // ************************************************************************************************
 
 export function isSingleTrackNext()
@@ -56,38 +55,39 @@ export function singleTrackNextReady(cueOrPlayTrackByIdCallback)
     debug.log('ready()');
 
     m.cueOrPlayTrackById = cueOrPlayTrackByIdCallback;
-    m.trackDateTime      = document.querySelector('single-track').getAttribute('data-track-date-time');
+    m.startTrackDateTime = document.querySelector('single-track').getAttribute('data-track-date-time');
 
-    addEventListener('popstate', () => location.reload());
+    window.addEventListener('popstate', (event) =>
+    {
+      (event.state === null) ? location.reload() : updatePlayerAndPage(event.state, false, false);
+    });
   }
 }
 
 export async function playNextSingleTrack(playTrack = false)
 {
-  m.isNextTrackLoading = true;
-
   if (isSingleTrackNext())
   {
-    const restResponse = await fetchNextTrack(m.nextTrack);
+    m.isNextTrackLoading = true;
+    const restResponse   = await fetchTracks(m.loadTracksDateTime);
 
-    if ((restResponse !== null) && (restResponse.status.code === 200) && (restResponse.data.length !== 0))
+    if ((restResponse !== null) && (restResponse.status.code === 200) && (restResponse.data.length > 1))
     {
-      m.nextTrack = restResponse.data[0];
+      m.loadTracksDateTime = restResponse.data[0].date;
+      const currentTrack   = restResponse.data[1];
   
-      debug.log(`playNextSingleTrack() - playTrack: ${playTrack} - trackType: ${debug.getKeyForValue(TRACK_TYPE, m.nextTrack.meta.track_source_type)} => ${getTrackTitle(m.nextTrack.meta)}`);
+      debug.log(`playNextSingleTrack() - playTrack: ${playTrack} - trackType: ${debug.getKeyForValue(TRACK_TYPE, currentTrack.meta.track_source_type)} => ${getTrackTitle(currentTrack.meta)}`);
   
-      if (m.nextTrack.meta.track_source_type === TRACK_TYPE.YOUTUBE)
+      if (currentTrack.meta.track_source_type === TRACK_TYPE.YOUTUBE)
       {
-        const thumbnailData = getThumbnailData(m.nextTrack.meta);
-        m.cueOrPlayTrackById(m.nextTrack.meta, thumbnailData, playTrack);
-        updatePage(restResponse.data, thumbnailData);
+        updatePlayerAndPage(restResponse.data, playTrack, true);
       }
       else
       {
         showSnackbar('SoundCloud track, skipping to next', 5, 'Play', () => 
         {
           sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: true, trackId: null, position: 0 }));
-          window.location.href = m.nextTrack.link;
+          window.location.href = currentTrack.link;
         },
         () => playNextSingleTrack(playTrack));
       }
@@ -104,20 +104,18 @@ export async function playNextSingleTrack(playTrack = false)
 
 
 // ************************************************************************************************
-//
+// Support functions
 // ************************************************************************************************
 
-async function fetchNextTrack(currentTrack)
+async function fetchTracks(tracksDateTime)
 {
-  let beforeTrackDate = null;
+  let beforeTrackDateTime = tracksDateTime;
 
-  if (currentTrack === null)
-    beforeTrackDate = (m.trackDateTime !== '') ? m.trackDateTime : null;
-  else
-    beforeTrackDate = (currentTrack?.date !== undefined) ? currentTrack.date : null;
+  if (tracksDateTime === null)
+    beforeTrackDateTime = (m.startTrackDateTime !== '') ? m.startTrackDateTime : '3000-01-01T00:00:01'; // Before the year 3000 should be enough for a while...
 
-  if (beforeTrackDate !== null)
-    return await fetchRest('tracks', `before=${beforeTrackDate}&per_page=2&_fields=id,date,link,meta,artists_links,channels_links`, true);
+  if (beforeTrackDateTime !== null)
+    return await fetchRest('tracks', `before=${beforeTrackDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, true);
 
   return null;
 }
@@ -127,19 +125,12 @@ function getTrackTitle(titleData)
   return `${titleData.track_artist} - ${titleData.track_title}`;
 }
 
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
-
-function updatePage(trackData, thumbnailData)
+function updatePlayerAndPage(trackData, playTrack = false, pushState = true)
 {
-  updateNavLinks(document.querySelector('div.nav-links'), trackData);
-  updateTrackHeader(document.querySelector('header.entry-header'), trackData[0]);
-  updateTrackAttributes(trackData[0], thumbnailData);
+  const thumbnailData = getThumbnailData(trackData[1].meta);
 
-  history.pushState({}, '', trackData[0].link);
-  document.title = getTrackTitle(trackData[0].meta);
+  m.cueOrPlayTrackById(trackData[1].meta, thumbnailData, playTrack);
+  updatePage(trackData, thumbnailData, pushState);
 }
 
 function getTrackNavHtml(isNavPrev, navUrl, navTitle)
@@ -153,20 +144,39 @@ function getTrackNavHtml(isNavPrev, navUrl, navTitle)
     </div>`;
 }
 
+function setElementAttributes(element, attributes)
+{
+  Object.keys(attributes).forEach(key => element.setAttribute(`data-${key}`, attributes[key]));
+}
+
+
+// ************************************************************************************************
+// Update DOM functions
+// ************************************************************************************************
+
+function updatePage(trackData, thumbnailData, pushState = true)
+{
+  updateNavLinks(document.querySelector('div.nav-links'), trackData);
+  updateTrackHeader(document.querySelector('header.entry-header'), trackData[1]);
+  updateTrackAttributes(trackData[1], thumbnailData);
+
+  if (pushState)
+    history.pushState(trackData, '', trackData[1].link);
+
+  document.title = getTrackTitle(trackData[1].meta);
+}
+
 function updateNavLinks(element, trackData)
 {
-  let trackNavHtml = getTrackNavHtml(true, 
-    encodeURIComponent(window.location.href),
-    escHtml(document.querySelector('h2.entry-title').textContent)
-  );
+  let trackNavHtml = getTrackNavHtml(true, trackData[0].link, getTrackTitle(trackData[0].meta));
   
-  response.prevPage = window.location.href;
+  response.prevPage = trackData[0].link;
   response.nextPage = null;
   
-  if (trackData.length === 2)
+  if (trackData.length === 3)
   {
-    trackNavHtml     += getTrackNavHtml(false, trackData[1].link, getTrackTitle(trackData[1].meta));
-    response.nextPage = trackData[1].link;
+    trackNavHtml     += getTrackNavHtml(false, trackData[2].link, getTrackTitle(trackData[2].meta));
+    response.nextPage = trackData[2].link;
   }
 
   element.innerHTML = trackNavHtml;
@@ -177,11 +187,6 @@ function updateTrackHeader(element, trackData)
   element.querySelector('h2.entry-title').textContent = getTrackTitle(trackData.meta);
   element.querySelector('div.entry-meta-artists  .term-links').innerHTML = trackData.artists_links;
   element.querySelector('div.entry-meta-channels .term-links').innerHTML = trackData.channels_links;
-}
-
-function setElementAttributes(element, attributes)
-{
-  Object.keys(attributes).forEach(key => element.setAttribute(`data-${key}`, attributes[key]));
 }
 
 function updateTrackAttributes(trackData, thumbnailData)
