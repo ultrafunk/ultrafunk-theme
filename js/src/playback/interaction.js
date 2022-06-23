@@ -271,7 +271,7 @@ function onKeyArrowRight(event)
 
 function onKeySingleTrackNext(event)
 {
-  if (settings.experimental.singleTrackNextNoReload)
+  if (settings.gallery.singleTrackNextNoReload)
   {
     event.preventDefault();
 

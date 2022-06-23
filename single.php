@@ -11,7 +11,7 @@ if (have_posts())
   while (have_posts())
   {
     the_post();
-    get_template_part('php/templates/content', 'track');
+    get_template_part('php/templates/content', 'single-track');
 
     ?>
     <nav class="navigation track-navigation" aria-label="Tracks">

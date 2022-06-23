@@ -1,14 +1,46 @@
 <?php declare(strict_types=1);
 /*
- * Single track template for pages with multiple tracks
+ * Single (standalone) track template
  *
  */
 
 
-namespace Ultrafunk\Theme\Templates\Track;
+namespace Ultrafunk\Theme\Templates\SingleTrack;
 
 
 use Ultrafunk\Plugin\Constants\TRACK_TYPE;
+
+
+/**************************************************************************************************************************/
+
+
+function get_track_date_time() : string
+{
+  $next_post = get_next_post();
+  
+  if (!empty($next_post))
+    return str_replace(' ', 'T', $next_post->post_date);
+
+  return '';
+}
+
+function entry_content(object $post) : void
+{
+  if (intval($post->track_source_type) === TRACK_TYPE::SOUNDCLOUD)
+  {
+    the_content();
+  }
+  else
+  {
+    ?>
+    <figure class="wp-block-embed">
+      <div class="wp-block-embed__wrapper">
+        <div id="youtube-player"></div>
+      </div>
+    </figure>
+    <?php
+  }
+}
 
 
 /**************************************************************************************************************************/
@@ -29,6 +61,7 @@ $is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
   <?php if ($is_youtube_track) { ?>
     data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
   <?php } ?>
+  data-track-date-time="<?php echo esc_html(get_track_date_time()); ?>"
   >
   <header class="entry-header">
     <?php \Ultrafunk\Theme\Tags\entry_title(); ?>
@@ -43,6 +76,6 @@ $is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
     </div>
   </header>
   <div class="entry-content">
-    <?php the_content(); ?>
+    <?php entry_content($post); ?>
   </div>
 </single-track>

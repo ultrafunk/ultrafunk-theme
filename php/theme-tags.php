@@ -8,10 +8,7 @@
 namespace Ultrafunk\Theme\Tags;
 
 
-use Ultrafunk\Plugin\Constants\ {
-  PLAYER_TYPE,
-  TRACK_TYPE,
-};
+use Ultrafunk\Plugin\Constants\PLAYER_TYPE;
 
 use const Ultrafunk\Theme\Constants\THEME_ENV;
 
@@ -458,24 +455,12 @@ function entry_title() : void
     esc_html(the_title(sprintf('<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url(get_permalink())), '</a></h2>'));
 }
 
-function meta_controls(object $post) : void
+function meta_controls() : void
 {
-  $track_data       = \Ultrafunk\Plugin\Shared\get_track_data($post);
-  $is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
-  
   ?>
   <div class="entry-meta-controls">
     <div class="track-share-control">
-      <span class="material-icons" title="Share track / Play On"
-        data-track-type="<?php echo $post->track_source_type; ?>"
-        data-track-artist="<?php echo esc_html($post->track_artist); ?>"
-        data-track-title="<?php echo esc_html($post->track_title); ?>"
-        data-track-url="<?php echo esc_url(get_permalink()); ?>"
-        data-track-thumbnail-url="<?php echo $track_data['thumnail_src']; ?>"
-        <?php if ($is_youtube_track) { ?>
-          data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
-        <?php } ?>
-        >share</span>
+      <span class="material-icons" title="Share track / Play On">share</span>
     </div>
     <div class="crossfade-controls">
       <div class="crossfade-preset-control state-disabled"></div>

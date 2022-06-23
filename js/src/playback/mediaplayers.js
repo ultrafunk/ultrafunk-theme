@@ -94,11 +94,11 @@ class MediaPlayer
 
 export class YouTube extends MediaPlayer
 {
-  constructor(trackId, iframeId, embeddedPlayer, trackSourceUrl)
+  constructor(trackId, iframeId, embeddedPlayer, videoId)
   {
     super(trackId, iframeId, embeddedPlayer);
     this.trackType = TRACK_TYPE.YOUTUBE;
-    super.setThumbnail(getYouTubeImgUrl(trackSourceUrl));
+    super.setThumbnail(getYouTubeImgUrl(videoId));
   }
 
   cueTrackById(id)  { this.embeddedPlayer.cueVideoById(id);  }
@@ -284,9 +284,9 @@ export class Playlist extends MediaPlayer
     }
   }
 
-  setThumbnail(youTubeVideoId)
+  setThumbnail(videoId)
   {
-    super.setThumbnail(getYouTubeImgUrl(`youtube.com/watch?v=${youTubeVideoId}`));
+    super.setThumbnail(getYouTubeImgUrl(videoId));
   }
 
   getTrackData()
@@ -309,6 +309,8 @@ export class Playlist extends MediaPlayer
 
 // Default / fallback track thumbnail object
 const defThumbnailObj = { src: '/wp-content/themes/ultrafunk/inc/img/photo_filled_grey.png', class: 'type-default', uid: '' };
+
+// https://webapps.stackexchange.com/a/101153
 export const youTubeVideoIdRegEx = /[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/;
 
 export function getYouTubeImgUrl(trackSourceUrl)

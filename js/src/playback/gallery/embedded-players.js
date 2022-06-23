@@ -69,39 +69,33 @@ function updatePlayersReady()
 
 function getAllPlayers()
 {
-  const entries = document.querySelectorAll('single-track');
+  const elements = document.querySelectorAll('single-track');
 
-  entries.forEach(entry => 
+  elements.forEach(element => 
   {
-    const trackType = parseInt(entry.getAttribute('data-track-type'));
-    const iframe    = entry.querySelector('iframe');
+    const trackType = parseInt(element.getAttribute('data-track-type'));
+    const iframe    = element.querySelector('iframe');
     let player      = null;
 
-    if (trackType === mediaPlayers.TRACK_TYPE.YOUTUBE) 
+    if (trackType === mediaPlayers.TRACK_TYPE.YOUTUBE)
     {
-      const embeddedPlayer = new YT.Player(iframe.id, // eslint-disable-line no-undef
-      {
-        events:
-        {
-          onReady:       (event) => onYouTubePlayerReady(event, iframe.id),
-          onStateChange: (event) => onYouTubePlayerStateChange(event, iframe.id),
-          onError:       (event) => onYouTubePlayerError(event, iframe.id),
-        }
-      });
+    //debug.log(`getAllPlayers() - isYouTubeSingleTrack: ${(elements.length === 1) && (iframe === null)}`);
 
-      player = new mediaPlayers.YouTube(entry.id, iframe.id, embeddedPlayer, entry.getAttribute('data-track-source-data'));
-      player.setDuration(parseInt(entry.getAttribute('data-track-duration')));
+      if ((elements.length === 1) && (iframe === null))
+        player = getYouTubePlayer('youtube-player', element, true);
+      else
+        player = getYouTubePlayer(iframe.id, element, false);
     }
     else if (trackType === mediaPlayers.TRACK_TYPE.SOUNDCLOUD)
     {
       /* eslint-disable */
       const embeddedPlayer = SC.Widget(iframe.id);
-      player = new mediaPlayers.SoundCloud(entry.id, iframe.id, embeddedPlayer, iframe.src);
+      player = new mediaPlayers.SoundCloud(element.id, iframe.id, embeddedPlayer, iframe.src);
 
       // Preload thumbnail image as early as possible
       embeddedPlayer.bind(SC.Widget.Events.READY, () =>
       {
-        player.setThumbnail(entry.querySelector('.track-share-control span'));
+        player.setThumbnail(element);
         embeddedPlayer.getDuration(durationMilliseconds => player.setDuration(Math.round(durationMilliseconds / 1000)));
         onSoundCloudPlayerEventReady(player, iframe.id);
       });
@@ -115,10 +109,31 @@ function getAllPlayers()
 
     if (player !== null)
     {
-      player.setArtistTitle(entry.getAttribute('data-track-artist'), entry.getAttribute('data-track-title'));
+      player.setArtistTitle(element.getAttribute('data-track-artist'), element.getAttribute('data-track-title'));
       m.players.add(player);
     }
   });
+}
+
+function getYouTubePlayer(playerId, element, addYTPlayerVideoId = false)
+{
+  const videoId = element.getAttribute('data-track-source-uid');
+  
+  const embeddedPlayer = new YT.Player(playerId, // eslint-disable-line no-undef
+  {
+    events:
+    {
+      onReady:       (event) => onYouTubePlayerReady(event, playerId),
+      onStateChange: (event) => onYouTubePlayerStateChange(event, playerId),
+      onError:       (event) => onYouTubePlayerError(event, playerId),
+    },
+    ...addYTPlayerVideoId && { videoId: videoId },
+  });
+
+  const player = new mediaPlayers.YouTube(element.id, playerId, embeddedPlayer, videoId);
+  player.setDuration(parseInt(element.getAttribute('data-track-duration')));
+
+  return player;
 }
 
 

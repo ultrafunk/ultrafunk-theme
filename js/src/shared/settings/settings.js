@@ -31,7 +31,7 @@ const galleryPerPageValues       = [...Array(22).keys()].map(i => i + 3);
 const galleryPerPageValueStrings = [...Array(22).keys()].map(i => `${i + 3}`);
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 14, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 17, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -50,7 +50,7 @@ export const settingsSchema = {
   },
   gallery: {
     layout:                  { description: 'Track Layout',                           type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
-  //singleTrackNextNoReload: { description: 'Play single tracks without page reload', type: BOOLEAN, values: [true, false],           default: false, valueStrings: ['ON', 'OFF'] },
+    singleTrackNextNoReload: { description: 'Play single tracks without page reload', type: BOOLEAN, values: [true, false],           default: true,  valueStrings: ['ON', 'OFF'] },
     tracksPerPage:           { description: 'Tracks Per Page: Search & Shuffle',      type: INTEGER, values: galleryPerPageValues,    default: 12,    valueStrings: galleryPerPageValueStrings },
     autoCrossfade:           { description: 'Auto Crossfade to next track',           type: BOOLEAN, values: [true, false],           default: false, valueStrings: ['ON', 'OFF'] },
     autoCrossfadeLength:     { description: 'Auto Crossfade Length',                  type: INTEGER, values: [5, 10, 15, 20, 25, 30], default: 20,    valueStrings: ['5 sec', '10 sec', '15 sec', '20 sec', '25 sec', '30 sec'] },
@@ -108,7 +108,7 @@ export const defaultSettings = {
   },
   gallery: {
     layout:                  settingsSchema.gallery.layout.default,
-  //singleTrackNextNoReload: settingsSchema.gallery.singleTrackNextNoReload.default,
+    singleTrackNextNoReload: settingsSchema.gallery.singleTrackNextNoReload.default,
     tracksPerPage:           settingsSchema.gallery.tracksPerPage.default,
     autoCrossfade:           settingsSchema.gallery.autoCrossfade.default,
     autoCrossfadeLength:     settingsSchema.gallery.autoCrossfadeLength.default,

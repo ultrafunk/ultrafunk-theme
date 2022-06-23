@@ -9,7 +9,6 @@ namespace Ultrafunk\Theme\Templates\Page;
 
 
 ?>
-
 <article id="post-<?php the_ID(); ?>" class="">
   <header class="entry-header">
     <?php \Ultrafunk\Theme\Tags\entry_title(); ?>

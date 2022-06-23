@@ -9,7 +9,6 @@ namespace Ultrafunk\Theme\Templates\None;
 
 
 ?>
-
 <div class="entry-content">
   <?php if (is_search()) { ?>
     <h1 class="entry-header">Sorry, no content matched your search criteria...</h1>

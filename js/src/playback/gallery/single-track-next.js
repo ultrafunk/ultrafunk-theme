@@ -40,7 +40,7 @@ const m = {
 
 export function isSingleTrackNext()
 {
-  return (document.body.matches('.single.track') && settings.experimental.singleTrackNextNoReload);
+  return (document.body.matches('.single.track') && settings.gallery.singleTrackNextNoReload);
 }
 
 export function isNextTrackLoading()
@@ -144,11 +144,6 @@ function getTrackNavHtml(isNavPrev, navUrl, navTitle)
     </div>`;
 }
 
-function setElementAttributes(element, attributes)
-{
-  Object.keys(attributes).forEach(key => element.setAttribute(`data-${key}`, attributes[key]));
-}
-
 
 // ************************************************************************************************
 // Update DOM functions
@@ -158,7 +153,7 @@ function updatePage(trackData, thumbnailData, pushState = true)
 {
   updateNavLinks(document.querySelector('div.nav-links'), trackData);
   updateTrackHeader(document.querySelector('header.entry-header'), trackData[1]);
-  updateTrackAttributes(trackData[1], thumbnailData);
+  updateTrackAttributes(document.querySelector('single-track'), trackData[1], thumbnailData);
 
   if (pushState)
     history.pushState(trackData, '', trackData[1].link);
@@ -189,22 +184,17 @@ function updateTrackHeader(element, trackData)
   element.querySelector('div.entry-meta-channels .term-links').innerHTML = trackData.channels_links;
 }
 
-function updateTrackAttributes(trackData, thumbnailData)
+function updateTrackAttributes(element, trackData, thumbnailData)
 {
-  setElementAttributes(document.querySelector('single-track'), {
-    'track-type':        trackData.meta.track_source_type,
-    'track-artist':      trackData.meta.track_artist,
-    'track-title':       trackData.meta.track_title,
-    'track-duration':    trackData.meta.track_duration,
-    'track-source-data': trackData.meta.track_source_data,
-  });
-
-  setElementAttributes(document.querySelector('div.track-share-control span'), {
+  const attributes = {
     'track-type':          trackData.meta.track_source_type,
     'track-artist':        trackData.meta.track_artist,
     'track-title':         trackData.meta.track_title,
+    'track-duration':      trackData.meta.track_duration,
     'track-url':           trackData.link,
     'track-thumbnail-url': thumbnailData.src,
     'track-source-uid':    thumbnailData.uid,
-  });
+  };
+
+  Object.keys(attributes).forEach(key => element.setAttribute(`data-${key}`, attributes[key]));
 }

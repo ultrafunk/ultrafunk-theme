@@ -75,7 +75,7 @@ class MetaUiElements extends ElementClick
   elementClicked()
   {
     if (this.clicked('div.track-share-control'))
-      return sharePlayClick(this.event.target);
+      return sharePlayClick(this.closest('single-track'));
   
     if (this.clicked('span.term-links'))
       return linkClick(this.event);
