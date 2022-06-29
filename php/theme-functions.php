@@ -10,9 +10,15 @@ namespace Ultrafunk\Theme\Functions;
 
 use SimpleXMLElement;
 
-use Ultrafunk\Plugin\Constants\PLAYER_TYPE;
+use Ultrafunk\Plugin\Constants\ {
+  PLAYER_TYPE,
+  TRACK_TYPE,
+};
 
-use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
+use const Ultrafunk\Plugin\Constants\ {
+  PLUGIN_ENV,
+  YOUTUBE_VIDEO_ID_REGEX,
+};
 
 use function Ultrafunk\Plugin\Globals\ {
   is_shuffle,
@@ -191,4 +197,32 @@ function get_shuffle_title() : string
     $title = single_term_title('Shuffle: ', false);
 
   return (!empty($title) ? $title : 'Shuffle: All Tracks');
+}
+
+//
+//
+//
+const DEFAULT_TRACK_DATA = [
+  'track_type'   => TRACK_TYPE::SOUNDCLOUD,
+  'thumnail_src' => '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png',
+  'css_class'    => 'type-soundcloud',
+  'source_uid'   => null,
+];
+
+function get_track_data(object $track) : array
+{
+  if (intval($track->track_source_type) === TRACK_TYPE::YOUTUBE)
+  {
+    if (1 === preg_match(YOUTUBE_VIDEO_ID_REGEX, $track->track_source_data, $source_uid))
+    {
+      return [
+        'track_type'   => TRACK_TYPE::YOUTUBE,
+        'thumnail_src' => "https://img.youtube.com/vi/$source_uid[0]/default.jpg",
+        'css_class'    => 'type-youtube',
+        'source_uid'   => $source_uid[0],
+      ];
+    }
+  }
+
+  return DEFAULT_TRACK_DATA;
 }

@@ -14,7 +14,7 @@ use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 /**************************************************************************************************************************/
 
 
-$track_data       = \Ultrafunk\Plugin\Shared\get_track_data($post);
+$track_data       = \Ultrafunk\Theme\Functions\get_track_data($post);
 $is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
 
 
