@@ -31,6 +31,11 @@
   flex-wrap: wrap;
 }
 
+.artist-letters-container.artist-letters-footer {
+  margin-top: 75px;
+  margin-bottom: -25px;
+}
+
 .artist-letter {
   margin: 0 1px 1px 0;
 }
@@ -259,7 +264,8 @@
 }
 
 .body-right .artists,
-.body-right .channels {
+.body-right .channels,
+.body-right .top-artists {
   margin-top: 15px;
 }
 
@@ -413,6 +419,11 @@
     margin-bottom: 50px;
   }
 
+  .artist-letters-container.artist-letters-footer {
+    margin-top: 50px;
+    margin-bottom: -20px;
+  }
+
   .termlist-body {
     padding: 12px 15px 17px 15px;
   }
@@ -429,6 +440,11 @@
 
   .artist-letters-container {
     margin-bottom: 40px;
+  }
+
+  .artist-letters-container.artist-letters-footer {
+    margin-top: 40px;
+    margin-bottom: -25px;
   }
 
   .termlist-icons .material-icons {
@@ -481,6 +497,11 @@
 
   .artist-letters-container {
     margin-bottom: 32px;
+  }
+
+  .artist-letters-container.artist-letters-footer {
+    margin-top: 32px;
+    margin-bottom: -20px;
   }
 
   .termlist-title {

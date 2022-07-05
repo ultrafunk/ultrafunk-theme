@@ -5,14 +5,19 @@
 //
 
 
-import * as debugLogger   from '../shared/debuglogger.js';
-import { KEY }            from '../shared/storage.js';
-import { showSnackbar }   from '../shared/snackbar.js';
-import { stripAttribute } from '../shared/utils.js';
+import * as debugLogger from '../shared/debuglogger.js';
+import { KEY }          from '../shared/storage.js';
+import { showSnackbar } from '../shared/snackbar.js';
+
+import {
+  fetchRest,
+  stripAttribute,
+} from '../shared/utils.js';
 
 import {
   getTermlistHtml,
   getTermLinksHtml,
+  getTopArtistsLinksHtml,
 } from './termlist-templates.js';
 
 
@@ -34,7 +39,7 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
   const termSlug      = stripAttribute(termlistEntry, 'data-term-slug');
   const isAllChannels = (termType === 'channels');
 
-  fetchTracks(termType, termId, (isAllChannels ? 10 : 50), (termData) => 
+  fetchTracks(termType, termId, (isAllChannels ? 10 : 50), async (termData) => 
   {
     let header  = isAllChannels ? 'Latest Tracks' : 'All Tracks';
     let element = termlistBody.querySelector('.body-left');
@@ -63,6 +68,18 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
         else
           element.innerHTML = `<b>${header}</b><br>None found`;
       });
+    }
+    else if (termData !== null)
+    {
+      if (('topArtists' in m.termCache[termId]) === false)
+      {
+        const restResponse = await fetchRest('top-artists', `channelId=${termId}`, true, '/wp-json/ultrafunk/v1/');
+
+        if ((restResponse !== null) && (restResponse.status.code === 200))
+          m.termCache[termId]['topArtists'] = restResponse.data;
+      }
+
+      termlistBody.querySelector('.top-artists').innerHTML = getTopArtistsLinksHtml('Top Artists (tracks)', m.termCache[termId]['topArtists']);
     }
   });
 }

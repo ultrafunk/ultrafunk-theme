@@ -14,38 +14,35 @@ use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 /**************************************************************************************************************************/
 
 
-class ListPlayer extends \Ultrafunk\Theme\Templates\BaseTemplate
+class ListPlayer extends \Ultrafunk\Theme\Templates\Base
 {
-  public function render() : void
+  public function render_response() : void
   {
-    if (!empty($this->request->query_result))
-    {
-      $is_first_video = $this->is_video(get_object_term_cache($this->request->query_result[0]->ID, 'uf_channel'));
-  
-      ?>
-      <div id="list-player-container" class="player-container">
-        <div class="embedded-container">
-          <div class="wp-block-embed__wrapper <?php echo ($is_first_video ? 'aspect-ratio-16_9' : 'aspect-ratio-1_1'); ?>">
-            <div id="youtube-player"></div>
-          </div>
+    $is_first_video = $this->is_video(get_object_term_cache($this->request->query_result[0]->ID, 'uf_channel'));
+
+    ?>
+    <div id="list-player-container" class="player-container">
+      <div class="embedded-container">
+        <div class="wp-block-embed__wrapper <?php echo ($is_first_video ? 'aspect-ratio-16_9' : 'aspect-ratio-1_1'); ?>">
+          <div id="youtube-player"></div>
         </div>
-        <div id="tracklist"
-          data-term-type="<?php echo $this->request->term_type       ?? ''; ?>"
-          data-term-id="<?php  echo $this->request->wp_term->term_id ?? ''; ?>"
-          >
-          <?php $this->tracklist_entries(); ?>
-          <div id="tracklist-load-more">
-            <div class="load-more-title">Load more tracks...<span class="light-text"></span></div>
-            <div class="load-more-loader">
-              <div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div><div class="loader-4">&#8226;</div><div class="loader-5">&#8226;</div>
-            </div>
+      </div>
+      <div id="tracklist"
+        data-term-type="<?php echo $this->request->term_type       ?? ''; ?>"
+        data-term-id="<?php  echo $this->request->wp_term->term_id ?? ''; ?>"
+        >
+        <?php $this->tracklist_entries(); ?>
+        <div id="tracklist-load-more">
+          <div class="load-more-title">Load more tracks...<span class="light-text"></span></div>
+          <div class="load-more-loader">
+            <div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div><div class="loader-4">&#8226;</div><div class="loader-5">&#8226;</div>
           </div>
         </div>
       </div>
-      <?php
-      
-      $this->content_pagination();
-    }
+    </div>
+    <?php
+    
+    $this->content_pagination();
   }
   
 

@@ -107,7 +107,7 @@ export async function playNextSingleTrack(playTrack = false)
 // Support functions
 // ************************************************************************************************
 
-async function fetchTracks(tracksDateTime)
+function fetchTracks(tracksDateTime)
 {
   let beforeTrackDateTime = tracksDateTime;
 
@@ -115,7 +115,7 @@ async function fetchTracks(tracksDateTime)
     beforeTrackDateTime = (m.startTrackDateTime !== '') ? m.startTrackDateTime : '3000-01-01T00:00:01'; // Before the year 3000 should be enough for a while...
 
   if (beforeTrackDateTime !== null)
-    return await fetchRest('tracks', `before=${beforeTrackDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, true);
+    return fetchRest('tracks', `before=${beforeTrackDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, true);
 
   return null;
 }

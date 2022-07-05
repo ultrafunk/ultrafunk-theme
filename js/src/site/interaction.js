@@ -174,7 +174,7 @@ function detailsClick(element)
 
 function trackThumbnailClick(modalId, artistTitle)
 {
-  document.getElementById(modalId).querySelector('.modal-track').title = 'Click thumbnail to Copy Artist & Title';
+  document.getElementById(modalId).querySelector('.modal-track').title = 'Click / tap to Copy Artist & Title';
   
   document.getElementById(modalId)?.querySelector('img')?.addEventListener('click', () =>
   {

@@ -52,3 +52,12 @@ export function getTermLinksHtml(header, termData)
 
   return html.slice(0, (html.length - 2));
 }
+
+export function getTopArtistsLinksHtml(header, artistsData)
+{
+  let html = `<b>${header}</b><br>`;
+  
+  artistsData.forEach(item => html += `<a href="/artist/${item.artist_slug}/">${item.artist_name}</a> (${item.track_count})<br>`);
+  
+  return html;
+}

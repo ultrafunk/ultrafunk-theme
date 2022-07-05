@@ -8,33 +8,34 @@
 namespace Ultrafunk\Theme\Templates;
 
 
-use function Ultrafunk\Plugin\Globals\is_termlist;
-
-
 /**************************************************************************************************************************/
 
 
-class Termlist extends \Ultrafunk\Theme\Templates\BaseTemplate
+class Termlist extends \Ultrafunk\Theme\Templates\Base
 {
-  public function render() : void
+  private $is_artists = false;
+
+  public function render_response() : void
   {
-    if (!empty($this->request->query_result))
-    {
-      if (is_termlist('artists'))
-        $this->artist_letters($this->request);
-  
-      ?>
-      <term-list id="termlist-container"
-        class="entry-content <?php echo "term-{$this->request->term_type}"; ?>"
-        data-term-type="<?php echo $this->request->term_type; ?>"
-        >
-        <?php if (is_termlist('channels')) { ?>
-          <div class="termlist-title"><b>All Channels</b> (tracks)</div>
-        <?php } ?>
-        <?php $this->termlist_entries(); ?>
-      </term-list>
-      <?php
-    }
+    $this->is_artists = \Ultrafunk\Plugin\Globals\is_termlist('artists');
+
+    if ($this->is_artists)
+      $this->artist_letters('header');
+
+    ?>
+    <term-list id="termlist-container"
+      class="entry-content <?php echo "term-{$this->request->term_type}"; ?>"
+      data-term-type="<?php echo $this->request->term_type; ?>"
+      >
+      <?php if ($this->is_artists === false) { ?>
+        <div class="termlist-title"><b>All Channels</b> (tracks)</div>
+      <?php } ?>
+      <?php $this->termlist_entries(); ?>
+    </term-list>
+    <?php
+
+    if ($this->is_artists && (count($this->request->query_result) > 30))
+      $this->artist_letters('footer');
   }
   
 
@@ -43,7 +44,7 @@ class Termlist extends \Ultrafunk\Theme\Templates\BaseTemplate
 
   private function termlist_entries() : void
   {
-    $odd_even  = is_termlist('artists') ? 1 : 0;
+    $odd_even  = $this->is_artists ? 1 : 0;
     $term_path = $this->request->term_path;
   
     foreach($this->request->query_result as $term)
@@ -74,16 +75,20 @@ class Termlist extends \Ultrafunk\Theme\Templates\BaseTemplate
         </div>
         <div class="termlist-body <?php echo $row_class; ?>">
           <div class="body-left">
-            <?php echo (is_termlist('artists') ? '<b>All Tracks</b>' : '<b>Latest Tracks</b>'); ?>
+            <?php echo ($this->is_artists ? '<b>All Tracks</b>' : '<b>Latest Tracks</b>'); ?>
             <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>
           </div>
           <div class="body-right">
-            <div class="permalink"><b>Permalink</b><br><a href="<?php echo "/$term_path/$term_slug/"; ?>"><?php echo $term_name; ?></a></div>
-            <?php if (is_termlist('artists')) { ?>
+            <div class="permalink"><b><?php echo ($this->is_artists ? 'Artist' : 'Channel'); ?> Link</b><br><a href="<?php echo "/$term_path/$term_slug/"; ?>"><?php echo $term_name; ?></a></div>
+            <?php if ($this->is_artists) { ?>
               <div class="artists"><b>Related Artists</b>
                 <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>
               </div>
               <div class="channels"><b>In Channels</b>
+                <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>
+              </div>
+            <?php } else { ?>
+              <div class="top-artists"><b>Top Artists (tracks)</b>
                 <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>
               </div>
             <?php } ?>
@@ -98,9 +103,9 @@ class Termlist extends \Ultrafunk\Theme\Templates\BaseTemplate
   /**************************************************************************************************************************/
   
   
-  private function artist_letters() : void
+  private function artist_letters(string $letters_class = '') : void
   {
-    ?><div class="artist-letters-container"><?php
+    ?><div class="artist-letters-container <?php echo 'artist-letters-' . $letters_class; ?>"><?php
   
     foreach($this->request->letters_range as $letter)
     {

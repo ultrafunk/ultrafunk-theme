@@ -200,7 +200,7 @@ function get_shuffle_title() : string
 }
 
 //
-//
+// Get track details / data for content-template use
 //
 const DEFAULT_TRACK_DATA = [
   'track_type'   => TRACK_TYPE::SOUNDCLOUD,

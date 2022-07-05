@@ -39,8 +39,8 @@
 
 #modal-dialog-container {
   padding: 15px 0 12px 0;
-  min-width: 460px;
-  max-width: 600px;
+  min-width: 450px;
+  max-width: 550px;
   max-height: calc(100vh - 50px);
   overflow-y: auto;
   background-color: var(--modal-background-color);
@@ -265,6 +265,8 @@
 
   .modal-dialog-body p {
     margin: 0 20px 20px 20px;
+    font-size: 14px;
+    line-height: 22px;
   }
   
   .modal-header-entry {

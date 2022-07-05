@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * Theme template base classes
+ * Theme template base class
  *
  */
 
@@ -11,7 +11,7 @@ namespace Ultrafunk\Theme\Templates;
 /**************************************************************************************************************************/
 
 
-abstract class BaseTemplate
+abstract class Base
 {
   protected $request  = null;
   protected $home_url = null;
@@ -22,7 +22,13 @@ abstract class BaseTemplate
     $this->home_url = \Ultrafunk\Plugin\Globals\get_cached_home_url();
   }
 
-  abstract function render() : void;
+  public function render() : void
+  {
+    if (!empty($this->request->query_result))
+      $this->render_response();
+  }
+
+  abstract function render_response() : void;
 
   protected function content_pagination() : void
   {
