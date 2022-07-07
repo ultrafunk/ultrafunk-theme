@@ -88,7 +88,7 @@ class Termlist extends \Ultrafunk\Theme\Templates\Base
                 <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>
               </div>
             <?php } else { ?>
-              <div class="top-artists"><b>Top Artists (tracks)</b>
+              <div class="top-artists text-nowrap-ellipsis"><b>Top Artists (tracks)</b>
                 <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>
               </div>
             <?php } ?>

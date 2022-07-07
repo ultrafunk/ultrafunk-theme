@@ -6,6 +6,7 @@
 
 
 import {
+  SITE_URL,
   getPrefPlayerUrl,
   getThumbnailData,
 } from "../shared/utils.js";
@@ -53,11 +54,15 @@ export function getTermLinksHtml(header, termData)
   return html.slice(0, (html.length - 2));
 }
 
-export function getTopArtistsLinksHtml(header, artistsData)
+export function getTopArtistsLinksHtml(header, artistsData, channelSlug)
 {
   let html = `<b>${header}</b><br>`;
   
-  artistsData.forEach(item => html += `<a href="/artist/${item.artist_slug}/">${item.artist_name}</a> (${item.track_count})<br>`);
+  artistsData.forEach((item) =>
+  {
+    const artistLink = getPrefPlayerUrl(`${SITE_URL}/artist/${item.artist_slug}/?channel=${channelSlug}`);
+    html += `<a href="${artistLink}">${item.artist_name}</a> (${item.track_count})<br>`;
+  });
   
   return html;
 }

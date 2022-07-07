@@ -79,7 +79,7 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
           m.termCache[termId]['topArtists'] = restResponse.data;
       }
 
-      termlistBody.querySelector('.top-artists').innerHTML = getTopArtistsLinksHtml('Top Artists (tracks)', m.termCache[termId]['topArtists']);
+      termlistBody.querySelector('.top-artists').innerHTML = getTopArtistsLinksHtml('Top Artists (tracks)', m.termCache[termId]['topArtists'], termSlug);
     }
   });
 }
