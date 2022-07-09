@@ -63,12 +63,25 @@ class PlayerTypeToggle extends ElementToggle
   
   toggle()
   {
-    const destData = this.getDestData();
-    let   destUrl  = window.location.href.replace(/\/page\/(?!0)\d{1,6}/, ''); // Strip off any pagination
+    const isPagedRegEx = /\/page\/(?!0)\d{1,6}/;
+    const destData     = this.getDestData();
+    const sourceUrl    = window.location.href;
+    let destUrl        = null;
   
-    // Add new destination pagination if needed
-    if (destData.pageNum > 1)
-      destUrl = `${destUrl}page/${destData.pageNum}/`;
+    // Add destination pagination or remove pagination if needed
+    if ((destData.pageNum > 1) && (sourceUrl.match(isPagedRegEx) !== null))
+    {
+      destUrl = sourceUrl.replace(isPagedRegEx, `/page/${destData.pageNum}`);
+    }
+    else if (destData.pageNum > 1)
+    {
+      const url = new URL(decodeURIComponent(sourceUrl));
+      destUrl   = `${url.origin}${url.pathname}page/${destData.pageNum}/${url.search}`;
+    }
+    else
+    {
+      destUrl = sourceUrl.replace(isPagedRegEx, '');
+    }
 
     settings.playback.preferredPlayer = isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST;
     setCookie(KEY.UF_PREFERRED_PLAYER, `${isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST}`, (YEAR_IN_SECONDS * 5));

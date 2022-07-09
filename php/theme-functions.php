@@ -71,8 +71,8 @@ function get_session_vars() : array
     if (!empty($nextPost))
       $nextUrl = get_the_permalink($nextPost->ID);
     
-    $session_vars['prevPage'] = isset($prevUrl) ? esc_url($prevUrl) : null;
-    $session_vars['nextPage'] = isset($nextUrl) ? esc_url($nextUrl) : null;
+    $session_vars['prevPage'] = isset($prevUrl) ? $prevUrl : null;
+    $session_vars['nextPage'] = isset($nextUrl) ? $nextUrl : null;
   }
   else
   {
@@ -85,8 +85,8 @@ function get_session_vars() : array
     if ($nextLink !== null)
       $nextUrl = new SimpleXMLElement($nextLink);
     
-    $session_vars['prevPage'] = isset($prevUrl) ? ((string) esc_url($prevUrl['href'])) : null;
-    $session_vars['nextPage'] = isset($nextUrl) ? ((string) esc_url($nextUrl['href'])) : null;
+    $session_vars['prevPage'] = isset($prevUrl) ? ((string) $prevUrl['href']) : null;
+    $session_vars['nextPage'] = isset($nextUrl) ? ((string) $nextUrl['href']) : null;
   }
 
   return $session_vars;
@@ -135,9 +135,35 @@ function get_title() : string
     $title = 'All Tracks';
   }
 
+  $title .= get_filter_result_by($params);
+
   set_cached_title($title);
   
   return $title;
+}
+
+//
+// Get title string for results filtering
+//
+function get_filter_result_by(array $params) : string
+{
+  $filter_slug = get_query_var('channel', null);
+  $filter_tax  = 'uf_channel';
+
+  if (isset($params['filter']))
+    $filter_slug = $params['filter']['slug'];
+  else if ($filter_slug !== null)
+    $filter_slug = sanitize_title($filter_slug);
+
+  if ($filter_slug !== null)
+  {
+    $term = get_term_by('slug', $filter_slug, $filter_tax);
+
+    if ($term !== false)
+      return ' [ ' . esc_html($term->name) . ' ] ';
+  }
+
+  return '';
 }
 
 //

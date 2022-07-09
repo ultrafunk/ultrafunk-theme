@@ -287,12 +287,12 @@ function get_nav_bar_arrows() : array
   if (($session_vars['prevPage'] !== null) || ($session_vars['nextPage'] !== null))
   {
     if ($session_vars['prevPage'] !== null)
-      $nav_arrows['back'] = '<a href="' . $session_vars['prevPage'] . '" class="navbar-prev-link"><span class="material-icons navbar-arrow-back" title="Previous track / page (shift + arrow left)">arrow_backward</span></a>';
+      $nav_arrows['back'] = '<a href="' . esc_url($session_vars['prevPage']) . '" class="navbar-prev-link"><span class="material-icons navbar-arrow-back" title="Previous track / page (shift + arrow left)">arrow_backward</span></a>';
     else
       $nav_arrows['back'] = '<span class="material-icons navbar-arrow-back disbled">arrow_backward</span>';
 
     if ($session_vars['nextPage'] !== null)
-      $nav_arrows['fwd'] = '<a href="' . $session_vars['nextPage'] . '" class="navbar-next-link"><span class="material-icons navbar-arrow-fwd" title="Next track / page (shift + arrow right)">arrow_forward</span></a>';
+      $nav_arrows['fwd'] = '<a href="' . esc_url($session_vars['nextPage']) . '" class="navbar-next-link"><span class="material-icons navbar-arrow-fwd" title="Next track / page (shift + arrow right)">arrow_forward</span></a>';
     else
       $nav_arrows['fwd'] = '<span class="material-icons navbar-arrow-fwd disbled">arrow_forward</span>';
   }
