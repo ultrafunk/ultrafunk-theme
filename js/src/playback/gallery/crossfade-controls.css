@@ -9,7 +9,7 @@
   display: none;
 }
 
-body.autoplay-off.tracks .crossfade-controls {
+body.tracks.autoplay-off .crossfade-controls {
   display: contents;
 }
 

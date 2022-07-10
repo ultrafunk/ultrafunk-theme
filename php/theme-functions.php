@@ -147,7 +147,7 @@ function get_title() : string
 //
 function get_filter_result_by(array $params) : string
 {
-  $filter_slug = get_query_var('channel', null);
+  $filter_slug = isset($_GET['channel']) ? $_GET['channel'] : null;
   $filter_tax  = 'uf_channel';
 
   if (isset($params['filter']))

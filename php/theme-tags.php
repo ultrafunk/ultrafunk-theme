@@ -161,6 +161,13 @@ function body_attributes() : void
     }
   }
 
+  if (($gallery_track_count === 0) && !is_list_player())
+    $classes[] = 'no-playback';
+  else if ($gallery_track_count === 1)
+    $classes[] = 'gallery-player track';
+  else if ($gallery_track_count > 1)
+    $classes[] = 'gallery-player tracks';
+
   if (is_page())
     $classes[] = 'page page-' . $wp_query->query_vars['pagename'];
   else if (is_single())
@@ -172,20 +179,13 @@ function body_attributes() : void
   else if (is_termlist())
     $classes[] = 'termlist';
   else if (is_list_player())
-    $classes[] = 'list-player' . (is_list_player('search') ? ' list-player-search' : '');
+    $classes[] = 'list-player' . (is_list_player('search') ? ' search' : '');
   else if (is_tax('uf_artist'))
     $classes[] = 'artist';
   else if (is_tax('uf_channel'))
-    $classes[] = 'channel';
+    $classes[] = 'channel-' . get_queried_object()->slug;
   else if (is_404())
     $classes[] = '404';
-
-  if (($gallery_track_count === 0) && !is_list_player())
-    $classes[] = 'no-playback';
-  else if ($gallery_track_count === 1)
-    $classes[] = 'track gallery-player';
-  else if ($gallery_track_count > 1)
-    $classes[] = 'tracks gallery-player';
 
   echo 'class="' . implode(' ', $classes) . '"';
 
