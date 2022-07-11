@@ -423,14 +423,23 @@ function nav_bar_title() : void
   echo '<div class="navbar-title">' . $prefix . $title . $pagination . '</div>';
 }
 
-function single_track_nav_link(bool $is_prev, mixed $post, string $text) : void
+function single_track_nav_link(bool $is_prev, mixed $post) : void
 {
   if (($post !== null) && ($post !== ''))
   {
+    $track_artist_title = '<b>' . esc_html($post->track_artist) . '</b><br>' . esc_html($post->track_title);
+    
     ?>
     <div class="<?php echo ($is_prev ? 'nav-previous' : 'nav-next'); ?>">
-      <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_prev ? 'prev' : 'next'); ?>"><b><?php echo $text; ?></b><br>
-      <span class="<?php echo ($is_prev ? 'prev-track-artist-title' : 'next-track-artist-title'); ?>"><?php echo esc_html($post->post_title); ?></span></a>
+      <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_prev ? 'prev' : 'next'); ?>">
+        <?php if ($is_prev) { ?>
+          <div class="prev-track-arrow">&#10094</div>
+        <?php } ?>
+        <div class="<?php echo ($is_prev ? 'prev-track-artist-title' : 'next-track-artist-title'); ?>"><?php echo $track_artist_title; ?></div>
+        <?php if (!$is_prev) { ?>
+          <div class="next-track-arrow">&#10095</div>
+        <?php } ?>
+      </a>
     </div>
     <?php
   }

@@ -18,8 +18,8 @@ if (have_posts())
       <h2 class="screen-reader-text">Track navigation</h2>
       <div class="nav-links">
         <?php
-        \Ultrafunk\Theme\Tags\single_track_nav_link(true,  get_next_post(),     '&#10094;&#10094; Previous Track');
-        \Ultrafunk\Theme\Tags\single_track_nav_link(false, get_previous_post(), 'Next Track &#10095;&#10095;');
+        \Ultrafunk\Theme\Tags\single_track_nav_link(true,  get_next_post());
+        \Ultrafunk\Theme\Tags\single_track_nav_link(false, get_previous_post());
         ?>
       </div>
     </nav>

@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.12
+Version:           1.44.13
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -533,6 +533,11 @@ ul#menu-primary-menu {
 * Site content
 ***************************************************************************************************/
 
+body.track.single {
+  --site-content-margin-top: 40px;
+  --site-content-margin-bottom: 50px;
+}
+
 #site-content {
   max-width: var(--site-max-width);
   margin: calc(var(--site-content-margin-top) + var(--site-header-height)) auto var(--site-content-margin-bottom) auto;
@@ -555,7 +560,7 @@ nav.navigation.pagination {
 }
 
 nav.navigation.track-navigation {
-  margin: 100px auto;
+  margin: 50px auto;
 }
 
 nav .nav-links ul {
@@ -607,14 +612,20 @@ nav .nav-links ul {
 .track-navigation .nav-links {
   display: flex;
   width: 100%;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 26px;
 }
 
 .track-navigation .nav-previous,
 .track-navigation .nav-next {
   width: 100%;
+  /*
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  */
 }
 
 .track-navigation .nav-previous {
@@ -630,23 +641,29 @@ nav .nav-links ul {
 .track-navigation .nav-next a {
   color: var(--primary-font-color);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.track-navigation .nav-next a {
+  justify-content: end;
 }
 
 .track-navigation .nav-previous a:hover,
 .track-navigation .nav-next a:hover {
   color: var(--link-hover-color);
-  text-decoration: underline;
 }
 
-.track-navigation .nav-previous b,
-.track-navigation .nav-next b {
-  text-transform: uppercase;
+.track-navigation .prev-track-arrow,
+.track-navigation .next-track-arrow {
+  font-size: 60px;
 }
 
-.prev-track-artist-title, 
-.next-track-artist-title {
-  font-size: 20px;
-  font-weight: 400;
+.track-navigation .prev-track-arrow {
+  margin-right: 15px;
+}
+.track-navigation .next-track-arrow {
+  margin-left: 15px;
 }
 
 
@@ -854,12 +871,6 @@ h1 {
   line-height: 50px;
   margin-block-start: 0.83em;
   margin-block-end: 0.83em;
-}
-
-h1.content-header {
-  margin: 0;
-  padding-top: 0;
-  padding-bottom: 45px;
 }
 
 single-track {
@@ -1330,19 +1341,6 @@ body.no-playback .sticky-nav-up .site-header-container {
 
 
 /**************************************************************************************************
-* Responsive: min-width: 1351px (wide screens)
-***************************************************************************************************/
-
-@media screen and (min-width: 1351px) {
-
-  h1.content-header {
-    display: none;
-  }
-
-}
-
-
-/**************************************************************************************************
 * Responsive: max-width: 1350px
 ***************************************************************************************************/
 
@@ -1352,7 +1350,6 @@ body.no-playback .sticky-nav-up .site-header-container {
   nav.navigation,
   #intro-banner,
   #site-footer,
-  h1.content-header,
   .entry-header,
   .entry-content h2,
   .entry-content h3,
@@ -1474,24 +1471,12 @@ body.no-playback .sticky-nav-up .site-header-container {
     line-height: 31px;
   }
 
-  .track-navigation .nav-previous,
-  .track-navigation .nav-next {
-    white-space: unset;
-    overflow: unset;
-    text-overflow: unset;
-  }
-  
-  .track-navigation .nav-previous{
+  .track-navigation .nav-previous {
     margin-right: 12px;
   }
   
   .track-navigation .nav-next {
     margin-left: 12px;
-  }
-
-  .prev-track-artist-title, 
-  .next-track-artist-title {
-    font-size: unset;
   }
 
   aside.widget-area {
@@ -1534,7 +1519,6 @@ body.no-playback .sticky-nav-up .site-header-container {
   nav.navigation,
   #intro-banner,
   #site-footer,
-  h1.content-header,
   .entry-header,
   .entry-content h2,
   .entry-content h3,
@@ -1587,7 +1571,6 @@ body.no-playback .sticky-nav-up .site-header-container {
   nav.navigation,
   #intro-banner,
   #site-footer,
-  h1.content-header,
   .entry-header,
   .entry-content h2,
   .entry-content h3,
@@ -1640,6 +1623,16 @@ body.no-playback .sticky-nav-up .site-header-container {
   .entry-meta {
     font-size: unset;
     line-height: unset;
+  }
+
+  .track-navigation .nav-links {
+    font-size: unset;
+    line-height: 24px;
+  }
+
+  .track-navigation .prev-track-arrow,
+  .track-navigation .next-track-arrow {
+    font-size: 55px
   }
 
   #taxonomies-2,
@@ -1699,6 +1692,11 @@ body.no-playback .sticky-nav-up .site-header-container {
     --site-header-height-down: 64px;
     --site-header-height-up: 110px;
 
+    --site-content-margin-top: 32px;
+    --site-content-margin-bottom: 50px;
+  }
+
+  body.track.single {
     --site-content-margin-top: 32px;
     --site-content-margin-bottom: 50px;
   }
@@ -1887,22 +1885,32 @@ body.no-playback .sticky-nav-up .site-header-container {
   }
   
   nav.navigation.track-navigation {
-    margin: 60px auto 55px auto;
+    margin: 50px auto;
   }
 
-  .track-navigation .nav-previous{
+  .track-navigation .nav-links {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .track-navigation .prev-track-arrow,
+  .track-navigation .next-track-arrow {
+    font-size: 40px
+  }
+
+  .track-navigation .prev-track-arrow {
+    margin-right: 10px;
+  }
+  .track-navigation .next-track-arrow {
+    margin-left: 10px;
+  }
+
+  .track-navigation .nav-previous {
     margin-right: 7px;
   }
   
   .track-navigation .nav-next {
     margin-left: 7px;
-  }
-
-  .prev-track-artist-title, 
-  .next-track-artist-title {
-    font-size: 14px;
-    line-height: 21px;
-    font-weight: 300;
   }
 
   .nav-links .page-numbers li a,
@@ -1929,10 +1937,6 @@ body.no-playback .sticky-nav-up .site-header-container {
   h1 {
     font-size: 25px;
     line-height: 35px;
-  }
-  
-  h1.content-header {
-    display:none;
   }
   
   h2.entry-title.now-playing-icon::before {

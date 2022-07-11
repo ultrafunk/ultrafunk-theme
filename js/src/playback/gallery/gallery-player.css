@@ -19,14 +19,6 @@
   padding-right: 65px;
 }
 
-.gallery-layout-2-column h1.content-header,
-.gallery-layout-3-column h1.content-header {
-  padding-top: 35px;
-  padding-bottom: 45px;
-  padding-left: 0;
-  padding-right: 0;
-}
-
 .gallery-layout-2-column gallery-layout,
 .gallery-layout-3-column gallery-layout {
   display: inline-grid;
@@ -188,8 +180,6 @@
 
   .gallery-layout-2-column gallery-layout,
   .gallery-layout-3-column gallery-layout,
-  .gallery-layout-2-column h1.content-header,
-  .gallery-layout-3-column h1.content-header,  
   .gallery-layout-2-column nav.navigation,
   .gallery-layout-3-column nav.navigation,
   .gallery-layout-2-column #site-footer,

@@ -40,7 +40,7 @@ const m = {
 
 export function isSingleTrackNext()
 {
-  return (document.body.matches('.single.track') && settings.gallery.singleTrackNextNoReload);
+  return (document.body.matches('.single.track') && settings.gallery.fetchNextSingleTrack);
 }
 
 export function isNextTrackLoading()
@@ -133,13 +133,16 @@ function updatePlayerAndPage(trackData, playTrack = false, pushState = true)
   updatePage(trackData, thumbnailData, pushState);
 }
 
-function getTrackNavHtml(isNavPrev, navUrl, navTitle)
+function getTrackNavHtml(isNavPrev, navUrl, trackMeta)
 {
+  const trackArtistTitle = `<b>${trackMeta.track_artist}</b><br>${trackMeta.track_title}`;
+  
   return /*html*/ `
     <div class="${isNavPrev ? 'nav-previous' : 'nav-next'}">
       <a href="${navUrl}" rel="${isNavPrev ? 'prev' : 'next'}">
-        <b>${isNavPrev ? '&#10094;&#10094; Previous Track' : 'Next Track &#10095;&#10095;'}</b><br>
-        <span class="${isNavPrev ? 'prev-track-artist-title' : 'next-track-artist-title'}">${navTitle}</span>
+        ${isNavPrev ? '<div class="prev-track-arrow">&#10094</div>' : ''}
+        <div class="${isNavPrev ? 'prev-track-artist-title' : 'next-track-artist-title'}">${trackArtistTitle}</div>
+        ${!isNavPrev ? '<div class="next-track-arrow">&#10095</div>' : ''}
       </a>
     </div>`;
 }
@@ -163,14 +166,14 @@ function updatePage(trackData, thumbnailData, pushState = true)
 
 function updateNavLinks(element, trackData)
 {
-  let trackNavHtml = getTrackNavHtml(true, trackData[0].link, getTrackTitle(trackData[0].meta));
+  let trackNavHtml = getTrackNavHtml(true, trackData[0].link, trackData[0].meta);
   
   response.prevPage = trackData[0].link;
   response.nextPage = null;
   
   if (trackData.length === 3)
   {
-    trackNavHtml     += getTrackNavHtml(false, trackData[2].link, getTrackTitle(trackData[2].meta));
+    trackNavHtml     += getTrackNavHtml(false, trackData[2].link, trackData[2].meta);
     response.nextPage = trackData[2].link;
   }
 

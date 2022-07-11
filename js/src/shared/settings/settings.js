@@ -31,7 +31,7 @@ const galleryPerPageValues       = [...Array(22).keys()].map(i => i + 3);
 const galleryPerPageValueStrings = [...Array(22).keys()].map(i => `${i + 3}`);
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 17, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 18, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -50,7 +50,7 @@ export const settingsSchema = {
   },
   gallery: {
     layout:                  { description: 'Track Layout',                         type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
-    singleTrackNextNoReload: { description: 'Play single tracks without page load', type: BOOLEAN, values: [true, false],           default: true,  valueStrings: ['ON', 'OFF'] },
+    fetchNextSingleTrack:    { description: 'Play single tracks without page load', type: BOOLEAN, values: [true, false],           default: true,  valueStrings: ['ON', 'OFF'] },
     tracksPerPage:           { description: 'Tracks Per Page: Search & Shuffle',    type: INTEGER, values: galleryPerPageValues,    default: 12,    valueStrings: galleryPerPageValueStrings },
     autoCrossfade:           { description: 'Auto Crossfade to next track',         type: BOOLEAN, values: [true, false],           default: false, valueStrings: ['ON', 'OFF'] },
     autoCrossfadeLength:     { description: 'Auto Crossfade Length',                type: INTEGER, values: [5, 10, 15, 20, 25, 30], default: 20,    valueStrings: ['5 sec', '10 sec', '15 sec', '20 sec', '25 sec', '30 sec'] },
@@ -72,7 +72,7 @@ export const settingsSchema = {
     modalOverlayOpacity: { description: 'Modal overlay opacity',                 type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
   },
   experimental: {
-    singleTrackNextNoReload: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
+    fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   },
   tips: {
     showTrackDetailsHint:          { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
@@ -108,7 +108,7 @@ export const defaultSettings = {
   },
   gallery: {
     layout:                  settingsSchema.gallery.layout.default,
-    singleTrackNextNoReload: settingsSchema.gallery.singleTrackNextNoReload.default,
+    fetchNextSingleTrack:    settingsSchema.gallery.fetchNextSingleTrack.default,
     tracksPerPage:           settingsSchema.gallery.tracksPerPage.default,
     autoCrossfade:           settingsSchema.gallery.autoCrossfade.default,
     autoCrossfadeLength:     settingsSchema.gallery.autoCrossfadeLength.default,
@@ -130,7 +130,7 @@ export const defaultSettings = {
     modalOverlayOpacity: settingsSchema.site.modalOverlayOpacity.default,
   },
   experimental: {
-    singleTrackNextNoReload: settingsSchema.experimental.singleTrackNextNoReload.default,
+    fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,
   },
   tips: {
     showTrackDetailsHint:          settingsSchema.tips.showTrackDetailsHint.default,
