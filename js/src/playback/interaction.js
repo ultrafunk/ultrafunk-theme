@@ -12,6 +12,7 @@ import * as listPlayback      from './list/list-playback.js';
 import * as playbackEvents    from './playback-events.js';
 import * as utils             from '../shared/utils.js';
 import * as footerToggles     from './footer-toggles.js';
+import ElementClick           from '../shared/element-click.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { initScreenWakeLock } from './screen-wakelock.js';
 import { TRACK_TYPE }         from './mediaplayers.js';
@@ -41,6 +42,8 @@ import {
   playerOnKeyScroll,
   shuffleClickNavTo,
   autoplayNavTo,
+  fullscreenElement,
+  keyboardShortcuts,
 } from './shared-gallery-list.js';
 
 
@@ -51,8 +54,10 @@ const debug    = debugLogger.newInstance('playback-interaction');
 const eventLog = new eventLogger.Interaction(10);
 
 const m = {
-  player:          null,
-  isPlaybackReady: false,
+  player:             null,
+  isPlaybackReady:    false,
+  siteNavUiElements:  null,
+  trackNavUiElements: null,
 };
 
 const config = {
@@ -65,7 +70,9 @@ const config = {
 // ************************************************************************************************
 
 document.addEventListener('DOMContentLoaded', () =>
-{ 
+{
+  debugLogger.measureStartupExecutionTime();
+  
   debug.log('DOMContentLoaded');
 
   getSessionData();
@@ -97,6 +104,9 @@ function initShared()
   initPlaybackEvents();
 
   m.player.init();
+  m.siteNavUiElements  = new siteNavUiElements('#site-navigation');
+  m.trackNavUiElements = new trackNavUiElements('nav.track-navigation .nav-links');
+
   fullscreenElement.init();
   keyboardShortcuts.init();
 
@@ -115,12 +125,6 @@ function initPlaybackEvents()
 function initListeners()
 {
   utils.addListener('.playback-shuffle-control span', 'click', shuffleClickNavTo);
-
-  utils.addListenerAll('span.navbar-arrow-back',            'click', (event) => prevNextNavTo(event, response.prevPage));
-  utils.addListenerAll('span.navbar-arrow-fwd',             'click', (event) => prevNextNavTo(event, response.nextPage));
-  utils.addListener('nav.track-navigation .nav-previous a', 'click', (event) => prevNextNavTo(event, response.prevPage));
-  utils.addListener('nav.track-navigation .nav-next a',     'click', (event) => prevNextNavTo(event, response.nextPage));
-  
   document.addEventListener('keydown', documentEventKeyDown);
   document.addEventListener('keydown', documentEventMediaKeyDown);
   window.addEventListener('blur', windowEventBlur);
@@ -381,6 +385,30 @@ function playbackTimerClick()
   showSnackbarHint('showTrackTimerHint', '<b>Tip:</b> Click or tap Track Timer to toggle Autoplay On / Off');
 }
 
+class siteNavUiElements extends ElementClick
+{
+  elementClicked()
+  {
+    if (this.clicked('span.navbar-arrow-back'))
+      return prevNextNavTo(this.event, response.prevPage);
+
+    if (this.clicked('span.navbar-arrow-fwd'))
+      return prevNextNavTo(this.event, response.nextPage);
+  }
+}
+
+class trackNavUiElements extends ElementClick
+{
+  elementClicked()
+  {
+    if (this.clicked('div.nav-previous a'))
+      return prevNextNavTo(this.event, response.prevPage);
+
+    if (this.clicked('div.nav-next a'))
+      return onKeySingleTrackNext(this.event);
+  }
+}
+
 function showSnackbarHint(hintKey, hintText, snackbarTimeout = 0)
 {
   if (settings.tips[hintKey])
@@ -395,91 +423,3 @@ function prevNextNavTo(event, destUrl)
   event?.preventDefault();
   autoplayNavTo(destUrl, m.player.getStatus().isPlaying);
 }
-
-
-// ************************************************************************************************
-// Fullscreen Element module
-// ************************************************************************************************
-
-const fullscreenElement = (() =>
-{
-  const fseEvent = new Event('fullscreenElement');
-  let fseTarget  = null;
-
-  return {
-    init,
-    enter,
-    exit,        
-    toggle,
-  };
-
-  function init()
-  {
-    document.addEventListener('fullscreenchange',       fullscreenChange);
-    document.addEventListener('webkitfullscreenchange', fullscreenChange);
-  }
-
-  function fullscreenChange()
-  {
-    fseTarget = (document.fullscreenElement !== null)
-                  ? document.fullscreenElement.id
-                  : null;
-    
-    fseEvent.fullscreenTarget = fseTarget;
-    document.dispatchEvent(fseEvent);
-  }
-
-  function enter(element)
-  {
-    element.requestFullscreen();
-  }
-  
-  function exit()
-  {
-    if (fseTarget !== null)
-    {
-      document.exitFullscreen();
-      fseTarget = null;
-    }
-  }
-
-  function toggle(element)
-  {
-    if (fseTarget === null)
-      enter(element);
-    else
-      exit();
-  }
-})();
-
-
-// ************************************************************************************************
-// Allow / Deny keyboard shortcuts event handling module
-// ************************************************************************************************
-
-const keyboardShortcuts = (() =>
-{
-  let allow = false;
-
-  return {
-    allow() { return allow; },
-    init,
-  };
-
-  function init()
-  {
-    allow = settings.playback.keyboardShortcuts;
-    
-    document.addEventListener('allowKeyboardShortcuts', () =>
-    {
-      if (settings.playback.keyboardShortcuts)
-        allow = true;
-    });
-    
-    document.addEventListener('denyKeyboardShortcuts', () =>
-    {
-      if (settings.playback.keyboardShortcuts)
-        allow = false;
-    });
-  }
-})();

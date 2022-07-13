@@ -5,10 +5,24 @@
 //
 
 
+import {
+  addListener,
+  addListenerAll,
+} from "./utils.js";
+
+
+/*************************************************************************************************/
+
+
 export default class ElementClick
 {
-  constructor()
+  constructor(selectors, addToAllMatching = false)
   {
+    if (addToAllMatching)
+      addListenerAll(selectors, 'click', (event) => this.clickHandler(event));
+    else
+      addListener(selectors, 'click', (event) => this.clickHandler(event));
+    
     this.event   = null;
     this.element = null;
   }

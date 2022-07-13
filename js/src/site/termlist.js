@@ -36,9 +36,7 @@ export function init()
   debug.log('init()');
 
   m.listContainer = document.getElementById('termlist-container');
-  m.uiElements    = new UiElements();
-
-  m.listContainer.addEventListener('click', (event) => m.uiElements.clickHandler(event));
+  m.uiElements    = new UiElements('#termlist-container');
 
   restoreState();
 }

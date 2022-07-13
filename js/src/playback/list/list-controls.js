@@ -52,9 +52,7 @@ export function init(setCurrentTrackCallback)
   m.tracklist         = document.getElementById('tracklist');
   m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
   m.playerWrapper     = document.querySelector('.wp-block-embed__wrapper');
-  m.uiElements        = new UiElements(setCurrentTrackCallback);
-
-  m.tracklist.addEventListener('click', (event) => m.uiElements.clickHandler(event));
+  m.uiElements        = new UiElements('#tracklist', setCurrentTrackCallback);
 }
 
 export function ready(player)
@@ -150,9 +148,9 @@ export function setCuedTrack(trackId)
 
 class UiElements extends ElementClick
 {
-  constructor(setCurrentTrackCallback)
+  constructor(selectors, setCurrentTrackCallback)
   {
-    super();
+    super(selectors);
     this.setCurrentTrack = setCurrentTrackCallback;
   }
 

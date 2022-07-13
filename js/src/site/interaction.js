@@ -43,13 +43,10 @@ export function init()
 {
   debug.log('init()');
 
-  m.metaUiElements = new MetaUiElements();
-  m.listUiElements = new ListUiElements();
+  m.metaUiElements = new MetaUiElements('div.entry-meta', true);
+  m.listUiElements = new ListUiElements('#tracklist');
   siteTheme        = new SiteThemeToggle('footer-site-theme-toggle');
   galleryLayout    = new GalleryLayoutToggle('footer-gallery-layout-toggle');
-
-  utils.addListenerAll('.entry-meta', 'click', (event) => m.metaUiElements.clickHandler(event));
-  document.getElementById('tracklist')?.addEventListener('click', (event) => m.listUiElements.clickHandler(event));
 
   window.addEventListener('load', () =>
   {

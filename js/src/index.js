@@ -58,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () =>
   }
 
   setPreviousPageTitle();
+  
+  debugLogger.logStartupExecutionTime();
 });
 
 function initIndex()

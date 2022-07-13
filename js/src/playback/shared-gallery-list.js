@@ -186,3 +186,95 @@ export function playerOnKeyScroll(event)
     }
   }
 }
+
+
+// ************************************************************************************************
+// Fullscreen Element enter / exit / toggle closure
+// ************************************************************************************************
+
+const fullscreenElementClosure = (() =>
+{
+  const fseEvent = new Event('fullscreenElement');
+  let fseTarget  = null;
+
+  return {
+    init,
+    enter,
+    exit,        
+    toggle,
+  };
+
+  function init()
+  {
+    document.addEventListener('fullscreenchange',       fullscreenChange);
+    document.addEventListener('webkitfullscreenchange', fullscreenChange);
+  }
+
+  function fullscreenChange()
+  {
+    fseTarget = (document.fullscreenElement !== null)
+                  ? document.fullscreenElement.id
+                  : null;
+    
+    fseEvent.fullscreenTarget = fseTarget;
+    document.dispatchEvent(fseEvent);
+  }
+
+  function enter(element)
+  {
+    element.requestFullscreen();
+  }
+  
+  function exit()
+  {
+    if (fseTarget !== null)
+    {
+      document.exitFullscreen();
+      fseTarget = null;
+    }
+  }
+
+  function toggle(element)
+  {
+    if (fseTarget === null)
+      enter(element);
+    else
+      exit();
+  }
+});
+
+export const fullscreenElement = fullscreenElementClosure();
+
+
+// ************************************************************************************************
+// Allow / Deny keyboard shortcuts event handling closure
+// ************************************************************************************************
+
+const keyboardShortcutsClosure = (() =>
+{
+  let allow = false;
+
+  return {
+    allow() { return allow; },
+    init,
+  };
+
+  function init()
+  {
+    allow = settings.playback.keyboardShortcuts;
+    
+    document.addEventListener('allowKeyboardShortcuts', () =>
+    {
+      if (settings.playback.keyboardShortcuts)
+        allow = true;
+    });
+    
+    document.addEventListener('denyKeyboardShortcuts', () =>
+    {
+      if (settings.playback.keyboardShortcuts)
+        allow = false;
+    });
+  }
+});
+
+export const keyboardShortcuts = keyboardShortcutsClosure();

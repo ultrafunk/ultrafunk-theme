@@ -8,6 +8,13 @@
 const DEBUG = false;
 
 
+/*************************************************************************************************/
+
+
+let executionStart = 0;
+let executionStop  = 0;
+
+
 // ************************************************************************************************
 // DebugLog parent and child classes
 // ************************************************************************************************
@@ -93,4 +100,15 @@ export function logErrorOnServer(errorCategory, errorData)
     event_category: errorCategory,
     event_label:    'Ultrafunk Client Error',
   });
+}
+
+export function measureStartupExecutionTime()
+{
+  executionStart = performance.now();
+}
+
+export function logStartupExecutionTime()
+{
+  executionStop = performance.now();
+  console.log(`ultrafunk.com startup JavaScript execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms.`);
 }
