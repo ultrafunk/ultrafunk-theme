@@ -57,10 +57,7 @@ export function singleTrackNextReady(cueOrPlayTrackByIdCallback)
     m.cueOrPlayTrackById = cueOrPlayTrackByIdCallback;
     m.startTrackDateTime = document.querySelector('single-track').getAttribute('data-track-date-time');
 
-    window.addEventListener('popstate', (event) =>
-    {
-      (event.state === null) ? location.reload() : updatePlayerAndPage(event.state, false, false);
-    });
+    window.addEventListener('popstate', (event) => onPopState(event));
   }
 }
 
@@ -120,6 +117,20 @@ function fetchTracks(tracksDateTime)
   return null;
 }
 
+function onPopState(event)
+{
+  if (event.state === null)
+  {
+    location.reload();
+  }
+  else
+  {
+    // Set load next track DateTime to the right value for this page
+    m.loadTracksDateTime = event.state[0].date;
+    updatePlayerAndPage(event.state, false, false);
+  }
+}
+
 function getTrackTitle(titleData)
 {
   return `${titleData.track_artist} - ${titleData.track_title}`;
@@ -154,7 +165,12 @@ function getTrackNavHtml(isNavPrev, navUrl, trackMeta)
 
 function updatePage(trackData, thumbnailData, pushState = true)
 {
-  updateNavLinks(document.querySelector('div.nav-links'), trackData);
+  response.prevPage = trackData[0].link;
+  response.nextPage = (trackData.length === 3) ? trackData[2].link : null;
+
+  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-back'), response.prevPage);
+  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-fwd'), response.nextPage);
+  updateTrackNavLinks(document.querySelector('div.nav-links'), trackData);
   updateTrackHeader(document.querySelector('header.entry-header'), trackData[1]);
   updateTrackAttributes(document.querySelector('single-track'), trackData[1], thumbnailData);
 
@@ -164,27 +180,26 @@ function updatePage(trackData, thumbnailData, pushState = true)
   document.title = getTrackTitle(trackData[1].meta);
 }
 
-function updateNavLinks(element, trackData)
+function updateSiteNavLinks(elements, url)
 {
-  let trackNavHtml = getTrackNavHtml(true, trackData[0].link, trackData[0].meta);
-  
-  response.prevPage = trackData[0].link;
-  response.nextPage = null;
-  
-  if (trackData.length === 3)
-  {
-    trackNavHtml     += getTrackNavHtml(false, trackData[2].link, trackData[2].meta);
-    response.nextPage = trackData[2].link;
-  }
-
-  element.innerHTML = trackNavHtml;
+  elements?.forEach(element => { element.closest('a').href = (url !== null) ? url : ''; });
 }
 
-function updateTrackHeader(element, trackData)
+function updateTrackNavLinks(parentElement, trackData)
 {
-  element.querySelector('h2.entry-title').textContent = getTrackTitle(trackData.meta);
-  element.querySelector('div.entry-meta-artists  .term-links').innerHTML = trackData.artists_links;
-  element.querySelector('div.entry-meta-channels .term-links').innerHTML = trackData.channels_links;
+  let trackNavHtml = getTrackNavHtml(true, response.prevPage, trackData[0].meta);
+  
+  if (trackData.length === 3)
+    trackNavHtml += getTrackNavHtml(false, response.nextPage, trackData[2].meta);
+
+  parentElement.innerHTML = trackNavHtml;
+}
+
+function updateTrackHeader(parentElement, trackData)
+{
+  parentElement.querySelector('h2.entry-title').textContent = getTrackTitle(trackData.meta);
+  parentElement.querySelector('div.entry-meta-artists  .term-links').innerHTML = trackData.artists_links;
+  parentElement.querySelector('div.entry-meta-channels .term-links').innerHTML = trackData.channels_links;
 }
 
 function updateTrackAttributes(element, trackData, thumbnailData)

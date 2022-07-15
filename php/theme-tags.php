@@ -283,22 +283,18 @@ function get_nav_bar_icons() : array
 function get_nav_bar_arrows() : array
 {
   $session_vars = get_session_vars();
-  
+
   if (($session_vars['prevPage'] !== null) || ($session_vars['nextPage'] !== null))
   {
-    if ($session_vars['prevPage'] !== null)
-      $nav_arrows['back'] = '<a href="' . esc_url($session_vars['prevPage']) . '" class="navbar-prev-link"><span class="material-icons navbar-arrow-back" title="Previous track / page (shift + arrow left)">arrow_backward</span></a>';
-    else
-      $nav_arrows['back'] = '<span class="material-icons navbar-arrow-back disbled">arrow_backward</span>';
+    $nav_url = ($session_vars['prevPage'] !== null) ? $session_vars['prevPage'] : '';
+    $nav_arrows['back'] = '<a href="' . esc_url($nav_url) . '"><span class="material-icons navbar-arrow-back" title="Previous track / page (shift + arrow left)">arrow_backward</span></a>';
 
-    if ($session_vars['nextPage'] !== null)
-      $nav_arrows['fwd'] = '<a href="' . esc_url($session_vars['nextPage']) . '" class="navbar-next-link"><span class="material-icons navbar-arrow-fwd" title="Next track / page (shift + arrow right)">arrow_forward</span></a>';
-    else
-      $nav_arrows['fwd'] = '<span class="material-icons navbar-arrow-fwd disbled">arrow_forward</span>';
+    $nav_url = ($session_vars['nextPage'] !== null) ? $session_vars['nextPage'] : '';
+    $nav_arrows['fwd']  = '<a href="' . esc_url($nav_url) . '"><span class="material-icons navbar-arrow-fwd"  title="Next track / page (shift + arrow right)">arrow_forward</span></a>';
   }
   else
   {
-    $nav_arrows['back'] = '<a href="" title="Go back" onclick="javascript:history.back();return false;" class="navbar-prev-link"><span class="material-icons navbar-arrow-back">arrow_backward</span></a>';
+    $nav_arrows['back'] = '<a href="" title="Go back" onclick="javascript:history.back();return false;"><span class="material-icons navbar-arrow-back">arrow_backward</span></a>';
     $nav_arrows['fwd']  = '<span class="material-icons navbar-arrow-fwd disbled">arrow_forward</span>';
   }
 

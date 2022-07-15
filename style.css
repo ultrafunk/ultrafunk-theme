@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.14
+Version:           1.44.15
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -334,6 +334,11 @@ body.no-playback #playback-controls {
   text-decoration: none;
 }
 
+.navbar-arrows a[href=""],
+.navbar-arrow-single a[href=""] {
+  pointer-events: none;
+}
+
 .navbar-arrows a span:hover,
 .navbar-arrow-single a span:hover {
   color: var(--link-hover-color);
@@ -344,8 +349,8 @@ body.no-playback #playback-controls {
   margin-right: 5px;
 }
 
-.navbar-arrow-back.disbled,
-.navbar-arrow-fwd.disbled {
+a[href=""] .navbar-arrow-back,
+a[href=""] .navbar-arrow-fwd {
   opacity: var(--control-disabled-opacity);
   pointer-events: none;
 }
@@ -626,6 +631,10 @@ nav .nav-links ul {
 .track-navigation .nav-next {
   margin-left: 20px;
   text-align: right;
+}
+
+.track-navigation .nav-next:only-child {
+  width: 100%;
 }
 
 .track-navigation .nav-previous a,
@@ -1873,6 +1882,8 @@ body.no-playback .sticky-nav-up .site-header-container {
   
   nav.navigation.track-navigation {
     margin: 50px auto;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
   .track-navigation .nav-links {

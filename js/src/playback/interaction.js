@@ -18,6 +18,7 @@ import { initScreenWakeLock } from './screen-wakelock.js';
 import { TRACK_TYPE }         from './mediaplayers.js';
 
 import {
+  isSingleTrackNext,
   isNextTrackLoading,
   playNextSingleTrack,
 } from './gallery/single-track-next.js';
@@ -190,11 +191,6 @@ function documentEventKeyDown(event)
         showSnackbar(settings.playback.masterMute ? 'Volume is muted (<b>m</b> to unmute)' : 'Volume is unmuted (<b>m</b> to mute)', 3);
         break;
 
-      case 'n':
-      case 'N':
-        onKeySingleTrackNext(event);
-        break;
-
       case 'p':
       case 'P':
         footerToggles.playerType.toggle();
@@ -268,17 +264,17 @@ function onKeyArrowRight(event)
   event.preventDefault();
 
   if (event.shiftKey === true)
-    prevNextNavTo(null, response.nextPage);
+    onSingleTrackNext(null);
   else
     m.player.nextTrack();
 }
 
-function onKeySingleTrackNext(event)
+function onSingleTrackNext(event)
 {
-  if (settings.gallery.fetchNextSingleTrack)
-  {
-    event.preventDefault();
+  event?.preventDefault();
 
+  if (isSingleTrackNext())
+  {
     if (m.player.getStatus().trackType === TRACK_TYPE.YOUTUBE)
     {
       if (isNextTrackLoading() === false)
@@ -290,6 +286,10 @@ function onKeySingleTrackNext(event)
     {
       prevNextNavTo(null, response.nextPage);
     }
+  }
+  else
+  {
+    prevNextNavTo(null, response.nextPage);
   }
 }
 
@@ -393,7 +393,7 @@ class siteNavUiElements extends ElementClick
       return prevNextNavTo(this.event, response.prevPage);
 
     if (this.clicked('span.navbar-arrow-fwd'))
-      return prevNextNavTo(this.event, response.nextPage);
+      return onSingleTrackNext(this.event);
   }
 }
 
@@ -405,7 +405,7 @@ class trackNavUiElements extends ElementClick
       return prevNextNavTo(this.event, response.prevPage);
 
     if (this.clicked('div.nav-next a'))
-      return onKeySingleTrackNext(this.event);
+      return onSingleTrackNext(this.event);
   }
 }
 
