@@ -286,16 +286,16 @@ function get_nav_bar_arrows() : array
 
   if (($session_vars['prevPage'] !== null) || ($session_vars['nextPage'] !== null))
   {
-    $nav_url = ($session_vars['prevPage'] !== null) ? $session_vars['prevPage'] : '';
+    $nav_url = ($session_vars['prevPage'] !== null) ? $session_vars['prevPage'] : '#';
     $nav_arrows['back'] = '<a href="' . esc_url($nav_url) . '"><span class="material-icons navbar-arrow-back" title="Previous track / page (shift + arrow left)">arrow_backward</span></a>';
 
-    $nav_url = ($session_vars['nextPage'] !== null) ? $session_vars['nextPage'] : '';
+    $nav_url = ($session_vars['nextPage'] !== null) ? $session_vars['nextPage'] : '#';
     $nav_arrows['fwd']  = '<a href="' . esc_url($nav_url) . '"><span class="material-icons navbar-arrow-fwd"  title="Next track / page (shift + arrow right)">arrow_forward</span></a>';
   }
   else
   {
-    $nav_arrows['back'] = '<a href="" title="Go back" onclick="javascript:history.back();return false;"><span class="material-icons navbar-arrow-back">arrow_backward</span></a>';
-    $nav_arrows['fwd']  = '<span class="material-icons navbar-arrow-fwd disbled">arrow_forward</span>';
+    $nav_arrows['back'] = '<a href="/" title="Go back" onclick="javascript:history.back();return false;"><span class="material-icons navbar-arrow-back">arrow_backward</span></a>';
+    $nav_arrows['fwd']  = '<a href="#"><span class="material-icons navbar-arrow-fwd">arrow_forward</span></a>';
   }
 
   return $nav_arrows;

@@ -107,8 +107,12 @@ export function measureStartupExecutionTime()
   executionStart = performance.now();
 }
 
+const logCss = `
+  background-color: rgb(40, 80, 160);
+  padding: 2px 4px`;
+
 export function logStartupExecutionTime()
 {
   executionStop = performance.now();
-  console.log(`ultrafunk.com startup JavaScript execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms.`);
+  console.log(`%cultrafunk.com startup JavaScript execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms.`, logCss);
 }

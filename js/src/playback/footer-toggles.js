@@ -63,11 +63,26 @@ class PlayerTypeToggle extends ElementToggle
   
   toggle()
   {
+    const destData = this.getDestData();
+  
+    settings.playback.preferredPlayer = isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST;
+    setCookie(KEY.UF_PREFERRED_PLAYER, `${isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST}`, (YEAR_IN_SECONDS * 5));
+    sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify(destData.trackData));
+
+    navToUrl(getPrefPlayerUrl(this.getDestUrl(destData)));
+  }
+
+  update()
+  {
+    this.value = (settings.playback.preferredPlayer === PLAYER_TYPE.LIST) ? 'List' : 'Gallery';
+  }
+
+  getDestUrl(destData)
+  {
     const isPagedRegEx = /\/page\/(?!0)\d{1,6}/;
-    const destData     = this.getDestData();
     const sourceUrl    = window.location.href;
     let destUrl        = null;
-  
+
     // Add destination pagination or remove pagination if needed
     if ((destData.pageNum > 1) && (sourceUrl.match(isPagedRegEx) !== null))
     {
@@ -83,16 +98,7 @@ class PlayerTypeToggle extends ElementToggle
       destUrl = sourceUrl.replace(isPagedRegEx, '');
     }
 
-    settings.playback.preferredPlayer = isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST;
-    setCookie(KEY.UF_PREFERRED_PLAYER, `${isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST}`, (YEAR_IN_SECONDS * 5));
-    sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify(destData.trackData));
-
-    navToUrl(getPrefPlayerUrl(destUrl));
-  }
-
-  update()
-  {
-    this.value = (settings.playback.preferredPlayer === PLAYER_TYPE.LIST) ? 'List' : 'Gallery';
+    return destUrl;
   }
   
   getDestData()

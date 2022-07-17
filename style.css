@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.15
+Version:           1.44.16
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -282,6 +282,8 @@ body.no-playback #playback-controls {
   justify-content: space-between;
 }
 
+.navbar-arrows .material-icons,
+.navbar-arrow-single .material-icons,
 .nav-menu-toggle .material-icons,
 .nav-search-toggle .material-icons {
   font-size: 40px;
@@ -291,6 +293,7 @@ body.no-playback #playback-controls {
   width: 40px;
   overflow: hidden;
   cursor: pointer;
+  user-select: none;
 }
 
 .nav-menu-toggle .material-icons:hover,
@@ -300,19 +303,16 @@ body.no-playback #playback-controls {
 
 @media not all and (pointer: fine) {
 
+  .navbar-arrows .material-icons:active,
+  .navbar-arrow-single .material-icons:active {
+    color: var(--link-hover-color);
+  }
+
   .nav-menu-toggle .material-icons:hover,
   .nav-search-toggle .material-icons:hover {
     opacity: 1;
   }
   
-}
-
-.navbar-arrows .material-icons,
-.navbar-arrow-single .material-icons {
-  font-size: 40px;
-  width: 40px;
-  height: 40px;
-  color: var(--primary-icon-color);
 }
 
 .navbar-arrows {
@@ -334,25 +334,31 @@ body.no-playback #playback-controls {
   text-decoration: none;
 }
 
-.navbar-arrows a[href=""],
-.navbar-arrow-single a[href=""] {
+.navbar-arrows a[href="#"],
+.navbar-arrow-single a[href="#"] {
   pointer-events: none;
+  cursor: default;  
 }
 
-.navbar-arrows a span:hover,
-.navbar-arrow-single a span:hover {
-  color: var(--link-hover-color);
-  text-decoration: none;
+@media all and (pointer: fine) {
+
+  .navbar-arrows a span:hover,
+  .navbar-arrow-single a span:hover {
+    color: var(--link-hover-color);
+    text-decoration: none;
+  }
+
 }
 
 .navbar-arrow-back {
   margin-right: 5px;
 }
 
-a[href=""] .navbar-arrow-back,
-a[href=""] .navbar-arrow-fwd {
+a[href="#"] .navbar-arrow-back,
+a[href="#"] .navbar-arrow-fwd {
   opacity: var(--control-disabled-opacity);
   pointer-events: none;
+  cursor: default;  
 }
 
 .navbar-title {
@@ -1882,8 +1888,8 @@ body.no-playback .sticky-nav-up .site-header-container {
   
   nav.navigation.track-navigation {
     margin: 50px auto;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .track-navigation .nav-links {

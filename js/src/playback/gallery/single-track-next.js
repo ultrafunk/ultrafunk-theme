@@ -182,7 +182,7 @@ function updatePage(trackData, thumbnailData, pushState = true)
 
 function updateSiteNavLinks(elements, url)
 {
-  elements?.forEach(element => { element.closest('a').href = (url !== null) ? url : ''; });
+  elements?.forEach(element => { element.closest('a').href = (url !== null) ? url : '#'; });
 }
 
 function updateTrackNavLinks(parentElement, trackData)
