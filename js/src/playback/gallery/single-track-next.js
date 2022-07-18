@@ -185,21 +185,22 @@ function updateSiteNavLinks(elements, url)
   elements?.forEach(element => { element.closest('a').href = (url !== null) ? url : '#'; });
 }
 
-function updateTrackNavLinks(parentElement, trackData)
+function updateTrackNavLinks(element, trackData)
 {
   let trackNavHtml = getTrackNavHtml(true, response.prevPage, trackData[0].meta);
   
   if (trackData.length === 3)
     trackNavHtml += getTrackNavHtml(false, response.nextPage, trackData[2].meta);
 
-  parentElement.innerHTML = trackNavHtml;
+  element.innerHTML = trackNavHtml;
 }
 
-function updateTrackHeader(parentElement, trackData)
+function updateTrackHeader(element, trackData)
 {
-  parentElement.querySelector('h2.entry-title').textContent = getTrackTitle(trackData.meta);
-  parentElement.querySelector('div.entry-meta-artists  .term-links').innerHTML = trackData.artists_links;
-  parentElement.querySelector('div.entry-meta-channels .term-links').innerHTML = trackData.channels_links;
+  element.querySelector('h2.entry-title').textContent          = getTrackTitle(trackData.meta);
+  element.querySelector('h2.entry-title.type-split').innerHTML = `${trackData.meta.track_artist}<br><span class="light-text">${trackData.meta.track_title}</span>`;
+  element.querySelector('div.entry-meta-artists  .term-links').innerHTML = trackData.artists_links;
+  element.querySelector('div.entry-meta-channels .term-links').innerHTML = trackData.channels_links;
 }
 
 function updateTrackAttributes(element, trackData, thumbnailData)

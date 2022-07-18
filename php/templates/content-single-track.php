@@ -46,8 +46,9 @@ function entry_content(object $post) : void
 /**************************************************************************************************************************/
 
 
-$track_data       = \Ultrafunk\Theme\Functions\get_track_data($post);
-$is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
+$track_data        = \Ultrafunk\Theme\Functions\get_track_data($post);
+$is_youtube_track  = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
+$entry_title_split = '<h2 class="entry-title type-split">' . $post->track_artist . '<br><span class="light-text">' . $post->track_title . '</span></h2>';
 
 
 ?>
@@ -64,7 +65,10 @@ $is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
   data-track-date-time="<?php echo esc_html(get_track_date_time()); ?>"
   >
   <header class="entry-header">
-    <?php \Ultrafunk\Theme\Tags\entry_title(); ?>
+    <?php
+    \Ultrafunk\Theme\Tags\entry_title();
+    echo $entry_title_split;
+    ?>
     <div class="entry-meta">
       <div class="entry-meta-artists">
         <b><a href="/artists/" title="Show All Artists">Artists</a>: </b><span class="term-links"><?php the_terms(get_the_ID(), 'uf_artist'); ?></span>
