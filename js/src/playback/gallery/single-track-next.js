@@ -146,13 +146,17 @@ function updatePlayerAndPage(trackData, playTrack = false, pushState = true)
 
 function getTrackNavHtml(isNavPrev, navUrl, trackMeta)
 {
-  const trackArtistTitle = `<b>${trackMeta.track_artist}</b><br>${trackMeta.track_title}`;
+  const trackArtistTitle  = `<b>${trackMeta.track_artist}</b><br>${trackMeta.track_title}`;
+  const prevNextThumbnail = getThumbnailData(trackMeta);
+  const prevNextThumbHtml = `<div class="${isNavPrev ? 'prev' : 'next'}-track-nav-thumbnail ${prevNextThumbnail.class}"><img src="${prevNextThumbnail.src}"></div>`;
   
   return /*html*/ `
     <div class="${isNavPrev ? 'nav-previous' : 'nav-next'}">
-      <a href="${navUrl}" rel="${isNavPrev ? 'prev' : 'next'}">
+      <a href="${navUrl}" rel="${isNavPrev ? 'prev' : 'next'}" title="${isNavPrev ? 'Go to Previous track' : 'Go to Next track'}">
         ${isNavPrev ? '<div class="prev-track-arrow">&#10094</div>' : ''}
+        ${isNavPrev ? prevNextThumbHtml : ''}
         <div class="${isNavPrev ? 'prev-track-artist-title' : 'next-track-artist-title'}">${trackArtistTitle}</div>
+        ${!isNavPrev ? prevNextThumbHtml : ''}
         ${!isNavPrev ? '<div class="next-track-arrow">&#10095</div>' : ''}
       </a>
     </div>`;

@@ -26,6 +26,7 @@ use function Ultrafunk\Plugin\Globals\ {
 use function Ultrafunk\Theme\Functions\ {
   get_title,
   get_shuffle_title,
+  get_track_data,
 };
 
 
@@ -419,20 +420,25 @@ function nav_bar_title() : void
   echo '<div class="navbar-title">' . $prefix . $title . $pagination . '</div>';
 }
 
-function single_track_nav_link(bool $is_prev, mixed $post) : void
+function single_track_nav_link(bool $is_nav_prev, mixed $post) : void
 {
   if (($post !== null) && ($post !== ''))
   {
     $track_artist_title = '<b>' . esc_html($post->track_artist) . '</b><br>' . esc_html($post->track_title);
-    
+    $prev_next_title    = $is_nav_prev ? "Go to Previous track" : "Go to Next track";
+    $prev_next_post     = $is_nav_prev ? get_next_post() : get_previous_post();
+    $track_data         = ($prev_next_post !== null) ? get_track_data($prev_next_post) : null;
+
     ?>
-    <div class="<?php echo ($is_prev ? 'nav-previous' : 'nav-next'); ?>">
-      <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_prev ? 'prev' : 'next'); ?>">
-        <?php if ($is_prev) { ?>
+    <div class="<?php echo ($is_nav_prev ? 'nav-previous' : 'nav-next'); ?>">
+      <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_nav_prev ? 'prev' : 'next'); ?>" title="<?php echo $prev_next_title; ?>">
+        <?php if ($is_nav_prev) { ?>
           <div class="prev-track-arrow">&#10094</div>
+          <div class="prev-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>"></div>
         <?php } ?>
-        <div class="<?php echo ($is_prev ? 'prev-track-artist-title' : 'next-track-artist-title'); ?>"><?php echo $track_artist_title; ?></div>
-        <?php if (!$is_prev) { ?>
+        <div class="<?php echo ($is_nav_prev ? 'prev-track-artist-title' : 'next-track-artist-title'); ?>"><?php echo $track_artist_title; ?></div>
+        <?php if (!$is_nav_prev) { ?>
+          <div class="next-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>"></div>
           <div class="next-track-arrow">&#10095</div>
         <?php } ?>
       </a>
