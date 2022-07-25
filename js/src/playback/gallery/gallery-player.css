@@ -1,224 +1,317 @@
 /*
-* Gallery player layout
+* Gallery player grid layouts
 *
 * https://ultrafunk.com
 *
 */
 
-.gallery-layout-2-column,
-.gallery-layout-3-column {
+:root {
+  --gallery-layout-min-width: 1100px;
+}
+
+.gallery-2-col,
+.gallery-3-col {
   --site-max-width: calc(100% - 130px);
   --site-content-margin-top: 30px;
   --site-content-margin-bottom: 65px;
   --footer-max-width: 1500px;
 }
 
-.gallery-layout-2-column .site-header-container,
-.gallery-layout-3-column .site-header-container {
+.gallery-layout #site-content {
+  max-width: var(--site-max-width);
+  margin: calc(var(--site-content-margin-top) + var(--site-header-height)) auto var(--site-content-margin-bottom) auto;
+  box-sizing: border-box;
+  clear: both;
+}
+
+.gallery-1-col gallery-track:first-child {
+  margin-top: 0;
+}
+
+.gallery-2-col .site-header-container,
+.gallery-3-col .site-header-container {
   padding-left: 65px;
   padding-right: 65px;
 }
 
-.gallery-layout-2-column gallery-layout,
-.gallery-layout-3-column gallery-layout {
+.gallery-1-col gallery-grid {
+  display: block;
+}
+
+.gallery-2-col gallery-grid,
+.gallery-3-col gallery-grid {
   display: inline-grid;
   width: 100%;
   box-sizing: border-box;  
 }
 
-.gallery-layout-2-column gallery-layout {
+.gallery-2-col gallery-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-row-gap: 40px;
   grid-column-gap: 80px;
 }
 
-.gallery-layout-3-column gallery-layout {
+.gallery-3-col gallery-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-row-gap: 30px;
   grid-column-gap: 60px;
 }
 
-.gallery-layout-2-column single-track,
-.gallery-layout-3-column single-track {
+.gallery-2-col gallery-track,
+.gallery-3-col gallery-track {
   margin-top: 0;
 }
 
-.gallery-layout-2-column .entry-header,
-.gallery-layout-3-column .entry-header {
+.gallery-2-col .track-header,
+.gallery-3-col .track-header {
   padding-left: 0;
   padding-right: 0;
 }
 
-.gallery-layout-2-column h2.entry-title.now-playing-icon::before {
+.gallery-2-col h2.track-title.now-playing-icon::before {
   font-size: 27px;
   top: 4px;
   margin-right: 5px;
   margin-left: -4px;
 }
 
-.gallery-layout-3-column h2.entry-title.now-playing-icon::before {
+.gallery-3-col h2.track-title.now-playing-icon::before {
   font-size: 23px;
   top: 4px;
   margin-right: 5px;
   margin-left: -3px;
 }
 
-.gallery-layout-2-column h2.entry-title,
-.gallery-layout-2-column h2.entry-title a {
+.gallery-2-col h2.track-title,
+.gallery-2-col h2.track-title a {
   font-size: 25px;
   line-height: 35px;
   margin-top: 25px;
   margin-bottom: 12px;
 }
 
-.gallery-layout-3-column h2.entry-title,
-.gallery-layout-3-column h2.entry-title a {
+.gallery-3-col h2.track-title,
+.gallery-3-col h2.track-title a {
   font-size: 20px;
   line-height: 30px;
   margin-top: 20px;
   margin-bottom: 5px;
 }
 
-.gallery-layout-2-column .entry-meta {
+.gallery-2-col .track-meta {
   font-size: 20px;
   line-height: 30px;
 }
 
-.gallery-layout-3-column .entry-meta {
-  font-size: 15px;
-  line-height: 25px;
-}
-
-.gallery-layout-2-column .entry-meta-controls .track-share-control {
+.gallery-2-col .track-meta-controls .track-share-control,
+.gallery-3-col .track-meta-controls .track-share-control {
   width: 40px;
   height: 40px;
   margin-right: -8px;
 }
 
-.gallery-layout-2-column .entry-meta-controls .track-share-control .material-icons {
+.gallery-2-col .track-meta-controls .track-share-control .material-icons,
+.gallery-3-col .track-meta-controls .track-share-control .material-icons {
   font-size: 30px;
 }
 
-.gallery-layout-2-column .crossfade-preset-control {
+.gallery-2-col .crossfade-preset-control {
   width: 28px;
   height: 28px;
   font-size: 18px;
   line-height: 28px;
 }
 
-.gallery-layout-2-column .crossfade-fadeto-control {
+.gallery-2-col .crossfade-fadeto-control {
   width: 44px;
   height: 44px;
   margin-right: -6px;
 }
 
-.gallery-layout-2-column .crossfade-fadeto-control img {
+.gallery-2-col .crossfade-fadeto-control img {
   width: 44px;
   height: 44px;
 }
 
-.gallery-layout-3-column .entry-meta-controls .track-share-control {
-  width: 40px;
-  height: 40px;
-  margin-right: -8px;
+.gallery-3-col .track-meta {
+  font-size: 15px;
+  line-height: 25px;
 }
 
-.gallery-layout-3-column .entry-meta-controls .track-share-control .material-icons {
-  font-size: 30px;
-}
-
-.gallery-layout-3-column .crossfade-preset-control {
+.gallery-3-col .crossfade-preset-control {
   width: 26px;
   height: 26px;
   font-size: 18px;
   line-height: 27px;
 }
 
-.gallery-layout-3-column .crossfade-fadeto-control {
+.gallery-3-col .crossfade-fadeto-control {
   width: 40px;
   height: 40px;
   margin-right: -5px;
 }
 
-.gallery-layout-3-column .crossfade-fadeto-control img {
+.gallery-3-col .crossfade-fadeto-control img {
   width: 40px;
   height: 40px;
 }
 
-.gallery-layout-2-column figure.wp-block-embed {
+.gallery-2-col figure.wp-block-embed {
   margin: 20px 0 0 0;
 }
 
-.gallery-layout-3-column figure.wp-block-embed {
+.gallery-3-col figure.wp-block-embed {
   margin: 10px 0 0 0;
 }
 
-.gallery-layout-2-column .wp-block-embed__wrapper {
+.gallery-2-col .wp-block-embed__wrapper {
   background-size: 100px;
 }
 
-.gallery-layout-3-column .wp-block-embed__wrapper {
+.gallery-3-col .wp-block-embed__wrapper {
   background-size: 50px;
 }
 
-.gallery-layout-2-column .site-footer-container,
-.gallery-layout-3-column .site-footer-container {
+.gallery-2-col .site-footer-container,
+.gallery-3-col .site-footer-container {
   max-width: var(--footer-max-width);
 }
 
 
 /**************************************************************************************************
-*  Responsive
+* Responsive: max-width: 2525px
 ***************************************************************************************************/
 
 @media screen and (max-width: 2525px) {
 
-  .gallery-layout-2-column #site-content,
-  .gallery-layout-3-column #site-content {
+  .gallery-2-col #site-content,
+  .gallery-3-col #site-content {
     max-width: 100%;
   }
 
-  .gallery-layout-2-column gallery-layout,
-  .gallery-layout-3-column gallery-layout,
-  .gallery-layout-2-column nav.navigation,
-  .gallery-layout-3-column nav.navigation,
-  .gallery-layout-2-column #site-footer,
-  .gallery-layout-3-column #site-footer {
+  .gallery-2-col gallery-grid,
+  .gallery-3-col gallery-grid,
+  .gallery-2-col nav.navigation,
+  .gallery-3-col nav.navigation,
+  .gallery-2-col #site-footer,
+  .gallery-3-col #site-footer {
     padding-left: 65px;
     padding-right: 65px;
   }
 
 }
 
+
+/**************************************************************************************************
+* Responsive: min-width: 2100px
+***************************************************************************************************/
+
 @media screen and (min-width: 2100px) {
 
-  .gallery-layout-3-column gallery-layout {
+  .gallery-3-col gallery-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
 }
 
+
+/**************************************************************************************************
+* Responsive: max-width: 2100px
+***************************************************************************************************/
+
 @media screen and (max-width: 2100px) {
 
-  .gallery-layout-2-column .wp-block-embed__wrapper {
+  .gallery-2-col .wp-block-embed__wrapper {
     background-size: 75px;
   }
 
-  .gallery-layout-3-column .wp-block-embed__wrapper {
+  .gallery-3-col .wp-block-embed__wrapper {
     background-size: 66px;
   }
   
 }
 
+
+/**************************************************************************************************
+* Responsive: max-width: 1920px
+***************************************************************************************************/
+
+@media screen and (max-width: 1920px) {
+
+  .gallery-1-col {
+    --site-max-width: 1100px;
+    --site-content-margin-top: 40px;
+    --site-content-margin-bottom: 65px;
+  }
+
+  .gallery-1-col nav.navigation.pagination,
+  .gallery-2-col nav.navigation.pagination,
+  .gallery-3-col nav.navigation.pagination {
+    margin: 60px auto 65px auto;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 1600px
+***************************************************************************************************/
+
 @media screen and (max-width: 1600px) {
 
-  .gallery-layout-3-column gallery-layout {
+  .gallery-3-col gallery-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .gallery-layout-2-column .wp-block-embed__wrapper,
-  .gallery-layout-3-column .wp-block-embed__wrapper {
+  .gallery-2-col .wp-block-embed__wrapper,
+  .gallery-3-col .wp-block-embed__wrapper {
     background-size: 50px;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 1350px
+***************************************************************************************************/
+
+@media screen and (max-width: 1350px) {
+
+  .gallery-1-col .site-header-container,
+  .gallery-1-col #site-content {
+    max-width: 100%;
+  }
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 900px
+***************************************************************************************************/
+
+/*
+@media screen and (max-width: 900px) {
+
+  .gallery-1-col {
+    --site-content-margin-top: 40px;
+  }
+
+}
+*/
+
+
+/**************************************************************************************************
+* Responsive: max-width: 500px
+***************************************************************************************************/
+
+@media screen and (max-width: 500px) {
+
+  .gallery-1-col {
+    --site-content-margin-top: 32px;
+    --site-content-margin-bottom: 50px;
+  }
+
+  .gallery-1-col nav.navigation.pagination {
+    margin: 64px auto 70px auto;
   }
 
 }

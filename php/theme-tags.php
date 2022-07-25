@@ -35,12 +35,17 @@ use function Ultrafunk\Theme\Functions\ {
 
 function user_layout_class() : void
 {
-  if (!is_singular() && !is_search() && !is_404())
+  if (is_home() || is_tax() || is_date())
   {
     global $wp_query;
 
-    if (isset($wp_query) && ($wp_query->post_count >= 3))
-      echo 'user-layout';
+    if (isset($wp_query))
+    {
+      if ($wp_query->post_count > 3)
+        echo 'gallery-layout';
+      else
+        echo 'gallery-1-col';
+    }
   }
 }
 
@@ -56,20 +61,23 @@ function pre_wp_head() : void
 
     document.documentElement.classList.add(siteThemeClass);
 
-    if ((window.innerWidth > 1100) && (document.documentElement.classList.contains('user-layout')))
+    if (document.documentElement.classList.contains('gallery-layout'))
     {
       const galleryLayout      = localStorage.getItem('uf_gallery_layout');
-      let   galleryLayoutClass = 'gallery-layout-3-column';
+      let   galleryLayoutClass = 'gallery-3-col';
 
       if (galleryLayout !== null)
       {
         if (galleryLayout === '1-column')
-          galleryLayoutClass = 'gallery-layout-1-column';
+          galleryLayoutClass = 'gallery-1-col';
         else if (galleryLayout === '2-column')
-          galleryLayoutClass = 'gallery-layout-2-column';
+          galleryLayoutClass = 'gallery-2-col';
       }
 
-      document.documentElement.classList.add(galleryLayoutClass);
+      if (window.innerWidth > 1100)
+        document.documentElement.classList.add(galleryLayoutClass);
+      else
+        document.documentElement.classList.add('gallery-1-col');
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -458,18 +466,18 @@ function content_pagination() : void
   ]);
 }
 
-function entry_title() : void
+function entry_title(string $prefix = 'entry') : void
 {
   if (is_singular())
-    esc_html(the_title('<h2 class="entry-title">', '</h2>'));
+    esc_html(the_title('<h2 class="' . $prefix . '-title">', '</h2>'));
   else
-    esc_html(the_title(sprintf('<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url(get_permalink())), '</a></h2>'));
+    esc_html(the_title(sprintf('<h2 class="' . $prefix . '-title"><a href="%s" rel="bookmark">', esc_url(get_permalink())), '</a></h2>'));
 }
 
-function meta_controls() : void
+function track_meta_controls() : void
 {
   ?>
-  <div class="entry-meta-controls">
+  <div class="track-meta-controls">
     <div class="track-share-control">
       <span class="material-icons" title="Share track / Play On">share</span>
     </div>

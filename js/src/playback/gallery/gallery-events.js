@@ -13,9 +13,9 @@ import { response, settings } from '../../shared/session-data.js';
 import { EVENT, addListener } from '../playback-events.js';
 
 import {
-  isSingleTrackNext,
+  isSingleTrackFetch,
   playNextSingleTrack,
-} from './single-track-next.js';
+} from './single-track-fetch.js';
 
 import {
   playerScrollTo,
@@ -39,7 +39,7 @@ const m = {
 };
 
 const config = {
-  nowPlayingIconsSelector: 'h2.entry-title',
+  nowPlayingIconsSelector: 'h2.track-title',
 };
 
 
@@ -116,7 +116,7 @@ function continueAutoplay(playbackEvent)
 {
   debug.log(playbackEvent);
 
-  if (isSingleTrackNext() && (playbackEvent.data.trackType === TRACK_TYPE.YOUTUBE))
+  if (isSingleTrackFetch() && (playbackEvent.data.trackType === TRACK_TYPE.YOUTUBE))
     playNextSingleTrack(true);
   else
     autoplayNavTo(response.nextPage, true);
@@ -190,7 +190,7 @@ function playbackEventErrorTryNext(playbackEvent)
   }
   else
   {
-    if (isSingleTrackNext())
+    if (isSingleTrackFetch())
     {
       // ToDo: Make below behaviour consistent throughout instead of: playNextSingleTrack(true) or
       //                                                              playNextSingleTrack(isPlaying()) ?

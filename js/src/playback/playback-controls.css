@@ -226,7 +226,7 @@ body.autoplay-off .progress-bar-control {
 
 body.search .playback-player-type-control,
 body.channel-soundcloud .playback-player-type-control,
-body.track.single .playback-player-type-control {
+body.single.track .playback-player-type-control {
   opacity: 0.3;
   pointer-events: none;
   cursor: default;
@@ -398,33 +398,7 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
 
 
 /**************************************************************************************************
-* Now playing icons (indicates currently playing track)
-***************************************************************************************************/
-
-.now-playing-icon::before {
-  color: #ff0000;
-}
-
-body.autoplay-off .now-playing-icon::before {
-  color: #0080ff;
-}
-
-.playing-animate::before,
-body.autoplay-off .playing-animate::before {
-  animation: track-icon-pulse 2s ease-in-out infinite;
-}
-
-@keyframes track-icon-pulse {
-  50% { opacity: 0.10; }
-}
-
-.playing-paused::before {
-  animation-play-state: paused !important;
-}
-
-
-/**************************************************************************************************
-* Responsive
+* Responsive: max-width: 1100px
 ***************************************************************************************************/
 
 @media screen and (max-width: 1100px) {
@@ -448,6 +422,11 @@ body.autoplay-off .playing-animate::before {
  
 }
 
+
+/**************************************************************************************************
+* Responsive: max-width: 700px
+***************************************************************************************************/
+
 @media screen and (max-width: 700px) {
 
   #playback-controls {
@@ -459,6 +438,11 @@ body.autoplay-off .playing-animate::before {
   }
 
 }
+
+
+/**************************************************************************************************
+* Responsive: max-width: 500px
+***************************************************************************************************/
 
 @media screen and (max-width: 500px) {
 

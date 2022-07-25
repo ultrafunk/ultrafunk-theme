@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.18
+Version:           1.44.19
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -34,8 +34,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
 
   --site-content-margin-top: 75px;
   --site-content-margin-bottom: 100px;
-
-  --site-gallery-layout-min-width: 1100px;
 
   --link-hover-color: #dd0000;
 
@@ -184,8 +182,7 @@ body.no-playback #progress-controls {
   display: none;
 }
 
-body.page,
-body.termlist {
+body.page {
   --site-max-width: 1000px;
 }
 
@@ -544,11 +541,6 @@ ul#menu-primary-menu {
 * Site content
 ***************************************************************************************************/
 
-body.track.single {
-  --site-content-margin-top: 40px;
-  --site-content-margin-bottom: 50px;
-}
-
 #site-content {
   max-width: var(--site-max-width);
   margin: calc(var(--site-content-margin-top) + var(--site-header-height)) auto var(--site-content-margin-bottom) auto;
@@ -561,17 +553,8 @@ body.no-playback #site-content {
   margin-top: calc(var(--site-content-margin-top) + var(--site-header-height-no-playback));
 }
 
-gallery-layout,
-term-list {
-  display: block;
-}
-
 nav.navigation.pagination {
   margin: 94px auto 100px auto;
-}
-
-nav.navigation.track-navigation {
-  margin: 50px auto;
 }
 
 nav .nav-links ul {
@@ -618,87 +601,6 @@ nav .nav-links ul {
   padding: 8px 14px;
   border: none;
   display: block;
-}
-
-.track-navigation .nav-links {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 26px;
-  justify-content: space-between;
-}
-
-.track-navigation .nav-previous {
-  margin-right: 20px;
-}
-
-.track-navigation .nav-next {
-  margin-left: 20px;
-  text-align: right;
-}
-
-.track-navigation .nav-next:only-child {
-  width: 100%;
-}
-
-.track-navigation .nav-previous a,
-.track-navigation .nav-next a {
-  color: var(--primary-font-color);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-}
-
-.track-navigation .nav-previous a:hover,
-.track-navigation .nav-next a:hover {
-  color: var(--link-hover-color);
-}
-
-.prev-track-nav-thumbnail,
-.next-track-nav-thumbnail {
-  width: 46px;
-  min-width: 46px;
-  height: 46px;
-  overflow: hidden;
-  cursor: pointer;
-  border-radius: var(--button-border-radius);
-}
-
-.prev-track-nav-thumbnail {
-  margin-right: 12px;
-}
-
-.next-track-nav-thumbnail {
-  margin-left: 12px;
-}
-
-.prev-track-nav-thumbnail.type-youtube img,
-.next-track-nav-thumbnail.type-youtube img{
-  height: 62px;
-  margin-top: -8px;
-}
-
-.prev-track-nav-thumbnail img,
-.next-track-nav-thumbnail img {
-  width: 46px;
-  height: 46px;
-  object-fit: cover;
-  image-rendering: -webkit-optimize-contrast;
-}
-
-.track-navigation .prev-track-arrow,
-.track-navigation .next-track-arrow {
-  font-size: 62px;
-}
-
-.track-navigation .prev-track-arrow {
-  margin-right: 10px;
-}
-
-.track-navigation .next-track-arrow {
-  margin-left: 10px;
 }
 
 
@@ -793,21 +695,18 @@ body.page-settings .footer-settings {
 * Handle button states here based on body classes set by server
 */
 
+html:not(.gallery-layout) #footer-gallery-layout-toggle,
+
 body.no-playback #footer-player-type-toggle,
 body.no-playback #footer-autoplay-toggle,
 body.no-playback #footer-crossfade-toggle,
-body.no-playback #footer-gallery-layout-toggle,
 
 body.search #footer-player-type-toggle,
 body.channel-soundcloud #footer-player-type-toggle,
-body.track.single #footer-player-type-toggle,
+body.single.track #footer-player-type-toggle,
 
 body.track #footer-crossfade-toggle,
-body.list-player #footer-crossfade-toggle,
-
-body.search #footer-gallery-layout-toggle,
-body.track #footer-gallery-layout-toggle,
-body.list-player #footer-gallery-layout-toggle {
+body.list-player #footer-crossfade-toggle {
   opacity: 0.33;
   pointer-events: none;
   cursor: default;
@@ -908,17 +807,11 @@ h1 {
   margin-block-end: 0.83em;
 }
 
-single-track {
-  display: block;
-}
-
-article,
-single-track {
+article {
   margin-top: 100px;
 }
 
-article:first-child,
-single-track:first-child {
+article:first-child {
   margin-top: 0;
 }
 
@@ -930,27 +823,8 @@ h2.entry-title a {
   color: var(--primary-font-color);
 }
 
-single-track h2.entry-title,
-single-track h2.entry-title a {
-  font-size: 30px;
-  line-height: 40px;
-}
-
 h2.entry-title a:hover {
   color: var(--link-hover-color);
-}
-
-h2.entry-title.now-playing-icon::before {
-  font-family: "Material Icons";
-  font-weight: 400;
-  content: "\E01D";
-  font-size: 33px;
-  line-height: 0;
-  position: relative;
-  top: 5px;
-  margin-right: 8px;
-  margin-left: -5px;
-  pointer-events: none;
 }
 
 h2.entry-title,
@@ -960,14 +834,8 @@ h2.entry-title a {
   text-overflow: ellipsis;
 }
 
-body.track.single h2.entry-title.type-split {
-  display: none;
-}
-
 h2,
 h2.widget-title,
-.single h2.entry-title,
-.single h2.entry-title a,
 .page h2.entry-title,
 .page h2.entry-title a {
   white-space: initial;
@@ -1017,93 +885,6 @@ strong {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-}
-
-
-/**************************************************************************************************
-* .entry-meta styles
-***************************************************************************************************/
-
-.entry-meta {
-  display: grid;
-  font-size: 20px;
-  line-height: 30px;
-}
-
-body.no-playback .entry-meta {
-  display: none;
-}
-
-.entry-meta-artists {
-  grid-row: 1;
-}
-
-.entry-meta-channels {
-  grid-row: 2;
-}
-
-.entry-meta-controls {
-  grid-row: 1 / span 2;
-  display: flex;
-  align-items: center;
-  justify-self: end;
-}
-
-.entry-meta a {
-  text-decoration: none;
-  color: var(--primary-font-color);
-}
-
-.entry-meta a:hover {
-  color: var(--link-hover-color);
-  text-decoration: underline;
-}
-
-.entry-meta-channels,
-.entry-meta-artists {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.single .entry-meta-channels,
-.single .entry-meta-artists,
-.page .entry-meta-channels,
-.page .entry-meta-artists {
-  white-space: initial;
-  overflow: initial;
-  text-overflow: initial;
-}
-
-.entry-meta-controls .track-share-control {
-  display: none;
-  width: 45px;
-  height: 45px;
-  margin-left: 10px;
-  margin-right: -9px;
-}
-
-body.autoplay-on .entry-meta-controls .track-share-control {
-  display: block;
-}
-
-.entry-meta-controls .track-share-control .material-icons {
-  font-size: 35px;
-  color: var(--primary-icon-color);
-  cursor: pointer;
-  padding: 5px;
-}
-
-.entry-meta-controls .track-share-control .material-icons:hover {
-  opacity: var(--control-hover-opacity);
-}
-
-@media not all and (pointer: fine) {
-
-  .entry-meta-controls .track-share-control .material-icons:hover {
-    opacity: 1;
-  }
-    
 }
 
 
@@ -1380,6 +1161,34 @@ body.no-playback .sticky-nav-up .site-header-container {
 
 
 /**************************************************************************************************
+* Responsive: max-width: 1920px
+***************************************************************************************************/
+
+@media screen and (max-width: 1920px) {
+  
+  body.search {
+    --site-max-width: 1100px;
+    --site-content-margin-top: 50px;
+  }
+
+  body.search article {
+    margin-top: 60px;
+  }
+
+  body.search article h2,
+  body.search article h2 a {
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .site-footer-container {
+    padding: 150px 0;
+  }
+
+}
+
+
+/**************************************************************************************************
 * Responsive: max-width: 1350px
 ***************************************************************************************************/
 
@@ -1400,6 +1209,10 @@ body.no-playback .sticky-nav-up .site-header-container {
     padding-right: 75px;
   }
   
+  body.search .site-header-container {
+    max-width: 100%;
+  }
+
   #menu-primary-menu li {
     width: calc((100% / 4) - 4.5px);
   }
@@ -1420,13 +1233,11 @@ body.no-playback .sticky-nav-up .site-header-container {
     max-width: 100%;
   }
 
-  body.page #site-content,
-  body.termlist #site-content {
+  body.page #site-content {
     max-width: calc(var(--site-max-width) + 150px);
   }
 
-  article,
-  single-track {
+  article {
     margin-top: var(--site-content-margin-top);
   }
 
@@ -1510,14 +1321,6 @@ body.no-playback .sticky-nav-up .site-header-container {
     line-height: 31px;
   }
 
-  .track-navigation .nav-previous {
-    margin-right: 12px;
-  }
-  
-  .track-navigation .nav-next {
-    margin-left: 12px;
-  }
-
   aside.widget-area {
     font-size: unset;
     line-height: unset;
@@ -1588,6 +1391,10 @@ body.no-playback .sticky-nav-up .site-header-container {
     line-height: unset;
   }
 
+  body.search article {
+    margin-top: 45px;
+  }
+
   .wp-block-embed__wrapper {
     background-size: 75px;
   }
@@ -1604,6 +1411,10 @@ body.no-playback .sticky-nav-up .site-header-container {
   :root {
     --site-content-margin-top: 40px;
     --site-content-margin-bottom: 65px;
+  }
+
+  body.search {
+    --site-content-margin-top: 40px;
   }
 
   .site-header-container,
@@ -1636,19 +1447,12 @@ body.no-playback .sticky-nav-up .site-header-container {
     font-size: 30px;
     line-height: 40px;
   }
-  
-  h2.entry-title.now-playing-icon::before {
-    font-size: 27px;
-    top: 4px;
-    margin-right: 8px;
-    margin-left: -4px;
-  }
 
   h2,
   h2.entry-title a,
-  single-track h2.entry-title,
-  single-track h2.entry-title a,
-  h2.widget-title {
+  h2.widget-title,
+  body.search article h2,
+  body.search article h2 a {
     font-size: 25px;
     line-height: 35px;
   }
@@ -1657,34 +1461,6 @@ body.no-playback .sticky-nav-up .site-header-container {
     font-size: 20px;
     line-height: 30px;
     margin-top: 50px;
-  }
-
-  .entry-meta {
-    font-size: unset;
-    line-height: unset;
-  }
-
-  .track-navigation .nav-links {
-    font-size: unset;
-    line-height: 24px;
-  }
-
-  .track-navigation .prev-track-nav-thumbnail,
-  .track-navigation .next-track-nav-thumbnail {
-    display: none;
-  }
-
-  .track-navigation .prev-track-arrow,
-  .track-navigation .next-track-arrow {
-    font-size: 55px
-  }
-
-  .track-navigation .prev-track-arrow {
-    margin-right: 15px;
-  }
-  
-  .track-navigation .next-track-arrow {
-    margin-left: 15px;
   }
 
   #taxonomies-2,
@@ -1748,9 +1524,8 @@ body.no-playback .sticky-nav-up .site-header-container {
     --site-content-margin-bottom: 50px;
   }
 
-  body.track.single {
+  body.search {
     --site-content-margin-top: 32px;
-    --site-content-margin-bottom: 50px;
   }
 
   .site-header-container,
@@ -1924,49 +1699,10 @@ body.no-playback .sticky-nav-up .site-header-container {
     width: 230px;
   }
 
-  #site-content {
-    margin: calc(var(--site-content-margin-top) + var(--site-header-height)) auto var(--site-content-margin-bottom) auto;
-  }
-  
-  body.no-playback #site-content {
-    margin-top: calc(var(--site-content-margin-top) + var(--site-header-height-no-playback));
-  }
-
   nav.navigation.pagination {
     margin: 64px auto 70px auto;
   }
   
-  nav.navigation.track-navigation {
-    margin: 50px auto;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .track-navigation .nav-links {
-    font-size: 13px;
-    line-height: 18px;
-  }
-
-  .track-navigation .prev-track-arrow,
-  .track-navigation .next-track-arrow {
-    font-size: 40px
-  }
-
-  .track-navigation .prev-track-arrow {
-    margin-right: 10px;
-  }
-  .track-navigation .next-track-arrow {
-    margin-left: 10px;
-  }
-
-  .track-navigation .nav-previous {
-    margin-right: 7px;
-  }
-  
-  .track-navigation .nav-next {
-    margin-left: 7px;
-  }
-
   .nav-links .page-numbers li a,
   .nav-links .page-numbers li .dots,
   .nav-links .page-numbers li .current {
@@ -1987,23 +1723,20 @@ body.no-playback .sticky-nav-up .site-header-container {
   .footer-site-info {
     font-size: 20px;
   }
-  
+
+  body.search article {
+    margin-top: var(--site-content-margin-top);
+  }
+
   h1 {
     font-size: 25px;
     line-height: 35px;
   }
   
-  h2.entry-title.now-playing-icon::before {
-    font-size: 20px;
-    top: 3px;
-    margin-right: 6px;
-    margin-left: -3px;
-  }
-
   h2.entry-title,
   h2.entry-title a,
-  single-track h2.entry-title,
-  single-track h2.entry-title a {
+  body.search article h2,
+  body.search article h2 a {
     font-size: 18px;
     line-height: 26px;
   }
@@ -2016,15 +1749,6 @@ body.no-playback .sticky-nav-up .site-header-container {
     line-height: 28px;
   }
 
-  body.track.single h2.entry-title {
-    display: none;
-  }
-
-  body.track.single h2.entry-title.type-split {
-    display: block;
-    margin-bottom: 20px;
-  }
-
   h3 {
     font-size: 18px;
     line-height: 26px;
@@ -2033,22 +1757,6 @@ body.no-playback .sticky-nav-up .site-header-container {
 
   .lightest-text {
     font-weight: 300;
-  }
-
-  .entry-meta {
-    font-size: 14px;
-    line-height: 22px;
-  }
-
-  .entry-meta-controls .track-share-control {
-    width: 40px;
-    height: 40px;
-    margin-right: -9px;
-  }
-
-  .entry-meta-controls .track-share-control .material-icons {
-    font-size: 26px;
-    padding: 7px;
   }
 
   .entry-content p {

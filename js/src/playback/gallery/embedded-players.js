@@ -69,7 +69,7 @@ function updatePlayersReady()
 
 function getAllPlayers()
 {
-  const elements = document.querySelectorAll('single-track');
+  const elements = document.querySelectorAll('single-track, gallery-track');
 
   elements.forEach(element => 
   {
@@ -79,8 +79,6 @@ function getAllPlayers()
 
     if (trackType === mediaPlayers.TRACK_TYPE.YOUTUBE)
     {
-    //debug.log(`getAllPlayers() - isYouTubeSingleTrack: ${(elements.length === 1) && (iframe === null)}`);
-
       if ((elements.length === 1) && (iframe === null))
         player = getYouTubePlayer('youtube-player', element, true);
       else
@@ -281,10 +279,10 @@ function onYouTubeStateCued(iframeId)
 
   const player = m.players.playerFromUid(iframeId);
   
-  // Handle single track next loaded and checking for track duration, if it is 0, it is not playable
-  if (('isSingleTrackNextCued' in player) && player.isSingleTrackNextCued)
+  // Handle next single track cued and check for track duration, if it is 0, it is not playable
+  if (('isNextSingleTrackCued' in player) && player.isNextSingleTrackCued)
   {
-    delete player.isSingleTrackNextCued;
+    delete player.isNextSingleTrackCued;
 
     if (player.embeddedPlayer.getDuration() === 0)
       player.setIsPlayable(false);

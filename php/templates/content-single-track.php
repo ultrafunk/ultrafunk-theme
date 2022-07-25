@@ -24,7 +24,7 @@ function get_track_date_time() : string
   return '';
 }
 
-function entry_content(object $post) : void
+function track_content(object $post) : void
 {
   if (intval($post->track_source_type) === TRACK_TYPE::SOUNDCLOUD)
   {
@@ -48,7 +48,7 @@ function entry_content(object $post) : void
 
 $track_data        = \Ultrafunk\Theme\Functions\get_track_data($post);
 $is_youtube_track  = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
-$entry_title_split = '<h2 class="entry-title type-split">' . $post->track_artist . '<br><span class="light-text">' . $post->track_title . '</span></h2>';
+$track_title_split = '<h2 class="track-title type-split">' . $post->track_artist . '<br><span class="light-text">' . $post->track_title . '</span></h2>';
 
 
 ?>
@@ -64,22 +64,22 @@ $entry_title_split = '<h2 class="entry-title type-split">' . $post->track_artist
   <?php } ?>
   data-track-date-time="<?php echo esc_html(get_track_date_time()); ?>"
   >
-  <header class="entry-header">
+  <header class="track-header">
     <?php
-    \Ultrafunk\Theme\Tags\entry_title();
-    echo $entry_title_split;
+    \Ultrafunk\Theme\Tags\entry_title('track');
+    echo $track_title_split;
     ?>
-    <div class="entry-meta">
-      <div class="entry-meta-artists">
+    <div class="track-meta">
+      <div class="track-meta-artists">
         <b><a href="/artists/" title="Show All Artists">Artists</a>: </b><span class="term-links"><?php the_terms(get_the_ID(), 'uf_artist'); ?></span>
       </div>
-      <div class="entry-meta-channels">
+      <div class="track-meta-channels">
         <b><a href="/channels/" title="Show All Channels">Channels</a>: </b><span class="term-links"><?php the_terms(get_the_ID(), 'uf_channel'); ?></span>
       </div>
-      <?php \Ultrafunk\Theme\Tags\meta_controls(); ?>
+      <?php \Ultrafunk\Theme\Tags\track_meta_controls(); ?>
     </div>
   </header>
-  <div class="entry-content">
-    <?php entry_content($post); ?>
+  <div class="track-content">
+    <?php track_content($post); ?>
   </div>
 </single-track>

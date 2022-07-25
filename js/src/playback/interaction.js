@@ -18,10 +18,10 @@ import { initScreenWakeLock } from './screen-wakelock.js';
 import { TRACK_TYPE }         from './mediaplayers.js';
 
 import {
-  isSingleTrackNext,
-  isNextTrackLoading,
+  isSingleTrackFetch,
+  isNextSingleTrackLoading,
   playNextSingleTrack,
-} from './gallery/single-track-next.js';
+} from './gallery/single-track-fetch.js';
 
 import {
   setPlaybackControlsCss,
@@ -106,7 +106,7 @@ function initShared()
 
   m.player.init();
   m.siteNavUiElements  = new siteNavUiElements('#site-navigation');
-  m.trackNavUiElements = new trackNavUiElements('nav.track-navigation .nav-links');
+  m.trackNavUiElements = new trackNavUiElements('nav.single-track-nav .nav-links');
 
   fullscreenElement.init();
   keyboardShortcuts.init();
@@ -264,20 +264,20 @@ function onKeyArrowRight(event)
   event.preventDefault();
 
   if (event.shiftKey === true)
-    onSingleTrackNext(null);
+    onNextSingleTrack(null);
   else
     m.player.nextTrack();
 }
 
-function onSingleTrackNext(event)
+function onNextSingleTrack(event)
 {
   event?.preventDefault();
 
-  if (isSingleTrackNext())
+  if (isSingleTrackFetch())
   {
     if (m.player.getStatus().trackType === TRACK_TYPE.YOUTUBE)
     {
-      if (isNextTrackLoading() === false)
+      if (isNextSingleTrackLoading() === false)
         playNextSingleTrack(m.player.getStatus().isPlaying);
       else
         showSnackbar('Loading next track, please wait...', 3);
@@ -393,7 +393,7 @@ class siteNavUiElements extends ElementClick
       return prevNextNavTo(this.event, response.prevPage);
 
     if (this.clicked('span.navbar-arrow-fwd'))
-      return onSingleTrackNext(this.event);
+      return onNextSingleTrack(this.event);
   }
 }
 
@@ -405,7 +405,7 @@ class trackNavUiElements extends ElementClick
       return prevNextNavTo(this.event, response.prevPage);
 
     if (this.clicked('div.nav-next a'))
-      return onSingleTrackNext(this.event);
+      return onNextSingleTrack(this.event);
   }
 }
 

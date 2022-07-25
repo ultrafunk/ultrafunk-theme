@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 /*
- * Single track template for pages with multiple tracks
+ * Track template for gallery tracks
  *
  */
 
 
-namespace Ultrafunk\Theme\Templates\Track;
+namespace Ultrafunk\Theme\Templates\GalleryTrack;
 
 
 use Ultrafunk\Plugin\Constants\TRACK_TYPE;
@@ -19,7 +19,7 @@ $is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
 
 
 ?>
-<single-track id="track-<?php the_ID(); ?>" class=""
+<gallery-track id="track-<?php the_ID(); ?>" class=""
   data-track-type="<?php echo intval($post->track_source_type); ?>"
   data-track-artist="<?php echo esc_html($post->track_artist); ?>"
   data-track-title="<?php echo esc_html($post->track_title); ?>"
@@ -30,19 +30,19 @@ $is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
     data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
   <?php } ?>
   >
-  <header class="entry-header">
-    <?php \Ultrafunk\Theme\Tags\entry_title(); ?>
-    <div class="entry-meta">
-      <div class="entry-meta-artists">
+  <header class="track-header">
+    <?php \Ultrafunk\Theme\Tags\entry_title('track'); ?>
+    <div class="track-meta">
+      <div class="track-meta-artists">
         <b><a href="/artists/" title="Show All Artists">Artists</a>: </b><span class="term-links"><?php the_terms(get_the_ID(), 'uf_artist'); ?></span>
       </div>
-      <div class="entry-meta-channels">
+      <div class="track-meta-channels">
         <b><a href="/channels/" title="Show All Channels">Channels</a>: </b><span class="term-links"><?php the_terms(get_the_ID(), 'uf_channel'); ?></span>
       </div>
-      <?php \Ultrafunk\Theme\Tags\meta_controls(); ?>
+      <?php \Ultrafunk\Theme\Tags\track_meta_controls(); ?>
     </div>
   </header>
-  <div class="entry-content">
+  <div class="track-content">
     <?php the_content(); ?>
   </div>
-</single-track>
+</gallery-track>

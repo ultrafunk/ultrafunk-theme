@@ -1,0 +1,357 @@
+/*
+* Single + Gallery track default layout
+*
+* https://ultrafunk.com
+*
+*/
+
+gallery-track {
+  display: block;
+}
+
+gallery-track {
+  margin-top: 100px;
+}
+
+gallery-track:first-child {
+  margin-top: 0;
+}
+
+single-track h2.track-title,
+single-track h2.track-title a,
+gallery-track h2.track-title,
+gallery-track h2.track-title a {
+  font-size: 30px;
+  line-height: 40px;
+  text-decoration: none;
+  color: var(--primary-font-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+gallery-track h2.track-title a:hover {
+  color: var(--link-hover-color);
+}
+
+gallery-track .track-content {
+  clear: both;
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 1920px
+***************************************************************************************************/
+
+@media screen and (max-width: 1920px) {
+
+  gallery-track {
+    margin-top: 60px;
+  }
+
+  single-track figure.wp-block-embed,
+  gallery-track figure.wp-block-embed {
+    margin: 20px 0;
+  }
+
+  single-track h2.track-title,
+  single-track h2.track-title a,
+  gallery-track h2.track-title,
+  gallery-track h2.track-title a {
+    font-size: 25px;
+    line-height: 35px;
+    margin-bottom: 15px;
+  }
+
+  single-track .track-meta,
+  gallery-track .track-meta {
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 1350px
+***************************************************************************************************/
+
+@media screen and (max-width: 1350px) {
+
+  single-track .track-header,
+  gallery-track .track-header {
+    padding-left: 75px;
+    padding-right: 75px;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 900px
+***************************************************************************************************/
+
+@media screen and (max-width: 900px) {
+  
+  gallery-track {
+    margin-top: 45px;
+  }
+
+  single-track .track-header,
+  gallery-track .track-header {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 768px
+***************************************************************************************************/
+
+@media screen and (max-width: 768px) {
+  
+  single-track .track-header,
+  gallery-track .track-header {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  gallery-track h2.track-title,
+  gallery-track h2.track-title a {
+    font-size: 25px;
+    line-height: 35px;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 500px
+***************************************************************************************************/
+
+@media screen and (max-width: 500px) {
+
+  gallery-track {
+    margin-top: 32px;
+  }
+
+  single-track .track-header,
+  gallery-track .track-header {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  single-track h2.track-title,
+  single-track h2.track-title a,
+  gallery-track h2.track-title,
+  gallery-track h2.track-title a {
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  single-track .track-meta,
+  gallery-track .track-meta {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  single-track figure.wp-block-embed,
+  gallery-track figure.wp-block-embed {
+    margin: 30px 0;
+  }
+  
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 400px
+***************************************************************************************************/
+
+@media screen and (max-width: 400px) {
+  
+  single-track h2.track-title,
+  single-track h2.track-title a,
+  gallery-track h2.track-title,
+  gallery-track h2.track-title a {
+    font-size: 17px;
+    line-height: 25px;
+  }
+
+  single-track .track-meta,
+  gallery-track .track-meta {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+}
+
+
+/**************************************************************************************************
+*
+* Gallery track meta styles
+*
+***************************************************************************************************/
+
+.track-meta {
+  display: grid;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.track-meta-artists {
+  grid-row: 1;
+}
+
+.track-meta-channels {
+  grid-row: 2;
+}
+
+.track-meta-controls {
+  grid-row: 1 / span 2;
+  display: flex;
+  align-items: center;
+  justify-self: end;
+}
+
+.track-meta a {
+  text-decoration: none;
+  color: var(--primary-font-color);
+}
+
+.track-meta a:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+}
+
+.track-meta-channels,
+.track-meta-artists {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-meta-controls .track-share-control {
+  display: none;
+  width: 45px;
+  height: 45px;
+  margin-left: 10px;
+  margin-right: -9px;
+}
+
+body.autoplay-on .track-meta-controls .track-share-control {
+  display: block;
+}
+
+.track-meta-controls .track-share-control .material-icons {
+  font-size: 35px;
+  color: var(--primary-icon-color);
+  cursor: pointer;
+  padding: 5px;
+}
+
+.track-meta-controls .track-share-control .material-icons:hover {
+  opacity: var(--control-hover-opacity);
+}
+
+@media not all and (pointer: fine) {
+
+  .track-meta-controls .track-share-control .material-icons:hover {
+    opacity: 1;
+  }
+    
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 500px
+***************************************************************************************************/
+
+@media screen and (max-width: 500px) {
+  
+  .track-meta-controls .track-share-control {
+    width: 40px;
+    height: 40px;
+    margin-right: -9px;
+  }
+
+  .track-meta-controls .track-share-control .material-icons {
+    font-size: 26px;
+    padding: 7px;
+  }
+
+}
+
+
+/**************************************************************************************************
+*
+* Now playing icons (indicates currently playing gallery track)
+*
+***************************************************************************************************/
+
+.now-playing-icon::before {
+  color: #ff0000;
+}
+
+body.autoplay-off .now-playing-icon::before {
+  color: #0080ff;
+}
+
+.playing-animate::before,
+body.autoplay-off .playing-animate::before {
+  animation: track-icon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes track-icon-pulse {
+  50% { opacity: 0.10; }
+}
+
+.playing-paused::before {
+  animation-play-state: paused !important;
+}
+
+h2.track-title.now-playing-icon::before {
+  font-family: "Material Icons";
+  font-weight: 400;
+  content: "\E01D";
+  font-size: 33px;
+  line-height: 0;
+  position: relative;
+  top: 5px;
+  margin-right: 8px;
+  margin-left: -5px;
+  pointer-events: none;
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 1920px
+***************************************************************************************************/
+
+@media screen and (max-width: 1920px) {
+
+  h2.track-title.now-playing-icon::before {
+    font-size: 27px;
+    top: 4px;
+    margin-right: 8px;
+    margin-left: -4px;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 500px
+***************************************************************************************************/
+
+@media screen and (max-width: 500px) {
+
+  h2.track-title.now-playing-icon::before {
+    font-size: 20px;
+    top: 3px;
+    margin-right: 6px;
+    margin-left: -3px;
+  }
+
+}

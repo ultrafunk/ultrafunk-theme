@@ -13,8 +13,8 @@ namespace Ultrafunk\Theme\Templates;
 
 abstract class Base
 {
-  protected $request  = null;
-  protected $home_url = null;
+  protected ?object $request  = null;
+  protected ?string $home_url = null;
 
   public function __construct(object $request_handler)
   {

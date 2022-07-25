@@ -14,7 +14,7 @@ if (have_posts())
     get_template_part('php/templates/content', 'single-track');
 
     ?>
-    <nav class="navigation track-navigation" aria-label="Tracks">
+    <nav class="navigation single-track-nav" aria-label="Single Track Navigation">
       <h2 class="screen-reader-text">Track navigation</h2>
       <div class="nav-links">
         <?php

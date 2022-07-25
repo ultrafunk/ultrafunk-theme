@@ -13,7 +13,7 @@ namespace Ultrafunk\Theme\Templates;
 
 class Termlist extends \Ultrafunk\Theme\Templates\Base
 {
-  private $is_artists = false;
+  private bool $is_artists = false;
 
   public function render_response() : void
   {

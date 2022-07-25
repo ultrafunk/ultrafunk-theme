@@ -5,18 +5,18 @@
 //
 
 
-import * as debugLogger         from '../../shared/debuglogger.js';
-import * as eventLogger         from '../eventlogger.js';
-import * as embeddedPlayers     from './embedded-players.js';
-import * as playbackEvents      from '../playback-events.js';
-import * as galleryEvents       from './gallery-events.js';
-import * as playbackControls    from '../playback-controls.js';
-import * as crossfadeControls   from './crossfade-controls.js';
-import { playbackTimer }        from './gallery-playback-timer.js';
-import { galleryPlayers }       from './gallery-players.js';
-import { CROSSFADE_TYPE }       from './crossfade.js';
-import { settings }             from '../../shared/session-data.js';
-import { singleTrackNextReady } from './single-track-next.js';
+import * as debugLogger          from '../../shared/debuglogger.js';
+import * as eventLogger          from '../eventlogger.js';
+import * as embeddedPlayers      from './embedded-players.js';
+import * as playbackEvents       from '../playback-events.js';
+import * as galleryEvents        from './gallery-events.js';
+import * as playbackControls     from '../playback-controls.js';
+import * as crossfadeControls    from './crossfade-controls.js';
+import { playbackTimer }         from './gallery-playback-timer.js';
+import { galleryPlayers }        from './gallery-players.js';
+import { CROSSFADE_TYPE }        from './crossfade.js';
+import { settings }              from '../../shared/session-data.js';
+import { singleTrackFetchReady } from './single-track-fetch.js';
 
 
 /*************************************************************************************************/
@@ -219,9 +219,9 @@ function resumeAutoplay(autoplayData, iframeId = null)
   }
 }
 
-function cueOrPlaySingleTrackNextById(trackData, thumbnailData, playMedia = false)
+function cueOrPlayNextSingleTrackById(trackData, thumbnailData, playMedia = false)
 {
-  debug.log(`cueOrPlaySingleTrackNextById() - playMedia: ${playMedia}`);
+  debug.log(`cueOrPlayNextSingleTrackById() - playMedia: ${playMedia}`);
 
   m.players.current.setIsPlayable(true);
   m.players.current.setArtistTitle(trackData.track_artist, trackData.track_title);
@@ -239,7 +239,7 @@ function cueOrPlaySingleTrackNextById(trackData, thumbnailData, playMedia = fals
   else
   {
     m.players.current.cueTrackById(thumbnailData.uid);
-    m.players.current.isSingleTrackNextCued = true;
+    m.players.current.isNextSingleTrackCued = true;
   }
 }
 
@@ -311,7 +311,7 @@ function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
 
     case playbackEvents.EVENT.PLAYBACK_READY:
       playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
-      singleTrackNextReady(cueOrPlaySingleTrackNextById);
+      singleTrackFetchReady(cueOrPlayNextSingleTrackById);
       playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, embeddedEventData);
       playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
       break;

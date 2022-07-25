@@ -1,5 +1,5 @@
 //
-// Play next single gallery track without page reload SPA style...
+// Fetch & play next single (standalone) track without page reload SPA style...
 //
 // https://ultrafunk.com
 //
@@ -24,7 +24,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('single-track-next');
+const debug = debugLogger.newInstance('single-track-fetch');
 
 const m = {
   cueOrPlayTrackById: null,
@@ -38,19 +38,19 @@ const m = {
 // Exports
 // ************************************************************************************************
 
-export function isSingleTrackNext()
+export function isSingleTrackFetch()
 {
   return (document.body.matches('.single.track') && settings.gallery.fetchNextSingleTrack);
 }
 
-export function isNextTrackLoading()
+export function isNextSingleTrackLoading()
 {
   return m.isNextTrackLoading;
 }
 
-export function singleTrackNextReady(cueOrPlayTrackByIdCallback)
+export function singleTrackFetchReady(cueOrPlayTrackByIdCallback)
 {
-  if (isSingleTrackNext())
+  if (isSingleTrackFetch())
   {
     debug.log('ready()');
 
@@ -63,7 +63,7 @@ export function singleTrackNextReady(cueOrPlayTrackByIdCallback)
 
 export async function playNextSingleTrack(playTrack = false)
 {
-  if (isSingleTrackNext())
+  if (isSingleTrackFetch())
   {
     m.isNextTrackLoading = true;
     const restResponse   = await fetchTracks(m.loadTracksDateTime);
@@ -175,7 +175,7 @@ function updatePage(trackData, thumbnailData, pushState = true)
   updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-back'), response.prevPage);
   updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-fwd'), response.nextPage);
   updateTrackNavLinks(document.querySelector('div.nav-links'), trackData);
-  updateTrackHeader(document.querySelector('header.entry-header'), trackData[1]);
+  updateTrackHeader(document.querySelector('header.track-header'), trackData[1]);
   updateTrackAttributes(document.querySelector('single-track'), trackData[1], thumbnailData);
 
   if (pushState)
@@ -201,10 +201,10 @@ function updateTrackNavLinks(element, trackData)
 
 function updateTrackHeader(element, trackData)
 {
-  element.querySelector('h2.entry-title').textContent          = getTrackTitle(trackData.meta);
-  element.querySelector('h2.entry-title.type-split').innerHTML = `${trackData.meta.track_artist}<br><span class="light-text">${trackData.meta.track_title}</span>`;
-  element.querySelector('div.entry-meta-artists  .term-links').innerHTML = trackData.artists_links;
-  element.querySelector('div.entry-meta-channels .term-links').innerHTML = trackData.channels_links;
+  element.querySelector('h2.track-title').textContent          = getTrackTitle(trackData.meta);
+  element.querySelector('h2.track-title.type-split').innerHTML = `${trackData.meta.track_artist}<br><span class="light-text">${trackData.meta.track_title}</span>`;
+  element.querySelector('div.track-meta-artists  .term-links').innerHTML = trackData.artists_links;
+  element.querySelector('div.track-meta-channels .term-links').innerHTML = trackData.channels_links;
 }
 
 function updateTrackAttributes(element, trackData, thumbnailData)

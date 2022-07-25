@@ -95,7 +95,7 @@ function crossfadeToClick(event)
 {
   if (isPlaying() && (m.players.crossfade.isFading() === false))
   {
-    const element = event.target.closest('single-track');
+    const element = event.target.closest('gallery-track');
 
     if (element !== null)
     {

@@ -43,7 +43,7 @@ export function init()
 {
   debug.log('init()');
 
-  m.metaUiElements = new MetaUiElements('div.entry-meta', true);
+  m.metaUiElements = new MetaUiElements('div.track-meta', true);
   m.listUiElements = new ListUiElements('#tracklist');
   siteTheme        = new SiteThemeToggle('footer-site-theme-toggle');
   galleryLayout    = new GalleryLayoutToggle('footer-gallery-layout-toggle');
@@ -72,7 +72,7 @@ class MetaUiElements extends ElementClick
   elementClicked()
   {
     if (this.clicked('div.track-share-control'))
-      return sharePlayClick(this.closest('single-track'));
+      return sharePlayClick(this.closest('single-track, gallery-track'));
   
     if (this.clicked('span.term-links'))
       return linkClick(this.event);
@@ -278,12 +278,12 @@ class GalleryLayoutToggle extends ElementToggle
   {
     super(elementId, false);
 
-    this.minWidth = `(max-width: ${utils.getCssPropString('--site-gallery-layout-min-width')})`;
+    this.minWidth = `(max-width: ${utils.getCssPropString('--gallery-layout-min-width')})`;
 
     this.layouts = {
-      oneColumn:   { id: '1-column', text: '1 column',     class: 'gallery-layout-1-column' },
-      twoColumn:   { id: '2-column', text: '2 column',     class: 'gallery-layout-2-column' },
-      threeColumn: { id: '3-column', text: '3 / 4 column', class: 'gallery-layout-3-column' },
+      oneColumn:   { id: '1-column', text: '1 column',     class: 'gallery-1-col' },
+      twoColumn:   { id: '2-column', text: '2 column',     class: 'gallery-2-col' },
+      threeColumn: { id: '3-column', text: '3 / 4 column', class: 'gallery-3-col' },
     };
 
     this.setCurrent();
@@ -299,12 +299,18 @@ class GalleryLayoutToggle extends ElementToggle
 
   matchMediaMinWidth(event)
   {
-    if (htmlClassList.contains('user-layout'))
+    if (htmlClassList.contains('gallery-layout'))
     {
       if (event.matches)
+      {
         htmlClassList.remove(this.currentLayout.class);
+        htmlClassList.add(this.layouts.oneColumn.class);
+      }
       else
+      {
+        htmlClassList.remove(this.layouts.oneColumn.class);
         htmlClassList.add(this.currentLayout.class);
+      }
     }
   }
 
@@ -316,20 +322,20 @@ class GalleryLayoutToggle extends ElementToggle
 
   update(event)
   {
+    this.value = this.currentLayout.text;
     setValue(KEY.UF_GALLERY_LAYOUT, this.currentLayout.id);
 
+    if (window.matchMedia(this.minWidth).matches)
+      return;
+
     // Only update DOM if needed and when something has actually changed
-    if ((htmlClassList.contains('user-layout')) && (htmlClassList.contains(this.currentLayout.class) === false))
+    if ((htmlClassList.contains('gallery-layout')) && (htmlClassList.contains(this.currentLayout.class) === false))
     {
       debug.log(`GalleryLayoutToggle.update() - newGalleryLayout: ${this.currentLayout.id}`);
-
+      
       htmlClassList.remove(this.layouts.oneColumn.class, this.layouts.twoColumn.class, this.layouts.threeColumn.class);
-
-      if (window.matchMedia(this.minWidth).matches === false)
-        htmlClassList.add(this.currentLayout.class);
+      htmlClassList.add(this.currentLayout.class);
     }
-
-    this.value = this.currentLayout.text;
 
     if (event?.type === 'click')
       this.element.scrollIntoView();
