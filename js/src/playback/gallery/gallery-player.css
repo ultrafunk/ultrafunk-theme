@@ -239,7 +239,7 @@
 @media screen and (max-width: 1920px) {
 
   .gallery-1-col {
-    --site-max-width: 1100px;
+    --site-max-width: 1000px;
     --site-content-margin-top: 40px;
     --site-content-margin-bottom: 65px;
   }
@@ -308,10 +308,6 @@
   .gallery-1-col {
     --site-content-margin-top: 32px;
     --site-content-margin-bottom: 50px;
-  }
-
-  .gallery-1-col nav.navigation.pagination {
-    margin: 64px auto 70px auto;
   }
 
 }
