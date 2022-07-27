@@ -73,7 +73,7 @@ class MetaUiElements extends ElementClick
   {
     if (this.clicked('div.track-share-control'))
       return sharePlayClick(this.closest('single-track, gallery-track'));
-  
+
     if (this.clicked('span.term-links'))
       return linkClick(this.event);
   }
@@ -85,7 +85,7 @@ class ListUiElements extends ElementClick
   {
     if (this.clicked('div.share-play-button'))
       return sharePlayClick(this.closest('div.track-entry'));
-    
+
     if (this.clicked('div.details-button'))
       return detailsClick(this.closest('div.track-entry'));
   }
@@ -129,9 +129,9 @@ function detailsClick(element)
     class:   'track-details-entry',
     content: getModalTrackHtml(element, trackArtist, trackTitle),
   });
-  
+
   modalEntries.push({ class: 'header-entry', content: 'Artists' });
-  
+
   artists.forEach(item =>
   {
     modalEntries.push({
@@ -143,9 +143,9 @@ function detailsClick(element)
       icon:    'link',
     });
   });
-  
+
   modalEntries.push({ class: 'header-entry', content: 'Channels' });
-  
+
   channels.forEach(item =>
   {
     modalEntries.push({
@@ -172,7 +172,7 @@ function detailsClick(element)
 function trackThumbnailClick(modalId, artistTitle)
 {
   document.getElementById(modalId).querySelector('.modal-track').title = 'Click / tap to Copy Artist & Title';
-  
+
   document.getElementById(modalId)?.querySelector('img')?.addEventListener('click', () =>
   {
     copyTextToClipboard(artistTitle, 'Artist &amp Title copied to clipboard', 'Unable to copy Artist &amp Title to clipboard');
@@ -194,7 +194,7 @@ function getNextSetting(settingsObject, currentSetting)
 {
   const index = Object.values(settingsObject).findIndex(value => (value.id === currentSetting.id));
   const keys  = Object.keys(settingsObject);
-  
+
   return (((index + 1) < keys.length)
            ? settingsObject[keys[index + 1]]
            : settingsObject[keys[0]]);
@@ -243,21 +243,21 @@ class SiteThemeToggle extends ElementToggle
   update()
   {
     let newTheme = this.currentTheme;
-  
+
     if (this.currentTheme.id === this.themes.auto.id)
     {
       newTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
                    ? this.themes.dark
                    : this.themes.light;
     }
-  
+
     setValue(KEY.UF_SITE_THEME, newTheme.id);
-  
+
     // Only update DOM if something has actually changed...
     if (htmlClassList.contains(newTheme.class) === false)
     {
       debug.log(`SiteThemeToggle.update() - newSiteTheme: ${newTheme.id}`);
-    
+
       htmlClassList.remove(this.themes.light.class, this.themes.dark.class);
       htmlClassList.add(newTheme.class);
     }
@@ -332,7 +332,7 @@ class GalleryLayoutToggle extends ElementToggle
     if ((htmlClassList.contains('gallery-layout')) && (htmlClassList.contains(this.currentLayout.class) === false))
     {
       debug.log(`GalleryLayoutToggle.update() - newGalleryLayout: ${this.currentLayout.id}`);
-      
+
       htmlClassList.remove(this.layouts.oneColumn.class, this.layouts.twoColumn.class, this.layouts.threeColumn.class);
       htmlClassList.add(this.currentLayout.class);
     }

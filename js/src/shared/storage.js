@@ -123,7 +123,7 @@ export function getValue(keyName, defaultValue = null, setDefault = false)
 
     return defaultValue;
   }
-  
+
   return keyValue;
 }
 
@@ -147,7 +147,7 @@ export function setValue(keyName, keyValue)
 export function readJson(keyName, defaultValue = null, setDefault = false)
 {
   debug.log(`readJson(): ${keyName} - ${defaultValue} - ${setDefault}`);
-  
+
   const keyValue     = localStorage.getItem(keyName);
   let parsedKeyValue = null;
 
@@ -242,7 +242,7 @@ function cleanDeep(mergedSettings, newSettings)
       debug.log(`cleanDeep() - Deleting: ${key} (${(typeof mergedSettings[key] === 'object') ? 'object' : 'property'})`);
       delete mergedSettings[key];
     }
-    
+
     if (typeof mergedSettings[key] === 'object')
       cleanDeep(mergedSettings[key], newSettings[key]);
   }
@@ -305,7 +305,7 @@ export function readWriteSettingsProxy(settingsKey, defaultSettings = null, setD
   if ((parsedJson !== null) && (defaultSettings !== null) && (parsedJson.version !== undefined))
   {
     let settingsObject = parsedJson;
-    
+
     // If version is new, perform settings merge, cleanup and deletion of deprecated settings
     if (parsedJson.version < defaultSettings.version)
     {
@@ -348,17 +348,17 @@ export function readWriteSettingsProxy(settingsKey, defaultSettings = null, setD
 // ************************************************************************************************
 
 const onSettingsChange = (settingsKey, settingsObject) =>
-{ 
+{
   const handler =
   {
     get(target, property, receiver)
     {
     //debug.log(`onSettingsChange(): Get property: ${property}`);
-      
+
       if (property in target)
-      {      
+      {
         const value = Reflect.get(target, property, receiver);
-        
+
         if (typeof value === 'object')
           return new Proxy(value, handler);
 
@@ -367,7 +367,7 @@ const onSettingsChange = (settingsKey, settingsObject) =>
 
       debug.error(`onSettingsChange(): Get unknown property: ${property}`);
     },
-    
+
     set(target, property, newValue, receiver)
     {
     //debug.log(`onSettingsChange(): Set property: ${property}`);

@@ -167,7 +167,7 @@ function document_title_parts(array $title) : array
 
     $title['title'] = esc_html($title_parts);
   }
-  
+
   return $title;
 }
 add_filter('document_title_parts', '\Ultrafunk\Theme\Filters\document_title_parts');
@@ -189,7 +189,7 @@ function embed_oembed_html(string $cache, string $url, array $attr, int $post_id
     $cache = str_ireplace('<iframe', sprintf('<iframe id="soundcloud-uid-%s" allow="autoplay"', uniqid()), $cache);
     $cache = str_ireplace('visual=true', 'visual=true&single_active=false', $cache);
   }
-  
+
   return $cache;
 }
 add_filter('embed_oembed_html', '\Ultrafunk\Theme\Filters\embed_oembed_html', 10, 4);
@@ -212,7 +212,7 @@ add_filter('wp_robots', '\Ultrafunk\Theme\Filters\wp_robots');
 function wp_lazy_loading_enabled(bool $default, string $tag_name, string $context) : bool
 {
   if ('iframe' === $tag_name)
-    return false;  
+    return false;
 
   return $default;
 }
@@ -231,16 +231,16 @@ function wp_setup_nav_menu_item(object $menu_item) : object
   {
     $menu_item_all_id     = THEME_ENV['menu_item_all_id'];
     $menu_item_shuffle_id = THEME_ENV['menu_item_shuffle_id'];
-  
+
     if (is_list_player())
     {
       $data = get_request_params()['data'];
-  
+
       if ($menu_item->ID === $menu_item_all_id)
         $menu_item->url = '/list/';
       else
         $menu_item->url = str_replace('ultrafunk.com', 'ultrafunk.com/list', $menu_item->url);
-  
+
       if (($menu_item->ID === $menu_item_all_id) && is_list_player('all'))
         $menu_item->classes[] = 'current-menu-item';
       else if (($menu_item->ID === $menu_item_shuffle_id) && is_shuffle(PLAYER_TYPE::LIST))
@@ -251,7 +251,7 @@ function wp_setup_nav_menu_item(object $menu_item) : object
     else
     {
       if (($menu_item->ID === $menu_item_all_id) && is_front_page() && !is_shuffle(PLAYER_TYPE::GALLERY))
-        $menu_item->classes[] = 'current-menu-item';    
+        $menu_item->classes[] = 'current-menu-item';
       else if (($menu_item->ID === $menu_item_shuffle_id) && is_shuffle(PLAYER_TYPE::GALLERY))
         $menu_item->classes[] = 'current-menu-item';
       else if (($menu_item->ID === THEME_ENV['menu_item_all_artists_id']) && (is_termlist()))
@@ -276,7 +276,7 @@ function nav_menu_link_attributes(array $attributes, object $menu_item) : array
       $attributes['title'] = esc_attr(get_shuffle_title());
     }
   }
-  
+
   return $attributes;
 }
 add_filter('nav_menu_link_attributes', '\Ultrafunk\Theme\Filters\nav_menu_link_attributes', 10, 2);

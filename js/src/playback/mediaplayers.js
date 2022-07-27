@@ -48,7 +48,7 @@ class MediaPlayer
   // Abstract methods to be overriden in child class if needed
   cueTrackById()  {}
   playTrackById() {}
-  
+
   getTrackType()        { return this.trackType;      }
   getTrackId()          { return this.trackId;        }
   getIframeId()         { return this.iframeId;       }
@@ -155,12 +155,12 @@ export class SoundCloud extends MediaPlayer
     {
       const iframeSrcParts = new URL(decodeURIComponent(iframeSrc));
       const trackUrl       = iframeSrcParts.searchParams.get('url');
-      
+
       if (trackUrl !== null)
       {
         const trackUrlParts = trackUrl.split('/');
         const tracksString  = 'tracks'.toUpperCase();
-  
+
         for (let i = 0; i < trackUrlParts.length; i++)
         {
           if (trackUrlParts[i].toUpperCase() === tracksString)
@@ -168,7 +168,7 @@ export class SoundCloud extends MediaPlayer
         }
       }
     }
-    
+
     debug.error(`MediaPlayer.SoundCloud.getSoundId() failed for: ${this.iframeId}`);
 
     return null;
@@ -186,7 +186,7 @@ export class SoundCloud extends MediaPlayer
   // Override parent getUid() because SoundCloud provides its own UID
   getUid() { return this.soundId;         }
   pause()  { this.embeddedPlayer.pause(); }
-  
+
   play(onErrorCallback)
   {
     // playable is set to FALSE if the widget fires SC.Widget.Events.ERROR (track does not exist)
@@ -205,7 +205,7 @@ export class SoundCloud extends MediaPlayer
       onErrorCallback(this, 'https://soundcloud.com');
     }
   }
-  
+
   stop()
   {
     this.pause();
@@ -217,13 +217,13 @@ export class SoundCloud extends MediaPlayer
   {
     super.seekTo(positionSeconds * 1000);
   }
-  
+
   getVolume(callback)
   {
     this.embeddedPlayer.getVolume(volume => callback(volume));
   }
 
-  // Override parent setVolume() because we use it for mute() as well 
+  // Override parent setVolume() because we use it for mute() as well
   setVolume(volume)
   {
     if (volume !== 0)

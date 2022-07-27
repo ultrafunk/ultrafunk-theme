@@ -46,7 +46,7 @@ export function init()
   m.eventLog = embeddedPlayers.eventLog;
 
   galleryEvents.init();
-  
+
   m.players = galleryPlayers();
   m.players.init(playTrack);
 
@@ -92,7 +92,7 @@ export function prevTrack()
       {
         if (m.players.getCurrentTrack() > 1)
           m.players.stop();
-        
+
         if (m.players.prevTrack(playbackControls.isPlaying()))
           playbackControls.updatePrevState();
       }
@@ -112,7 +112,7 @@ export function nextTrack(isMediaEnded = false)
   if (isLastTrack === false)
   {
     m.players.stop();
-    
+
     if (isMediaEnded && (settings.playback.autoplay === false))
     {
       playbackControls.setPauseState();
@@ -170,7 +170,7 @@ export function toggleMute()
   settings.playback.masterMute = (settings.playback.masterMute === true) ? false : true;
   m.players.mute();
 }
-  
+
 function cueTrack(iframeId, scrollToMedia = true)
 {
   debug.log(`cueTrack(): ${iframeId}`);
@@ -183,7 +183,7 @@ function cueTrack(iframeId, scrollToMedia = true)
 function playTrack(playMedia, scrollToMedia = true)
 {
   playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_NEXT, { scrollToMedia: scrollToMedia, trackId: m.players.current.getTrackId() });
-  
+
   if (playMedia)
     m.players.current.play(embeddedPlayers.onPlayerError);
 }
@@ -195,7 +195,7 @@ function skipToTrack(trackNum, playMedia = true)
   if ((playMedia === true) && (playbackControls.isPlaying() === false))
   {
     m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
-    
+
     if (m.players.jumpToTrack(trackNum, playMedia))
       playbackControls.updateNextState();
   }
@@ -338,11 +338,11 @@ const playbackState = (() =>
     PLAY:  1,
     PAUSE: 2,
   };
-  
+
   const syncAll = function syncAllRecursive(nextPlayerUid, syncState)
   {
     debug.log(`playbackState.syncAll() - previousTrack: ${m.players.getPlayerIndex() + 1} - nextTrack: ${m.players.indexMap.get(nextPlayerUid) + 1} - syncState: ${debug.getKeyForValue(STATE, syncState)}`);
-    
+
     if (m.players.isCurrent(nextPlayerUid))
     {
       if (syncState === STATE.PLAY)
@@ -358,10 +358,10 @@ const playbackState = (() =>
     {
       const prevPlayerIndex = m.players.getPlayerIndex();
       const nextPlayerIndex = m.players.indexMap.get(nextPlayerUid);
-      
+
       m.players.stop();
       m.players.setPlayerIndex(nextPlayerIndex);
-      
+
       syncControls(prevPlayerIndex, nextPlayerIndex);
       syncAllRecursive(nextPlayerUid, syncState);
     }

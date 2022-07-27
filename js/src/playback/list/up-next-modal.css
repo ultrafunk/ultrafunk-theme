@@ -2,7 +2,7 @@
 * Up Next modal dialog UI - extends modal.css
 *
 * https://ultrafunk.com
-* 
+*
 */
 
 .modal-type-tracklist .modal-header-entry {
@@ -84,7 +84,7 @@
   object-fit: cover;
   -webkit-user-select: none;
   -ms-user-select: none;
-  user-select: none;      
+  user-select: none;
   image-rendering: -webkit-optimize-contrast;
 }
 
@@ -131,7 +131,7 @@
 ***************************************************************************************************/
 
 @media screen and (max-width: 500px) {
-  
+
   .modal-type-tracklist .modal-header-entry {
     padding-top: 10px;
   }
@@ -140,11 +140,11 @@
     font-size: 14px;
     line-height: 18px;
   }
-  
+
   .modal-tracklist-entry:nth-of-type(10) {
     margin-bottom: 5px;
   }
-  
+
   .modal-tracklist-entry .modal-track-thumbnail::before {
     font-size: 26px;
     line-height: 36px;
@@ -155,12 +155,12 @@
     min-width: 36px;
     height: 36px;
   }
-  
+
   .modal-tracklist-entry .modal-track-thumbnail img {
     width: 36px;
     height: 36px;
   }
-  
+
   .modal-tracklist-entry .modal-track-thumbnail.type-youtube img {
     height: 48px;
     margin-top: -6px;
@@ -171,7 +171,7 @@
     width: 40px;
     min-width: 40px;
     height: 40px;
-  }    
+  }
 
   .modal-track-thumbnail img {
     width: 40px;
@@ -180,7 +180,7 @@
   .modal-track-thumbnail.type-youtube img {
     height: 54px;
     margin-top: -7px;
-  }    
+  }
 
   .modal-track-duration {
     min-width: 40px;
@@ -191,11 +191,11 @@
     margin-right: -5px;
     margin-left: 8px;
   }
-  
+
   .modal-track-buttons .material-icons {
     font-size: 26px;
   }
-  
+
   .modal-track-buttons .drag-drop-button {
     width: 26px;
     height: 26px;

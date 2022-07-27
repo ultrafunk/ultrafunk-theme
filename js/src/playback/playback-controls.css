@@ -8,7 +8,7 @@
 .site-theme-light {
   --progress-bar-color: #dd0000;
   --progress-bar-color-autoplay-off: #4080ff;
-    
+
   --playback-play-pause-color: #dd0000;
   --playback-play-pause-hover-color: #ff0000;
   --playback-play-pause-color-autoplay-off: #3264c8;
@@ -79,7 +79,7 @@ body.autoplay-off .progress-bar-control {
   line-height: 0;
   float: right;
   display: flex;
-  align-items: center;  
+  align-items: center;
   height: 54px;
   margin-right: -8px;
   min-width: 0;
@@ -357,7 +357,7 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     color: var(--primary-font-color);
     opacity: 1;
   }
-    
+
   .playback-play-pause-control {
     color: var(--playback-play-pause-color);
   }
@@ -406,7 +406,7 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
   #playback-controls {
     margin-right: -12px;
   }
-  
+
   .playback-details-control {
     margin-right: 0px;
   }
@@ -419,7 +419,7 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
   .playback-mute-control {
     display: none;
   }
- 
+
 }
 
 
@@ -456,7 +456,7 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     max-width: calc(100% + 11px);
     width: calc(100% + 11px);
   }
-  
+
   #playback-controls .material-icons {
     font-size: 40px;
     width: 40px;
@@ -492,12 +492,12 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     height: 54px;
     margin-top: -7px;
   }
-  
+
   .playback-thumbnail-control.state-loading .thumbnail-overlay {
     width: 40px;
     height: 40px;
   }
-  
+
   .playback-thumbnail-control.state-loading .spinner {
     width: 22px;
     height: 22px;

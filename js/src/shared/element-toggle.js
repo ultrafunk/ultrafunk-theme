@@ -27,7 +27,7 @@ export default class ElementToggle
       event?.preventDefault();
       this.toggle(event);
     });
-    
+
     if (updateOnConstruct)
       this.update();
   }

@@ -2,7 +2,7 @@
 * Modal dialog UI
 *
 * https://ultrafunk.com
-* 
+*
 */
 
 .site-theme-light {
@@ -119,7 +119,7 @@
 }
 
 .modal-header-entry {
-  padding: 18px 30px 8px 30px; 
+  padding: 18px 30px 8px 30px;
 }
 
 .modal-icon-text,
@@ -229,7 +229,7 @@
     font-size: unset;
     line-height: unset;
   }
-  
+
 }
 
 
@@ -238,7 +238,7 @@
 ***************************************************************************************************/
 
 @media screen and (max-width: 500px) {
-  
+
   #modal-dialog-container {
     width: 100%;
     min-width: unset;
@@ -256,7 +256,7 @@
     font-size: 20px;
     line-height: 24px;
   }
-  
+
   .modal-dialog-close-icon {
     width: 32px;
     height: 32px;
@@ -273,7 +273,7 @@
     font-size: 14px;
     line-height: 22px;
   }
-  
+
   .modal-header-entry {
     padding: 16px 20px 6px 20px;
   }
@@ -307,10 +307,10 @@
   .modal-dialog-footer {
     margin: 25px 15px 9px 15px;
   }
-  
+
   .modal-dialog-close-button {
     font-size: 18px;
     line-height: 20px;
   }
-  
+
 }

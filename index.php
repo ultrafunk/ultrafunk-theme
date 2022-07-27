@@ -19,7 +19,7 @@ if (have_posts())
   }
 
   ?></gallery-grid><?php
-  
+
   \Ultrafunk\Theme\Tags\content_pagination();
 }
 else
@@ -27,4 +27,4 @@ else
   get_template_part('php/templates/content', 'none');
 }
 
-get_footer(); 
+get_footer();

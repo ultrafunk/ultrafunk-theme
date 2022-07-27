@@ -60,11 +60,11 @@ class PlayerTypeToggle extends ElementToggle
     super(elementId);
     this.getPlayerStatus = getPlayerStatus;
   }
-  
+
   toggle()
   {
     const destData = this.getDestData();
-  
+
     settings.playback.preferredPlayer = isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST;
     setCookie(KEY.UF_PREFERRED_PLAYER, `${isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST}`, (YEAR_IN_SECONDS * 5));
     sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify(destData.trackData));
@@ -100,7 +100,7 @@ class PlayerTypeToggle extends ElementToggle
 
     return destUrl;
   }
-  
+
   getDestData()
   {
     const urlParts          = window.location.href.split('/');
@@ -112,7 +112,7 @@ class PlayerTypeToggle extends ElementToggle
     const tracksPerPageFrom = isListPlayer() ? response.listPerPage    : response.galleryPerPage;
     const tracksPerPageTo   = isListPlayer() ? response.galleryPerPage : response.listPerPage;
     const trackOffset       = trackData.currentTrack + ((currentPage - 1) * tracksPerPageFrom);
-  
+
     return {
       pageNum: Math.ceil(trackOffset / tracksPerPageTo),
       trackData: {
@@ -134,7 +134,7 @@ class AutoplayToggle extends ElementToggle
   toggle()
   {
     settings.playback.autoplay = (settings.playback.autoplay === true) ? false : true;
-    
+
     showSnackbar(settings.playback.autoplay
       ? 'Autoplay enabled (<b>Shift</b> + <b>A</b> to disable)'
       : 'Autoplay disabled (<b>Shift</b> + <b>A</b> to enable)', 5);
@@ -143,11 +143,11 @@ class AutoplayToggle extends ElementToggle
   update()
   {
     this.value = settings.playback.autoplay ? 'ON' : 'OFF';
-    
+
     settings.playback.autoplay
       ? replaceClass(document.body, 'autoplay-off', 'autoplay-on')
       : replaceClass(document.body, 'autoplay-on', 'autoplay-off');
-    
+
     settings.playback.autoplay
       ? crossfade?.classList.remove('disabled')
       : crossfade?.classList.add('disabled');
@@ -159,7 +159,7 @@ class CrossfadeToggle extends ElementToggle
   toggle()
   {
     settings.gallery.autoCrossfade = (settings.gallery.autoCrossfade === true) ? false : true;
-    
+
     showSnackbar(settings.gallery.autoCrossfade
       ? 'Auto Crossfade enabled (<b>x</b> to disable)'
       : 'Auto Crossfade disabled (<b>x</b> to enable)', 5);

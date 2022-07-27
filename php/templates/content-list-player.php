@@ -41,10 +41,10 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\Base
       </div>
     </div>
     <?php
-    
+
     $this->content_pagination();
   }
-  
+
 
   /**************************************************************************************************************************/
 
@@ -52,7 +52,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\Base
   private function tracklist_entries() : void
   {
     global $ultrafunk_is_prod_build;
-  
+
     foreach($this->request->query_result as $track)
     {
       $track_artist     = esc_html($track->track_artist);
@@ -64,7 +64,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\Base
       $artists          = get_object_term_cache($track->ID, 'uf_artist');
       $channels         = get_object_term_cache($track->ID, 'uf_channel');
       $is_video_class   = $this->is_video($channels) ? ' is-video' : ' is-audio';
-  
+
       ?>
       <div id="<?php echo uniqid(); ?>" class="track-entry <?php echo $track_data['css_class'] . $is_video_class; ?>"
         data-track-type="<?php echo $track_data['track_type']; ?>"
@@ -119,20 +119,20 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\Base
       <?php
     }
   }
-  
-  
+
+
   /**************************************************************************************************************************/
-  
-  
+
+
   private function term_links(array $tags, string $path, int $track_artist_id = -1) : void
   {
     foreach ($tags as $tag)
     {
-      $class = (($track_artist_id !== -1) && ($tag->term_id === $track_artist_id)) ? 'primary' : 'secondary';    
+      $class = (($track_artist_id !== -1) && ($tag->term_id === $track_artist_id)) ? 'primary' : 'secondary';
       echo "<a class='$class' href='/list/$path/$tag->slug/'>$tag->name</a>";
     }
   }
-  
+
   private function is_video(array $channels) : bool
   {
     foreach ($channels as $channel)
@@ -140,10 +140,10 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\Base
       if ($channel->slug === 'video')
         return true;
     }
-  
+
     return false;
   }
-  
+
   private function getTimeString(int $seconds) : string
   {
     return (($seconds > 3600) ? gmdate("H:i:s", $seconds) : gmdate("i:s", $seconds));

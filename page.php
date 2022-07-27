@@ -15,4 +15,4 @@ if (have_posts())
   }
 }
 
-get_footer(); 
+get_footer();

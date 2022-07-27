@@ -61,7 +61,7 @@ function saveState()
       if (element.classList.contains('open'))
         termlistState.openTermIds.push(element.id);
     });
-    
+
     sessionStorage.setItem(KEY.UF_TERMLIST_STATE, JSON.stringify(termlistState));
     termlistRest.writeCache();
   }
@@ -74,16 +74,16 @@ function restoreState()
   if (performance.getEntriesByType('navigation')[0].type !== 'reload')
   {
     const termlistState = JSON.parse(sessionStorage.getItem(KEY.UF_TERMLIST_STATE));
- 
+
     if ((termlistState !== null) && (termlistState.pageUrl === window.location.href))
     {
       history.scrollRestoration = 'manual';
-      
+
       termlistState.openTermIds.forEach(item =>
       {
         document.getElementById(item).querySelector('div.termlist-header').click();
       });
-      
+
       window.scroll({ top: termlistState.scrollPos, left: 0, behavior: 'auto' });
     }
     else
@@ -107,19 +107,19 @@ class UiElements extends ElementClick
   {
     if (this.clicked('div.play-button'))
       return playClick(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
-  
+
     if (this.clicked('div.shuffle-button'))
       return shuffleClick(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
-  
+
     if (this.clicked('div.share-find-button'))
       return shareFindClick(this.element);
-  
+
     if (this.clicked('div.termlist-header'))
       return termlistHeaderClick(this.event);
-  
+
     if (this.clicked('div.thumbnail'))
       return playTrackClick(this.event, this.element);
-  
+
     if (this.clicked('a'))
       return linkClicked(this.event, this.element);
   }

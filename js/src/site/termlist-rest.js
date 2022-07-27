@@ -39,7 +39,7 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
   const termSlug      = stripAttribute(termlistEntry, 'data-term-slug');
   const isAllChannels = (termType === 'channels');
 
-  fetchTracks(termType, termId, (isAllChannels ? 10 : 50), async (termData) => 
+  fetchTracks(termType, termId, (isAllChannels ? 10 : 50), async (termData) =>
   {
     let header  = isAllChannels ? 'Latest Tracks' : 'All Tracks';
     let element = termlistBody.querySelector('.body-left');
@@ -90,7 +90,7 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
 // ************************************************************************************************
 
 function fetchTracks(termType, termId, maxItems, callback)
-{ 
+{
   if (termId in m.termCache)
   {
     callback(m.termCache[termId].tracks);
@@ -100,14 +100,14 @@ function fetchTracks(termType, termId, maxItems, callback)
     debug.log(`fetchTracks() - termType: ${termType} - termId: ${termId} - maxItems: ${maxItems}`);
 
     fetch(`/wp-json/wp/v2/tracks?${termType}=${termId}&per_page=${maxItems}&_fields=id,link,artists,channels,meta`)
-    .then(response => 
+    .then(response =>
     {
       if (!response.ok)
       {
         debug.error(response);
         return null;
       }
-      
+
       return response.json();
     })
     .then(data =>
@@ -139,15 +139,15 @@ function fetchTermMeta(termData, termId, maxItems, callback)
   {
     const channels = [];
     let   artists  = [];
-  
+
     termData.forEach(item =>
     {
       channels.push.apply(channels, item.channels);
       artists.push.apply(artists, item.artists);
     });
-  
+
     artists = artists.filter(item => (item !== termId));
-  
+
     fetchMeta('channels', termId, [...new Set(channels)], maxItems, callback);
     fetchMeta('artists',  termId, [...new Set(artists)],  maxItems, callback);
   }
@@ -171,14 +171,14 @@ function fetchMeta(
     debug.log(`fetchMeta() - termType: ${termType} - termIds: ${(termIds.length > 0) ? termIds : 'Empty'} - maxItems: ${maxItems}`);
 
     fetch(`/wp-json/wp/v2/${termType}?include=${termIds}&per_page=${maxItems}&_fields=link,name`)
-    .then(response => 
+    .then(response =>
     {
       if (!response.ok)
       {
         debug.error(response);
         return null;
       }
-      
+
       return response.json();
     })
     .then(data =>
@@ -207,7 +207,7 @@ function fetchMeta(
 export function readCache()
 {
   m.termCache = JSON.parse(sessionStorage.getItem(KEY.UF_TERMLIST_CACHE));
-  
+
   if (m.termCache === null)
     m.termCache = {};
 }

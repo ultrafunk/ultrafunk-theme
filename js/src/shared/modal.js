@@ -49,11 +49,11 @@ export function showModal(
 )
 {
   init();
-  
+
   if (Array.isArray(modalBody) && (modalBody.length > 0))
     setSingleChoiceList(modalBody);
   else
-    elements.body.innerHTML = modalBody;  
+    elements.body.innerHTML = modalBody;
 
   m.onEntryClicked = onEntryClickedCallback;
   m.onClickClose   = onClickCloseCallback;
@@ -120,7 +120,7 @@ function init()
   if (elements.container === null)
   {
     document.body.insertAdjacentHTML('beforeend', getTemplateHtml());
-    
+
     elements.overlay   = document.getElementById(`${config.id}-overlay`);
     elements.container = document.getElementById(`${config.id}-container`);
     elements.body      = elements.overlay.querySelector(`.${config.id}-body`);
@@ -148,7 +148,7 @@ function init()
 function setSingleChoiceList(singleChoiceList)
 {
   elements.body.innerHTML = getSingleChoiceListHtml(singleChoiceList);
-  
+
   singleChoiceList.forEach(entry =>
   {
     if (entry.clickId)
@@ -176,7 +176,7 @@ function keyDown(event)
 function disablePageScrolling(disableScrolling)
 {
   const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-  
+
   document.documentElement.style.overflowY                  = disableScrolling ? 'hidden'              : '';
   document.documentElement.style.paddingRight               = disableScrolling ? `${scrollbarWidth}px` : '';
   document.getElementById('site-header').style.paddingRight = disableScrolling ? `${scrollbarWidth}px` : '';

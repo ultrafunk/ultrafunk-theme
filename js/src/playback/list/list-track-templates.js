@@ -23,7 +23,7 @@ const debug = debugLogger.newInstance('list-track-templates');
 
 
 // ************************************************************************************************
-// 
+//
 // ************************************************************************************************
 
 export function getPageSeparatorHtml(responseData, loadingPage)
@@ -57,7 +57,7 @@ export function getTrackEntryHtml(track)
   const trackArtistTitle = isYouTubeTrack
                              ? `<span><b>${trackArtist}</b></span><br><span>${trackTitle}</span>`
                              : `<a href="${track.link}"><span><b>${trackArtist}</b></span><br><span>${trackTitle}</span></a>`;
-  
+
   const trackPlayNext = isYouTubeTrack
                           ? `<div class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></div>`
                           : '';

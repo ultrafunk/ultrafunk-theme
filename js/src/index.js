@@ -31,7 +31,7 @@ const elements = {
   introBanner:       null,
   siteContent:       null,
   siteContentSearch: null,
-  fullscreenTarget:  null,  
+  fullscreenTarget:  null,
 };
 
 
@@ -40,14 +40,14 @@ const elements = {
 // ************************************************************************************************
 
 document.addEventListener('DOMContentLoaded', () =>
-{ 
+{
   debug.log('DOMContentLoaded');
 
   initIndex();
-  
+
   if (elements.introBanner !== null)
     showIntroBanner();
-  
+
   if (document.getElementById('termlist-container') !== null)
     termlist.init();
 
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () =>
   }
 
   setPreviousPageTitle();
-  
+
   debugLogger.logStartupExecutionTime();
 });
 
@@ -74,7 +74,7 @@ function initIndex()
   interaction.init();
   navSearch.init();
   navMenu.init();
-  
+
   resize.addEventListener();
   scroll.addEventListener();
 
@@ -274,7 +274,7 @@ const resize = (() =>
     resizeEvent();
     window.addEventListener('resize', resizeEvent);
   }
-  
+
   function resizeEvent()
   {
     if (noPlayback())
@@ -290,7 +290,7 @@ const resize = (() =>
   }
 })();
 
-  
+
 // ************************************************************************************************
 // window.addEventListener('scroll') handling
 // ************************************************************************************************

@@ -5,16 +5,16 @@
 //
 
 
-import * as debugLogger from '../debuglogger.js?ver=1.44.20';
-import { addListener }  from '../utils.js?ver=1.44.20';
-import { showSnackbar } from '../snackbar.js?ver=1.44.20';
+import * as debugLogger from '../debuglogger.js?ver=1.44.21';
+import { addListener }  from '../utils.js?ver=1.44.21';
+import { showSnackbar } from '../snackbar.js?ver=1.44.21';
 
 import {
   KEY,
   deleteCookie,
   readJson,
   writeJson,
-} from '../storage.js?ver=1.44.20';
+} from '../storage.js?ver=1.44.21';
 
 import {
   TYPE_INTEGER,
@@ -22,7 +22,7 @@ import {
   TYPE_STRING,
   settingsSchema,
   defaultSettings,
-} from './settings.js?ver=1.44.20';
+} from './settings.js?ver=1.44.21';
 
 
 /*************************************************************************************************/
@@ -65,7 +65,7 @@ const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and
 // ************************************************************************************************
 
 document.addEventListener('DOMContentLoaded', () =>
-{ 
+{
   debug.log('DOMContentLoaded');
 
   m.container = document.getElementById(config.containerId);
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () =>
 
       insertSettingsHtml();
       m.container.style.opacity = 1;
-  
+
       addListener(`#${config.saveResetId} .settings-save`,  'click', settingsSaveClick);
       addListener(`#${config.saveResetId} .settings-reset`, 'click', settingsResetClick);
     }
@@ -219,7 +219,7 @@ function getTypeValueClasses(entry)
   {
     case TYPE_INTEGER: return 'value-string type-integer';
     case TYPE_STRING:  return 'value-string type-string';
-  
+
     case TYPE_BOOLEAN:
       {
         const currentValue = (entry.values[entry.current] === true) ? 'true' : 'false';

@@ -69,34 +69,34 @@ export const crossfadeClosure = ((galleryPlayers) =>
     stop,
     mute,
   };
-  
+
   function init(crossfadeType, crossfadePreset, fadeInUid = null)
   {
     if ((fadeState === STATE.NONE) && (set(fadeInUid) === true))
     {
       debug.log(`init() - type: ${debug.getKeyForValue(TYPE, crossfadeType)} - fadeInUid: ${fadeInUid} - preset: ${crossfadePreset.length} sec ${debug.getKeyForValue(CURVE, crossfadePreset.curve)} (Name: ${crossfadePreset.name})`);
-  
+
       fadeState       = STATE.INIT;
       fadeStartVolume = settings.playback.masterVolume;
       fadeType        = crossfadeType;
       fadePreset      = crossfadePreset;
-      
+
       fadeInPlayer.setVolume(0);
-  
+
       if (fadeInUid === null)
         players.nextTrack(true);
       else
         players.jumpToTrack(players.trackFromUid(fadeInUid), true, false);
-  
+
       return {
         fadeOutPlayer: players.indexMap.get(fadeOutPlayer.getUid()),
         fadeInPlayer:  players.indexMap.get(fadeInPlayer.getUid())
       };
     }
-  
+
     return null;
   }
-  
+
   function start()
   {
     if (fadeState === STATE.INIT)
@@ -109,23 +109,23 @@ export const crossfadeClosure = ((galleryPlayers) =>
         fadeStartTime        = ((positionMilliseconds + updateInterval) / 1000);
         const timeRemaining  = fadeOutPlayer.getDuration() - fadeStartTime;
         const fadeRemaining  = timeRemaining - (updateInterval / 1000);
-  
+
         if (fadeType === TYPE.AUTO)
           fadeLength = fadeRemaining;
         else if (fadeType === TYPE.TRACK)
           fadeLength = (timeRemaining > fadePreset.length) ? fadePreset.length : fadeRemaining;
-  
+
         debug.log(`start() - fadeStartTime: ${fadeStartTime.toFixed(2)} sec - timeRemaining: ${timeRemaining.toFixed(2)} sec - fadeLength: ${fadeLength.toFixed(2)} sec - updateInterval: ${updateInterval} ms`);
-  
+
         intervalId = setInterval((fadePreset.curve === CURVE.EQUAL_POWER) ? equalPowerFade : linearFade, updateInterval);
       });
     }
   }
-  
+
   function stop()
   {
     debug.log(`stop() - fadeState: ${debug.getKeyForValue(STATE, fadeState)}`);
-  
+
     if (fadeState !== STATE.NONE)
     {
       if (intervalId !== -1)
@@ -133,12 +133,12 @@ export const crossfadeClosure = ((galleryPlayers) =>
         clearInterval(intervalId);
         intervalId = -1;
       }
-  
+
       if (fadeOutPlayer !== null)
       {
         fadeOutPlayer.pause();
         fadeOutPlayer.seekTo(0);
-  
+
         // ToDo: Temp fix for: This might POP on fade out end, check if there is a safer way to reset the volume
         setTimeout(() =>
         {
@@ -147,10 +147,10 @@ export const crossfadeClosure = ((galleryPlayers) =>
         },
         200);
       }
-    
+
       if (fadeInPlayer !== null)
         fadeInPlayer = null;
-    
+
       fadeState       = STATE.NONE;
       fadeLength      = 0;
       fadeStartVolume = 0;
@@ -159,24 +159,24 @@ export const crossfadeClosure = ((galleryPlayers) =>
       fadeStartTime   = 0;
     }
   }
-  
+
   function mute(setMute)
   {
     if (fadeOutPlayer !== null)
       fadeOutPlayer.mute(setMute);
   }
-  
+
   function set(fadeInUid)
   {
     fadeOutPlayer = players.current;
     fadeInPlayer  = (fadeInUid === null) ? players.next : players.playerFromUid(fadeInUid);
-  
+
     if (fadeOutPlayer.getIsPlayable() && fadeInPlayer.getIsPlayable())
       return true;
-  
+
     return false;
   }
-  
+
   //
   // https://dsp.stackexchange.com/questions/14754/equal-power-crossfade
   //
@@ -187,14 +187,14 @@ export const crossfadeClosure = ((galleryPlayers) =>
       // Clamp negative position values
       const position     = ((positionMilliseconds / 1000) - fadeStartTime);
       const fadePosition = (position >= 0) ? position : 0;
-  
+
       // Clamp negative volume values
       const volume     = fadeStartVolume - (fadeStartVolume * (fadePosition / fadeLength));
       const fadeVolume = (volume >= VOLUME.MIN) ? volume : VOLUME.MIN;
-  
+
       const fadeOutVolume = Math.round(Math.sqrt(fadeStartVolume * fadeVolume));
       const fadeInVolume  = Math.round(Math.sqrt(fadeStartVolume * (fadeStartVolume - fadeVolume)));
-  
+
       if ((fadePosition >= fadeLength) && (fadeVolume <= VOLUME.MIN) && (fadeInVolume >= fadeStartVolume))
       {
         fadeOutPlayer.setVolume(VOLUME.MIN);
@@ -208,7 +208,7 @@ export const crossfadeClosure = ((galleryPlayers) =>
       }
     });
   }
-  
+
   function linearFade()
   {
     fadeOutPlayer.getPosition((positionMilliseconds) =>
@@ -216,7 +216,7 @@ export const crossfadeClosure = ((galleryPlayers) =>
       const fadePosition  = ((positionMilliseconds / 1000) - fadeStartTime);
       const fadeInVolume  = Math.round(fadeStartVolume * (fadePosition / fadeLength));
       const fadeOutVolume = fadeStartVolume - fadeInVolume;
-  
+
       if ((fadePosition > fadeLength) && (fadeOutVolume < VOLUME.MIN) && (fadeInVolume > fadeStartVolume))
       {
         fadeOutPlayer.setVolume(VOLUME.MIN);

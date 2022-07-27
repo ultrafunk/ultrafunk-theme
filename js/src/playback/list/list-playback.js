@@ -59,7 +59,7 @@ export function init()
   debug.log('init()');
 
   listControls.init(setCurrentTrack);
-  
+
   if (cueInitialTrack() !== null)
     initYouTubeAPI();
   else
@@ -82,7 +82,7 @@ function cueInitialTrack()
     if ((m.autoplayData !== null) && (m.autoplayData.trackId !== null))
     {
       const matchesVideoId = m.autoplayData.trackId.match(mediaPlayers.youTubeVideoIdRegEx);
-      
+
       if (matchesVideoId !== null)
       {
         const trackElement = listControls.queryTrack(`[data-track-source-uid="${matchesVideoId[0]}"]`);
@@ -107,7 +107,7 @@ function cueInitialTrack()
         }
       }
     }
-  
+
     listControls.setCuedTrack(m.currentTrackId);
   }
 
@@ -344,7 +344,7 @@ function initYouTubeAPI()
 function onYouTubePlayerReady()
 {
   debug.log('onYouTubePlayerReady()');
-  
+
   if (m.autoplayData?.autoplay === true)
     eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
 
@@ -383,7 +383,7 @@ function onYouTubePlayerStateChange(event)
     case YT.PlayerState.BUFFERING:
       playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
       break;
-    
+
     // eslint-disable-next-line no-undef
     case YT.PlayerState.PLAYING:
       onYouTubeStatePlaying();
@@ -432,7 +432,7 @@ function onYouTubeStatePlaying()
   {
     m.firstStatePlaying = false;
     m.autoplayData      = null;
-    
+
     setTimeout(() =>
     {
       if (settings.playback.autoplay            &&
@@ -454,7 +454,7 @@ function onYouTubePlayerError(event)
   listControls.setTrackMessage('Error!');
   eventLog.add(eventLogger.SOURCE.YOUTUBE, eventLogger.EVENT.PLAYER_ERROR, m.currentTrackId);
   showSnackbar('Unable to play track, skipping to next', 5, 'Stop', stopSkipToNextTrack, skipToNextTrack);
-  
+
   debugLogger.logErrorOnServer('EVENT_MEDIA_UNAVAILABLE', {
     mediaUrl:   m.player.embedded.getVideoUrl(),
     mediaTitle: `${m.player.getArtist()} - ${m.player.getTitle()}`,

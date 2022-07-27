@@ -67,7 +67,7 @@ export const galleryPlayers = (() =>
   function add(player)
   {
     debug.log(player);
-    
+
     mediaPlayers.push(player);
     indexMap.set(player.getUid(), mediaPlayers.length - 1);
   }
@@ -82,7 +82,7 @@ export const galleryPlayers = (() =>
     this.current.stop();
     crossfade.stop();
   }
-  
+
   function mute()
   {
     this.current.mute(settings.playback.masterMute);
@@ -109,23 +109,23 @@ export const galleryPlayers = (() =>
       playTrack(playMedia);
       return true;
     }
-    
+
     return false;
   }
-  
+
   function nextTrack(playMedia)
   {
     playerIndex++;
-    
+
     if (playerIndex < this.getNumTracks())
     {
       playTrack(playMedia);
       return true;
     }
-    
+
     return false;
   }
-  
+
   function jumpToTrack(track, playMedia, scrollToMedia = true)
   {
     if ((track > 0) && (track <= this.getNumTracks()))
@@ -134,7 +134,7 @@ export const galleryPlayers = (() =>
       playTrack(playMedia, scrollToMedia);
       return true;
     }
-  
+
     return false;
   }
 });

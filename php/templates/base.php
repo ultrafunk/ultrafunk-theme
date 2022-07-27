@@ -44,7 +44,7 @@ abstract class Base
         'prev_text' => '&#10094;&#10094; Prev.',
         'next_text' => 'Next &#10095;&#10095;',
       ];
-  
+
       ?>
       <nav class="navigation pagination" aria-label="Pagination">
         <h2 class="screen-reader-text">Pagination</h2>

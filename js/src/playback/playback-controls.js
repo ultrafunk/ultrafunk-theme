@@ -90,27 +90,27 @@ export function init(mediaPlayers, seekClickCallback)
     ctrl.details        = new ElementWrapper('.playback-details-control', playbackControls);
     ctrl.details.artist = ctrl.details.getElement('.playback-details-artist');
     ctrl.details.title  = ctrl.details.getElement('.playback-details-title');
-    
+
     ctrl.thumbnail     = new ElementWrapper('.playback-thumbnail-control', playbackControls);
     ctrl.thumbnail.img = ctrl.thumbnail.getElement('img');
-    
+
     ctrl.timer                 = new ElementWrapper('.playback-timer-control', playbackControls);
     ctrl.timer.position        = ctrl.timer.getElement('.playback-timer-position');
     ctrl.timer.duration        = ctrl.timer.getElement('.playback-timer-duration');
     ctrl.timer.positionSeconds = -1; // Make sure initial value is set + shown when track plays
     ctrl.timer.durationSeconds = -1; // Make sure initial value is set + shown when track plays
-      
+
     ctrl.playerType = new ElementWrapper('.playback-player-type-control', playbackControls);
 
     ctrl.playPause.icon = ctrl.playPause.getElement('span.material-icons');
-    
+
     ctrl.nextTrack = new ElementWrapper('.playback-next-control', playbackControls);
-    
+
     ctrl.repeat      = new ElementWrapper('.playback-repeat-control', playbackControls);
     ctrl.repeat.icon = ctrl.repeat.getElement('span.material-icons');
-    
+
     ctrl.shuffle = new ElementWrapper('.playback-shuffle-control', playbackControls);
-    
+
     ctrl.mute      = new ElementWrapper('.playback-mute-control', playbackControls);
     ctrl.mute.icon = ctrl.mute.getElement('span.material-icons');
   }
@@ -127,7 +127,7 @@ export function ready(prevClickCallback, playPauseClickCallback, nextClickCallba
   ctrl.progressSeek.setState(STATE.ENABLED);
   ctrl.progressSeek.addListener('click', progressSeekClick);
   ctrl.progressBar.setState(STATE.ENABLED);
-  
+
   ctrl.details.setState(STATE.HIDDEN);
   ctrl.thumbnail.setState(STATE.HIDDEN);
   ctrl.timer.setState(STATE.HIDDEN);
@@ -243,7 +243,7 @@ function setDetails(trackData)
 
   ctrl.details.artist.textContent = trackData.artist || ''; // Artist will contain the post title if all else fails
   ctrl.details.title.textContent  = trackData.title  || '';
-  
+
   setThumbnail(trackData.thumbnail);
   setTimerDisplayHoursMinutes(trackData.duration);
   setTimer((isPlaying() ? ctrl.timer.positionSeconds : 0), trackData.duration);
@@ -276,7 +276,7 @@ function setTimer(positionSeconds, durationSeconds)
 
     if (settings.playback.autoplay === false)
       positionSeconds = (durationSeconds - positionSeconds);
-    
+
     ctrl.timer.position.textContent = getTimeString(positionSeconds, (durationSeconds > 3600));
   }
 
@@ -306,7 +306,7 @@ function clearTimer(trackData)
 export function isPlaying()
 {
   // ToDo: This might not be the best place to save / check playback state...?
-  return ((ctrl.playPause.state.ID === STATE.PLAYING.ID) ? true : false);    
+  return ((ctrl.playPause.state.ID === STATE.PLAYING.ID) ? true : false);
 }
 
 function setLoadState()
@@ -327,7 +327,7 @@ export function setPlayState()
   ctrl.playPause.setState(STATE.PLAYING);
   ctrl.playPause.icon.textContent = 'pause_circle_filled';
   ctrl.prevTrack.setState(STATE.ENABLED);
-  
+
   setDetails(m.players.getTrackData());
 }
 
@@ -359,10 +359,10 @@ export function getSetTrackData()
 export function updatePrevState()
 {
   const trackData = getSetTrackData();
-  
+
   if ((isPlaying() === false) && (trackData.currentTrack <= 1))
     ctrl.prevTrack.setState(STATE.DISABLED);
-  
+
   if (trackData.currentTrack < trackData.numTracks)
     ctrl.nextTrack.setState(STATE.ENABLED);
 }
@@ -372,7 +372,7 @@ export function updateNextState()
   const trackData = getSetTrackData();
 
   ctrl.prevTrack.setState(STATE.ENABLED);
-  
+
   if (trackData.currentTrack >= trackData.numTracks)
     ctrl.nextTrack.setState(STATE.DISABLED);
 }

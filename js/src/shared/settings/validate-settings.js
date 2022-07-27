@@ -68,7 +68,7 @@ function isEntryInvalid(settings, schemaEntry, settingValue, entryKey)
         return true;
       }
       break;
-    
+
     case TYPE_BOOLEAN:
       if ((settingValue !== true) && (settingValue !== false))
       {

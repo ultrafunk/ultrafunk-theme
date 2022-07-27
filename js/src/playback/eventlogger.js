@@ -66,7 +66,7 @@ class EventLog
     this.lastPos    = 0;
     this.matchCount = 0;
   }
-  
+
   add(eventSource, eventType, uId, timeStamp = Date.now())
   {
     const logEntry = Object.create(entry);
@@ -75,7 +75,7 @@ class EventLog
     logEntry.eventType   = eventType;
     logEntry.uId         = uId;
     logEntry.timeStamp   = timeStamp;
-    
+
     // Simple and inefficient, but good enough...
     if (this.log.length < this.maxEntries)
     {
@@ -87,7 +87,7 @@ class EventLog
       this.log.push(logEntry);
     }
   }
-  
+
   clear()
   {
     this.log = [];
@@ -108,7 +108,7 @@ class EventLog
       this.matchCount++;
     }
   }
-  
+
   matchesDelta(elements, delta)
   {
     if ((this.log[this.lastPos].timeStamp - this.log[this.lastPos - elements].timeStamp) <= delta)
@@ -121,7 +121,7 @@ class EventLog
     {
       debug.log(`MATCH for: ${event}`);
       debug.logEventLog(this.log, SOURCE, EVENT);
-      
+
       return true;
     }
 
@@ -161,7 +161,7 @@ export class Playback extends EventLog
   ytAutoplayBlocked(uId, deltaTime)
   {
     this.initMatch();
-    
+
     if (this.lastPos >= 3)
     {
       this.matchesEvent(3, SOURCE.ULTRAFUNK, EVENT.RESUME_AUTOPLAY, null);
@@ -170,14 +170,14 @@ export class Playback extends EventLog
       this.matchesEvent(0, SOURCE.YOUTUBE,   EVENT.STATE_UNSTARTED, uId);
       this.matchesDelta(3, deltaTime);
     }
-    
+
     return this.isPatternMatch(5, 'YouTube Autoplay Blocked');
   }
-  
+
   scAutoplayBlocked(uId, deltaTime)
   {
     this.initMatch();
-    
+
     if (this.lastPos >= 3)
     {
       this.matchesEvent(3, SOURCE.ULTRAFUNK,  EVENT.RESUME_AUTOPLAY, null);
@@ -186,14 +186,14 @@ export class Playback extends EventLog
       this.matchesEvent(0, SOURCE.SOUNDCLOUD, EVENT.STATE_PAUSED,    uId);
       this.matchesDelta(3, deltaTime);
     }
-    
+
     return this.isPatternMatch(5, 'SoundCloud Autoplay Blocked');
   }
 
   scWidgetPlayBlocked(uId, deltaTime)
   {
     this.initMatch();
-    
+
     if (this.lastPos >= 2)
     {
       this.matchesEvent(2, SOURCE.SOUNDCLOUD, EVENT.STATE_PLAYING, uId);
@@ -201,7 +201,7 @@ export class Playback extends EventLog
       this.matchesEvent(0, SOURCE.SOUNDCLOUD, EVENT.STATE_PAUSED,  uId);
       this.matchesDelta(2, deltaTime);
     }
-    
+
     return this.isPatternMatch(4, 'SoundCloud WidgetPlay Blocked');
   }
 

@@ -92,7 +92,7 @@ gallery-track .track-content {
 ***************************************************************************************************/
 
 @media screen and (max-width: 900px) {
-  
+
   gallery-track {
     margin-top: 45px;
   }
@@ -111,7 +111,7 @@ gallery-track .track-content {
 ***************************************************************************************************/
 
 @media screen and (max-width: 768px) {
-  
+
   single-track .track-header,
   gallery-track .track-header {
     padding-left: 25px;
@@ -161,7 +161,7 @@ gallery-track .track-content {
   gallery-track figure.wp-block-embed {
     margin: 30px 0;
   }
-  
+
 }
 
 
@@ -170,7 +170,7 @@ gallery-track .track-content {
 ***************************************************************************************************/
 
 @media screen and (max-width: 400px) {
-  
+
   single-track h2.track-title,
   single-track h2.track-title a,
   gallery-track h2.track-title,
@@ -260,7 +260,7 @@ body.autoplay-on .track-meta-controls .track-share-control {
   .track-meta-controls .track-share-control .material-icons:hover {
     opacity: 1;
   }
-    
+
 }
 
 
@@ -269,7 +269,7 @@ body.autoplay-on .track-meta-controls .track-share-control {
 ***************************************************************************************************/
 
 @media screen and (max-width: 500px) {
-  
+
   .track-meta-controls .track-share-control {
     width: 40px;
     height: 40px;

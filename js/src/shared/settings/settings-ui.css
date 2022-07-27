@@ -28,7 +28,7 @@ table.settings tr:nth-child(odd) {
 }
 
 @media all and (pointer: fine) {
- 
+
   table.settings tr:hover {
     background: var(--list-row-hover-color);
     cursor: pointer;
@@ -110,14 +110,14 @@ table.settings td.current-value-false {
 }
 
 @media all and (pointer: fine) {
- 
+
   .settings-clear:hover,
   .settings-save:hover,
   .settings-reset:hover {
     background: var(--button-background-hover-rgba);
     cursor: pointer;
   }
-  
+
 }
 
 @media not all and (pointer: fine) {
@@ -143,17 +143,17 @@ table.settings td.current-value-false {
 ***************************************************************************************************/
 
 @media screen and (max-width: 1350px) {
-  
+
   table.settings {
     width: calc(100% - (75px + 75px));
     margin-left: auto;
     margin-right: auto;
   }
-  
+
   #settings-save-reset {
     margin-left: 75px;
     margin-right: 75px;
-  }  
+  }
 }
 
 
@@ -167,7 +167,7 @@ table.settings td.current-value-false {
     font-size: unset;
     line-height: unset;
   }
-    
+
 }
 
 
@@ -176,7 +176,7 @@ table.settings td.current-value-false {
 ***************************************************************************************************/
 
 @media screen and (max-width: 900px) {
-  
+
   table.settings {
     width: calc(100% - (50px + 50px));
   }
@@ -184,7 +184,7 @@ table.settings td.current-value-false {
   #settings-save-reset {
     margin-left: 50px;
     margin-right: 50px;
-  }  
+  }
 
 }
 
@@ -194,7 +194,7 @@ table.settings td.current-value-false {
 ***************************************************************************************************/
 
 @media screen and (max-width: 768px) {
-  
+
   table.settings {
     width: calc(100% - (25px + 25px));
   }
@@ -202,7 +202,7 @@ table.settings td.current-value-false {
   #settings-save-reset {
     margin-left: 25px;
     margin-right: 25px;
-  }  
+  }
 
 }
 
@@ -212,7 +212,7 @@ table.settings td.current-value-false {
 ***************************************************************************************************/
 
 @media screen and (max-width: 500px) {
-  
+
   table.settings {
     width: calc(100% - (20px + 20px));
   }
@@ -224,7 +224,7 @@ table.settings td.current-value-false {
 
   #settings-save-reset {
     margin: var(--site-content-margin-bottom) 20px;
-  } 
+  }
 
   table.settings td {
     padding: 12px 15px;
@@ -242,7 +242,7 @@ table.settings td.current-value-false {
 ***************************************************************************************************/
 
 @media screen and (max-width: 400px) {
-  
+
   table.settings td.description {
     white-space: initial;
   }

@@ -8,7 +8,7 @@
 import PlaybackTimer          from '../playback-timer.js';
 import { EVENT, addListener } from '../playback-events.js';
 
-import { 
+import {
   isPlaying,
   updateTimerAndProgress
 } from '../playback-controls.js';

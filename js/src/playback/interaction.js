@@ -73,7 +73,7 @@ const config = {
 document.addEventListener('DOMContentLoaded', () =>
 {
   debugLogger.measureStartupExecutionTime();
-  
+
   debug.log('DOMContentLoaded');
 
   getSessionData();
@@ -234,7 +234,7 @@ function documentEventMediaKeyDown(event)
         event.preventDefault();
         m.player.prevTrack();
         break;
-      
+
       case 'MediaTrackNext':
         debug.log('documentEventMediaKeyDown(): MediaTrackNext');
         event.preventDefault();
@@ -252,7 +252,7 @@ function documentEventMediaKeyDown(event)
 function onKeyArrowLeft(event)
 {
   event.preventDefault();
-  
+
   if (event.shiftKey === true)
     prevNextNavTo(null, response.prevPage);
   else
@@ -338,7 +338,7 @@ function windowEventBlur()
       setTimeout(() =>
       {
         document.activeElement.blur();
-        
+
         // Needed to get Firefox to behave like Chrome
         if (document.activeElement instanceof HTMLIFrameElement)
           document.activeElement.blur();
@@ -368,7 +368,7 @@ function playbackThumbnailClick()
   {
     eventLog.add(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, null);
     showSnackbarHint('showGalleryTrackThumbnailHint', '<b>Tip:</b> Double click or tap Track Thumbnail for full screen');
-  
+
     if (eventLog.doubleClicked(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, config.doubleClickDelay))
       fullscreenElement.enter(document.getElementById(m.player.getStatus().iframeId));
   }

@@ -31,7 +31,7 @@ const m = {
 
 
 // ************************************************************************************************
-// 
+//
 // ************************************************************************************************
 
 export async function loadTracks(termType, termId)
@@ -54,15 +54,15 @@ export async function loadTracks(termType, termId)
     });
 
     document.getElementById('tracklist-load-more').insertAdjacentHTML('beforebegin', tracksHtml);
-  
+
     debug.log(`Fetching: ${artistIds.size} artists (cached: ${m.artistsCache.size}) - Fetching: ${channelIds.size} channels (cached: ${m.channelsCache.size})`);
 
     let artistsPromise  = null;
     let channelsPromise = null;
-    
+
     if (artistIds.size > 0)
       artistsPromise = fetchTerms('artists',  [...artistIds], 100);
-  
+
     if (channelIds.size > 0)
       channelsPromise = fetchTerms('channels', [...channelIds], 100);
 
@@ -95,7 +95,7 @@ function fetchTracks(termType = '', termId = '', page = 1, tracksPerPage = 25)
   let params       = '';
   const pagination = `page=${page}&per_page=${tracksPerPage}`;
   const fields     = '&_fields=id,link,artists,channels,meta';
-  
+
   if (responseData.params.channel || responseData.params.artist)
     params = getTermQueryParams(termType, termId);
   else if (responseData.params.shuffle)

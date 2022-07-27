@@ -37,7 +37,7 @@ class Termlist extends \Ultrafunk\Theme\Templates\Base
     if ($this->is_artists && (count($this->request->query_result) > 30))
       $this->artist_letters('footer');
   }
-  
+
 
   /**************************************************************************************************************************/
 
@@ -46,13 +46,13 @@ class Termlist extends \Ultrafunk\Theme\Templates\Base
   {
     $odd_even  = $this->is_artists ? 1 : 0;
     $term_path = $this->request->term_path;
-  
+
     foreach($this->request->query_result as $term)
     {
       $row_class = (($odd_even++ % 2) === 1) ? 'odd' : 'even';
       $term_name = esc_html($term->name);
       $term_slug = esc_html($term->slug);
-  
+
       ?>
       <div id="<?php echo "term-$term->term_id"; ?>" class="termlist-entry" data-term-id="<?php echo $term->term_id; ?>" data-term-slug="<?php echo $term_slug; ?>">
         <div class="termlist-header <?php echo $row_class; ?>" title="Show more or less">
@@ -98,15 +98,15 @@ class Termlist extends \Ultrafunk\Theme\Templates\Base
       <?php
     }
   }
-  
-  
+
+
   /**************************************************************************************************************************/
-  
-  
+
+
   private function artist_letters(string $letters_class = '') : void
   {
     ?><div class="artist-letters-container <?php echo 'artist-letters-' . $letters_class; ?>"><?php
-  
+
     foreach($this->request->letters_range as $letter)
     {
       ?>
@@ -114,8 +114,8 @@ class Termlist extends \Ultrafunk\Theme\Templates\Base
         <a href="/artists/<?php echo $letter; ?>/"><?php echo $letter; ?></a>
       </div>
       <?php
-    }    
-  
+    }
+
     ?></div><?php
   }
 }

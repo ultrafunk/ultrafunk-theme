@@ -42,7 +42,7 @@
 .gallery-3-col gallery-grid {
   display: inline-grid;
   width: 100%;
-  box-sizing: border-box;  
+  box-sizing: border-box;
 }
 
 .gallery-2-col gallery-grid {
@@ -228,7 +228,7 @@
   .gallery-3-col .wp-block-embed__wrapper {
     background-size: 66px;
   }
-  
+
 }
 
 
@@ -242,12 +242,6 @@
     --site-max-width: 1000px;
     --site-content-margin-top: 40px;
     --site-content-margin-bottom: 65px;
-  }
-
-  .gallery-1-col nav.navigation.pagination,
-  .gallery-2-col nav.navigation.pagination,
-  .gallery-3-col nav.navigation.pagination {
-    margin: 60px auto 65px auto;
   }
 
 }
@@ -282,21 +276,6 @@
     max-width: 100%;
   }
 }
-
-
-/**************************************************************************************************
-* Responsive: max-width: 900px
-***************************************************************************************************/
-
-/*
-@media screen and (max-width: 900px) {
-
-  .gallery-1-col {
-    --site-content-margin-top: 40px;
-  }
-
-}
-*/
 
 
 /**************************************************************************************************

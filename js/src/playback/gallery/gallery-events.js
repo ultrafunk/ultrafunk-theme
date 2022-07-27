@@ -44,13 +44,13 @@ const config = {
 
 
 // ************************************************************************************************
-// 
+//
 // ************************************************************************************************
 
 export function init()
 {
   debug.log('init()');
-  
+
   m.nowPlayingIcons = document.querySelectorAll(config.nowPlayingIconsSelector);
 
   addListener(EVENT.MEDIA_PLAYING,     mediaPlaying);
@@ -66,13 +66,13 @@ export function init()
 
 
 // ************************************************************************************************
-// 
+//
 // ************************************************************************************************
 
 function mediaPlaying(playbackEvent)
 {
   debug.log(playbackEvent);
-  
+
   // If autoplayBlocked() snackbar is still visible, dismiss it when playback starts
   dismissSnackbar(m.snackbarId);
 
@@ -169,7 +169,7 @@ function mediaUnavailable(playbackEvent)
 
 
 // ************************************************************************************************
-// 
+//
 // ************************************************************************************************
 
 function resetNowPlayingIcons(nowPlayingElement)
@@ -210,6 +210,6 @@ function isPremiumTrack(trackId)
 
   if (postWithId !== null)
     return postWithId.classList.contains('uf_channel-premium');
-  
+
   return false;
 }

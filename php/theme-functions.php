@@ -64,13 +64,13 @@ function get_session_vars() : array
     // Reverse order for: prev = left direction and next = right direction (orderby: from New to Old)
     $prevPost = get_next_post();
     $nextPost = get_previous_post();
-    
+
     if (!empty($prevPost))
       $prevUrl = get_the_permalink($prevPost->ID);
 
     if (!empty($nextPost))
       $nextUrl = get_the_permalink($nextPost->ID);
-    
+
     $session_vars['prevPage'] = isset($prevUrl) ? $prevUrl : null;
     $session_vars['nextPage'] = isset($nextUrl) ? $nextUrl : null;
   }
@@ -78,13 +78,13 @@ function get_session_vars() : array
   {
     $prevLink = get_previous_posts_link('');
     $nextLink = get_next_posts_link('');
-    
+
     if ($prevLink !== null)
       $prevUrl = new SimpleXMLElement($prevLink);
-    
+
     if ($nextLink !== null)
       $nextUrl = new SimpleXMLElement($nextLink);
-    
+
     $session_vars['prevPage'] = isset($prevUrl) ? ((string) $prevUrl['href']) : null;
     $session_vars['nextPage'] = isset($nextUrl) ? ((string) $nextUrl['href']) : null;
   }
@@ -138,7 +138,7 @@ function get_title() : string
   $title .= get_filter_result_by($params);
 
   set_cached_title($title);
-  
+
   return $title;
 }
 
@@ -181,7 +181,7 @@ function get_shuffle_path() : string
       $request_path = '/' . $params['route_path'] . '/';
     else if (is_list_player('channel') || is_list_player('artist'))
       $request_path = '/' . str_ireplace('list/', 'list/shuffle/', $params['route_path']) . '/';
-    
+
     return $request_path;
   }
 

@@ -2,7 +2,7 @@
 * Snackbar UI
 *
 * https://ultrafunk.com
-* 
+*
 */
 
 .site-theme-light {
@@ -58,7 +58,7 @@
 
 .snackbar-action-text {
   font-weight: 700;
-  font-size: 25px;
+  font-size: 23px;
   cursor: pointer;
   color: var(--snackbar-action-text-color);
   text-decoration: none;
@@ -118,7 +118,7 @@
 ***************************************************************************************************/
 
 @media screen and (max-width: 500px) {
-  
+
   @keyframes snackbar-show {
     from { bottom:    0; opacity: 0; }
     to   { bottom: 10px; opacity: 1; }
@@ -132,7 +132,7 @@
   #snackbar {
     bottom: 10px;
   }
-  
+
   .snackbar-container {
     margin: 0px 10px;
     padding: 6px 10px 6px 15px;
@@ -151,17 +151,17 @@
     font-size: 18px;
     margin-left: 8px;
   }
-  
+
   .snackbar-close-icon {
     padding: 0px 0px 0px 2px;
     width: 32px;
     height: 32px;
   }
-  
+
   .snackbar-close-icon .material-icons {
     font-size: 32px;
   }
-  
+
 }
 
 

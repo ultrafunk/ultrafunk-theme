@@ -19,7 +19,7 @@ class Taxonomies extends \WP_Widget
       'classname'   => 'widget-taxonomies',
       'description' => 'Show Taxonomies',
     ];
-    
+
     parent::__construct('taxonomies', 'Taxonomies', $widget_ops);
   }
 
@@ -27,7 +27,7 @@ class Taxonomies extends \WP_Widget
   {
     if (!isset($args['widget_id']))
       $args['widget_id'] = $this->id;
-    
+
     $title    = (!empty($instance['title']))    ? $instance['title']          : 'Taxonomy';
     $taxonomy = (!empty($instance['taxonomy'])) ? $instance['taxonomy']       : 'category';
     $number   = (!empty($instance['number']))   ? absint($instance['number']) : 10;
@@ -41,14 +41,14 @@ class Taxonomies extends \WP_Widget
       'taxonomy'   => $taxonomy,
       'title_li'   => '',
     ];
-    
+
     echo $args['before_widget'];
     echo $args['before_title'] . $title . $args['after_title'];
-    
+
     ?><ul class="<?php echo $taxonomy; ?>"><?php
     wp_list_categories($listArgs);
     ?></ul><?php
-    
+
     echo $args['after_widget'];
   }
 
@@ -58,7 +58,7 @@ class Taxonomies extends \WP_Widget
     $instance['title']    = sanitize_text_field($new_instance['title']);
     $instance['taxonomy'] = sanitize_text_field($new_instance['taxonomy']);
     $instance['number']   = (int) $new_instance['number'];
-    
+
     return $instance;
   }
 
@@ -67,7 +67,7 @@ class Taxonomies extends \WP_Widget
     $title    = isset($instance['title'])    ? esc_attr($instance['title'])    : '';
     $taxonomy = isset($instance['taxonomy']) ? esc_attr($instance['taxonomy']) : '';
     $number   = isset($instance['number'])   ? absint($instance['number'])     : 10;
-    
+
     ?>
     <p><label for="<?php echo $this->get_field_id('title'); ?>">Title:</label>
     <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>

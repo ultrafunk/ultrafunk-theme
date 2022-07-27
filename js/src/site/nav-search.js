@@ -38,7 +38,7 @@ const navSearchClosure = (() =>
     utils.addListenerAll('.nav-search-toggle', 'mousedown', (event) => event.preventDefault());
     // Hide nav search bar on focus loss
     searchField.addEventListener('blur', hide);
-    
+
     // Hide nav search bar on ESC
     searchField.addEventListener('keydown', (event) =>
     {
@@ -54,13 +54,13 @@ const navSearchClosure = (() =>
   {
     hasVisibleSearchContainer() ? show() : hide();
   }
-  
+
   function hide()
   {
     if (isVisible)
       setProps(false, allowKeyboardShortcutsEvent, '', 'search');
   }
-  
+
   function hasVisibleSearchContainer()
   {
     if (searchContainer.style.display.length === 0)
@@ -90,16 +90,16 @@ const navSearchClosure = (() =>
     setPosSize();
     setProps(true, denyKeyboardShortcutsEvent, 'flex', 'clear');
     searchField.focus();
-    searchField.setSelectionRange(9999, 9999);    
+    searchField.setSelectionRange(9999, 9999);
   }
-  
+
   function setProps(visible, keyboardShortcutsEvent, display, icon)
   {
     isVisible = visible;
     document.dispatchEvent(keyboardShortcutsEvent);
     searchContainer.style.display = display;
     document.querySelectorAll('div.nav-search-toggle span').forEach(element => (element.textContent = icon));
-    
+
     if (isVisible)
       document.getElementById('playback-controls').classList.add('hide');
     else
@@ -132,7 +132,7 @@ const navSearchClosure = (() =>
         position   = new DOMRect((rect.left + 88), rect.top, (rect.right - 90), (rect.height - 1));
       }
     }
-  
+
     searchContainer.style.left   = `${position.left}px`;
     searchContainer.style.top    = `${position.top}px`;
     searchContainer.style.width  = `${position.width - position.left}px`;

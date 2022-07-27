@@ -58,7 +58,7 @@ export function noPlayback()
 export function isGalleryPlayer() { return isPlayer.gallery; }
 export function isListPlayer()    { return isPlayer.list;    }
 
-export function shuffleClickNavTo(event)
+export function shuffleClickNavTo(event = null)
 {
   event?.preventDefault();
   setCookie(KEY.UF_RESHUFFLE, 'true');

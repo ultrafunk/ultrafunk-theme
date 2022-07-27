@@ -13,9 +13,9 @@ import { replaceClass } from "../shared/utils.js";
 
 export const STATE = {
   UNKNOWN:  { ID:  0, CLASS: 'state-unknown'  },
-  DISABLED: { ID: 10, CLASS: 'state-disabled' },
-  ENABLED:  { ID: 20, CLASS: 'state-enabled'  },
-  HIDDEN:   { ID: 30, CLASS: 'state-hidden'   },
+  HIDDEN:   { ID: 10, CLASS: 'state-hidden'   },
+  DISABLED: { ID: 20, CLASS: 'state-disabled' },
+  ENABLED:  { ID: 30, CLASS: 'state-enabled'  },
   PLAYING:  { ID: 40, CLASS: 'state-playing'  },
   PAUSED:   { ID: 50, CLASS: 'state-paused'   },
   LOADING:  { ID: 60, CLASS: 'state-loading'  },

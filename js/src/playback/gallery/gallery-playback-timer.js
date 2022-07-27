@@ -18,7 +18,7 @@ class GalleryPlaybackTimer extends PlaybackTimer
 {
   constructor()
   {
-    super();    
+    super();
     this.players       = null;
     this.crossfadeInit = null;
   }

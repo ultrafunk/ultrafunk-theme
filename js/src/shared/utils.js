@@ -51,7 +51,7 @@ export function addListener(selectors, type, listener)
 }
 
 // Plain JS function equivalent to jQuery(selectors).eventX();
-// Adds event listeners of 'type' to all matching selectors 
+// Adds event listeners of 'type' to all matching selectors
 export function addListenerAll(selectors, type, listener)
 {
   const elementList = document.querySelectorAll(selectors);
@@ -91,7 +91,7 @@ export function matchesMedia(matchMedia)
   {
     case MATCH.SITE_MIN_WIDTH_WIDE:
       return siteMinWidthWide.matches;
-      
+
     case MATCH.SITE_MAX_WIDTH:
       return siteMaxWidth.matches;
 
@@ -177,13 +177,13 @@ export function stripAttribute(element, attribute)
 
   if (value !== null)
     return stripHtml(value);
-  
+
   return value;
 }
 
 
 // ************************************************************************************************
-// 
+//
 // ************************************************************************************************
 
 export function navToUrl(destUrl)
@@ -207,7 +207,7 @@ export function getListPlayerUrl(destUrl)
 
 export function getGalleryPlayerUrl(destUrl)
 {
-  return destUrl.replace(SITE_URL_LIST, SITE_URL);  
+  return destUrl.replace(SITE_URL_LIST, SITE_URL);
 }
 
 export function getPrefPlayerUrl(destUrl)
@@ -239,7 +239,7 @@ export function getThumbnailData(metaData)
 
 
 // ************************************************************************************************
-// 
+//
 // ************************************************************************************************
 
 export const FETCH_ERROR_TYPE = {
@@ -252,7 +252,7 @@ export async function fetchRest(endpoint, query, returnStatus = false, path = '/
   debug.log(`fetchRest(): ${path}${endpoint}?${query}`);
 
   return fetch(`${path}${endpoint}?${query}`)
-  .then(async (response) => 
+  .then(async (response) =>
   {
     if (!response.ok)
     {
@@ -266,7 +266,7 @@ export async function fetchRest(endpoint, query, returnStatus = false, path = '/
 
     if (returnStatus)
       return { status: { code: response.status }, data: await response.json() };
-    
+
     return response.json();
   })
   .catch(reason =>

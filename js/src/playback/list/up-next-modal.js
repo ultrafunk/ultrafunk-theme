@@ -5,12 +5,13 @@
 //
 
 
-import * as debugLogger from '../../shared/debuglogger.js';
-import { autoplay }     from '../footer-toggles.js';
-import { settings }     from '../../shared/session-data.js';
-import { isPlaying }    from '../playback-controls.js';
-import { TRACK_TYPE }   from '../mediaplayers.js';
-import { showSnackbar } from '../../shared/snackbar.js';
+import * as debugLogger      from '../../shared/debuglogger.js';
+import { autoplay }          from '../footer-toggles.js';
+import { settings }          from '../../shared/session-data.js';
+import { isPlaying }         from '../playback-controls.js';
+import { TRACK_TYPE }        from '../mediaplayers.js';
+import { showSnackbar }      from '../../shared/snackbar.js';
+import { shuffleClickNavTo } from '../shared-gallery-list.js';
 
 import {
   addListener,
@@ -67,8 +68,8 @@ function loadDragDropTouch()
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
     tag.src   = debug.isDebug()
-                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.44.20'
-                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.44.20';
+                  ? 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=1.44.21'
+                  : 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=1.44.21';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
@@ -97,7 +98,7 @@ export function showUpNextModal()
       else
         m.setCurrentTrack(nextTrackId, true, false);
     },
-    (event) => 
+    (event) =>
     {
       if (event.target.closest('#modal-item-1'))
         return true;
@@ -114,7 +115,7 @@ export function showUpNextModal()
   }
   else
   {
-    showSnackbar('No more tracks to play!', 5);
+    showSnackbar('No more tracks to play...', 5, 'Shuffle', () => shuffleClickNavTo());
   }
 }
 
@@ -124,9 +125,9 @@ export function updateUpNextModal(isPlayingTrack)
   {
     updateModalTitle(m.upNextModalId, getTitle(isPlayingTrack));
     addTitleListener();
-  
+
     const modalEntry = getModalEntry(1);
-  
+
     if (modalEntry.getAttribute('data-click-id') === getCurrentTrackElement().id)
     {
       modalEntry.classList.remove('playing-track', 'cued-track');
@@ -181,7 +182,7 @@ function getEntries(isPlayingTrack)
 
 function addTitleListener()
 {
-  addListener(`#${m.modalDialogId} .modal-dialog-title span`, 'click', (event) => 
+  addListener(`#${m.modalDialogId} .modal-dialog-title span`, 'click', (event) =>
   {
     autoplay.toggle();
     event.target.closest('span').innerHTML = `Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b>`;
@@ -233,7 +234,7 @@ function dragDrop(event)
   event.preventDefault();
 
   const insertPos = (event.clientY  > m.dragStartY) ? 'afterend' : 'beforebegin';
-  
+
   // Modal tracks drag & drop reorder
   const modalDragSource = document.getElementById(m.dragEntryId);
   const modalDropTarget = event.target.closest('div.modal-tracklist-entry');

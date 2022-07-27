@@ -2,7 +2,7 @@
 * Termlist layout
 *
 * https://ultrafunk.com
-* 
+*
 */
 
 body.termlist {
@@ -108,7 +108,7 @@ term-list {
 }
 
 @media all and (pointer: fine) {
- 
+
   .termlist-header:hover {
     background: var(--list-row-hover-color);
     cursor: pointer;
@@ -189,7 +189,7 @@ term-list {
 }
 
 @media all and (pointer: fine) {
- 
+
   .termlist-icons .play-button:hover,
   .termlist-icons .shuffle-button:hover,
   .termlist-icons .share-find-button:hover,
@@ -283,7 +283,7 @@ term-list {
   display: flex;
   align-items: center;
   height: 36px;
-  margin-top: 12px;  
+  margin-top: 12px;
 }
 
 .body-left .track:first-of-type {
@@ -380,7 +380,7 @@ term-list {
 ***************************************************************************************************/
 
 @media screen and (max-width: 1350px) {
- 
+
   .artist-letters-container,
   #termlist-container {
     padding-left: 75px;
@@ -399,7 +399,7 @@ term-list {
 ***************************************************************************************************/
 
 @media screen and (max-width: 1100px) {
- 
+
   .artist-letter a {
     width: 40px;
   }
@@ -430,7 +430,7 @@ term-list {
 ***************************************************************************************************/
 
 @media screen and (max-width: 900px) {
-  
+
   .artist-letters-container,
   #termlist-container {
     padding-left: 50px;
@@ -449,7 +449,7 @@ term-list {
   .termlist-body {
     padding: 12px 15px 17px 15px;
   }
-  
+
 }
 
 
@@ -458,7 +458,7 @@ term-list {
 ***************************************************************************************************/
 
 @media screen and (max-width: 768px) {
-  
+
   .artist-letters-container,
   #termlist-container {
     padding-left: 25px;
@@ -511,7 +511,7 @@ term-list {
   .body-right .loader-container {
     font-size: 30px;
   }
-  
+
 }
 
 
@@ -520,7 +520,7 @@ term-list {
 ***************************************************************************************************/
 
 @media screen and (max-width: 500px) {
-  
+
   .artist-letters-container,
   #termlist-container {
     padding-left: 20px;
@@ -548,7 +548,7 @@ term-list {
   .termlist-icons .shuffle-button a {
     padding: 9px;
   }
-  
+
   .termlist-icons .share-find-button,
   .termlist-icons .expand-toggle {
     width: 26px;

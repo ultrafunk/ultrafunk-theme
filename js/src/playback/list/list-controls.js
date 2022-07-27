@@ -73,7 +73,7 @@ function observerCallback(entries)
   m.tracklistObserver.unobserve(m.trackElement);
 
   if ((Math.ceil(entries[0].intersectionRatio * 100) / 100) !== 1)
-    m.tracklist.scrollTop = (m.trackElement.offsetTop - m.tracklist.offsetHeight) + m.trackElement.offsetHeight;    
+    m.tracklist.scrollTop = (m.trackElement.offsetTop - m.tracklist.offsetHeight) + m.trackElement.offsetHeight;
 }
 
 
@@ -107,7 +107,7 @@ export function getTrackType(element)
 
   if (trackType !== null)
     return parseInt(trackType);
-  
+
   return TRACK_TYPE.NONE;
 }
 
@@ -131,7 +131,7 @@ export function getNextPlayableId(startElement = m.trackElement)
 
   while ((destElement !== null) && (getTrackType(destElement) !== TRACK_TYPE.YOUTUBE))
     destElement = destElement.nextElementSibling;
-  
+
   return ((destElement !== null) ? destElement.id : null);
 }
 
@@ -158,21 +158,21 @@ class UiElements extends ElementClick
   {
     if (this.clicked('div.thumbnail'))
       return this.setCurrentTrack(this.closest('div.track-entry').id, true, true);
-  
+
     if (this.clicked('div.track-actions-toggle'))
       return trackActionsClick(this.closest('div.track-entry'));
-  
+
     if (this.clicked('div.remove-button'))
       return removeClick(this.closest('div.track-entry'));
-  
+
     if (this.clicked('div.play-next-button'))
       return playNextClick(this.closest('div.track-entry'));
-  
+
     if (this.clicked('span.arrow-up-button'))
       return arrowUpDownClick(this.closest('div.tracklist-page-separator'), true);
-  
+
     if (this.clicked('span.arrow-down-button'))
-      return arrowUpDownClick(this.closest('div.tracklist-page-separator'), false);      
+      return arrowUpDownClick(this.closest('div.tracklist-page-separator'), false);
   }
 }
 
@@ -196,14 +196,14 @@ function playNextClick(trackElement)
   if (m.trackElement !== null)
   {
     const nextTrackElement = trackElement.cloneNode(true);
-    
+
     clearTrackState(nextTrackElement);
     nextTrackElement.id = Date.now();
 
     if (settings.list.moveTrackOnPlayNext && (trackElement !== m.trackElement))
       removeClick(trackElement, false, () => addTrack(nextTrackElement, m.trackElement, 'afterend'));
     else
-      addTrack(nextTrackElement, m.trackElement, 'afterend'); 
+      addTrack(nextTrackElement, m.trackElement, 'afterend');
 
     showSnackbar('Track will play next', 3);
   }
@@ -225,7 +225,7 @@ function removeClick(trackElement, allowUndo = true, animationEndCallback = () =
       trackElement.remove();
       animationEndCallback();
     });
-    
+
     trackElement.classList.add('removing');
 
     if (allowUndo)
@@ -293,7 +293,7 @@ function initLoadMoreTracks()
 export async function loadMoreTracks()
 {
   let tracksLoaded = false;
-  
+
   if ((response.currentPage + 1) <= response.maxPages)
   {
     setIsLoadingTracks(true);
@@ -310,7 +310,7 @@ export async function loadMoreTracks()
       showSnackbar('Load more tracks failed!', 10, 'Retry', () => loadMoreTracks());
     }
   }
-  
+
   if (response.currentPage >= response.maxPages)
     m.tracklistLoadMore.style.display = 'none';
 
@@ -348,7 +348,7 @@ export function setCurrentTrackState(newState)
     else
     {
       m.trackElement.classList.remove(STATE.LOADING.CLASS);
-    
+
       if (newState.ID === STATE.PLAYING.ID)
         replaceClass(m.trackElement, STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
       else
@@ -388,7 +388,7 @@ export function setTrackMessage(message)
 export function updateTrackDetails()
 {
   const sourceUid = m.trackElement.getAttribute('data-track-source-uid');
-  
+
   m.player.setArtistTitle(m.trackElement.getAttribute('data-track-artist'), m.trackElement.getAttribute('data-track-title'));
   m.player.setDuration(parseInt(m.trackElement.getAttribute('data-track-duration')));
   m.player.setThumbnail(sourceUid);

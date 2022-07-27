@@ -25,7 +25,7 @@ class DebugLog
   {
     this.moduleName = padString(moduleName.toUpperCase(), 20, '.');
   }
-  
+
   isDebug()   { return DEBUG;                               }
   warn(data)  { console.warn(`${this.moduleName}:`,  data); }
   error(data) { console.error(`${this.moduleName}:`, data); }
@@ -41,7 +41,7 @@ class DevBuild extends DebugLog
   logEventLog(eventLog, eventSource, eventType)
   {
     const entries = [];
-    
+
     for (let i = 0; i < eventLog.length; i++)
     {
       const data = {
@@ -53,7 +53,7 @@ class DevBuild extends DebugLog
 
       entries.push(data);
     }
-    
+
     this.log(entries);
   }
 
@@ -92,9 +92,9 @@ function padString(string, maxLength, padChar)
 export function logErrorOnServer(errorCategory, errorData)
 {
   const eventAction = errorData.mediaUrl + ' | ' + errorData.mediaTitle;
-  
+
   console.warn(`logErrorOnServer(): ${errorCategory} - ${eventAction}`);
-  
+
   gtag('event', eventAction, // eslint-disable-line no-undef
   {
     event_category: errorCategory,

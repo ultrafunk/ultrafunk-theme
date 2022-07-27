@@ -20,13 +20,13 @@ export default class PlaybackTimer
     this.intervalId     = -1;
     this.lastPosSeconds = 0;
     this.isVisible      = true;
-    
+
     this.config = {
       updateTimerInterval: 250, // Milliseconds between each timer event
       maxBufferingDelay:   3,   // VERY rough estimate of "max" network buffering delay in seconds
     };
   }
-  
+
   init()
   {
     document.addEventListener('visibilitychange', () =>
@@ -54,11 +54,11 @@ export default class PlaybackTimer
       clearInterval(this.intervalId);
       this.intervalId = -1;
     }
-    
+
     this.lastPosSeconds = 0;
     blinkPlayPause(false);
   }
-  
+
   updateTimeRemainingWarning(positionSeconds, durationSeconds)
   {
     if ((settings.playback.autoplay === false)  &&

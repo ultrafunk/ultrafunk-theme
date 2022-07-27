@@ -2,7 +2,7 @@
 * List-player layout
 *
 * https://ultrafunk.com
-* 
+*
 */
 
 body.list-player {
@@ -310,7 +310,7 @@ body.list-player {
 }
 
 @media all and (pointer: fine) {
- 
+
   .track-actions .play-next-button,
   .track-actions .remove-button,
   .track-actions .share-play-button,
@@ -424,7 +424,7 @@ body.list-player {
 }
 
 @media all and (pointer: fine) {
- 
+
   .tracklist-page-separator .material-icons:hover {
     background-color: var(--control-highlight-color);
     cursor: pointer;
@@ -521,10 +521,6 @@ body.list-player {
   100% { opacity: 0; }
 }
 
-body.list-player nav.navigation.pagination {
-  margin: 54px auto 60px auto;
-}
-
 body.list-player #site-footer {
   padding-left: 65px;
   padding-right: 65px;
@@ -574,7 +570,7 @@ body.list-player .site-footer-container {
     padding-left: unset;
     padding-right: unset;
   }
-  
+
   body.list-player #site-content,
   body.list-player .site-footer-container {
     max-width: var(--site-max-width);
@@ -615,7 +611,7 @@ body.list-player .site-footer-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 900px) {
-  
+
   body.list-player {
     --site-max-width: calc(100% - 100px);
     --site-content-margin-top: 50px;
@@ -634,7 +630,7 @@ body.list-player .site-footer-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 768px) {
-  
+
   body.list-player {
     --site-max-width: calc(100% - 50px);
     --site-content-margin-top: 25px;
@@ -649,7 +645,7 @@ body.list-player .site-footer-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 500px) {
-  
+
   body.list-player {
     --site-max-width: calc(100% - 40px);
     --site-content-margin-top: 0px;
@@ -679,7 +675,7 @@ body.list-player .site-footer-container {
     width: 36px;
     height: 36px;
   }
-  
+
   .track-entry.current.state-loading .spinner {
     width: 18px;
     height: 18px;
@@ -690,12 +686,12 @@ body.list-player .site-footer-container {
     min-width: 36px;
     height: 36px;
   }
-  
+
   .track-entry .thumbnail img {
     width: 36px;
     height: 36px;
   }
-  
+
   .track-entry.type-youtube .thumbnail img {
     height: 48px;
     margin-top: -6px;
@@ -710,7 +706,7 @@ body.list-player .site-footer-container {
     height: 26px;
     padding: 7px;
   }
-  
+
   .track-actions .play-next-button .material-icons,
   .track-actions .remove-button .material-icons,
   .track-actions .share-play-button .material-icons,
@@ -755,7 +751,7 @@ body.list-player .site-footer-container {
     font-size: 26px;
     padding: 7px;
   }
-  
+
   .tracklist-page-separator .arrow-down-button {
     margin-left: 11px;
   }

@@ -41,7 +41,7 @@ const elements = {
 
 
 // ************************************************************************************************
-// 
+//
 // ************************************************************************************************
 
 export function showSnackbar(
@@ -80,7 +80,7 @@ export function showSnackbar(
 
   if (timeout !== 0)
     m.showTimeoutId = setTimeout(() => elements.snackbar.classList.add('hide'), (timeout * 1000));
-  
+
   return ++m.snackbarId;
 }
 
@@ -95,7 +95,7 @@ export function dismissSnackbar(dismissId = 0)
 
 
 // ************************************************************************************************
-// 
+//
 // ************************************************************************************************
 
 function init()
@@ -107,7 +107,7 @@ function init()
     elements.snackbar   = document.getElementById(config.id);
     elements.actionText = elements.snackbar.querySelector(`.${config.id}-action-text`);
     elements.closeIcon  = elements.snackbar.querySelector(`.${config.id}-close-icon`);
-    
+
     elements.snackbar.addEventListener('animationend', () =>
     {
       if (elements.snackbar.classList.contains('hide'))

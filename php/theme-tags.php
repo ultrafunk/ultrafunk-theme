@@ -81,7 +81,7 @@ function pre_wp_head() : void
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <?php
 
   global $ultrafunk_is_prod_build, $ultrafunk_js_preload_chunk;
@@ -159,7 +159,7 @@ function body_attributes() : void
   global $wp_query;
   $gallery_track_count = 0;
   $classes = [];
-  
+
   // 404 never has any posts / tracks
   if (isset($wp_query) && $wp_query->have_posts() && !is_404())
   {
@@ -213,7 +213,7 @@ function get_search_string() : string
 function search_form() : void
 {
   $is_list_player_search = (is_list_player() || is_request('response', 'list_player', 'search'));
-  
+
   ?>
   <form role="search" method="get" class="search-form" action="<?php echo get_cached_home_url($is_list_player_search ? '/list/search/' : '/'); ?>">
     <label>
@@ -255,7 +255,7 @@ function header_playback_controls() : void
 {
   $player_type_title    = is_list_player() ? 'List Player - Click / Tap for Gallery player (p)'   : 'Gallery Player - Click / Tap for List player (p)';
   $player_details_title = is_list_player() ? "Show current track / Queued tracks (backquote '|')" : "Show current track (backquote '|')";
-  
+
   ?>
   <div id="playback-controls">
     <div class="playback-details-control state-disabled" title="<?php echo $player_details_title; ?>">
@@ -345,17 +345,17 @@ function get_pagination(string $before = ' ( ', string $separator = ' / ', strin
   global $wp_query;
   $pagination = '';
   $pagednum   = (get_query_var('paged') ? get_query_var('paged') : 1);
-  
+
   if (isset($wp_query) && ($wp_query->max_num_pages > 1))
     $pagination = $before . $pagednum . $separator . $wp_query->max_num_pages . $after;
-  
+
   return $pagination;
 }
 
 function get_search_hits() : string
 {
   global $wp_query;
-    
+
   if (isset($wp_query) && ($wp_query->found_posts > 1))
   {
     if ($wp_query->max_num_pages <= 1)
@@ -392,7 +392,7 @@ function nav_bar_title() : void
     $title      = '';
     $pagination = '';
     $data       = $params['data'];
-  
+
     if ($params['max_pages'] > 1)
       $prefix = $prefix . ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )';
     else if (isset($data['first_letter']))

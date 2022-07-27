@@ -28,7 +28,7 @@ const shareModalClosure = (() =>
   return {
     show,
   };
-  
+
   function show(args)
   {
     ({

@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.20
+Version:           1.44.21
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -221,13 +221,13 @@ body.page {
   align-items: center;
   justify-content: space-between;
 }
-  
+
 body.no-playback .site-branding-container {
   height: 54px;
 }
 
 .site-branding {
-  margin-right: 15px;
+  margin-right: 10px;
 }
 
 .site-branding .nav-menu-toggle,
@@ -309,7 +309,7 @@ body.no-playback #playback-controls {
   .nav-search-toggle .material-icons:hover {
     opacity: 1;
   }
-  
+
 }
 
 .navbar-arrows {
@@ -334,7 +334,7 @@ body.no-playback #playback-controls {
 .navbar-arrows a[href="#"],
 .navbar-arrow-single a[href="#"] {
   pointer-events: none;
-  cursor: default;  
+  cursor: default;
 }
 
 @media all and (pointer: fine) {
@@ -355,7 +355,7 @@ a[href="#"] .navbar-arrow-back,
 a[href="#"] .navbar-arrow-fwd {
   opacity: var(--control-disabled-opacity);
   pointer-events: none;
-  cursor: default;  
+  cursor: default;
 }
 
 .navbar-title {
@@ -515,7 +515,7 @@ ul#menu-primary-menu {
   text-decoration: underline;
 }
 
-.intro-banner-container {  
+.intro-banner-container {
   max-width: var(--intro-banner-max-width);
   margin: 0 auto;
 }
@@ -554,7 +554,7 @@ body.no-playback #site-content {
 }
 
 nav.navigation.pagination {
-  margin: 94px auto 100px auto;
+  margin: 95px auto 100px auto;
 }
 
 nav .nav-links ul {
@@ -565,7 +565,7 @@ nav .nav-links ul {
   justify-content: center;
 }
 
-.nav-links .prev.page-numbers, 
+.nav-links .prev.page-numbers,
 .nav-links .next.page-numbers {
   padding-left: 20px;
   padding-right: 20px;
@@ -752,7 +752,7 @@ a:hover#footer-player-type-toggle {
   #footer-gallery-layout-toggle {
     transition: background 100ms 0s ease-in;
   }
-  
+
   #footer-autoplay-toggle:active,
   #footer-crossfade-toggle:active,
   #footer-site-theme-toggle:active,
@@ -1093,7 +1093,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     padding-top: 0;
     padding-bottom: 0;
   }
- 
+
   #site-header.sticky-nav-down #playback-controls,
   #site-header.sticky-nav-up #playback-controls {
     margin-top: 3px;
@@ -1165,7 +1165,7 @@ body.no-playback .sticky-nav-up .site-header-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 1920px) {
-  
+
   body.search {
     --site-max-width: 1000px;
     --site-content-margin-top: 40px;
@@ -1185,7 +1185,7 @@ body.no-playback .sticky-nav-up .site-header-container {
   nav.navigation.pagination {
     margin: 60px auto 65px auto;
   }
-  
+
   .site-footer-container {
     padding: 150px 0;
   }
@@ -1198,7 +1198,7 @@ body.no-playback .sticky-nav-up .site-header-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 1350px) {
-  
+
   .site-header-container,
   nav.navigation,
   #intro-banner,
@@ -1213,7 +1213,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     padding-left: 75px;
     padding-right: 75px;
   }
-  
+
   body.search .site-header-container {
     max-width: 100%;
   }
@@ -1258,7 +1258,7 @@ body.no-playback .sticky-nav-up .site-header-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 1100px) {
-  
+
   body,
   form, form input, form textarea, form select {
     font-size: 20px;
@@ -1347,7 +1347,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     width: 48%;
     margin: 0;
   }
-    
+
 }
 
 
@@ -1356,7 +1356,7 @@ body.no-playback .sticky-nav-up .site-header-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 900px) {
-  
+
   :root {
     --site-content-margin-top: 50px;
     --site-content-margin-bottom: 75px;
@@ -1388,7 +1388,7 @@ body.no-playback .sticky-nav-up .site-header-container {
   #menu-primary-menu li:nth-of-type(2n) {
     margin-right: 0;
   }
-  
+
   #intro-banner,
   .entry-content p,
   .entry-content ul {
@@ -1412,7 +1412,7 @@ body.no-playback .sticky-nav-up .site-header-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 768px) {
-  
+
   :root {
     --site-content-margin-top: 40px;
     --site-content-margin-bottom: 65px;
@@ -1473,7 +1473,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     clear: both;
     width: 100%;
   }
-  
+
 }
 
 
@@ -1482,10 +1482,6 @@ body.no-playback .sticky-nav-up .site-header-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 650px) {
-  
-  .site-branding {
-    margin-right: 10px;
-  }
 
   .site-branding img {
     width: 100%;
@@ -1499,16 +1495,16 @@ body.no-playback .sticky-nav-up .site-header-container {
   .site-footer-container {
     display: block;
   }
-  
+
   .footer-settings {
     max-width: 260px;
     margin: 0 auto 75px auto;
   }
-  
+
   .footer-site-info {
     margin-bottom: 75px;
   }
-  
+
 }
 
 
@@ -1555,7 +1551,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     line-height: 23px;
     font-weight: 400;
   }
-  
+
   .site-header-container {
     padding-top: 13px;
     padding-bottom: 10px;
@@ -1575,7 +1571,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     align-items: initial;
     justify-content: initial;
   }
-  
+
   body.no-playback .site-branding-container {
     height: auto;
   }
@@ -1607,7 +1603,7 @@ body.no-playback .sticky-nav-up .site-header-container {
   #branding-logo-mobile {
     display: block;
   }
-    
+
   #branding-logo-desktop {
     display: none;
   }
@@ -1620,7 +1616,7 @@ body.no-playback .sticky-nav-up .site-header-container {
   #playback-controls.hide {
     visibility: unset;
   }
-    
+
   #site-navigation {
     padding-top: 2px;
     margin-top: 0;
@@ -1646,7 +1642,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     height: 36px;
     width: 36px;
   }
- 
+
   .navbar-arrows {
     margin-left: -5px;
   }
@@ -1699,7 +1695,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     padding-top: 20px;
     padding-bottom: 20px;
   }
-  
+
   .intro-banner-close-button {
     margin-top: 30px;
     width: 230px;
@@ -1734,7 +1730,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     font-size: 25px;
     line-height: 35px;
   }
-  
+
   h2.entry-title,
   h2.entry-title a,
   body.search article h2,
@@ -1764,11 +1760,11 @@ body.no-playback .sticky-nav-up .site-header-container {
   .entry-content p {
     margin-bottom: 20px;
   }
-  
+
   .entry-content ul {
     margin-left: 20px;
   }
-  
+
   .entry-content a.show-more {
     display: block;
     text-align: center;
@@ -1782,7 +1778,7 @@ body.no-playback .sticky-nav-up .site-header-container {
   aside.widget-area {
     padding-top: 0;
   }
-  
+
   aside.widget-area ul {
     margin-left: 20px;
   }

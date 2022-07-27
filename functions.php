@@ -10,13 +10,13 @@
 function ultrafunk_theme_setup() : void
 {
   register_nav_menus(['primary-menu' => "Primary Menu"]);
-  
+
   add_theme_support('html5', ['search-form', 'script', 'style']);
   add_theme_support('title-tag');
   add_theme_support('custom-logo');
   add_theme_support('automatic-feed-links');
 
-  // Needed to disable: REQUIRED This theme text domain does not match the theme's slug. 
+  // Needed to disable: REQUIRED This theme text domain does not match the theme's slug.
   __('', 'ultrafunk');
 }
 add_action('after_setup_theme', 'ultrafunk_theme_setup');
@@ -142,7 +142,7 @@ else
   {
     require get_template_directory() . '/php/constants.php';
     require get_template_directory() . '/php/theme-widgets.php';
-    
+
     if (is_admin() === false)
     {
       require get_template_directory() . '/php/build-env.php';

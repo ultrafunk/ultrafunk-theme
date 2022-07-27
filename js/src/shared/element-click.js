@@ -22,7 +22,7 @@ export default class ElementClick
       addListenerAll(selectors, 'click', (event) => this.clickHandler(event));
     else
       addListener(selectors, 'click', (event) => this.clickHandler(event));
-    
+
     this.event   = null;
     this.element = null;
   }
@@ -42,7 +42,7 @@ export default class ElementClick
       this.event.stopImmediatePropagation();
       return true;
     }
-    
+
     return false;
   }
 

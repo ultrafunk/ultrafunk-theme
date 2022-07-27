@@ -5,10 +5,11 @@
 //
 
 
-import * as debugLogger from '../../shared/debuglogger.js';
-import { KEY }          from '../../shared/storage.js';
-import { TRACK_TYPE }   from '../mediaplayers.js';
-import { showSnackbar } from '../../shared/snackbar.js';
+import * as debugLogger      from '../../shared/debuglogger.js';
+import { KEY }               from '../../shared/storage.js';
+import { TRACK_TYPE }        from '../mediaplayers.js';
+import { showSnackbar }      from '../../shared/snackbar.js';
+import { shuffleClickNavTo } from '../shared-gallery-list.js';
 
 import {
   response,
@@ -72,16 +73,16 @@ export async function playNextSingleTrack(playTrack = false)
     {
       m.loadTracksDateTime = restResponse.data[0].date;
       const currentTrack   = restResponse.data[1];
-  
+
       debug.log(`playNextSingleTrack() - playTrack: ${playTrack} - trackType: ${debug.getKeyForValue(TRACK_TYPE, currentTrack.meta.track_source_type)} => ${getTrackTitle(currentTrack.meta)}`);
-  
+
       if (currentTrack.meta.track_source_type === TRACK_TYPE.YOUTUBE)
       {
         updatePlayerAndPage(restResponse.data, playTrack, true);
       }
       else
       {
-        showSnackbar('SoundCloud track, skipping to next', 5, 'Play', () => 
+        showSnackbar('SoundCloud track, skipping to next', 5, 'Play', () =>
         {
           sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: true, trackId: null, position: 0 }));
           window.location.href = currentTrack.link;
@@ -93,6 +94,8 @@ export async function playNextSingleTrack(playTrack = false)
     {
       if (restResponse.status.code !== 200)
         showSnackbar('Failed to fetch track data!', 10, 'Retry', () => playNextSingleTrack(playTrack));
+      else if ((restResponse.status.code === 200) && (restResponse.data.length === 1))
+        showSnackbar('No more tracks to play...', 5, 'Shuffle', () => shuffleClickNavTo());
     }
   }
 
@@ -149,7 +152,7 @@ function getTrackNavHtml(isNavPrev, navUrl, trackMeta)
   const trackArtistTitle  = `<b>${trackMeta.track_artist}</b><br>${trackMeta.track_title}`;
   const prevNextThumbnail = getThumbnailData(trackMeta);
   const prevNextThumbHtml = `<div class="${isNavPrev ? 'prev' : 'next'}-track-nav-thumbnail ${prevNextThumbnail.class}"><img src="${prevNextThumbnail.src}"></div>`;
-  
+
   return /*html*/ `
     <div class="${isNavPrev ? 'nav-previous' : 'nav-next'}">
       <a href="${navUrl}" rel="${isNavPrev ? 'prev' : 'next'}" title="${isNavPrev ? 'Go to Previous track' : 'Go to Next track'}">
@@ -192,7 +195,7 @@ function updateSiteNavLinks(elements, url)
 function updateTrackNavLinks(element, trackData)
 {
   let trackNavHtml = getTrackNavHtml(true, response.prevPage, trackData[0].meta);
-  
+
   if (trackData.length === 3)
     trackNavHtml += getTrackNavHtml(false, response.nextPage, trackData[2].meta);
 

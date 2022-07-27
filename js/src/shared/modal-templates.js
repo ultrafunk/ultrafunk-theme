@@ -44,7 +44,7 @@ export function getSingleChoiceListHtml(singleChoiceList)
     const entryIcon    = entry.icon  ? `<span class="material-icons">${entry.icon}</span>`          : '';
     const entryContent = entry.icon  ? `<span class="text-nowrap-ellipsis">${entry.content}</span>` : entry.content;
     entry.uid          = `modal-item-${index + 1}`;
-  
+
     if (entry.clickId)
       html += `<div id="${entry.uid}" data-click-id="${entry.clickId}" class="modal-click-item ${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
     else

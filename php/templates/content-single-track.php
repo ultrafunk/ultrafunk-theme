@@ -17,7 +17,7 @@ use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 function get_track_date_time() : string
 {
   $next_post = get_next_post();
-  
+
   if (!empty($next_post))
     return str_replace(' ', 'T', $next_post->post_date);
 

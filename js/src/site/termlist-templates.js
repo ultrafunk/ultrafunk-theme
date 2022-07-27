@@ -41,7 +41,7 @@ export function getTermlistHtml(header, termSlug, termData)
       </div>
     </div>`;
   });
-  
+
   return html;
 }
 
@@ -57,12 +57,12 @@ export function getTermLinksHtml(header, termData)
 export function getTopArtistsLinksHtml(header, artistsData, channelSlug)
 {
   let html = `<b>${header}</b><br>`;
-  
+
   artistsData.forEach((item) =>
   {
     const artistLink = getPrefPlayerUrl(`${SITE_URL}/artist/${item.artist_slug}/?channel=${channelSlug}`);
     html += `<a href="${artistLink}">${item.artist_name}</a> (${item.track_count})<br>`;
   });
-  
+
   return html;
 }
