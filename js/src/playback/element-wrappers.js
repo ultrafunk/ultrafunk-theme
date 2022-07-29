@@ -74,7 +74,7 @@ export const ElementsWrapper = function(elmentsSelector, parentElement = documen
   const elements = parentElement.querySelectorAll(elmentsSelector);
 
   return {
-    get length()     { return elements.length;    },
-    forEach(...args) { elements.forEach(...args); },
+    get length()      { return elements.length;     },
+    forEach(callback) { elements.forEach(callback); },
   };
 };

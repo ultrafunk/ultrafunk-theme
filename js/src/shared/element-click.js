@@ -33,6 +33,9 @@ export default class ElementClick
     this.elementClicked();
   }
 
+  // Abstract method to be overriden in child class if needed
+  elementClicked() {}
+
   clicked(selector)
   {
     this.element = this.event.target.closest(selector);

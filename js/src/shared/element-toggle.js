@@ -39,7 +39,7 @@ export default class ElementToggle
   pointerEventsEnabled() { return (getCssPropString('pointer-events', this.element) !== 'none'); }
 
   // Abstract method to be overriden in child class if needed
-  toggle() {}
+  toggle(event) {}
 
   // Proxy for overridden child class method
   toggleProxy(event)
@@ -52,7 +52,7 @@ export default class ElementToggle
   }
 
   // Abstract method to be overriden in child class if needed
-  update() {}
+  update(event) {}
 
   // Proxy for overridden child class method
   updateProxy()

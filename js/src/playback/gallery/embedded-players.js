@@ -308,11 +308,19 @@ function onYouTubeStateEnded(iframeId)
 
 function onYouTubePlayerError(event, iframeId)
 {
-  debug.log('onYouTubePlayerError: ' + event.data);
-
   const player = m.players.playerFromUid(iframeId);
-  player.setIsPlayable(false);
-  onPlayerError(player, event.target.getVideoUrl());
+
+  if ((event.data === null) && (player.getIsPlayable() === false))
+  {
+    debug.warn(`onYouTubePlayerError(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - ${player.getTitle()}\nNo YouTube API error given! ((event.data === null) && (isPlayable === false))`);
+  }
+  else
+  {
+    debug.log('onYouTubePlayerError: ' + event.data);
+
+    player.setIsPlayable(false);
+    onPlayerError(player, event.target.getVideoUrl());
+  }
 }
 
 

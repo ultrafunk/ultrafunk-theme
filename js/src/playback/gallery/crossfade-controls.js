@@ -42,8 +42,8 @@ export function init(mediaPlayers, crossfadeClickCallback)
 
   m.players = mediaPlayers;
 
-  ctrl.crossfadePreset = new ElementsWrapper(config.crossfadePresetSelector);
-  ctrl.crossfadeTo     = new ElementsWrapper(config.crossfadeToSelector);
+  ctrl.crossfadePreset = ElementsWrapper(config.crossfadePresetSelector);
+  ctrl.crossfadeTo     = ElementsWrapper(config.crossfadeToSelector);
 
   if ((ctrl.crossfadePreset.length > 1) && (ctrl.crossfadeTo.length > 1))
   {

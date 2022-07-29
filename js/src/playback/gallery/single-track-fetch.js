@@ -175,8 +175,8 @@ function updatePage(trackData, thumbnailData, pushState = true)
   response.prevPage = trackData[0].link;
   response.nextPage = (trackData.length === 3) ? trackData[2].link : null;
 
-  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-back'), response.prevPage);
-  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-fwd'), response.nextPage);
+  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-prev'), response.prevPage);
+  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-next'), response.nextPage);
   updateTrackNavLinks(document.querySelector('div.nav-links'), trackData);
   updateTrackHeader(document.querySelector('header.track-header'), trackData[1]);
   updateTrackAttributes(document.querySelector('single-track'), trackData[1], thumbnailData);

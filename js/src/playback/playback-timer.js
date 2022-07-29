@@ -35,6 +35,9 @@ export default class PlaybackTimer
     });
   }
 
+  // Abstract method to be overriden in child class if needed
+  updateProxy() {}
+
   start()
   {
     this.stop();

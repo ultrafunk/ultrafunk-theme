@@ -40,8 +40,8 @@ const ctrl  = {};
 
 export function setPlaybackControlsCss()
 {
-  ctrl.prevTrack = new ElementWrapper('.playback-prev-control');
-  ctrl.playPause = new ElementWrapper('.playback-play-pause-control');
+  ctrl.prevTrack = ElementWrapper('.playback-prev-control');
+  ctrl.playPause = ElementWrapper('.playback-play-pause-control');
 
   if (matchesMedia(MATCH.SITE_MAX_WIDTH_MOBILE))
   {
@@ -74,9 +74,9 @@ export function init(mediaPlayers, seekClickCallback)
 
   if (playbackProgress !== null)
   {
-    ctrl.progressSeek = new ElementWrapper('.progress-seek-control', playbackProgress);
+    ctrl.progressSeek = ElementWrapper('.progress-seek-control', playbackProgress);
     ctrl.progressSeek.clickCallback = seekClickCallback;
-    ctrl.progressBar  = new ElementWrapper('.progress-bar-control', playbackProgress);
+    ctrl.progressBar  = ElementWrapper('.progress-bar-control', playbackProgress);
   }
   else
   {
@@ -87,31 +87,31 @@ export function init(mediaPlayers, seekClickCallback)
 
   if (playbackControls !== null)
   {
-    ctrl.details        = new ElementWrapper('.playback-details-control', playbackControls);
+    ctrl.details        = ElementWrapper('.playback-details-control', playbackControls);
     ctrl.details.artist = ctrl.details.getElement('.playback-details-artist');
     ctrl.details.title  = ctrl.details.getElement('.playback-details-title');
 
-    ctrl.thumbnail     = new ElementWrapper('.playback-thumbnail-control', playbackControls);
+    ctrl.thumbnail     = ElementWrapper('.playback-thumbnail-control', playbackControls);
     ctrl.thumbnail.img = ctrl.thumbnail.getElement('img');
 
-    ctrl.timer                 = new ElementWrapper('.playback-timer-control', playbackControls);
+    ctrl.timer                 = ElementWrapper('.playback-timer-control', playbackControls);
     ctrl.timer.position        = ctrl.timer.getElement('.playback-timer-position');
     ctrl.timer.duration        = ctrl.timer.getElement('.playback-timer-duration');
     ctrl.timer.positionSeconds = -1; // Make sure initial value is set + shown when track plays
     ctrl.timer.durationSeconds = -1; // Make sure initial value is set + shown when track plays
 
-    ctrl.playerType = new ElementWrapper('.playback-player-type-control', playbackControls);
+    ctrl.playerType = ElementWrapper('.playback-player-type-control', playbackControls);
 
     ctrl.playPause.icon = ctrl.playPause.getElement('span.material-icons');
 
-    ctrl.nextTrack = new ElementWrapper('.playback-next-control', playbackControls);
+    ctrl.nextTrack = ElementWrapper('.playback-next-control', playbackControls);
 
-    ctrl.repeat      = new ElementWrapper('.playback-repeat-control', playbackControls);
+    ctrl.repeat      = ElementWrapper('.playback-repeat-control', playbackControls);
     ctrl.repeat.icon = ctrl.repeat.getElement('span.material-icons');
 
-    ctrl.shuffle = new ElementWrapper('.playback-shuffle-control', playbackControls);
+    ctrl.shuffle = ElementWrapper('.playback-shuffle-control', playbackControls);
 
-    ctrl.mute      = new ElementWrapper('.playback-mute-control', playbackControls);
+    ctrl.mute      = ElementWrapper('.playback-mute-control', playbackControls);
     ctrl.mute.icon = ctrl.mute.getElement('span.material-icons');
   }
   else

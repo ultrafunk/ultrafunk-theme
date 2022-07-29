@@ -3,6 +3,7 @@
     "module": "es6",
     "target": "es2020",
     "strictFunctionTypes": true,
+  //"checkJs": true
   },
   "exclude": [
     "node_modules",

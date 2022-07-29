@@ -389,10 +389,10 @@ class siteNavUiElements extends ElementClick
 {
   elementClicked()
   {
-    if (this.clicked('span.navbar-arrow-back'))
+    if (this.clicked('a.navbar-prev-link'))
       return prevNextNavTo(this.event, response.prevPage);
 
-    if (this.clicked('span.navbar-arrow-fwd'))
+    if (this.clicked('a.navbar-next-link'))
       return onNextSingleTrack(this.event);
   }
 }
