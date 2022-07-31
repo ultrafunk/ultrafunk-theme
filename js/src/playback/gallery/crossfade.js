@@ -171,7 +171,7 @@ export const crossfadeClosure = ((galleryPlayers) =>
     fadeOutPlayer = players.current;
     fadeInPlayer  = (fadeInUid === null) ? players.next : players.playerFromUid(fadeInUid);
 
-    if (fadeOutPlayer.getIsPlayable() && fadeInPlayer.getIsPlayable())
+    if (fadeOutPlayer.isPlayable() && fadeInPlayer.isPlayable())
       return true;
 
     return false;

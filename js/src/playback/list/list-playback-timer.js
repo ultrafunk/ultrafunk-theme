@@ -19,26 +19,9 @@ import {
 
 class ListPlaybackTimer extends PlaybackTimer
 {
-  constructor()
-  {
-    super();
-    this.player = null;
-  }
+  #player = null;
 
-  ready(player)
-  {
-    super.init();
-    this.player = player;
-    addListener(EVENT.MEDIA_PLAYING, () => super.start());
-  }
-
-  updateProxy()
-  {
-    if (isPlaying())
-      this.update(this.player.embedded.getCurrentTime(), this.player.getDuration());
-  }
-
-  update(positionSecondsDecimal, durationSeconds)
+  #update(positionSecondsDecimal, durationSeconds)
   {
     if (positionSecondsDecimal !== undefined)
     {
@@ -49,6 +32,19 @@ class ListPlaybackTimer extends PlaybackTimer
       if ((positionSeconds > 0) && (durationSeconds > 0))
         super.updateTimeRemainingWarning(positionSeconds, durationSeconds);
     }
+  }
+
+  ready(player)
+  {
+    super.init();
+    this.#player = player;
+    addListener(EVENT.MEDIA_PLAYING, () => super.start());
+  }
+
+  updateProxy()
+  {
+    if (isPlaying())
+      this.#update(this.#player.embedded.getCurrentTime(), this.#player.getDuration());
   }
 }
 

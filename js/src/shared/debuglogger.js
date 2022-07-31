@@ -109,7 +109,7 @@ export function measureStartupExecutionTime()
 
 const logCss = `
   background-color: rgb(40, 80, 160);
-  padding: 2px 4px`;
+  padding: 2px 5px`;
 
 export function logStartupExecutionTime()
 {

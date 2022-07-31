@@ -74,7 +74,7 @@ export const galleryPlayers = (() =>
 
   function uIdFromIframeId(iframeId)
   {
-    return mediaPlayers.find(player => (player.iframeId === iframeId)).getUid();
+    return mediaPlayers.find(player => (player.getIframeId() === iframeId)).getUid();
   }
 
   function stop()

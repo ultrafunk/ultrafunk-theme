@@ -54,17 +54,19 @@ const entry = {
 
 
 // ************************************************************************************************
-// EventLog parent class
+// EventLog base class
 // ************************************************************************************************
 
 class EventLog
 {
+  #log        = [];
+  #maxEntries = 0;
+  #matchCount = 0;
+  #lastPos    = 0;
+
   constructor(maxEntries = 10)
   {
-    this.log        = [];
-    this.maxEntries = maxEntries;
-    this.lastPos    = 0;
-    this.matchCount = 0;
+    this.#maxEntries = maxEntries;
   }
 
   add(eventSource, eventType, uId, timeStamp = Date.now())
@@ -77,50 +79,55 @@ class EventLog
     logEntry.timeStamp   = timeStamp;
 
     // Simple and inefficient, but good enough...
-    if (this.log.length < this.maxEntries)
+    if (this.#log.length < this.#maxEntries)
     {
-      this.log.push(logEntry);
+      this.#log.push(logEntry);
     }
     else
     {
-      this.log.shift();
-      this.log.push(logEntry);
+      this.#log.shift();
+      this.#log.push(logEntry);
     }
   }
 
   clear()
   {
-    this.log = [];
+    this.#log = [];
+  }
+
+  getLastPos()
+  {
+    return this.#lastPos;
   }
 
   initMatch()
   {
-    this.lastPos    = this.log.length - 1;
-    this.matchCount = 0;
+    this.#lastPos    = this.#log.length - 1;
+    this.#matchCount = 0;
   }
 
   matchesEvent(index, eventSource, eventType, uId = null)
   {
-    if ((this.log[this.lastPos - index].eventSource === eventSource) &&
-        (this.log[this.lastPos - index].eventType   === eventType)   &&
-        (this.log[this.lastPos - index].uId         === uId))
+    if ((this.#log[this.#lastPos - index].eventSource === eventSource) &&
+        (this.#log[this.#lastPos - index].eventType   === eventType)   &&
+        (this.#log[this.#lastPos - index].uId         === uId))
     {
-      this.matchCount++;
+      this.#matchCount++;
     }
   }
 
   matchesDelta(elements, delta)
   {
-    if ((this.log[this.lastPos].timeStamp - this.log[this.lastPos - elements].timeStamp) <= delta)
-      this.matchCount++;
+    if ((this.#log[this.#lastPos].timeStamp - this.#log[this.#lastPos - elements].timeStamp) <= delta)
+      this.#matchCount++;
   }
 
   isPatternMatch(matchCount, event)
   {
-    if (this.matchCount === matchCount)
+    if (this.#matchCount === matchCount)
     {
       debug.log(`MATCH for: ${event}`);
-      debug.logEventLog(this.log, SOURCE, EVENT);
+      debug.logEventLog(this.#log, SOURCE, EVENT);
 
       return true;
     }
@@ -140,7 +147,7 @@ export class Interaction extends EventLog
   {
     this.initMatch();
 
-    if (this.lastPos >= 1)
+    if (this.getLastPos() >= 1)
     {
       this.matchesEvent(1, eventSource, eventType);
       this.matchesEvent(0, eventSource, eventType);
@@ -162,7 +169,7 @@ export class Playback extends EventLog
   {
     this.initMatch();
 
-    if (this.lastPos >= 3)
+    if (this.getLastPos() >= 3)
     {
       this.matchesEvent(3, SOURCE.ULTRAFUNK, EVENT.RESUME_AUTOPLAY, null);
       this.matchesEvent(2, SOURCE.YOUTUBE,   EVENT.STATE_UNSTARTED, uId);
@@ -178,7 +185,7 @@ export class Playback extends EventLog
   {
     this.initMatch();
 
-    if (this.lastPos >= 3)
+    if (this.getLastPos() >= 3)
     {
       this.matchesEvent(3, SOURCE.ULTRAFUNK,  EVENT.RESUME_AUTOPLAY, null);
       this.matchesEvent(2, SOURCE.SOUNDCLOUD, EVENT.STATE_PLAYING,   uId);
@@ -194,7 +201,7 @@ export class Playback extends EventLog
   {
     this.initMatch();
 
-    if (this.lastPos >= 2)
+    if (this.getLastPos() >= 2)
     {
       this.matchesEvent(2, SOURCE.SOUNDCLOUD, EVENT.STATE_PLAYING, uId);
       this.matchesEvent(1, SOURCE.SOUNDCLOUD, EVENT.STATE_PAUSED,  uId);
@@ -209,7 +216,7 @@ export class Playback extends EventLog
   {
     this.initMatch();
 
-    if (this.lastPos >= 2)
+    if (this.getLastPos() >= 2)
     {
       this.matchesEvent(2, SOURCE.ULTRAFUNK,  EVENT.CROSSFADE_START, null);
       this.matchesEvent(1, SOURCE.SOUNDCLOUD, EVENT.STATE_PLAYING,   uId);

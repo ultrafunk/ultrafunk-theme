@@ -284,10 +284,10 @@ function onYouTubeStateCued(iframeId)
   {
     delete player.isNextSingleTrackCued;
 
-    if (player.embeddedPlayer.getDuration() === 0)
+    if (player.embedded.getDuration() === 0)
       player.setIsPlayable(false);
 
-    debug.log(`onYouTubePlayerStateChange: CUED      Duration: ${player.embeddedPlayer.getDuration()} - isPlayable: ${player.getIsPlayable()}`);
+    debug.log(`onYouTubePlayerStateChange: CUED      Duration: ${player.embedded.getDuration()} - isPlayable: ${player.isPlayable()}`);
   }
 }
 
@@ -310,16 +310,16 @@ function onYouTubePlayerError(event, iframeId)
 {
   const player = m.players.playerFromUid(iframeId);
 
-  if ((event.data === null) && (player.getIsPlayable() === false))
-  {
-    debug.warn(`onYouTubePlayerError(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - ${player.getTitle()}\nNo YouTube API error given! ((event.data === null) && (isPlayable === false))`);
-  }
-  else
+  if ((event.data !== null) && player.isPlayable())
   {
     debug.log('onYouTubePlayerError: ' + event.data);
 
     player.setIsPlayable(false);
     onPlayerError(player, event.target.getVideoUrl());
+  }
+  else
+  {
+    debug.warn(`onYouTubePlayerError(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - ${player.getTitle()}\nNo YouTube API error given! ((event.data === null) && (isPlayable === false))`);
   }
 }
 

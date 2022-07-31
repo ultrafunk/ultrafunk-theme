@@ -1,7 +1,7 @@
 module.exports = {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 11,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "rules": {
@@ -18,7 +18,7 @@ module.exports = {
   "env": {
     "browser": true,
     "commonjs": true,
-    "es6": true
+    "es2022": true
   },
   "globals": {
     "Atomics": "readonly",

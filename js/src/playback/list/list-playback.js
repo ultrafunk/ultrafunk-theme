@@ -332,6 +332,8 @@ function initYouTubeAPI()
     m.player = new mediaPlayers.Playlist(embeddedPlayer);
     playbackControls.init(m.player, (positionSeconds) => m.player.embedded.seekTo(positionSeconds));
     playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 33 });
+
+    debug.log(m.player);
   };
 
   const tag = document.createElement('script');

@@ -27,51 +27,56 @@ export const TRACK_TYPE = {
 
 class MediaPlayer
 {
-  constructor(trackId, iframeId, embeddedPlayer)
+  #trackType      = TRACK_TYPE.NONE;
+  #trackId        = null;
+  #iframeId       = null;
+  #embeddedPlayer = null;
+  #isPlayable     = true;
+
+  duration       = 0;
+  artist         = null;
+  title          = null;
+  thumbnailSrc   = null;
+  thumbnailClass = 'type-default';
+
+  constructor(trackType, trackId, iframeId, embeddedPlayer)
   {
-    this.trackType      = TRACK_TYPE.NONE;
-    this.trackId        = trackId;
-    this.iframeId       = iframeId;
-    this.embeddedPlayer = embeddedPlayer;
-    this.isPlayable     = true;
+    this.#trackType      = trackType;
+    this.#trackId        = trackId;
+    this.#iframeId       = iframeId;
+    this.#embeddedPlayer = embeddedPlayer;
 
-    this.duration = 0;
-    this.artist   = null;
-    this.title    = null;
-
-    this.thumbnailSrc       = null;
-    this.thumbnailClass     = 'type-default';
     this.thumbnail          = new Image();
     this.thumbnail.decoding = 'async';
   }
 
-  // Abstract methods to be overriden in child class if needed
+  // Placeholder methods to be overriden in child class if needed
   cueTrackById()  {}
   playTrackById() {}
 
-  getTrackType()        { return this.trackType;      }
-  getTrackId()          { return this.trackId;        }
-  getIframeId()         { return this.iframeId;       }
-  getUid()              { return this.iframeId;       }
-  getEmbeddedPlayer()   { return this.embeddedPlayer; }
+  getTrackType() { return this.#trackType;      }
+  getTrackId()   { return this.#trackId;        }
+  getIframeId()  { return this.#iframeId;       }
+  getUid()       { return this.#iframeId;       }
+  get embedded() { return this.#embeddedPlayer; }
 
-  getIsPlayable()           { return this.isPlayable;       }
-  setIsPlayable(isPlayable) { this.isPlayable = isPlayable; }
+  isPlayable()              { return this.#isPlayable;       }
+  setIsPlayable(isPlayable) { this.#isPlayable = isPlayable; }
 
   getDuration()         { return this.duration;     }
   setDuration(duration) { this.duration = duration; }
 
-  getArtist()           { return this.artist;   }
-  setArtist(artist)     { this.artist = artist; }
+  getArtist()       { return this.artist;   }
+  setArtist(artist) { this.artist = artist; }
 
-  getTitle()            { return this.title;  }
-  setTitle(title)       { this.title = title; }
+  getTitle()      { return this.title;  }
+  setTitle(title) { this.title = title; }
 
-  getThumbnailSrc()     { return this.thumbnailSrc;   }
-  getThumbnailClass()   { return this.thumbnailClass; }
+  getThumbnailSrc()   { return this.thumbnailSrc;   }
+  getThumbnailClass() { return this.thumbnailClass; }
 
-  seekTo(position)      { this.embeddedPlayer.seekTo(position);  }
-  setVolume(volume)     { this.embeddedPlayer.setVolume(volume); }
+  seekTo(position)  { this.#embeddedPlayer.seekTo(position);  }
+  setVolume(volume) { this.#embeddedPlayer.setVolume(volume); }
 
   setArtistTitle(artist, title)
   {
@@ -96,40 +101,39 @@ export class YouTube extends MediaPlayer
 {
   constructor(trackId, iframeId, embeddedPlayer, videoId)
   {
-    super(trackId, iframeId, embeddedPlayer);
-    this.trackType = TRACK_TYPE.YOUTUBE;
+    super(TRACK_TYPE.YOUTUBE, trackId, iframeId, embeddedPlayer);
     super.setThumbnail(getYouTubeImgUrl(videoId));
   }
 
-  cueTrackById(id)  { this.embeddedPlayer.cueVideoById(id);  }
-  playTrackById(id) { this.embeddedPlayer.loadVideoById(id); }
-  pause()           { this.embeddedPlayer.pauseVideo();      }
-  stop()            { this.embeddedPlayer.stopVideo();       }
+  cueTrackById(id)  { this.embedded.cueVideoById(id);  }
+  playTrackById(id) { this.embedded.loadVideoById(id); }
+  pause()           { this.embedded.pauseVideo();      }
+  stop()            { this.embedded.stopVideo();       }
 
   play(onErrorCallback)
   {
-    if (this.isPlayable === true)
-      this.embeddedPlayer.playVideo();
+    if (this.isPlayable())
+      this.embedded.playVideo();
     else
-      onErrorCallback(this, this.embeddedPlayer.getVideoUrl());
+      onErrorCallback(this, this.embedded.getVideoUrl());
   }
 
   getVolume(callback)
   {
-    callback(this.embeddedPlayer.getVolume());
+    callback(this.embedded.getVolume());
   }
 
   mute(setMute)
   {
     if (setMute)
-      this.embeddedPlayer.mute();
+      this.embedded.mute();
     else
-      this.embeddedPlayer.unMute();
+      this.embedded.unMute();
   }
 
   getPosition(callback)
   {
-    callback((this.embeddedPlayer.getCurrentTime() * 1000), this.duration);
+    callback((this.embedded.getCurrentTime() * 1000), this.duration);
   }
 }
 
@@ -140,16 +144,17 @@ export class YouTube extends MediaPlayer
 
 export class SoundCloud extends MediaPlayer
 {
+  #soundId = null;
+  #volume  = VOLUME.MAX;
+  #isMuted = false;
+
   constructor(trackId, iframeId, embeddedPlayer, iframeSrc)
   {
-    super(trackId, iframeId, embeddedPlayer);
-    this.trackType = TRACK_TYPE.SOUNDCLOUD;
-    this.soundId   = this.getSoundId(iframeSrc);
-    this.volume    = VOLUME.MAX;
-    this.muted     = false;
+    super(TRACK_TYPE.SOUNDCLOUD, trackId, iframeId, embeddedPlayer);
+    this.#soundId = this.#getSoundId(iframeSrc);
   }
 
-  getSoundId(iframeSrc)
+  #getSoundId(iframeSrc)
   {
     if (iframeSrc)
     {
@@ -169,14 +174,14 @@ export class SoundCloud extends MediaPlayer
       }
     }
 
-    debug.error(`MediaPlayer.SoundCloud.getSoundId() failed for: ${this.iframeId}`);
+    debug.error(`MediaPlayer.SoundCloud.getSoundId() failed for: ${this.getIframeId()}`);
 
     return null;
   }
 
   setThumbnail(trackThumbnailUrlElement)
   {
-    this.embeddedPlayer.getCurrentSound(soundObject =>
+    this.embedded.getCurrentSound(soundObject =>
     {
       super.setThumbnail(getSoundCloudImgUrl(soundObject));
       trackThumbnailUrlElement?.setAttribute('data-track-thumbnail-url', this.getThumbnailSrc());
@@ -184,18 +189,18 @@ export class SoundCloud extends MediaPlayer
   }
 
   // Override parent getUid() because SoundCloud provides its own UID
-  getUid() { return this.soundId;         }
-  pause()  { this.embeddedPlayer.pause(); }
+  getUid() { return this.#soundId;  }
+  pause()  { this.embedded.pause(); }
 
   play(onErrorCallback)
   {
     // playable is set to FALSE if the widget fires SC.Widget.Events.ERROR (track does not exist)
-    if (this.isPlayable === true)
+    if (this.isPlayable())
     {
-      this.embeddedPlayer.getCurrentSound(soundObject =>
+      this.embedded.getCurrentSound(soundObject =>
       {
         if (soundObject.playable === true)
-          this.embeddedPlayer.play();
+          this.embedded.play();
         else
           onErrorCallback(this, soundObject.permalink_url);
       });
@@ -220,32 +225,32 @@ export class SoundCloud extends MediaPlayer
 
   getVolume(callback)
   {
-    this.embeddedPlayer.getVolume(volume => callback(volume));
+    this.embedded.getVolume(volume => callback(volume));
   }
 
   // Override parent setVolume() because we use it for mute() as well
   setVolume(volume)
   {
     if (volume !== 0)
-      this.volume = volume;
+      this.#volume = volume;
 
-    if ((this.muted === false) || (volume === 0))
+    if ((this.#isMuted === false) || (volume === 0))
       super.setVolume(volume);
   }
 
   mute(setMute)
   {
-    this.muted = setMute ? true : false;
+    this.#isMuted = setMute ? true : false;
 
     if (setMute)
       this.setVolume(0);
     else
-      this.setVolume(this.volume);
+      this.setVolume(this.#volume);
   }
 
   getPosition(callback)
   {
-    this.embeddedPlayer.getPosition(positionMilliseconds => callback(positionMilliseconds, this.duration));
+    this.embedded.getPosition(positionMilliseconds => callback(positionMilliseconds, this.duration));
   }
 }
 
@@ -256,31 +261,30 @@ export class SoundCloud extends MediaPlayer
 
 export class Playlist extends MediaPlayer
 {
+  #playerState  = -1; // YT.PlayerState.UNSTARTED
+  #numTracks    = 3;
+  #currentTrack = 2;
+
   constructor(embeddedPlayer)
   {
-    super(null, null, embeddedPlayer);
-    this.trackType    = TRACK_TYPE.YOUTUBE;
-    this.numTracks    = 3;
-    this.currentTrack = 2;
-    this.playerState  = -1; // YT.PlayerState.UNSTARTED
+    super(TRACK_TYPE.YOUTUBE, null, null, embeddedPlayer);
   }
 
-  get embedded()        { return this.embeddedPlayer; }
-  getNumTracks()        { return this.numTracks;      }
-  getCurrentTrack()     { return this.currentTrack;   }
-  setPlayerState(state) { this.playerState = state;   }
+  getNumTracks()        { return this.#numTracks;    }
+  getCurrentTrack()     { return this.#currentTrack; }
+  setPlayerState(state) { this.#playerState = state; }
 
   play(onErrorCallback)
   {
     //YT.PlayerState.CUED === 5
-    if ((this.playerState === 5) && (this.embeddedPlayer.getDuration() === 0))
+    if ((this.#playerState === 5) && (this.embedded.getDuration() === 0))
     {
       onErrorCallback({ data: 'Unable to play track -- No YouTube API error given!' });
-      this.playerState = -1; // YT.PlayerState.UNSTARTED
+      this.#playerState = -1; // YT.PlayerState.UNSTARTED
     }
     else
     {
-      this.embeddedPlayer.playVideo();
+      this.embedded.playVideo();
     }
   }
 
