@@ -330,10 +330,10 @@ function initYouTubeAPI()
     });
 
     m.player = new mediaPlayers.Playlist(embeddedPlayer);
+    debug.log(m.player);
+
     playbackControls.init(m.player, (positionSeconds) => m.player.embedded.seekTo(positionSeconds));
     playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 33 });
-
-    debug.log(m.player);
   };
 
   const tag = document.createElement('script');

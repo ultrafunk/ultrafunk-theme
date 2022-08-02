@@ -261,10 +261,10 @@ function setPreviousPageTitle()
 
 const resize = (() =>
 {
-  let headerHeight = 0;
+  let siteHeaderYOffset = 0;
 
   return {
-    getHeaderHeight() { return headerHeight; },
+    getSiteHeaderYOffset() { return siteHeaderYOffset; },
     addEventListener,
     trigger: resizeEvent,
   };
@@ -277,10 +277,14 @@ const resize = (() =>
 
   function resizeEvent()
   {
+    let headerHeight = 0;
+
     if (noPlayback())
       headerHeight = utils.getCssPropValue('--site-header-height-no-playback');
     else
       headerHeight = utils.getCssPropValue('--site-header-height');
+
+    siteHeaderYOffset = Math.round((headerHeight > 150) ? (headerHeight / 2) : (headerHeight / 3));
 
     if ((elements.introBanner !== null) && (elements.introBanner.style.display.length !== 0))
     {
@@ -297,8 +301,11 @@ const resize = (() =>
 
 const scroll = (() =>
 {
-  let lastScrollPos  = 0;
-  let isScrolledDown = false;
+  let previousScrollPos = 0;
+  let scrollDeltaUp     = 0;
+  let scrollDeltaDown   = 0;
+  let isScrolledDown    = false;
+  const scrollThreshold = 44; // px minimum amount of scrolling for direction change
 
   return {
     addEventListener,
@@ -312,35 +319,41 @@ const scroll = (() =>
 
   function scrollEvent()
   {
-    const currentScrollPos   = window.pageYOffset;
-    const scrollDownMenuHide = Math.round((resize.getHeaderHeight() > 150)
-                                 ? (resize.getHeaderHeight() / 2)
-                                 : (resize.getHeaderHeight() / 3));
+    const currentScrollPos = window.pageYOffset;
 
-    // Extra check with Math.round() for non 0 and fractional pixel values when scrolled to top
-    if ((currentScrollPos === 0) || (Math.round(currentScrollPos) <= 1))
+    if (currentScrollPos === 0)
     {
       scrolledTop();
     }
-    else if ((currentScrollPos > scrollDownMenuHide) && (currentScrollPos > lastScrollPos))
+    if (currentScrollPos > previousScrollPos)
     {
-      scrolledDown();
+      scrollDeltaDown += (currentScrollPos - previousScrollPos);
+
+      if ((scrollDeltaDown > scrollThreshold) && (currentScrollPos > resize.getSiteHeaderYOffset()))
+      {
+        scrollDeltaUp = 0;
+        scrolledDown();
+      }
     }
     else
     {
-      scrolledUp();
+      scrollDeltaUp += (previousScrollPos - currentScrollPos);
+
+      if (scrollDeltaUp > scrollThreshold)
+      {
+        scrollDeltaDown = 0;
+        scrolledUp();
+      }
     }
 
-    // Hide navigation search form on any scroll event
-    navSearch.hide();
-
-    lastScrollPos = currentScrollPos;
+    previousScrollPos = currentScrollPos;
   }
 
   function scrolledTop()
   {
     elements.siteHeader.classList.remove('sticky-nav-down', 'sticky-nav-up');
     elements.siteHeader.classList.add('hide-nav-menu');
+    navSearch.hide();
     navMenu.scrolledTop();
   }
 
@@ -350,6 +363,7 @@ const scroll = (() =>
     {
       isScrolledDown = true;
       utils.replaceClass(elements.siteHeader, 'sticky-nav-up', 'sticky-nav-down');
+      navSearch.hide();
     }
   }
 
@@ -360,8 +374,5 @@ const scroll = (() =>
       isScrolledDown = false;
       utils.replaceClass(elements.siteHeader, 'sticky-nav-down', 'sticky-nav-up');
     }
-
-    if (navMenu.isVisible())
-      navMenu.toggle();
   }
 })();

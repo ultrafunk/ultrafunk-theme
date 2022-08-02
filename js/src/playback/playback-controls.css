@@ -224,17 +224,6 @@ body.autoplay-off .progress-bar-control {
   color: var(--link-hover-color);
 }
 
-body.search .playback-player-type-control,
-body.channel-soundcloud .playback-player-type-control,
-body.single.track .playback-player-type-control {
-  opacity: 0.3;
-  pointer-events: none;
-  cursor: default;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
 .playback-prev-control .material-icons,
 .playback-play-pause-control .material-icons,
 .playback-next-control .material-icons {
@@ -256,6 +245,9 @@ body.single.track .playback-player-type-control {
   user-select: none;
 }
 
+body.search .playback-player-type-control,
+body.channel-soundcloud .playback-player-type-control,
+body.single.track .playback-player-type-control,
 .playback-player-type-control.state-disabled,
 .playback-prev-control.state-disabled,
 .playback-play-pause-control.state-disabled,
@@ -265,6 +257,7 @@ body.single.track .playback-player-type-control {
 .playback-mute-control.state-disabled {
   opacity: var(--control-disabled-opacity);
   color: var(--primary-icon-color);
+  cursor: default;
   pointer-events: none;
 }
 
