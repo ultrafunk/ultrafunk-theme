@@ -93,7 +93,7 @@ export async function playNextSingleTrack(playTrack = false)
     else
     {
       if (restResponse.status.code !== 200)
-        showSnackbar('Failed to fetch track data!', 10, 'Retry', () => playNextSingleTrack(playTrack));
+        showSnackbar('Failed to fetch track data!', 30, 'Retry', () => playNextSingleTrack(playTrack));
       else if ((restResponse.status.code === 200) && (restResponse.data.length === 1))
         showSnackbar('No more tracks to play...', 5, 'Shuffle', () => shuffleClickNavTo());
     }

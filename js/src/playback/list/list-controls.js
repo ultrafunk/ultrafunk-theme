@@ -307,7 +307,7 @@ export async function loadMoreTracks()
     }
     else
     {
-      showSnackbar('Load more tracks failed!', 10, 'Retry', () => loadMoreTracks());
+      showSnackbar('Load more tracks failed!', 30, 'Retry', () => loadMoreTracks());
     }
   }
 

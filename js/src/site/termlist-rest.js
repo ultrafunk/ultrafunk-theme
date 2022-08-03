@@ -5,7 +5,7 @@
 //
 
 
-import * as debugLogger from '../shared/debuglogger.js';
+//import * as debugLogger from '../shared/debuglogger.js';
 import { KEY }          from '../shared/storage.js';
 import { showSnackbar } from '../shared/snackbar.js';
 
@@ -24,7 +24,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('termlist-rest');
+//const debug = debugLogger.newInstance('termlist-rest');
 const m     = { termCache: {} };
 
 
@@ -51,12 +51,12 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
     }
     else
     {
-      showSnackbar('Unable to fetch track data, please try again...', 10);
+      showSnackbar('Failed to fetch track data!', 30, 'retry', () => loadTermlist(termlistContainer, termlistEntry, termlistBody));
     }
 
     if (!isAllChannels && (termData !== null))
     {
-      fetchTermMeta(termData, termId, 50, (metaType, metadata) =>
+      fetchArtistMeta(termData, termId, 50, (metaType, metadata) =>
       {
         header  = (metaType === 'artists') ? 'Related Artists' : 'In Channels';
         element = (metaType === 'artists')
@@ -86,49 +86,28 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
 
 
 // ************************************************************************************************
-// Fetch tracks for a given termType with termId (taxonomy: channel or artist)
+// Fetch tracks for a given termType with termId (channel or artist)
 // ************************************************************************************************
 
-function fetchTracks(termType, termId, maxItems, callback)
+async function fetchTracks(termType, termId, maxItems, callback)
 {
-  if (termId in m.termCache)
+  if ((termId in m.termCache) === false)
   {
-    callback(m.termCache[termId].tracks);
-  }
-  else
-  {
-    debug.log(`fetchTracks() - termType: ${termType} - termId: ${termId} - maxItems: ${maxItems}`);
+    const restResponse = await fetchRest('tracks', `${termType}=${termId}&per_page=${maxItems}&_fields=id,link,artists,channels,meta`, true);
 
-    fetch(`/wp-json/wp/v2/tracks?${termType}=${termId}&per_page=${maxItems}&_fields=id,link,artists,channels,meta`)
-    .then(response =>
-    {
-      if (!response.ok)
-      {
-        debug.error(response);
-        return null;
-      }
-
-      return response.json();
-    })
-    .then(data =>
-    {
-      m.termCache[termId] = { tracks: data };
-      callback(data);
-    })
-    .catch(reason =>
-    {
-      debug.warn(reason);
-      callback(null);
-    });
+    if ((restResponse !== null) && (restResponse.status.code === 200))
+      m.termCache[termId] = { tracks: restResponse.data };
   }
+
+  callback((m.termCache[termId] !== undefined) ? m.termCache[termId].tracks : null);
 }
 
 
 // ************************************************************************************************
-// Merge then fetch metadata for a given termType with termIds (taxonomy: category or tag)
+// Merge then fetch channels and artists for a given artist (termId)
 // ************************************************************************************************
 
-function fetchTermMeta(termData, termId, maxItems, callback)
+function fetchArtistMeta(termData, termId, maxItems, callback)
 {
   if (('channels' in m.termCache[termId]) && ('artists' in m.termCache[termId]))
   {
@@ -153,7 +132,7 @@ function fetchTermMeta(termData, termId, maxItems, callback)
   }
 }
 
-function fetchMeta(
+async function fetchMeta(
   termType,
   termId,
   termIds,
@@ -161,42 +140,15 @@ function fetchMeta(
   callback
 )
 {
-  /*
-  if ((termId in termCache) === false)
-    termCache[termId] = {};
-  */
-
   if (termIds.length > 0)
   {
-    debug.log(`fetchMeta() - termType: ${termType} - termIds: ${(termIds.length > 0) ? termIds : 'Empty'} - maxItems: ${maxItems}`);
+    const restResponse = await fetchRest(termType, `include=${termIds}&per_page=${maxItems}&_fields=link,name`, true);
 
-    fetch(`/wp-json/wp/v2/${termType}?include=${termIds}&per_page=${maxItems}&_fields=link,name`)
-    .then(response =>
-    {
-      if (!response.ok)
-      {
-        debug.error(response);
-        return null;
-      }
+    if ((restResponse !== null) && (restResponse.status.code === 200))
+      m.termCache[termId][termType] = restResponse.data;
+  }
 
-      return response.json();
-    })
-    .then(data =>
-    {
-      m.termCache[termId][termType] = data;
-      callback(termType, data);
-    })
-    .catch(reason =>
-    {
-      debug.warn(reason);
-      callback(null);
-    });
-  }
-  else
-  {
-    m.termCache[termId][termType] = null;
-    callback(termType, null);
-  }
+  callback(termType, (m.termCache[termId][termType] !== undefined) ? m.termCache[termId][termType] : null);
 }
 
 

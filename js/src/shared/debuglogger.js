@@ -5,14 +5,9 @@
 //
 
 
+
 const DEBUG = false;
 
-
-/*************************************************************************************************/
-
-
-let executionStart = 0;
-let executionStop  = 0;
 
 
 // ************************************************************************************************
@@ -102,6 +97,14 @@ export function logErrorOnServer(errorCategory, errorData)
   });
 }
 
+
+// ************************************************************************************************
+// Measure JavaScript startup execution time
+// ************************************************************************************************
+
+let executionStart = 0;
+let executionStop  = 0;
+
 export function measureStartupExecutionTime()
 {
   executionStart = performance.now();
@@ -111,8 +114,12 @@ const logCss = `
   background-color: rgb(40, 80, 160);
   padding: 2px 5px`;
 
+const SITE_URL = DEBUG
+  ? 'https://wordpress.ultrafunk.com'
+  : 'https://ultrafunk.com';
+
 export function logStartupExecutionTime()
 {
   executionStop = performance.now();
-  console.log(`%cultrafunk.com startup JavaScript execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms.`, logCss);
+  console.log(`%cJavaScript startup execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms. for: ${SITE_URL}`, logCss);
 }
