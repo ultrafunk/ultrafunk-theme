@@ -5,8 +5,9 @@
 //
 
 
-import * as utils   from '../shared/utils.js';
-import { settings } from '../shared/session-data.js';
+import * as utils             from '../shared/utils.js';
+import { settings }           from '../shared/session-data.js';
+import { playerType }         from '../playback/footer-toggles.js';
 import { isSingleTrackFetch } from '../playback/gallery/single-track-fetch.js';
 
 import {
@@ -22,13 +23,15 @@ import {
 const navMenuClosure = (() =>
 {
   const observer = new ResizeObserver(observerCallback);
-  let siteHeader = null, navMenuOuter = null, modalOverlay = null;
+  let siteHeader = null, navMenuOuter = null, navMenuInner = null, modalOverlay = null;
   let isVisible = false;
+  let siteHeaderHeight = 0;
 
   window.addEventListener('load', () =>
   {
-    utils.addListener('#menu-primary-menu .menu-item-reshuffle a', 'click', shuffleClickNavTo);
-    document.getElementById('menu-primary-menu')?.addEventListener('click', menuClickUsePrefPlayer);
+    utils.addListener('#menu-primary-sections .menu-item-reshuffle a', 'click', shuffleClickNavTo);
+    utils.addListener('#menu-primary-sections .menu-item-pref-player', 'click', () => playerType.toggle());
+    document.getElementById('menu-primary-channels')?.addEventListener('click', menuClickUsePrefPlayer);
   });
 
   return {
@@ -42,12 +45,27 @@ const navMenuClosure = (() =>
   {
     siteHeader   = document.getElementById('site-header');
     navMenuOuter = document.querySelector('#site-navigation .nav-menu-outer');
+    navMenuInner = document.querySelector('#site-navigation .nav-menu-inner');
     modalOverlay = document.getElementById('nav-menu-modal-overlay');
 
-    utils.addListenerAll('.nav-menu-toggle', 'click', toggle);
+    utils.addListenerAll('div.nav-menu-toggle', 'click', toggle);
     modalOverlay.addEventListener('click', toggle);
-    modalOverlay.addEventListener('transitionend', transitionEnd);
-    observer.observe(navMenuOuter.querySelector('.menu-primary-menu-container'));
+    observer.observe(navMenuOuter);
+  }
+
+  function toggle()
+  {
+    siteHeaderHeight = siteHeader.offsetHeight;
+
+    if (siteHeader.classList.contains('sticky-nav-up'))
+    {
+      navMenuOuter.style.display = isVisible ? 'none' : 'flex';
+    }
+    else
+    {
+      if (siteHeader.classList.contains('sticky-nav-down') === false)
+        siteHeader.classList.toggle('hide-nav-menu');
+    }
   }
 
   function menuClickUsePrefPlayer(event)
@@ -64,46 +82,42 @@ const navMenuClosure = (() =>
     }
   }
 
-  function toggle()
-  {
-    if (siteHeader.classList.contains('sticky-nav-up'))
-    {
-      if (isVisible)
-        navMenuOuter.style.display = 'none';
-      else
-        navMenuOuter.style.display = 'flex';
-    }
-    else
-    {
-      if (siteHeader.classList.contains('sticky-nav-down') === false)
-        siteHeader.classList.toggle('hide-nav-menu');
-    }
-  }
-
   function observerCallback(entries)
   {
     isVisible = (entries[0].contentRect.height !== 0) ? true : false;
 
     if (isVisible)
     {
-      modalOverlay.className = '';
-      modalOverlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
-      modalOverlay.classList.add('show');
-      setTimeout(() => modalOverlay.classList.add('fadein'), 50);
+      if (modalOverlay.className === '')
+      {
+        setOverflowScroll();
+        modalOverlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
+        modalOverlay.classList.add('show');
+      }
     }
     else
     {
-      modalOverlay.classList.add('fadeout');
+      modalOverlay.className     = '';
+      navMenuOuter.style.display = '';
+      setOverflowProps();
     }
   }
 
-  function transitionEnd()
+  function setOverflowScroll()
   {
-    if (isVisible === false)
+    if (utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
     {
-      modalOverlay.className     = '';
-      navMenuOuter.style.display = '';
+      const margins = utils.getCssPropValue('margin-top', navMenuInner) + utils.getCssPropValue('margin-bottom', navMenuInner);
+      setOverflowProps('hidden', 'close', '100vh', `overflow-y: auto; max-height: ${window.innerHeight - (siteHeaderHeight + margins)}px`);
     }
+  }
+
+  function setOverflowProps(overflowY = '', textContent = 'menu', height = '', style = '')
+  {
+    document.documentElement.style.overflowY = overflowY;
+    siteHeader.querySelectorAll('.nav-menu-toggle span')?.forEach(element => element.textContent = textContent);
+    siteHeader.style.height = height;
+    navMenuInner.style      = style;
   }
 });
 

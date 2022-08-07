@@ -37,13 +37,18 @@ use \Ultrafunk\Theme\Tags as ultrafunk;
       <?php ultrafunk\header_nav_bars() ?>
       <div class="nav-menu-outer">
         <div class="nav-menu-inner">
-          <?php wp_nav_menu([
-              'theme_location' => 'primary-menu',
-              'item_spacing'   => 'discard',
-              'link_before'    => '<span class="menu-item-text">',
-              'link_after'     => '</span><span class="menu-item-icon"></span>',
-            ]);
-          ?>
+        <?php
+          wp_nav_menu([
+            'theme_location' => 'primary-sections',
+            'item_spacing'   => 'discard',
+            'link_before'    => '<span class="menu-item-text">',
+            'link_after'     => '</span><span class="menu-item-icon"></span>',
+          ]);
+          wp_nav_menu([
+            'theme_location' => 'primary-channels',
+            'item_spacing'   => 'discard',
+          ]);
+        ?>
         </div>
       </div>
     </nav>

@@ -88,7 +88,7 @@ const navSearchClosure = (() =>
   function show()
   {
     setPosSize();
-    setProps(true, denyKeyboardShortcutsEvent, 'flex', 'clear');
+    setProps(true, denyKeyboardShortcutsEvent, 'flex', 'close');
     searchField.focus();
     searchField.setSelectionRange(9999, 9999);
   }

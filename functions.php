@@ -9,7 +9,8 @@
 //
 function ultrafunk_theme_setup() : void
 {
-  register_nav_menus(['primary-menu' => "Primary Menu"]);
+  register_nav_menus(['primary-sections' => "Primary Sections Menu"]);
+  register_nav_menus(['primary-channels' => "Primary Channels Menu"]);
 
   add_theme_support('html5', ['search-form', 'script', 'style']);
   add_theme_support('title-tag');

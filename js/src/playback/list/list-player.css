@@ -571,6 +571,7 @@ body.list-player .site-footer-container {
     padding-right: unset;
   }
 
+  body.list-player.search .site-header-container,
   body.list-player #site-content,
   body.list-player .site-footer-container {
     max-width: var(--site-max-width);

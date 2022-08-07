@@ -87,7 +87,7 @@ export function getTrackEntryHtml(track)
       <div class="track-actions">
         <div class="track-message"></div>
         <div class="track-action-buttons">
-          <div class="remove-button" title="Remove Track from List"><span class="material-icons">clear</span></div>
+          <div class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></div>
           ${trackPlayNext}
           <div class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></div>
           <div class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></div>

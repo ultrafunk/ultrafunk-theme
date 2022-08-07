@@ -105,7 +105,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\Base
         <div class="track-actions">
           <div class="track-message"></div>
           <div class="track-action-buttons">
-            <div class="remove-button" title="Remove Track from List"><span class="material-icons">clear</span></div>
+            <div class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></div>
             <?php if ($is_youtube_track) { ?>
               <div class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></div>
             <?php } ?>

@@ -254,7 +254,9 @@ function wp_setup_nav_menu_item(object $menu_item) : object
         $menu_item->classes[] = 'current-menu-item';
       else if (($menu_item->ID === $menu_item_shuffle_id) && is_shuffle(PLAYER_TYPE::GALLERY))
         $menu_item->classes[] = 'current-menu-item';
-      else if (($menu_item->ID === THEME_ENV['menu_item_all_artists_id']) && (is_termlist()))
+      else if (($menu_item->ID === THEME_ENV['menu_item_all_artists_id']) && (is_termlist('artists')))
+        $menu_item->classes[] = 'current-menu-item';
+      else if (($menu_item->ID === THEME_ENV['menu_item_all_channels_id']) && (is_termlist('channels')))
         $menu_item->classes[] = 'current-menu-item';
     }
   }

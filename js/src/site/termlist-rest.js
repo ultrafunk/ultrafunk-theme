@@ -25,7 +25,7 @@ import {
 
 
 //const debug = debugLogger.newInstance('termlist-rest');
-const m     = { termCache: {} };
+const m = { termCache: {} };
 
 
 // ************************************************************************************************

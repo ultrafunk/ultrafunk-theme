@@ -95,7 +95,7 @@
 
 #snackbar.show {
   visibility: visible;
-  animation: snackbar-show 0.5s;
+  animation: snackbar-show 0.3s;
 }
 
 @keyframes snackbar-show {
@@ -104,7 +104,7 @@
 }
 
 #snackbar.hide {
-  animation: snackbar-hide 0.5s;
+  animation: snackbar-hide 0.3s;
 }
 
 @keyframes snackbar-hide {

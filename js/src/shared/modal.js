@@ -85,7 +85,8 @@ export function closeModal()
   document.body.removeEventListener('touchmove', touchMove, { passive: false });
   document.body.removeEventListener('touchstart', touchStart);
   elements.overlay.removeEventListener('keydown', keyDown);
-  elements.overlay.classList.replace('show', 'hide');
+  elements.overlay.className = '';
+  disablePageScrolling(false);
 }
 
 export function getModalId()
@@ -131,15 +132,6 @@ function init()
         closeModal();
     });
 
-    elements.overlay.addEventListener('animationend', () =>
-    {
-      if (elements.overlay.classList.contains('hide'))
-      {
-        elements.overlay.className = '';
-        disablePageScrolling(false);
-      }
-    });
-
     elements.overlay.querySelector(`.${config.id}-close-icon`).addEventListener('click', closeModal);
     elements.overlay.querySelector(`.${config.id}-close-button`).addEventListener('click', closeModal);
   }
@@ -161,7 +153,7 @@ function singleChoiceListClick(event)
   if (m.onClickClose(event) === true)
   {
     closeModal();
-    setTimeout(() => m.onEntryClicked(this.getAttribute('data-click-id'), event), 150);
+    m.onEntryClicked(this.getAttribute('data-click-id'), event);
   }
 }
 
