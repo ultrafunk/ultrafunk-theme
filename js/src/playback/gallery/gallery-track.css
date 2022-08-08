@@ -238,6 +238,7 @@ gallery-track .track-content {
   height: 45px;
   margin-left: 10px;
   margin-right: -9px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body.autoplay-on .track-meta-controls .track-share-control {

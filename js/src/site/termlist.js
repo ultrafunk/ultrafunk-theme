@@ -152,6 +152,7 @@ function shareFindClick(element)
     bodyHtml: `<b>${termName}</b>`,
     url:      utils.getPrefPlayerUrl(element.getAttribute('data-term-url')),
     verb:     'Find',
+    icon:     'search',
   });
 }
 

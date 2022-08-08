@@ -23,7 +23,7 @@ const debug = debugLogger.newInstance('share-modal');
 const shareModalClosure = (() =>
 {
   const filterBodyTextRegEx = /\s{1,}[\u002D\u00B7\u2013]\s{1,}/i;
-  let title, bodyText, filterBodyText, bodyHtml, url, sourceUid, verb;
+  let title, bodyText, filterBodyText, bodyHtml, url, sourceUid, verb, icon;
 
   return {
     show,
@@ -38,7 +38,8 @@ const shareModalClosure = (() =>
       bodyHtml       = null,
       url            = null,
       sourceUid      = null,
-      verb           = 'Play'
+      verb           = 'Play',
+      icon           = 'link',
     } = args);
 
     return showModal(title, getSingleChoiceList(), 'share', singleChoiceListClick);
@@ -49,11 +50,11 @@ const shareModalClosure = (() =>
     const singleChoiceList = [
       { clickId: 'copyToClipboardId', icon: 'content_copy', content: '<b>Copy Link</b> to Clipboard'   },
       { clickId: 'shareOnEmailId',    icon: 'share',        content: '<b>Share</b> on Email'           },
-      { clickId: 'amazonMusicId',     icon: 'link',         content: `<b>${verb}</b> on Amazon Music`  },
-      { clickId: 'appleMusicId',      icon: 'link',         content: `<b>${verb}</b> on Apple Music`   },
-      { clickId: 'spotifyId',         icon: 'link',         content: `<b>${verb}</b> on Spotify`       },
-      { clickId: 'tidalId',           icon: 'link',         content: `<b>${verb}</b> on Tidal`         },
-      { clickId: 'youTubeMusicId',    icon: 'link',         content: `<b>${verb}</b> on YouTube Music` },
+      { clickId: 'searchOnGoogleId',  icon: 'search',       content: '<b>Search</b> on Google'         },
+      { clickId: 'amazonMusicId',     icon: icon,           content: `<b>${verb}</b> on Amazon Music`  },
+      { clickId: 'appleMusicId',      icon: icon,           content: `<b>${verb}</b> on Apple Music`   },
+      { clickId: 'spotifyId',         icon: icon,           content: `<b>${verb}</b> on Spotify`       },
+      { clickId: 'youTubeMusicId',    icon: icon,           content: `<b>${verb}</b> on YouTube Music` },
     ];
 
     if (bodyHtml !== null)
@@ -80,6 +81,10 @@ const shareModalClosure = (() =>
         window.location.href = `mailto:?subject=${encodeURIComponent(bodyText)}&body=${encodeURI(url)}%0d%0a`;
         break;
 
+      case 'searchOnGoogleId':
+        window.open(`https://www.google.com/search?q=${searchString}`, "_blank");
+        break;
+
       case 'amazonMusicId':
         window.open(`https://music.amazon.com/search/${searchString}`, "_blank");
         break;
@@ -90,10 +95,6 @@ const shareModalClosure = (() =>
 
       case 'spotifyId':
         window.open(`https://open.spotify.com/search/${searchString}`, "_blank");
-        break;
-
-      case 'tidalId':
-        window.open(`https://google.com/search?q=${searchString}%20site:tidal.com`, "_blank");
         break;
 
       case 'youTubeMusicId':
