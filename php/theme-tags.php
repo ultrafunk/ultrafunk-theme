@@ -388,7 +388,7 @@ function nav_bar_title() : void
   }
   else if (is_termlist())
   {
-    $prefix     = is_termlist('artists') ? '<b>All Artists</b>' : '<b>All Channels</b>';
+    $prefix     = is_termlist('artists') ? '<b>Artists</b>' : '<b>All Channels</b>';
     $title      = '';
     $pagination = '';
     $data       = $params['data'];

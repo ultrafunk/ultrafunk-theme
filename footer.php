@@ -31,8 +31,8 @@
       </div>
     </div>
     <div class="footer-site-info">
-      <a href="/channels/"><b>All Channels</b></a><br>
-      <a href="/artists/"><b>All Artists</b></a>
+      <a href="/channels/"><b>View Channels</b></a><br>
+      <a href="/artists/"><b>View Artists</b></a>
       <div class="footer-site-info-block">
         <a href="/about/">About</a><br>
         <a href="/help/">Help</a><br>

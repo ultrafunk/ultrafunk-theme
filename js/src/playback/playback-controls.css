@@ -391,6 +391,18 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
 
 
 /**************************************************************************************************
+* Responsive: max-width: 1350px
+***************************************************************************************************/
+
+@media screen and (max-width: 1350px) {
+
+  .playback-player-type-control {
+    display: none;
+  }
+}
+
+
+/**************************************************************************************************
 * Responsive: max-width: 1100px
 ***************************************************************************************************/
 
@@ -404,7 +416,6 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     margin-right: 0px;
   }
 
-  .playback-player-type-control,
   .playback-thumbnail-control,
   .playback-timer-control,
   .playback-repeat-control,

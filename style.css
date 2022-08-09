@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.27
+Version:           1.44.28
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -1276,9 +1276,16 @@ body.no-playback .sticky-nav-up .site-header-container {
     max-width: 100%;
   }
 
-  #menu-primary-sections,
+  #menu-primary-sections {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   #menu-primary-channels {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  #menu-primary-sections .menu-item-pref-player {
+    display: inline-block;
   }
 
   #site-content {
@@ -1325,10 +1332,6 @@ body.no-playback .sticky-nav-up .site-header-container {
   #menu-primary-channels li {
     font-size: unset;
     line-height: unset;
-  }
-
-  #menu-primary-sections .menu-item-pref-player {
-    display: inline-block;
   }
 
   .site-footer-container {
