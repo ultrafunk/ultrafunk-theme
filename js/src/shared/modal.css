@@ -47,7 +47,7 @@
   padding: 15px 0 12px 0;
   min-width: 450px;
   max-width: 550px;
-  max-height: calc(100vh - 50px);
+  max-height: calc(100vh - 200px);
   overflow-y: auto;
   background-color: var(--modal-background-color);
   color: var(--primary-font-color);

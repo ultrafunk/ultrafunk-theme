@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.28
+Version:           1.44.29
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -39,6 +39,7 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --link-bright-hover-color: #ff0000;
 
   --site-theme-dark-color: rgb(10, 20, 40);
+  --site-theme-medium-dark-color: rgb(20, 40, 80);
   --site-theme-medium-color: rgb(30, 60, 120);
   --site-theme-light-color: rgb(40, 80, 160);
   --site-theme-font-color: #efefef;
@@ -479,7 +480,7 @@ a[href="#"] .navbar-arrow-next {
 
 #menu-primary-sections li.current-menu-item a {
   font-weight: 700;
-  background-color: var(--site-theme-medium-color);
+  background-color: var(--site-theme-medium-dark-color);
 }
 
 #menu-primary-channels li.current-menu-item a {
@@ -1685,6 +1686,23 @@ body.no-playback .sticky-nav-up .site-header-container {
     font-size: 36px;
     height: 36px;
     width: 36px;
+  }
+
+  @media not all and (pointer: fine) {
+
+    .nav-menu-toggle .material-icons,
+    .nav-search-toggle .material-icons {
+      transition: background 100ms 0s ease-in;
+      border-radius: var(--button-border-radius);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-menu-toggle .material-icons:active,
+    .nav-search-toggle .material-icons:active {
+      background-color: var(--control-highlight-color);
+      transition: background 0s;
+    }
+
   }
 
   .navbar-arrows {
