@@ -17,7 +17,7 @@ export default class PlaybackTimer
 {
   #intervalId     = -1;
   #lastPosSeconds = 0;
-  #isVisible      = true;
+  isVisible       = true;
 
   config = {
     updateTimerInterval: 250, // Milliseconds between each timer event
@@ -28,7 +28,7 @@ export default class PlaybackTimer
   {
     document.addEventListener('visibilitychange', () =>
     {
-      this.#isVisible = (document.visibilityState === 'visible') ? true : false;
+      this.isVisible = (document.visibilityState === 'visible') ? true : false;
     });
   }
 
@@ -38,13 +38,7 @@ export default class PlaybackTimer
   start()
   {
     this.stop();
-
-    this.#intervalId = setInterval(() =>
-    {
-      if (this.#isVisible)
-        this.updateProxy();
-    },
-    this.config.updateTimerInterval);
+    this.#intervalId = setInterval(() => this.updateProxy(), this.config.updateTimerInterval);
   }
 
   stop()

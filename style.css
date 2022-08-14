@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.29
+Version:           1.44.30
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -46,6 +46,9 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --site-theme-icon-color: #fff;
 
   --button-border-radius: 6px;
+  --button-default-transition: background 100ms 0s ease-in;
+  --button-active-transition: background 0s;
+
   --dialog-border-radius: 10px;
 }
 
@@ -362,9 +365,6 @@ a[href="#"] .navbar-arrow-next {
 
 .navbar-title {
   font-size: 20px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
   color: var(--primary-icon-color);
 }
 
@@ -799,7 +799,7 @@ a:hover#footer-player-type-toggle {
   #footer-crossfade-toggle,
   #footer-site-theme-toggle,
   #footer-gallery-layout-toggle {
-    transition: background 100ms 0s ease-in;
+    transition: var(--button-default-transition);
   }
 
   #footer-autoplay-toggle:active,
@@ -807,7 +807,7 @@ a:hover#footer-player-type-toggle {
   #footer-site-theme-toggle:active,
   #footer-gallery-layout-toggle:active {
     background-color: var(--site-theme-medium-color);
-    transition: background 0s;
+    transition: var(--button-active-transition);
   }
 
 }
@@ -1692,7 +1692,7 @@ body.no-playback .sticky-nav-up .site-header-container {
 
     .nav-menu-toggle .material-icons,
     .nav-search-toggle .material-icons {
-      transition: background 100ms 0s ease-in;
+      transition: var(--button-default-transition);
       border-radius: var(--button-border-radius);
       -webkit-tap-highlight-color: transparent;
     }
@@ -1700,7 +1700,7 @@ body.no-playback .sticky-nav-up .site-header-container {
     .nav-menu-toggle .material-icons:active,
     .nav-search-toggle .material-icons:active {
       background-color: var(--control-highlight-color);
-      transition: background 0s;
+      transition: var(--button-active-transition);
     }
 
   }

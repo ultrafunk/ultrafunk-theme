@@ -56,7 +56,7 @@ class Termlist extends \Ultrafunk\Theme\Templates\Base
       ?>
       <div id="<?php echo "term-$term->term_id"; ?>" class="termlist-entry" data-term-id="<?php echo $term->term_id; ?>" data-term-slug="<?php echo $term_slug; ?>">
         <div class="termlist-header <?php echo $row_class; ?>" title="Show more or less">
-          <div class="termlist-name"><?php echo "$term_name <span class='light-text'>($term->count)</span>"; ?></div>
+          <div class="termlist-name text-nowrap-ellipsis"><?php echo "$term_name <span class='light-text'>($term->count)</span>"; ?></div>
           <div class="termlist-icons">
             <div class="play-button" title="Play All - <?php echo $term_name; ?>">
               <a href="<?php echo "/$term_path/$term_slug/"; ?>" target="_blank"><span class="material-icons">play_arrow</span></a>

@@ -90,10 +90,7 @@ body.autoplay-off .progress-bar-control {
   font-size: 15px;
   line-height: 18px;
   font-weight: 400;
-  text-overflow: ellipsis;
   text-align: right;
-  white-space: nowrap;
-  overflow: hidden;
   margin-right: 10px;
   padding: 5px 10px;
   color: var(--primary-icon-color);

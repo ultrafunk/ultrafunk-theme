@@ -43,7 +43,7 @@ class ListPlaybackTimer extends PlaybackTimer
 
   updateProxy()
   {
-    if (isPlaying())
+    if (this.isVisible && isPlaying())
       this.#update(this.#player.embedded.getCurrentTime(), this.#player.getDuration());
   }
 }

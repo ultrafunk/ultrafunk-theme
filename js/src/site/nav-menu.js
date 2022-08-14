@@ -50,6 +50,7 @@ const navMenuClosure = (() =>
 
     utils.addListenerAll('div.nav-menu-toggle', 'click', toggle);
     modalOverlay.addEventListener('click', toggle);
+    window.addEventListener('resize', () => setNavMenuInnerSize());
     observer.observe(navMenuOuter);
   }
 
@@ -90,34 +91,38 @@ const navMenuClosure = (() =>
     {
       if (modalOverlay.className === '')
       {
-        setOverflowScroll();
         modalOverlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
         modalOverlay.classList.add('show');
+
+        if (utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
+          setNavToggleProps('hidden', 'close', '100vh');
+
+        setNavMenuInnerSize();
       }
     }
     else
     {
       modalOverlay.className     = '';
       navMenuOuter.style.display = '';
-      setOverflowProps();
+      setNavToggleProps();
     }
   }
 
-  function setOverflowScroll()
+  function setNavMenuInnerSize()
   {
-    if (utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
+    if (isVisible && utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
     {
       const margins = utils.getCssPropValue('margin-top', navMenuInner) + utils.getCssPropValue('margin-bottom', navMenuInner);
-      setOverflowProps('hidden', 'close', '100vh', `overflow-y: auto; max-height: ${window.innerHeight - (siteHeaderHeight + margins)}px`);
+      navMenuInner.style = `overflow-y: auto; max-height: ${window.innerHeight - (siteHeaderHeight + margins)}px`;
     }
   }
 
-  function setOverflowProps(overflowY = '', textContent = 'menu', height = '', style = '')
+  function setNavToggleProps(overflowY = '', textContent = 'menu', height = '')
   {
     document.documentElement.style.overflowY = overflowY;
     siteHeader.querySelectorAll('.nav-menu-toggle span')?.forEach(element => element.textContent = textContent);
     siteHeader.style.height = height;
-    navMenuInner.style      = style;
+    navMenuInner.style = '';
   }
 });
 

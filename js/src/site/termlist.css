@@ -120,24 +120,21 @@ term-list {
 
   .termlist-header.odd {
     background: var(--list-row-odd-color);
-    transition: background 100ms 0s ease-in;
+    transition: var(--button-default-transition);
   }
 
   .termlist-header.even {
-    transition: background 100ms 0s ease-in;
+    transition: var(--button-default-transition);
   }
 
   .termlist-header:active {
     background: var(--list-row-hover-color);
-    transition: background 0s;
+    transition: var(--button-active-transition);
   }
 
 }
 
 .termlist-name {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
   font-weight: 400;
 }
 
@@ -212,7 +209,7 @@ term-list {
   .termlist-icons .shuffle-button,
   .termlist-icons .share-find-button,
   .termlist-icons .expand-toggle:hover {
-    transition: background 100ms 0s ease-in;
+    transition: var(--button-default-transition);
   }
 
   .termlist-icons .play-button:active,
@@ -221,7 +218,7 @@ term-list {
   .termlist-icons .expand-toggle:active {
     background-color: var(--control-highlight-color);
     border-radius: var(--button-border-radius);
-    transition: background 0s;
+    transition: var(--button-active-transition);
   }
 
 }

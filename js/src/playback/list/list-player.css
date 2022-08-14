@@ -354,7 +354,7 @@ body.list-player {
   .track-actions .share-play-button,
   .track-actions .details-button,
   .track-actions .track-actions-toggle {
-    transition: background 100ms 0s ease-in;
+    transition: var(--button-default-transition);
   }
 
   .track-actions .play-next-button:active,
@@ -363,7 +363,7 @@ body.list-player {
   .track-actions .details-button:active,
   .track-actions .track-actions-toggle:active {
     background-color: var(--control-highlight-color);
-    transition: background 0s;
+    transition: var(--button-active-transition);
   }
 
   .track-actions .track-action-buttons {
@@ -435,12 +435,12 @@ body.list-player {
 @media not all and (pointer: fine) {
 
   .tracklist-page-separator .material-icons {
-    transition: background 100ms 0s ease-in;
+    transition: var(--button-default-transition);
   }
 
   .tracklist-page-separator .material-icons:active {
     background-color: var(--control-highlight-color);
-    transition: background 0s;
+    transition: var(--button-active-transition);
   }
 
 }
@@ -472,12 +472,12 @@ body.list-player {
 @media not all and (pointer: fine) {
 
   #tracklist-load-more {
-    transition: background 100ms 0s ease-in;
+    transition: var(--button-default-transition);
   }
 
   #tracklist-load-more:active {
     background-color: var(--site-theme-medium-color);
-    transition: background 0s;
+    transition: var(--button-active-transition);
   }
 
 }

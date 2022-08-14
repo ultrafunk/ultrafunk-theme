@@ -49,7 +49,7 @@ table.settings tr:nth-child(odd) {
 
   table.settings tr:active {
     background: var(--list-row-hover-color);
-    transition: background 0s;
+    transition: var(--button-active-transition);
   }
 
 }
@@ -132,7 +132,7 @@ table.settings td.current-value-false {
   .settings-save:active,
   .settings-reset:active {
     background: var(--button-background-hover-rgba);
-    transition: background 0s;
+    transition: var(--button-active-transition);
   }
 
 }

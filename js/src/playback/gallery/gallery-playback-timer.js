@@ -32,9 +32,14 @@ class GalleryPlaybackTimer extends PlaybackTimer
     }
   }
 
+  #isAutoCrossfade()
+  {
+    return (settings.playback.autoplay && settings.gallery.autoCrossfade);
+  }
+
   #updateAutoCrossfade(positionSeconds, durationSeconds)
   {
-    if ((settings.playback.masterMute === false) && settings.playback.autoplay && settings.gallery.autoCrossfade)
+    if ((settings.playback.masterMute === false) && this.#isAutoCrossfade())
     {
       if ((durationSeconds - positionSeconds) === (settings.gallery.autoCrossfadeLength + this.config.maxBufferingDelay))
       {
@@ -61,7 +66,8 @@ class GalleryPlaybackTimer extends PlaybackTimer
 
   updateProxy()
   {
-    this.#players.current.getPosition((position, duration) => this.#updateCallback(position, duration));
+    if (this.isVisible || this.#isAutoCrossfade())
+      this.#players.current.getPosition((position, duration) => this.#updateCallback(position, duration));
   }
 }
 

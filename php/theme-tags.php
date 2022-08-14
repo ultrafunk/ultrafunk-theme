@@ -258,7 +258,7 @@ function header_playback_controls() : void
 
   ?>
   <div id="playback-controls">
-    <div class="playback-details-control state-disabled" title="<?php echo $player_details_title; ?>">
+    <div class="playback-details-control text-nowrap-ellipsis state-disabled" title="<?php echo $player_details_title; ?>">
       <span class="playback-details-artist"></span><br><span class="playback-details-title"></span>
     </div>
     <div class="playback-thumbnail-control state-disabled" title="<?php echo (is_list_player() ? 'Show player' : 'Double click / tap: Toggle Fullscreen (f)'); ?>">
@@ -425,7 +425,7 @@ function nav_bar_title() : void
     $prefix = is_tax('uf_channel') ? '<b>Channel: </b>' : '<b>Artist: </b>';
   }
 
-  echo '<div class="navbar-title">' . $prefix . $title . $pagination . '</div>';
+  echo '<div class="navbar-title text-nowrap-ellipsis">' . $prefix . $title . $pagination . '</div>';
 }
 
 function single_track_nav_link(bool $is_nav_prev, mixed $post) : void
