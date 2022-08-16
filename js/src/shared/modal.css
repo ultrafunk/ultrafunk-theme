@@ -56,10 +56,15 @@
   cursor: auto;
   margin-left: 25px;
   margin-right: 25px;
+  line-height: 30px;
 }
 
 #modal-dialog-container.modal-type-default {
   max-width: 750px;
+}
+
+#modal-dialog-container.modal-click-items-2-columns {
+  max-width: 600px;
 }
 
 .modal-dialog-header {
@@ -149,6 +154,7 @@
   padding-right: 30px;
   cursor: pointer;
   color: var(--primary-icon-color);
+  box-sizing: border-box;
 }
 
 .modal-click-item:hover {
@@ -173,6 +179,11 @@
   align-items: center;
 }
 
+.modal-type-track-details .modal-click-item.modal-2-columns {
+  display: inline-flex;
+  width: 50%;
+}
+
 .modal-dialog-footer {
   display: none;
   justify-content: space-around;
@@ -189,7 +200,7 @@
   background-color: var(--site-theme-light-color);
   padding: 10px 50px;
   border-radius: var(--button-border-radius);
-  width: 100%;
+  width: 100px;
   text-align: center;
   font-size: 25px;
   line-height: 32px;
@@ -214,6 +225,28 @@
   .modal-dialog-body p {
     font-size: unset;
     line-height: unset;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 768px
+***************************************************************************************************/
+
+@media screen and (max-width: 768px) {
+
+  #modal-dialog-container {
+    line-height: unset;
+  }
+
+  #modal-dialog-container.modal-click-items-2-columns {
+    max-width: 550px;
+  }
+
+  .modal-type-track-details .modal-click-item.modal-2-columns {
+    display: flex;
+    width: unset;
   }
 
 }
@@ -297,6 +330,7 @@
   .modal-dialog-close-button {
     font-size: 18px;
     line-height: 20px;
+    width: 100%;
   }
 
 }

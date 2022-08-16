@@ -64,7 +64,7 @@ class GalleryPlaybackTimer extends PlaybackTimer
     this.#crossfadeInit = crossfadeInit;
   }
 
-  updateProxy()
+  updateTimer()
   {
     if (this.isVisible || this.#isAutoCrossfade())
       this.#players.current.getPosition((position, duration) => this.#updateCallback(position, duration));

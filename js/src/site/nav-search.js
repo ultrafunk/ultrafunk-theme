@@ -58,7 +58,7 @@ const navSearchClosure = (() =>
   function hide()
   {
     if (isVisible)
-      setProps(false, allowKeyboardShortcutsEvent, '', 'search');
+      setNavSearchProps(false, allowKeyboardShortcutsEvent, '', 'search');
   }
 
   function hasVisibleSearchContainer()
@@ -88,12 +88,12 @@ const navSearchClosure = (() =>
   function show()
   {
     setPosSize();
-    setProps(true, denyKeyboardShortcutsEvent, 'flex', 'close');
+    setNavSearchProps(true, denyKeyboardShortcutsEvent, 'flex', 'close');
     searchField.focus();
     searchField.setSelectionRange(9999, 9999);
   }
 
-  function setProps(visible, keyboardShortcutsEvent, display, icon)
+  function setNavSearchProps(visible, keyboardShortcutsEvent, display, icon)
   {
     isVisible = visible;
     document.dispatchEvent(keyboardShortcutsEvent);

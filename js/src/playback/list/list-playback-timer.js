@@ -41,7 +41,7 @@ class ListPlaybackTimer extends PlaybackTimer
     addListener(EVENT.MEDIA_PLAYING, () => super.start());
   }
 
-  updateProxy()
+  updateTimer()
   {
     if (this.isVisible && isPlaying())
       this.#update(this.#player.embedded.getCurrentTime(), this.#player.getDuration());

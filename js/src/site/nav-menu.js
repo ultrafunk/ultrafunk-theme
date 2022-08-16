@@ -95,7 +95,7 @@ const navMenuClosure = (() =>
         modalOverlay.classList.add('show');
 
         if (utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
-          setNavToggleProps('hidden', 'close', '100vh');
+          setNavMenuProps('hidden', 'close', '100vh');
 
         setNavMenuInnerSize();
       }
@@ -104,7 +104,7 @@ const navMenuClosure = (() =>
     {
       modalOverlay.className     = '';
       navMenuOuter.style.display = '';
-      setNavToggleProps();
+      setNavMenuProps();
     }
   }
 
@@ -117,7 +117,7 @@ const navMenuClosure = (() =>
     }
   }
 
-  function setNavToggleProps(overflowY = '', textContent = 'menu', height = '')
+  function setNavMenuProps(overflowY = '', textContent = 'menu', height = '')
   {
     document.documentElement.style.overflowY = overflowY;
     siteHeader.querySelectorAll('.nav-menu-toggle span')?.forEach(element => element.textContent = textContent);

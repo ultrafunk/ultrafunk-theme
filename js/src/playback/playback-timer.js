@@ -32,13 +32,13 @@ export default class PlaybackTimer
     });
   }
 
-  // Placeholder method to be overriden in child class if needed
-  updateProxy() {}
+  // Abstract method that must be overriden in child class
+  updateTimer() {}
 
   start()
   {
     this.stop();
-    this.#intervalId = setInterval(() => this.updateProxy(), this.config.updateTimerInterval);
+    this.#intervalId = setInterval(() => this.updateTimer(), this.config.updateTimerInterval);
   }
 
   stop()

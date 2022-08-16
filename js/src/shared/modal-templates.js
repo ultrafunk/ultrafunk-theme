@@ -33,9 +33,10 @@ export function getTemplateHtml()
     </div>`;
 }
 
-export function getSingleChoiceListHtml(singleChoiceList)
+export function getSingleChoiceListHtml(singleChoiceList, clickItemsCount = 0)
 {
   let html = '';
+  const entryColumnsClass = (clickItemsCount >= 10) ? 'modal-2-columns' : '';
 
   singleChoiceList.forEach((entry, index) =>
   {
@@ -46,7 +47,7 @@ export function getSingleChoiceListHtml(singleChoiceList)
     entry.uid          = `modal-item-${index + 1}`;
 
     if (entry.clickId)
-      html += `<div id="${entry.uid}" data-click-id="${entry.clickId}" class="modal-click-item ${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
+      html += `<div id="${entry.uid}" data-click-id="${entry.clickId}" class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
     else
       html += `<div class="${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
   });

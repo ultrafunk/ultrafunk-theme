@@ -24,6 +24,7 @@ const m = {
   onEntryClicked:   null,
   onClickClose:     null,
   modalId:          0,
+  clickItemsCount:  0,
   isOverflowY:      false,
   ignoreTouchMove:  false,
   isTouchDraggable: false,
@@ -50,15 +51,17 @@ export function showModal(
 {
   init();
 
+  m.onEntryClicked  = onEntryClickedCallback;
+  m.onClickClose    = onClickCloseCallback;
+  m.clickItemsCount = 0;
+
   if (Array.isArray(modalBody) && (modalBody.length > 0))
-    setSingleChoiceList(modalBody);
+    setSingleChoiceList(modalBody, modalType);
   else
     elements.body.innerHTML = modalBody;
 
-  m.onEntryClicked = onEntryClickedCallback;
-  m.onClickClose   = onClickCloseCallback;
-
   elements.container.classList = `modal-type-${(modalType !== null) ? modalType : 'default'}`;
+  elements.container.classList.add((m.clickItemsCount > 10) ? 'modal-click-items-2-columns' : 'modal-click-items-1-column');
   elements.container.querySelector(`.${config.id}-title`).innerHTML = modalTitle;
 
   elements.overlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
@@ -137,9 +140,12 @@ function init()
   }
 }
 
-function setSingleChoiceList(singleChoiceList)
+function setSingleChoiceList(singleChoiceList, modalType = null)
 {
-  elements.body.innerHTML = getSingleChoiceListHtml(singleChoiceList);
+  if (modalType === 'track-details')
+    singleChoiceList.forEach(item => (item.clickId && m.clickItemsCount++));
+
+  elements.body.innerHTML = getSingleChoiceListHtml(singleChoiceList, m.clickItemsCount);
 
   singleChoiceList.forEach(entry =>
   {
