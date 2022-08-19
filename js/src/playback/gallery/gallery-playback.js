@@ -94,7 +94,9 @@ export function prevTrack()
           m.players.stop();
 
         if (m.players.prevTrack(playbackControls.isPlaying()))
-          playbackControls.updatePrevState();
+          playbackControls.updateTrackData();
+        else
+          playbackEvents.dispatch(playbackEvents.EVENT.CLICKED_PREV_TRACK);
       }
     });
   }
@@ -120,8 +122,12 @@ export function nextTrack(isMediaEnded = false)
     else
     {
       if (m.players.nextTrack(playbackControls.isPlaying()))
-        playbackControls.updateNextState();
+        playbackControls.updateTrackData();
     }
+  }
+  else if (isLastTrack === true)
+  {
+    playbackEvents.dispatch(playbackEvents.EVENT.CLICKED_NEXT_TRACK);
   }
   else if (isMediaEnded)
   {
@@ -177,7 +183,7 @@ function cueTrack(iframeId, scrollToMedia = true)
 
   m.players.setPlayerIndex(m.players.indexMap.get(iframeId));
   playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_NEXT, { scrollToMedia: scrollToMedia, trackId: m.players.current.getTrackId() });
-  playbackControls.updateNextState();
+  playbackControls.updateTrackData();
 }
 
 function playTrack(playMedia, scrollToMedia = true)
@@ -197,7 +203,7 @@ function skipToTrack(trackNum, playMedia = true)
     m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
 
     if (m.players.jumpToTrack(trackNum, playMedia))
-      playbackControls.updateNextState();
+      playbackControls.updateTrackData();
   }
 }
 
@@ -229,7 +235,7 @@ function cueOrPlayNextSingleTrackById(trackData, thumbnailData, playMedia = fals
   m.players.current.setThumbnail(thumbnailData);
 
   playbackControls.updateProgressPercent(0);
-  playbackControls.getSetTrackData();
+  playbackControls.updateTrackData();
 
   if (playMedia)
   {
@@ -289,7 +295,7 @@ function crossfadeInit(crossfadeType, crossfadePreset, crossfadeInUid = null)
   const playersIndex = m.players.crossfade.init(crossfadeType, crossfadePreset, crossfadeInUid);
 
   if (playersIndex !== null)
-    playbackState.syncControls(playersIndex.fadeOutPlayer, playersIndex.fadeInPlayer);
+    playbackControls.updateTrackData();
 }
 
 
@@ -356,28 +362,15 @@ const playbackState = (() =>
     }
     else
     {
-      const prevPlayerIndex = m.players.getPlayerIndex();
-      const nextPlayerIndex = m.players.indexMap.get(nextPlayerUid);
-
       m.players.stop();
-      m.players.setPlayerIndex(nextPlayerIndex);
-
-      syncControls(prevPlayerIndex, nextPlayerIndex);
+      m.players.setPlayerIndex(m.players.indexMap.get(nextPlayerUid));
+      playbackControls.updateTrackData();
       syncAllRecursive(nextPlayerUid, syncState);
     }
   };
 
-  function syncControls(prevPlayerIndex, nextPlayerIndex)
-  {
-    if (nextPlayerIndex > prevPlayerIndex)
-      playbackControls.updateNextState();
-    else
-      playbackControls.updatePrevState();
-  }
-
   return {
     STATE,
     syncAll,
-    syncControls,
   };
 })();

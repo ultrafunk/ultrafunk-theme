@@ -27,7 +27,7 @@ export const TRACK_TYPE = {
 
 class MediaPlayer
 {
-  #trackType      = TRACK_TYPE.NONE;
+  #trackType;
   #trackId        = null;
   #iframeId       = null;
   #embeddedPlayer = null;
@@ -262,16 +262,12 @@ export class SoundCloud extends MediaPlayer
 export class Playlist extends MediaPlayer
 {
   #playerState  = -1; // YT.PlayerState.UNSTARTED
-  #numTracks    = 3;
-  #currentTrack = 2;
 
   constructor(embeddedPlayer)
   {
     super(TRACK_TYPE.YOUTUBE, null, null, embeddedPlayer);
   }
 
-  getNumTracks()        { return this.#numTracks;    }
-  getCurrentTrack()     { return this.#currentTrack; }
   setPlayerState(state) { this.#playerState = state; }
 
   play(onErrorCallback)
@@ -296,8 +292,8 @@ export class Playlist extends MediaPlayer
   getTrackData()
   {
     return {
-      currentTrack: this.getCurrentTrack(),
-      numTracks:    this.getNumTracks(),
+      currentTrack: 1,
+      numTracks:    1,
       artist:       this.getArtist(),
       title:        this.getTitle(),
       duration:     this.getDuration(),

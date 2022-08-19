@@ -141,13 +141,13 @@ export function ready(prevClickCallback, playPauseClickCallback, nextClickCallba
   ctrl.playerType.setState(STATE.ENABLED);
   ctrl.playerType.addListener('click', () => playerTypeToggle.toggle());
 
-  ctrl.prevTrack.setState((m.players.getCurrentTrack() > 1) ? STATE.ENABLED : STATE.DISABLED);
+  ctrl.prevTrack.setState(STATE.ENABLED);
   ctrl.prevTrack.addListener('click', prevClickCallback);
 
   ctrl.playPause.setState(STATE.PAUSED);
   ctrl.playPause.addListener('click', playPauseClickCallback);
 
-  ctrl.nextTrack.setState((m.players.getNumTracks() > 1) ? STATE.ENABLED : STATE.DISABLED);
+  ctrl.nextTrack.setState(STATE.ENABLED);
   ctrl.nextTrack.addListener('click', () => nextClickCallback());
 
   ctrl.repeat.setState(STATE.ENABLED);
@@ -230,6 +230,14 @@ function progressSeekClick(event)
 // ************************************************************************************************
 // Details (Artist + Title) and track timer
 // ************************************************************************************************
+
+export function updateTrackData()
+{
+  const trackData = m.players.getTrackData();
+
+  clearTimer(trackData);
+  setDetails(trackData);
+}
 
 function setDetails(trackData)
 {
@@ -344,37 +352,6 @@ export function blinkPlayPause(toggleBlink)
     ctrl.playPause.toggleClass('time-remaining-warning');
   else
     ctrl.playPause.removeClass('time-remaining-warning');
-}
-
-export function getSetTrackData()
-{
-  const trackData = m.players.getTrackData();
-
-  clearTimer(trackData);
-  setDetails(trackData);
-
-  return trackData;
-}
-
-export function updatePrevState()
-{
-  const trackData = getSetTrackData();
-
-  if ((isPlaying() === false) && (trackData.currentTrack <= 1))
-    ctrl.prevTrack.setState(STATE.DISABLED);
-
-  if (trackData.currentTrack < trackData.numTracks)
-    ctrl.nextTrack.setState(STATE.ENABLED);
-}
-
-export function updateNextState()
-{
-  const trackData = getSetTrackData();
-
-  ctrl.prevTrack.setState(STATE.ENABLED);
-
-  if (trackData.currentTrack >= trackData.numTracks)
-    ctrl.nextTrack.setState(STATE.DISABLED);
 }
 
 

@@ -121,6 +121,8 @@ function initPlaybackEvents()
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_NEXT,       playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,          playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_TIME_REMAINING, playbackEventMediaTimeRemaining);
+  playbackEvents.addListener(playbackEvents.EVENT.CLICKED_PREV_TRACK,   () => prevNextNavTo(null, response.prevPage));
+  playbackEvents.addListener(playbackEvents.EVENT.CLICKED_NEXT_TRACK,   () => playNextTrack(null));
 }
 
 function initListeners()
@@ -264,12 +266,12 @@ function onKeyArrowRight(event)
   event.preventDefault();
 
   if (event.shiftKey === true)
-    onNextSingleTrack(null);
+    playNextTrack(null);
   else
     m.player.nextTrack();
 }
 
-function onNextSingleTrack(event)
+function playNextTrack(event)
 {
   event?.preventDefault();
 
@@ -393,7 +395,7 @@ class siteNavUiElements extends ElementClick
       return prevNextNavTo(this.event, response.prevPage);
 
     if (this.clicked('a.navbar-next-link'))
-      return onNextSingleTrack(this.event);
+      return playNextTrack(this.event);
   }
 }
 
@@ -405,7 +407,7 @@ class trackNavUiElements extends ElementClick
       return prevNextNavTo(this.event, response.prevPage);
 
     if (this.clicked('div.nav-next a'))
-      return onNextSingleTrack(this.event);
+      return playNextTrack(this.event);
   }
 }
 

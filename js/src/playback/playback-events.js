@@ -30,10 +30,12 @@ export const EVENT = {
   RESUME_AUTOPLAY:      'resumeAutoplay',
   AUTOPLAY_BLOCKED:     'autoplayBlocked',
   PLAYBACK_BLOCKED:     'playbackBlocked',
+  CLICKED_PREV_TRACK:   'clickedPrevTrack',
+  CLICKED_NEXT_TRACK:   'clickedNextTrack',
 };
 
 const eventListeners = {
-  [EVENT.PLAYBACK_LOADING]:     [ (event) => updateProgressPercent(event.data.loadingPercent) ],
+  [EVENT.PLAYBACK_LOADING]:     [ (playbackEvent) => updateProgressPercent(playbackEvent.data.loadingPercent) ],
   [EVENT.PLAYBACK_READY]:       [ playbackReady ],
   [EVENT.MEDIA_LOADING]:        [],
   [EVENT.MEDIA_PLAYING]:        [ () => (hasPlaybackStarted = true) ],
@@ -47,6 +49,8 @@ const eventListeners = {
   [EVENT.RESUME_AUTOPLAY]:      [],
   [EVENT.AUTOPLAY_BLOCKED]:     [],
   [EVENT.PLAYBACK_BLOCKED]:     [],
+  [EVENT.CLICKED_PREV_TRACK]:   [ (playbackEvent) => debug.log(playbackEvent) ],
+  [EVENT.CLICKED_NEXT_TRACK]:   [ (playbackEvent) => debug.log(playbackEvent) ],
 };
 
 

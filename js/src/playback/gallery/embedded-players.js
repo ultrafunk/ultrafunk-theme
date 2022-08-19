@@ -319,7 +319,7 @@ function onYouTubePlayerError(event, iframeId)
   }
   else
   {
-    debug.warn(`onYouTubePlayerError(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - ${player.getTitle()}\nNo YouTube API error given! ((event.data === null) && (isPlayable === false))`);
+    debug.warn(`onYouTubePlayerError(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - "${player.getTitle()}"\nNo YouTube API error given! ((event.data === null) && (isPlayable === false))`);
   }
 }
 

@@ -156,7 +156,7 @@ function cueOrPlayCurrentTrack(playTrack)
   {
     m.player.embedded.loadVideoById(sourceUid);
     listControls.setCurrentTrackState(STATE.PLAYING);
-    playbackControls.getSetTrackData();
+    playbackControls.updateTrackData();
   }
   else
   {
@@ -204,7 +204,7 @@ export function prevTrack()
   if ((prevTrackId !== null) && (position <= 5))
   {
     setCurrentTrack(prevTrackId, playbackControls.isPlaying());
-    playbackControls.updatePrevState();
+    playbackControls.updateTrackData();
   }
   else if (position !== 0)
   {
@@ -220,7 +220,7 @@ export function nextTrack()
   if (nextTrackId !== null)
   {
     setCurrentTrack(nextTrackId, playbackControls.isPlaying());
-    playbackControls.updateNextState();
+    playbackControls.updateTrackData();
   }
 }
 
@@ -296,7 +296,7 @@ export function getStatus()
       currentTrack: (currentIndex + 1),
       trackType:    mediaPlayers.TRACK_TYPE.YOUTUBE,
       position:     Math.ceil(m.player.embedded.getCurrentTime()),
-      numTracks:    m.player.getNumTracks(),
+      numTracks:    1,
       trackId:      allTracksList[currentIndex].getAttribute('data-track-id'),
       iframeId:     'youtube-player',
     };
