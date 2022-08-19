@@ -125,7 +125,7 @@ export function nextTrack(isMediaEnded = false)
         playbackControls.updateTrackData();
     }
   }
-  else if (isLastTrack === true)
+  else if ((isLastTrack === true) && (isMediaEnded === false))
   {
     playbackEvents.dispatch(playbackEvents.EVENT.CLICKED_NEXT_TRACK);
   }
