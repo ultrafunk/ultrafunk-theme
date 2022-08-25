@@ -254,7 +254,7 @@ function onYouTubeStatePlaying(iframeId)
   debug.log(`onYouTubePlayerStateChange: PLAYING   (uID: ${iframeId})`);
 
   // Call order is important on play events for state handling: Always sync first!
-  m.playbackState.syncAll(iframeId, m.playbackState.STATE.PLAY);
+  m.playbackState.sync(iframeId, m.playbackState.STATE.PLAY);
   playbackTimer.start();
 }
 
@@ -264,7 +264,7 @@ function onYouTubeStatePaused(iframeId)
 
   if (m.players.isCurrent(iframeId))
   {
-    m.playbackState.syncAll(iframeId, m.playbackState.STATE.PAUSE);
+    m.playbackState.sync(iframeId, m.playbackState.STATE.PAUSE);
     playbackTimer.stop();
   }
   else
@@ -350,12 +350,12 @@ function onSoundCloudPlayerEventPlay(event)
   {
     // Call order is important on play events for state handling: Always sync first!
     if (eventLog.scPlayDoubleTrigger(event.soundId, (config.maxPlaybackStartDelay * 1000)))
-      m.playbackState.syncAll(event.soundId, m.playbackState.STATE.PLAY);
+      m.playbackState.sync(event.soundId, m.playbackState.STATE.PLAY);
   }
   else
   {
     // Call order is important on play events for state handling: Always sync first!
-    m.playbackState.syncAll(event.soundId, m.playbackState.STATE.PLAY);
+    m.playbackState.sync(event.soundId, m.playbackState.STATE.PLAY);
     m.players.current.mute(settings.playback.masterMute);
     m.players.current.setVolume(settings.playback.masterVolume);
   }
@@ -387,7 +387,7 @@ function onSoundCloudPlayerEventPause(event)
       {
         if (positionMilliseconds > 0)
         {
-          m.playbackState.syncAll(event.soundId, m.playbackState.STATE.PAUSE);
+          m.playbackState.sync(event.soundId, m.playbackState.STATE.PAUSE);
           playbackTimer.stop();
         }
       });

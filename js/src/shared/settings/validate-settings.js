@@ -92,4 +92,3 @@ function isEntryInvalid(settings, schemaEntry, settingValue, entryKey)
       return true;
   }
 }
-

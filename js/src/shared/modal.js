@@ -49,7 +49,8 @@ export function showModal(
   onClickCloseCallback = () => true
 )
 {
-  init();
+  initElements();
+  resetState();
 
   m.onEntryClicked  = onEntryClickedCallback;
   m.onClickClose    = onClickCloseCallback;
@@ -80,16 +81,9 @@ export function showModal(
 
 export function isShowingModal(showingModalId = -1)
 {
-  return ((showingModalId === m.modalId) && (elements.container !== null) && (elements.overlay.classList.contains('show')));
-}
-
-export function closeModal()
-{
-  document.body.removeEventListener('touchmove', touchMove, { passive: false });
-  document.body.removeEventListener('touchstart', touchStart);
-  elements.overlay.removeEventListener('keydown', keyDown);
-  elements.overlay.className = '';
-  disablePageScrolling(false);
+  return ((showingModalId === m.modalId) &&
+          (elements.container !== null)  &&
+          (elements.overlay.classList.contains('show')));
 }
 
 export function getModalId()
@@ -119,7 +113,7 @@ export function updateModalBody(updateModalId, updateSingleChoiceList)
 //
 // ************************************************************************************************
 
-function init()
+function initElements()
 {
   if (elements.container === null)
   {
@@ -132,11 +126,23 @@ function init()
     elements.overlay.addEventListener('click', (event) =>
     {
       if (event.target === elements.overlay)
-        closeModal();
+        resetState();
     });
 
-    elements.overlay.querySelector(`.${config.id}-close-icon`).addEventListener('click', closeModal);
-    elements.overlay.querySelector(`.${config.id}-close-button`).addEventListener('click', closeModal);
+    elements.overlay.querySelector(`.${config.id}-close-icon`).addEventListener('click', resetState);
+    elements.overlay.querySelector(`.${config.id}-close-button`).addEventListener('click', resetState);
+  }
+}
+
+function resetState()
+{
+  if (isShowingModal(m.modalId))
+  {
+    document.body.removeEventListener('touchmove', touchMove, { passive: false });
+    document.body.removeEventListener('touchstart', touchStart);
+    elements.overlay.removeEventListener('keydown', keyDown);
+    elements.overlay.className = '';
+    disablePageScrolling(false);
   }
 }
 
@@ -158,7 +164,7 @@ function singleChoiceListClick(event)
 {
   if (m.onClickClose(event) === true)
   {
-    closeModal();
+    resetState();
     m.onEntryClicked(this.getAttribute('data-click-id'), event);
   }
 }
@@ -168,7 +174,7 @@ function keyDown(event)
   event.stopPropagation();
 
   if (event.key === 'Escape')
-    closeModal();
+    resetState();
 }
 
 function disablePageScrolling(disableScrolling)

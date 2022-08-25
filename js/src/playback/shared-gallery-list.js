@@ -6,6 +6,7 @@
 
 
 import * as debugLogger       from '../shared/debuglogger.js';
+import { showSnackbar }       from '../shared/snackbar.js';
 import { KEY, setCookie }     from '../shared/storage.js';
 import { showUpNextModal }    from './list/up-next-modal.js';
 import { response, settings } from '../shared/session-data.js';
@@ -68,7 +69,7 @@ export function shuffleClickNavTo(event = null)
 export function autoplayNavTo(destUrl, continueAutoplay = false)
 {
   debug.log(`autoplayNavTo(): ${destUrl} - continueAutoplay: ${continueAutoplay}`);
-  
+
   if (destUrl)
   {
     sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: continueAutoplay, trackId: null, position: 0 }));
@@ -109,7 +110,7 @@ function listPlayerScrollTo(trackId = 0)
 
     if ((window.pageYOffset === 0) || (Math.round(window.pageYOffset) <= 1))
       scrollDestPos = getCssPropValue('--site-header-height') - getCssPropValue('--site-header-height-down');
-  
+
     scrollToYPos(window, scrollDestPos);
   }
   else
@@ -148,7 +149,7 @@ function galleryPlayerScrollTo(trackId)
              ? getCssPropValue('--site-header-height-down')
              : getCssPropValue('--site-header-height-up'));
   }
-  
+
   function getContentMarginTop()
   {
     // -1 because of fractional pixels on HiDPI displays (iframe bottom 1 px would show on top)
@@ -200,7 +201,7 @@ const fullscreenElementClosure = (() =>
   return {
     init,
     enter,
-    exit,        
+    exit,
     toggle,
   };
 
@@ -215,16 +216,19 @@ const fullscreenElementClosure = (() =>
     fseTarget = (document.fullscreenElement !== null)
                   ? document.fullscreenElement.id
                   : null;
-    
+
     fseEvent.fullscreenTarget = fseTarget;
     document.dispatchEvent(fseEvent);
   }
 
   function enter(element)
   {
-    element.requestFullscreen();
+    if (element.requestFullscreen)
+      element.requestFullscreen();
+    else
+      showSnackbar('Unable to enter fullscreen mode!', 3);
   }
-  
+
   function exit()
   {
     if (fseTarget !== null)
@@ -262,13 +266,13 @@ const keyboardShortcutsClosure = (() =>
   function init()
   {
     allow = settings.playback.keyboardShortcuts;
-    
+
     document.addEventListener('allowKeyboardShortcuts', () =>
     {
       if (settings.playback.keyboardShortcuts)
         allow = true;
     });
-    
+
     document.addEventListener('denyKeyboardShortcuts', () =>
     {
       if (settings.playback.keyboardShortcuts)

@@ -121,8 +121,8 @@ function initPlaybackEvents()
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_NEXT,       playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,          playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_TIME_REMAINING, playbackEventMediaTimeRemaining);
-  playbackEvents.addListener(playbackEvents.EVENT.CLICKED_PREV_TRACK,   () => prevNextNavTo(null, response.prevPage));
-  playbackEvents.addListener(playbackEvents.EVENT.CLICKED_NEXT_TRACK,   () => playNextTrack(null));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PREV_TRACK,     () => prevNextNavTo(null, response.prevPage));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_NEXT_TRACK,     () => playNextTrack(null));
 }
 
 function initListeners()

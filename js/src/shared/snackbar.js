@@ -54,8 +54,8 @@ export function showSnackbar(
 {
   debug.log(`showSnackbar(): ${message} (${timeout} sec.)`);
 
-  init();
-  reset(false);
+  initElements();
+  resetState(false);
 
   elements.snackbar.querySelector(`.${config.id}-message`).innerHTML = message;
   elements.snackbar.classList.add('show');
@@ -98,7 +98,7 @@ export function dismissSnackbar(dismissId = 0)
 //
 // ************************************************************************************************
 
-function init()
+function initElements()
 {
   if (elements.snackbar === null)
   {
@@ -112,14 +112,14 @@ function init()
     {
       if (elements.snackbar.classList.contains('hide'))
       {
-        reset(true);
+        resetState(true);
         m.afterClose();
       }
     });
 
     elements.closeIcon.addEventListener('click', () =>
     {
-      reset(true);
+      resetState(true);
       m.afterClose();
     });
   }
@@ -127,7 +127,7 @@ function init()
 
 function actionTextClick()
 {
-  reset(true);
+  resetState(true);
   m.actionClick();
 }
 
@@ -138,7 +138,7 @@ function isShowing()
            elements.snackbar.classList.contains('show'));
 }
 
-function reset(hideSnackbar = false)
+function resetState(hideSnackbar = false)
 {
   if (m.showTimeoutId !== -1)
   {

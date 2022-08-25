@@ -96,7 +96,7 @@ export function prevTrack()
         if (m.players.prevTrack(playbackControls.isPlaying()))
           playbackControls.updateTrackData();
         else
-          playbackEvents.dispatch(playbackEvents.EVENT.CLICKED_PREV_TRACK);
+          playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PREV_TRACK);
       }
     });
   }
@@ -127,7 +127,7 @@ export function nextTrack(isMediaEnded = false)
   }
   else if ((isLastTrack === true) && (isMediaEnded === false))
   {
-    playbackEvents.dispatch(playbackEvents.EVENT.CLICKED_NEXT_TRACK);
+    playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_NEXT_TRACK);
   }
   else if (isMediaEnded)
   {
@@ -345,9 +345,9 @@ const playbackState = (() =>
     PAUSE: 2,
   };
 
-  const syncAll = function syncAllRecursive(nextPlayerUid, syncState)
+  const sync = function syncRecursive(nextPlayerUid, syncState)
   {
-    debug.log(`playbackState.syncAll() - previousTrack: ${m.players.getPlayerIndex() + 1} - nextTrack: ${m.players.indexMap.get(nextPlayerUid) + 1} - syncState: ${debug.getKeyForValue(STATE, syncState)}`);
+    debug.log(`playbackState.sync() - previousTrack: ${m.players.getPlayerIndex() + 1} - nextTrack: ${m.players.indexMap.get(nextPlayerUid) + 1} - syncState: ${debug.getKeyForValue(STATE, syncState)}`);
 
     if (m.players.isCurrent(nextPlayerUid))
     {
@@ -365,12 +365,12 @@ const playbackState = (() =>
       m.players.stop();
       m.players.setPlayerIndex(m.players.indexMap.get(nextPlayerUid));
       playbackControls.updateTrackData();
-      syncAllRecursive(nextPlayerUid, syncState);
+      syncRecursive(nextPlayerUid, syncState);
     }
   };
 
   return {
     STATE,
-    syncAll,
+    sync,
   };
 })();

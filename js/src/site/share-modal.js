@@ -74,7 +74,7 @@ const shareModalClosure = (() =>
     switch (clickedId)
     {
       case 'copyToClipboardId':
-        copyTextToClipboard(url, 'Track link copied to clipboard', 'Unable to copy Track link to clipboard');
+        copyTextToClipboard(url, 'Track Link');
         break;
 
       case 'shareOnEmailId':
@@ -116,15 +116,56 @@ export const shareModal = shareModalClosure();
 //
 // ************************************************************************************************
 
-export function copyTextToClipboard(clipboardText, successMessage = 'Text copied to clipboard', errorMessage = 'Unable to copy text to clipboard')
+export function copyTextToClipboard(clipboardText, contentDescription = 'Content')
 {
-  navigator.clipboard.writeText(clipboardText).then(() =>
+  if (navigator.clipboard)
   {
-    showSnackbar(successMessage, 3);
-  },
-  (reason) =>
+    navigator.clipboard.writeText(clipboardText).then(() =>
+    {
+      showSnackbar(`${contentDescription} copied to clipboard`, 3);
+    },
+    (reason) =>
+    {
+      onClipboardWriteError(reason, clipboardText, contentDescription);
+    });
+  }
+  else
   {
-    debug.error(`copyTextToClipboard() failed because ${reason}`);
-    showSnackbar(errorMessage, 5);
-  });
+    // Handle navigator.clipboard not properly supported on WebKit / Safari yet...
+    if (copyTextToClipboardExecCommand(clipboardText))
+      showSnackbar(`${contentDescription} copied to clipboard`, 3);
+    else
+      onClipboardWriteError(`document.execCommand('copy') for "${clipboardText}" failed!`, clipboardText, contentDescription);
+  }
+}
+
+function copyTextToClipboardExecCommand(clipboardText)
+{
+  const element = document.createElement('textarea');
+
+  document.body.appendChild(element);
+  element.textContent = clipboardText;
+  element.select();
+  const isCopied = document.execCommand('copy');
+  document.body.removeChild(element);
+
+  return isCopied;
+}
+
+function onClipboardWriteError(logError, clipboardText, contentDescription)
+{
+  debug.error(`copyTextToClipboard() error: ${logError}`);
+
+  const modalBody = /*html*/ `
+    <style>
+      .modal-dialog-body p.modal-clipboard-content {
+        padding: 10px 15px;
+        border-radius: var(--dialog-border-radius);
+        background-color: var(--list-row-odd-color);
+      }
+    </style>
+    <p class="modal-clipboard-error">Failed to write ${contentDescription} to the clipboard, please copy the text below:</p>
+    <p class="modal-clipboard-content">${clipboardText}</p>`;
+
+  showModal('Copy to Clipboard error!', modalBody);
 }

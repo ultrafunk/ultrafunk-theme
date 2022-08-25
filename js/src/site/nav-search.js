@@ -42,7 +42,7 @@ const navSearchClosure = (() =>
     // Hide nav search bar on ESC
     searchField.addEventListener('keydown', (event) =>
     {
-      if (event.key === 'Escape')
+      if ((event.key === 'Escape') && isVisible)
       {
         event.stopPropagation();
         hide();

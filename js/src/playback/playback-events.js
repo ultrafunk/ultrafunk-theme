@@ -23,15 +23,14 @@ export const EVENT = {
   MEDIA_PAUSED:         'mediaPaused',
   MEDIA_ENDED:          'mediaEnded',
   MEDIA_CUE_NEXT:       'mediaCueNext',
-//MEDIA_CUED:           'mediaCued',
+  MEDIA_PREV_TRACK:     'mediaPrevTrack',
+  MEDIA_NEXT_TRACK:     'mediaNextTrack',
   MEDIA_TIME_REMAINING: 'mediaTimeRemaining',
   MEDIA_UNAVAILABLE:    'mediaUnavailable',
   CONTINUE_AUTOPLAY:    'continueAutoplay',
   RESUME_AUTOPLAY:      'resumeAutoplay',
   AUTOPLAY_BLOCKED:     'autoplayBlocked',
   PLAYBACK_BLOCKED:     'playbackBlocked',
-  CLICKED_PREV_TRACK:   'clickedPrevTrack',
-  CLICKED_NEXT_TRACK:   'clickedNextTrack',
 };
 
 const eventListeners = {
@@ -42,15 +41,14 @@ const eventListeners = {
   [EVENT.MEDIA_PAUSED]:         [],
   [EVENT.MEDIA_ENDED]:          [],
   [EVENT.MEDIA_CUE_NEXT]:       [ () => (hasPlaybackStarted = false) ],
-//[EVENT.MEDIA_CUED]:           [],
+  [EVENT.MEDIA_PREV_TRACK]:     [ (playbackEvent) => debug.log(playbackEvent) ],
+  [EVENT.MEDIA_NEXT_TRACK]:     [ (playbackEvent) => debug.log(playbackEvent) ],
   [EVENT.MEDIA_TIME_REMAINING]: [],
   [EVENT.MEDIA_UNAVAILABLE]:    [],
   [EVENT.CONTINUE_AUTOPLAY]:    [],
   [EVENT.RESUME_AUTOPLAY]:      [],
   [EVENT.AUTOPLAY_BLOCKED]:     [],
   [EVENT.PLAYBACK_BLOCKED]:     [],
-  [EVENT.CLICKED_PREV_TRACK]:   [ (playbackEvent) => debug.log(playbackEvent) ],
-  [EVENT.CLICKED_NEXT_TRACK]:   [ (playbackEvent) => debug.log(playbackEvent) ],
 };
 
 
