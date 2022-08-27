@@ -245,13 +245,17 @@ export function getThumbnailData(metaData)
 export const FETCH_ERROR_TYPE = {
   UNKNOWN: 0,
   NETWORK: 1,
+  TIMEOUT: 2,
 };
 
-export async function fetchRest(endpoint, query, returnStatus = false, path = '/wp-json/wp/v2/')
+export async function fetchRest(endpoint, query, returnStatus = false, path = '/wp-json/wp/v2/', timeoutSeconds = 10)
 {
-  debug.log(`fetchRest(): ${path}${endpoint}?${query}`);
+  debug.log(`fetchRest(): "${path}${endpoint}?${query}" - returnStatus: ${returnStatus} - timeoutSeconds: ${timeoutSeconds}`);
 
-  return fetch(`${path}${endpoint}?${query}`)
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(), (timeoutSeconds * 1000));
+
+  return fetch(`${path}${endpoint}?${query}`, { signal: controller.signal })
   .then(async (response) =>
   {
     if (!response.ok)
@@ -269,16 +273,24 @@ export async function fetchRest(endpoint, query, returnStatus = false, path = '/
 
     return response.json();
   })
-  .catch(reason =>
+  .catch(exception =>
   {
-    debug.error(reason);
+    debug.error(exception);
 
     if (returnStatus)
-    {
-      const errorType = (reason instanceof TypeError) ? FETCH_ERROR_TYPE.NETWORK : FETCH_ERROR_TYPE.UNKNOWN;
-      return { status: { code: 0, type: errorType, message: reason.message }};
-    }
+      return { status: { code: 0, errorType: getFetchErrorType(exception), errorMessage: exception.message }};
 
     return null;
   });
+}
+
+function getFetchErrorType(error)
+{
+  if (error instanceof TypeError)
+    return FETCH_ERROR_TYPE.NETWORK;
+
+  if (error instanceof DOMException)
+    return FETCH_ERROR_TYPE.TIMEOUT;
+
+  return FETCH_ERROR_TYPE.UNKNOWN;
 }

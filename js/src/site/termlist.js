@@ -145,12 +145,14 @@ function shuffleClick(event, destUrl)
 function shareFindClick(element)
 {
   const termName = utils.stripAttribute(element, 'data-term-name');
+  const urlType  = (m.listContainer.getAttribute('data-term-type') === 'channels') ? 'Channel link' : 'Artist link';
 
   shareModal.show({
     title:    `Share / Find ${utils.stripAttribute(element, 'data-term-path')}`,
     bodyText: termName,
     bodyHtml: `<b>${termName}</b>`,
     url:      utils.getPrefPlayerUrl(element.getAttribute('data-term-url')),
+    urlType:  urlType,
     verb:     'Find',
     icon:     'search',
   });

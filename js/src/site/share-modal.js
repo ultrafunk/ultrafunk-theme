@@ -23,7 +23,7 @@ const debug = debugLogger.newInstance('share-modal');
 const shareModalClosure = (() =>
 {
   const filterBodyTextRegEx = /\s{1,}[\u002D\u00B7\u2013]\s{1,}/i;
-  let title, bodyText, filterBodyText, bodyHtml, url, sourceUid, verb, icon;
+  let title, bodyText, filterBodyText, bodyHtml, url, urlType, sourceUid, verb, icon;
 
   return {
     show,
@@ -37,6 +37,7 @@ const shareModalClosure = (() =>
       filterBodyText = false,
       bodyHtml       = null,
       url            = null,
+      urlType        = 'Link',
       sourceUid      = null,
       verb           = 'Play',
       icon           = 'link',
@@ -65,7 +66,7 @@ const shareModalClosure = (() =>
 
   function singleChoiceListClick(clickedId)
   {
-    debug.log(`singleChoiceListClick(): ${clickedId} - title: "${title}" - bodyText: "${bodyText}" - filterBodyText: ${filterBodyText} - url: ${url} - sourceUid: ${sourceUid} - verb: ${verb}`);
+    debug.log(`singleChoiceListClick(): ${clickedId} - title: "${title}" - bodyText: "${bodyText}" - filterBodyText: ${filterBodyText} - url: ${url} - urlType: ${urlType} - sourceUid: ${sourceUid} - verb: ${verb}`);
 
     const searchString = filterBodyText
                            ? encodeURIComponent(bodyText.replace(filterBodyTextRegEx, ' '))
@@ -74,11 +75,11 @@ const shareModalClosure = (() =>
     switch (clickedId)
     {
       case 'copyToClipboardId':
-        copyTextToClipboard(url, 'Track Link');
+        copyTextToClipboard(url, urlType);
         break;
 
       case 'shareOnEmailId':
-        window.location.href = `mailto:?subject=${encodeURIComponent(bodyText)}&body=${encodeURI(url)}%0d%0a`;
+        window.location.href = `mailto:?subject=${encodeURIComponent(`Ultrafunk ${urlType}: ${bodyText}`)}&body=${encodeURI(url)}%0d%0a`;
         break;
 
       case 'searchOnGoogleId':

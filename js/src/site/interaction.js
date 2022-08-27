@@ -110,6 +110,7 @@ function sharePlayClick(element)
     filterBodyText: true,
     bodyHtml:       getModalTrackHtml(element, trackArtist, trackTitle),
     url:            utils.stripAttribute(element, 'data-track-url'),
+    urlType:        'Track link',
     sourceUid:      utils.stripAttribute(element, 'data-track-source-uid'),
   });
 

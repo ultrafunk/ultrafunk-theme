@@ -312,18 +312,19 @@ function get_nav_bar_arrows() : array
 
 function header_nav_bars() : void
 {
-  $nav_icons  = get_nav_bar_icons();
-  $nav_arrows = get_nav_bar_arrows();
+  $nav_icons     = get_nav_bar_icons();
+  $nav_arrows    = get_nav_bar_arrows();
+  $nav_bar_title = get_nav_bar_title();
 
   ?>
   <div class="navbar-container">
     <div class="navbar-arrows"><?php echo $nav_arrows['back'] . $nav_arrows['fwd']; ?></div>
-    <?php nav_bar_title(); ?>
+    <?php echo $nav_bar_title; ?>
     <div class="navbar-icons"><?php echo $nav_icons['search'] . $nav_icons['menu']; ?></div>
   </div>
   <div class="navbar-container-mobile-top">
     <div class="navbar-arrow-single back"><?php echo $nav_arrows['back']; ?></div>
-    <?php nav_bar_title(); ?>
+    <?php echo $nav_bar_title; ?>
     <div class="navbar-arrow-single fwd"><?php echo $nav_arrows['fwd']; ?></div>
   </div>
   <div class="navbar-container-mobile-up">
@@ -331,7 +332,7 @@ function header_nav_bars() : void
       <?php echo $nav_icons['menu'] ?>
       <div class="navbar-arrow-single"><?php echo $nav_arrows['back']; ?></div>
     </div>
-    <?php nav_bar_title(); ?>
+    <?php echo $nav_bar_title; ?>
     <div class="navbar-up-right">
       <div class="navbar-arrow-single"><?php echo $nav_arrows['fwd']; ?></div>
       <?php echo $nav_icons['search'] ?>
@@ -340,7 +341,7 @@ function header_nav_bars() : void
   <?php
 }
 
-function get_pagination(string $before = ' ( ', string $separator = ' / ', string $after = ' ) ') : string
+function get_wp_pagination(string $before = ' ( ', string $separator = ' / ', string $after = ' ) ') : string
 {
   global $wp_query;
   $pagination = '';
@@ -352,7 +353,23 @@ function get_pagination(string $before = ' ( ', string $separator = ' / ', strin
   return $pagination;
 }
 
-function get_search_hits() : string
+function get_uf_pagination(array $params) : string
+{
+  if (is_list_player('search'))
+  {
+    return ($params['max_pages'] <= 1)
+      ? ' (' . $params['found_items'] . ' hits)'
+      : ' (' . $params['found_items'] . ' hits - page ' . $params['current_page'] . ' of ' . $params['max_pages'] . ')';
+  }
+  else
+  {
+    return ($params['max_pages'] > 1)
+      ? ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )'
+      : '';
+  }
+}
+
+function get_wp_search_hits() : string
 {
   global $wp_query;
 
@@ -361,17 +378,17 @@ function get_search_hits() : string
     if ($wp_query->max_num_pages <= 1)
       return ' (' . $wp_query->found_posts . ' hits)';
     else
-      return ' (' . $wp_query->found_posts . ' hits - page ' . get_pagination('', ' of ', ')');
+      return ' (' . $wp_query->found_posts . ' hits - page ' . get_wp_pagination('', ' of ', ')');
   }
 
   return '';
 }
 
-function nav_bar_title() : void
+function get_nav_bar_title() : string
 {
   $prefix     = is_shuffle(PLAYER_TYPE::GALLERY) ? '<b>Shuffle: </b>' : '<b>Channel: </b>';
   $title      = esc_html(get_title());
-  $pagination = esc_html(get_pagination());
+  $pagination = esc_html(get_wp_pagination());
   $params     = get_request_params();
 
   if (is_single())
@@ -396,7 +413,7 @@ function nav_bar_title() : void
     if ($params['max_pages'] > 1)
       $prefix = $prefix . ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )';
     else if (isset($data['first_letter']))
-      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($data['first_letter']) . '</span> ( ' . $data['item_count'] . ' found )';
+      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($data['first_letter']) . '</span> ( ' . $params['found_items'] . ' found )';
     else
       $prefix = '<span class="go-back-to"><b>Go Back: </b><span class="go-back-title"></span></span>';
   }
@@ -404,9 +421,7 @@ function nav_bar_title() : void
   {
     $prefix     = '<b>' . $params['title_parts']['prefix'] . ': </b>';
     $title      = is_list_player('search') ? get_search_string() : $title;
-    $pagination = ($params['max_pages'] > 1)
-                    ? ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )'
-                    : '';
+    $pagination = esc_html(get_uf_pagination($params));
   }
   else if (is_404())
   {
@@ -418,14 +433,14 @@ function nav_bar_title() : void
   {
     $prefix     = '<b>Search: </b>';
     $title      = get_search_string();
-    $pagination = esc_html(get_search_hits());
+    $pagination = esc_html(get_wp_search_hits());
   }
   else if (is_tax())
   {
     $prefix = is_tax('uf_channel') ? '<b>Channel: </b>' : '<b>Artist: </b>';
   }
 
-  echo '<div class="navbar-title text-nowrap-ellipsis">' . $prefix . $title . $pagination . '</div>';
+  return '<div class="navbar-title text-nowrap-ellipsis">' . $prefix . $title . $pagination . '</div>';
 }
 
 function single_track_nav_link(bool $is_nav_prev, mixed $post) : void
