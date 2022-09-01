@@ -294,3 +294,29 @@ function getFetchErrorType(error)
 
   return FETCH_ERROR_TYPE.UNKNOWN;
 }
+
+
+// ************************************************************************************************
+// Allow / Deny keyboard shortcuts event handling closure
+// ************************************************************************************************
+
+export const keyboardShortcuts = ((keyboardShortcutsSetting) =>
+{
+  let allow = keyboardShortcutsSetting;
+
+  document.addEventListener('allowKeyboardShortcuts', () =>
+  {
+    if (keyboardShortcutsSetting)
+      allow = true;
+  });
+
+  document.addEventListener('denyKeyboardShortcuts', () =>
+  {
+    if (keyboardShortcutsSetting)
+      allow = false;
+  });
+
+  return {
+    allow() { return allow; },
+  };
+});

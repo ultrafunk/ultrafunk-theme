@@ -25,6 +25,7 @@ import {
 
 
 const debug = debugLogger.newInstance('index');
+const m     = { keyboardShortcuts: null };
 
 const elements = {
   siteHeader:        null,
@@ -65,6 +66,8 @@ document.addEventListener('DOMContentLoaded', () =>
 function initIndex()
 {
   debug.log('initIndex()');
+
+  m.keyboardShortcuts = utils.keyboardShortcuts(settings.site.keyboardShortcuts);
 
   elements.siteHeader        = document.getElementById('site-header');
   elements.introBanner       = document.getElementById('intro-banner');
@@ -115,9 +118,9 @@ function documentEventKeyDown(event)
   }
 
   // User enabled keyboard shortcuts (on by default)
-  if (settings.site.keyboardShortcuts &&
-      (event.repeat  === false)       &&
-      (event.ctrlKey === false)       &&
+  if (m.keyboardShortcuts.allow() &&
+      (event.repeat  === false)   &&
+      (event.ctrlKey === false)   &&
       (event.altKey  === false))
   {
     switch (event.key)

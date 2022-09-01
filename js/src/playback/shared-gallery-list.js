@@ -248,37 +248,3 @@ const fullscreenElementClosure = (() =>
 });
 
 export const fullscreenElement = fullscreenElementClosure();
-
-
-// ************************************************************************************************
-// Allow / Deny keyboard shortcuts event handling closure
-// ************************************************************************************************
-
-const keyboardShortcutsClosure = (() =>
-{
-  let allow = false;
-
-  return {
-    allow() { return allow; },
-    init,
-  };
-
-  function init()
-  {
-    allow = settings.playback.keyboardShortcuts;
-
-    document.addEventListener('allowKeyboardShortcuts', () =>
-    {
-      if (settings.playback.keyboardShortcuts)
-        allow = true;
-    });
-
-    document.addEventListener('denyKeyboardShortcuts', () =>
-    {
-      if (settings.playback.keyboardShortcuts)
-        allow = false;
-    });
-  }
-});
-
-export const keyboardShortcuts = keyboardShortcutsClosure();

@@ -5,7 +5,6 @@
 //
 
 
-//import * as debugLogger from '../shared/debuglogger.js';
 import { KEY }          from '../shared/storage.js';
 import { showSnackbar } from '../shared/snackbar.js';
 
@@ -24,7 +23,6 @@ import {
 /*************************************************************************************************/
 
 
-//const debug = debugLogger.newInstance('termlist-rest');
 const m = { termCache: {} };
 
 
@@ -47,7 +45,7 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
     if (termData !== null)
     {
       element.innerHTML = getTermlistHtml(header, termSlug, termData);
-      termlistEntry.classList.add('data-fetched');
+      termlistEntry.setAttribute('data-is-fetched', 1);
     }
     else
     {
@@ -147,6 +145,13 @@ async function fetchMeta(
     if ((restResponse !== null) && (restResponse.status.code === 200))
       m.termCache[termId][termType] = restResponse.data;
   }
+  /*
+  else
+  {
+  //FIX THIS: Needs to be cached in session storage even if no results are fetched => Related Artists: None found
+  //m.termCache[termId][termType] = {};
+  }
+  */
 
   callback(termType, (m.termCache[termId][termType] !== undefined) ? m.termCache[termId][termType] : null);
 }

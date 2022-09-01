@@ -7,6 +7,8 @@
 
 body.termlist {
   --site-max-width: 1000px;
+  --site-content-margin-top: 50px;
+  --site-content-margin-bottom: 50px;
 }
 
 .site-theme-light {
@@ -32,16 +34,11 @@ term-list {
 }
 
 .artist-letters-container {
-  margin-bottom: 75px;
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-}
-
-.artist-letters-container.artist-letters-footer {
-  margin-top: 75px;
-  margin-bottom: -25px;
 }
 
 .artist-letter {
@@ -49,6 +46,7 @@ term-list {
 }
 
 .artist-letter a {
+  color: var(--primary-font-color);
   text-transform: uppercase;
   display: block;
   width: 37px;
@@ -60,6 +58,7 @@ term-list {
 }
 
 .artist-letter a:hover {
+  color: var(--link-hover-color);
   font-weight: 700;
   text-decoration: none;
   background-color: var(--artist-letter-hover);
@@ -72,6 +71,32 @@ term-list {
 
 .artist-letter.current a:hover {
   color: var(--primary-font-color);
+}
+
+.termlist-filter-container {
+  width: 100%;
+  margin-bottom: 50px;
+  box-sizing: border-box;
+}
+
+#termlist-filter-input {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--form-search-field-background);
+  color: var(--primary-font-color);
+  outline: var(--form-search-field-outline);
+  border: var(--form-search-field-border);
+  padding: 5px;
+}
+
+#termlist-filter-input:focus {
+  background-color: var(--form-search-field-background-focus);
+  outline: var(--form-search-field-outline);
+  border: var(--form-search-field-border-focus);
+  padding: 5px;
 }
 
 #termlist-container {
@@ -87,6 +112,10 @@ term-list {
   padding: 10px 15px;
 }
 
+.termlist-entry.hidden {
+  display: none;
+}
+
 .termlist-header {
   display: flex;
   padding-left: 15px;
@@ -98,36 +127,58 @@ term-list {
   user-select: none;
 }
 
-.termlist-header.odd {
+.termlist-entry:nth-child(odd) .termlist-header {
   background-color: var(--list-row-odd-color);
 }
 
-.termlist-entry.open .termlist-header {
+.termlist-entry.odd .termlist-header {
+  background-color: var(--list-row-odd-color);
+}
+
+.termlist-entry.even .termlist-header {
+  background-color: var(--body-background-color);
+}
+
+.termlist-entry[data-is-expanded="1"] .termlist-header {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
 @media all and (pointer: fine) {
 
-  .termlist-header:hover {
+  .termlist-entry .termlist-header:hover,
+  .termlist-entry.odd .termlist-header:hover,
+  .termlist-entry.even .termlist-header:hover {
     background: var(--list-row-hover-color);
     cursor: pointer;
  }
 
 }
 
+.notransitions * {
+  transition: none !important;
+}
+
 @media not all and (pointer: fine) {
 
-  .termlist-header.odd {
+  .termlist-entry:nth-child(odd) .termlist-header {
     background: var(--list-row-odd-color);
     transition: var(--button-default-transition);
   }
 
-  .termlist-header.even {
+  .termlist-entry.odd .termlist-header {
+    background: var(--list-row-odd-color);
+  }
+
+  .termlist-entry:nth-child(even) .termlist-header {
     transition: var(--button-default-transition);
   }
 
-  .termlist-header:active {
+  .termlist-entry.even .termlist-header {
+    background: var(--body-background-color);
+  }
+
+  .termlist-entry .termlist-header:active {
     background: var(--list-row-hover-color);
     transition: var(--button-active-transition);
   }
@@ -152,9 +203,9 @@ term-list {
   display: none;
 }
 
-.termlist-entry.open .play-button,
-.termlist-entry.open .shuffle-button,
-.termlist-entry.open .share-find-button {
+.termlist-entry[data-is-expanded="1"] .play-button,
+.termlist-entry[data-is-expanded="1"] .shuffle-button,
+.termlist-entry[data-is-expanded="1"] .share-find-button {
   display: block;
 }
 
@@ -195,9 +246,9 @@ term-list {
     border-radius: var(--button-border-radius);
   }
 
-  .termlist-header:hover .play-button,
-  .termlist-header:hover .shuffle-button,
-  .termlist-header:hover .share-find-button {
+  .termlist-entry .termlist-header:hover .play-button,
+  .termlist-entry .termlist-header:hover .shuffle-button,
+  .termlist-entry .termlist-header:hover .share-find-button {
     display: block;
   }
 
@@ -235,9 +286,17 @@ term-list {
   justify-content: space-between;
 }
 
-.termlist-body.odd {
+.termlist-entry:nth-child(odd) .termlist-body {
   background-color: var(--list-row-odd-color);
   border-top: var(--border-top-odd-row);
+}
+
+.termlist-entry.odd .termlist-body {
+  background-color: var(--list-row-odd-color);
+}
+
+.termlist-entry.even .termlist-body {
+  background-color: var(--body-background-color);
 }
 
 .body-left {
@@ -251,11 +310,13 @@ term-list {
 
 .body-left a,
 .body-right a {
+  color: var(--primary-font-color);
   text-decoration: none;
 }
 
 .body-left a:hover,
 .body-right a:hover {
+  color: var(--link-hover-color);
   text-decoration: underline;
 }
 
@@ -321,7 +382,7 @@ term-list {
   background-color: var(--track-thumbnail-even-placeholder-color);
 }
 
-.termlist-body.odd .body-left .thumbnail {
+.termlist-entry:nth-child(odd) .termlist-body .body-left .thumbnail {
   background-color: var(--track-thumbnail-odd-placeholder-color);
 }
 
@@ -379,6 +440,7 @@ term-list {
 @media screen and (max-width: 1350px) {
 
   .artist-letters-container,
+  .termlist-filter-container,
   #termlist-container {
     padding-left: 75px;
     padding-right: 75px;
@@ -399,6 +461,11 @@ term-list {
 
   .artist-letter a {
     width: 40px;
+  }
+
+  #termlist-filter-input {
+    font-size: unset;
+    font-weight: unset;
   }
 
   #termlist-container {
@@ -429,18 +496,10 @@ term-list {
 @media screen and (max-width: 900px) {
 
   .artist-letters-container,
+  .termlist-filter-container,
   #termlist-container {
     padding-left: 50px;
     padding-right: 50px;
-  }
-
-  .artist-letters-container {
-    margin-bottom: 50px;
-  }
-
-  .artist-letters-container.artist-letters-footer {
-    margin-top: 50px;
-    margin-bottom: -20px;
   }
 
   .termlist-body {
@@ -456,19 +515,20 @@ term-list {
 
 @media screen and (max-width: 768px) {
 
+  body.termlist {
+    --site-content-margin-top: 40px;
+    --site-content-margin-bottom: 40px;
+  }
+
   .artist-letters-container,
+  .termlist-filter-container,
   #termlist-container {
     padding-left: 25px;
     padding-right: 25px;
   }
 
-  .artist-letters-container {
+  .termlist-filter-container {
     margin-bottom: 40px;
-  }
-
-  .artist-letters-container.artist-letters-footer {
-    margin-top: 40px;
-    margin-bottom: -25px;
   }
 
   .termlist-icons .material-icons {
@@ -518,19 +578,29 @@ term-list {
 
 @media screen and (max-width: 500px) {
 
+  body.termlist {
+    --site-content-margin-top: 32px;
+    --site-content-margin-bottom: 32px;
+  }
+
   .artist-letters-container,
+  .termlist-filter-container,
   #termlist-container {
     padding-left: 20px;
     padding-right: 20px;
   }
 
   .artist-letters-container {
-    margin-bottom: 32px;
+    justify-content: unset;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    padding: 0;
+    margin-left: 20px;
+    margin-right: 20px;
   }
 
-  .artist-letters-container.artist-letters-footer {
-    margin-top: 32px;
-    margin-bottom: -20px;
+  .termlist-filter-container {
+    margin-bottom: 32px;
   }
 
   .termlist-title {

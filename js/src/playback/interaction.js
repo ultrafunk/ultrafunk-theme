@@ -44,7 +44,6 @@ import {
   shuffleClickNavTo,
   autoplayNavTo,
   fullscreenElement,
-  keyboardShortcuts,
 } from './shared-gallery-list.js';
 
 
@@ -59,6 +58,7 @@ const m = {
   isPlaybackReady:    false,
   siteNavUiElements:  null,
   trackNavUiElements: null,
+  keyboardShortcuts:  null,
 };
 
 const config = {
@@ -109,7 +109,7 @@ function initShared()
   m.trackNavUiElements = new trackNavUiElements('nav.single-track-nav .nav-links');
 
   fullscreenElement.init();
-  keyboardShortcuts.init();
+  m.keyboardShortcuts = utils.keyboardShortcuts(settings.playback.keyboardShortcuts);
 
   initListeners();
   initScreenWakeLock();
@@ -140,10 +140,10 @@ function initListeners()
 
 function documentEventKeyDown(event)
 {
-  if (m.isPlaybackReady         &&
-      keyboardShortcuts.allow() &&
-      (event.repeat  === false) &&
-      (event.ctrlKey === false) &&
+  if (m.isPlaybackReady           &&
+      m.keyboardShortcuts.allow() &&
+      (event.repeat  === false)   &&
+      (event.ctrlKey === false)   &&
       (event.altKey  === false))
   {
     switch(event.code)
@@ -218,7 +218,7 @@ function documentEventKeyDown(event)
 
 function documentEventMediaKeyDown(event)
 {
-  if (m.isPlaybackReady && keyboardShortcuts.allow()) // && (event.repeat  === false)) does not function as expected on Firefox
+  if (m.isPlaybackReady && m.keyboardShortcuts.allow()) // && (event.repeat  === false)) does not function as expected on Firefox
   {
     switch(event.key)
     {

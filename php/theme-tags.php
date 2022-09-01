@@ -375,10 +375,9 @@ function get_wp_search_hits() : string
 
   if (isset($wp_query) && ($wp_query->found_posts > 1))
   {
-    if ($wp_query->max_num_pages <= 1)
-      return ' (' . $wp_query->found_posts . ' hits)';
-    else
-      return ' (' . $wp_query->found_posts . ' hits - page ' . get_wp_pagination('', ' of ', ')');
+    return ($wp_query->max_num_pages <= 1)
+      ? ' (' . $wp_query->found_posts . ' hits)'
+      : ' (' . $wp_query->found_posts . ' hits - page ' . get_wp_pagination('', ' of ', ')');
   }
 
   return '';
@@ -413,7 +412,7 @@ function get_nav_bar_title() : string
     if ($params['max_pages'] > 1)
       $prefix = $prefix . ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )';
     else if (isset($data['first_letter']))
-      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($data['first_letter']) . '</span> ( ' . $params['found_items'] . ' found )';
+      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($data['first_letter']) . '</span><span class="found-items"> ( ' . $params['found_items'] . ' found )</span>';
     else
       $prefix = '<span class="go-back-to"><b>Go Back: </b><span class="go-back-title"></span></span>';
   }

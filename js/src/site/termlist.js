@@ -22,9 +22,16 @@ import { response, settings } from '../shared/session-data.js';
 const debug = debugLogger.newInstance('termlist-controls');
 
 const m = {
-  listContainer: null,
-  uiElements:    null,
+  listContainer:       null,
+  uiElements:          null,
+  navTitleFoundCount:  null,
+  termlistFilterInput: null,
+  termlistEntries:     null,
+  transitionTimeoutId: 0,
 };
+
+const allowKeyboardShortcutsEvent = new Event('allowKeyboardShortcuts');
+const denyKeyboardShortcutsEvent  = new Event('denyKeyboardShortcuts');
 
 
 // ************************************************************************************************
@@ -38,6 +45,7 @@ export function init()
   m.listContainer = document.getElementById('termlist-container');
   m.uiElements    = new UiElements('#termlist-container');
 
+  initTermlistFilter();
   restoreState();
 }
 
@@ -58,7 +66,7 @@ function saveState()
 
     document.querySelectorAll('.termlist-entry').forEach(element =>
     {
-      if (element.classList.contains('open'))
+      if (element.getAttribute('data-is-expanded') === '1')
         termlistState.openTermIds.push(element.id);
     });
 
@@ -94,6 +102,85 @@ function restoreState()
 
   sessionStorage.removeItem(KEY.UF_TERMLIST_STATE);
   termlistRest.deleteCache();
+}
+
+
+// ************************************************************************************************
+// Realtime filtering of termlist items
+// ************************************************************************************************
+
+function initTermlistFilter()
+{
+  if (m.listContainer.getAttribute('data-term-type') === 'artists')
+  {
+    m.navTitleFoundCount  = document.querySelectorAll('div.navbar-title span.found-items');
+    m.termlistFilterInput = document.getElementById('termlist-filter-input');
+    m.termlistEntries     = m.listContainer.querySelectorAll('.termlist-entry');
+
+    m.termlistFilterInput.addEventListener('keyup', (event) => filterTermsList(event));
+    m.termlistFilterInput.addEventListener('focus', () => document.dispatchEvent(denyKeyboardShortcutsEvent));
+    m.termlistFilterInput.addEventListener('blur',  () => document.dispatchEvent(allowKeyboardShortcutsEvent));
+  //m.termlistFilterInput.focus();
+
+    // Lowercase all search term names now, optimizing comparison to user input later
+    termsListArray.forEach(entry => entry.name = entry.name.toLowerCase()); // eslint-disable-line no-undef
+
+    // Scroll current selection (artist letter) into view if needed...
+    document.querySelector('div.artist-letter.current').scrollIntoView(false);
+  }
+}
+
+function skipKeys(key)
+{
+  return ((key === 'ArrowLeft')  ||
+          (key === 'ArrowRight') ||
+          (key === 'Home')       ||
+          (key === 'End')        ||
+          (key === 'Shift'));
+}
+
+function filterTermsList(event)
+{
+  // Skip updating on keys that are not relevant
+  if (skipKeys(event.key))
+    return;
+
+  const filterStart  = performance.now();
+  const filterString = m.termlistFilterInput.value.toLowerCase();
+  let   foundCount   = m.termlistEntries.length;
+
+  // Disable all CSS transitions when updating the filtered items
+  m.listContainer.classList.add('notransitions');
+
+  if (filterString.length >= 3)
+  {
+    // eslint-disable-next-line no-undef
+    const foundEntries = termsListArray.filter(entry => (entry.name.includes(filterString)));
+    let filteredOddEvenRow = 1;
+    foundCount = (foundEntries.length > 0) ? foundEntries.length : 0;
+
+    m.termlistEntries.forEach(element =>
+    {
+      if (foundEntries.some(entry => (entry.id === element.id)) === false)
+        element.className = 'termlist-entry hidden';
+      else
+        element.className = `termlist-entry ${(filteredOddEvenRow++ % 2) ? 'odd' : 'even'}`;
+    });
+  }
+  else
+  {
+    m.termlistEntries.forEach(element => (element.className = 'termlist-entry'));
+  }
+
+  m.navTitleFoundCount.forEach(element => (element.textContent = ` ( ${foundCount} found )`));
+
+  // Cancel previous timeout if already running to prevent multiple setTimeout()s
+  clearTimeout(m.transitionTimeoutId);
+  // Restore all CSS transitions when done updating
+  m.transitionTimeoutId = setTimeout(() => m.listContainer.classList.remove('notransitions'), 250);
+
+  const filterStop = performance.now();
+  console.log(`filterTermsList(): ${(Math.round((filterStop - filterStart) * 100) / 100)} ms.`);
 }
 
 
@@ -197,10 +284,10 @@ function termlistHeaderClick(event)
   const termlistEntry = event.target.closest('div.termlist-entry');
   const expandToggle  = termlistEntry.querySelector('div.expand-toggle span');
   const termlistBody  = termlistEntry.querySelector('div.termlist-body');
-  const isExpanded    = (termlistBody.style.display.length !== 0);
-  const isDataFetched = termlistEntry.classList.contains('data-fetched');
+  const isExpanded    = (termlistEntry.getAttribute('data-is-expanded') === '1');
+  const isDataFetched = (termlistEntry.getAttribute('data-is-fetched') === '1');
 
-  utils.replaceClass(termlistEntry, (isExpanded ? 'open' : 'closed'), (isExpanded ? 'closed' : 'open'));
+  termlistEntry.setAttribute('data-is-expanded', isExpanded ? '' : '1');
 
   expandToggle.textContent   = isExpanded ? 'expand_more' : 'expand_less';
   termlistBody.style.display = isExpanded ? ''            : 'flex';
