@@ -579,8 +579,8 @@ term-list {
 @media screen and (max-width: 500px) {
 
   body.termlist {
-    --site-content-margin-top: 32px;
-    --site-content-margin-bottom: 32px;
+    --site-content-margin-top: 22px;
+    --site-content-margin-bottom: 22px;
   }
 
   .artist-letters-container,
@@ -600,7 +600,7 @@ term-list {
   }
 
   .termlist-filter-container {
-    margin-bottom: 32px;
+    margin-bottom: 22px;
   }
 
   .termlist-title {

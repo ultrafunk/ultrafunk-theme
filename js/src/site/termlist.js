@@ -172,7 +172,8 @@ function filterTermsList(event)
     m.termlistEntries.forEach(element => (element.className = 'termlist-entry'));
   }
 
-  m.navTitleFoundCount.forEach(element => (element.textContent = ` ( ${foundCount} found )`));
+  const currentFilterInput = (filterString.length >= 3) ? `"${filterString}" - ` : '';
+  m.navTitleFoundCount.forEach(element => (element.textContent = ` ( ${currentFilterInput}${foundCount} found )`));
 
   // Cancel previous timeout if already running to prevent multiple setTimeout()s
   clearTimeout(m.transitionTimeoutId);
@@ -180,7 +181,7 @@ function filterTermsList(event)
   m.transitionTimeoutId = setTimeout(() => m.listContainer.classList.remove('notransitions'), 250);
 
   const filterStop = performance.now();
-  console.log(`filterTermsList(): ${(Math.round((filterStop - filterStart) * 100) / 100)} ms.`);
+  debug.log(`filterTermsList(): ${(Math.round((filterStop - filterStart) * 100) / 100)} ms.`);
 }
 
 

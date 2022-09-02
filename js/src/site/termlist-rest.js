@@ -145,13 +145,10 @@ async function fetchMeta(
     if ((restResponse !== null) && (restResponse.status.code === 200))
       m.termCache[termId][termType] = restResponse.data;
   }
-  /*
   else
   {
-  //FIX THIS: Needs to be cached in session storage even if no results are fetched => Related Artists: None found
-  //m.termCache[termId][termType] = {};
+    m.termCache[termId][termType] = null;
   }
-  */
 
   callback(termType, (m.termCache[termId][termType] !== undefined) ? m.termCache[termId][termType] : null);
 }
