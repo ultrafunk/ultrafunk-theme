@@ -8,7 +8,7 @@
 import * as debugLogger       from '../shared/debuglogger.js';
 import * as termlistRest      from './termlist-rest.js';
 import * as utils             from '../shared/utils.js';
-import ElementClick           from '../shared/element-click.js';
+import { ElementClick }       from '../shared/element-click.js';
 import { shareModal }         from './share-modal.js';
 import { TRACK_TYPE }         from '../playback/mediaplayers.js';
 import { KEY, setCookie }     from '../shared/storage.js';
@@ -19,12 +19,12 @@ import { response, settings } from '../shared/session-data.js';
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('termlist-controls');
+const debug = debugLogger.newInstance('termlist');
 
 const m = {
   listContainer:       null,
   uiElements:          null,
-  navTitleFoundCount:  null,
+  navTitleFoundItems:  null,
   termlistFilterInput: null,
   termlistEntries:     null,
   transitionTimeoutId: 0,
@@ -35,12 +35,12 @@ const denyKeyboardShortcutsEvent  = new Event('denyKeyboardShortcuts');
 
 
 // ************************************************************************************************
-// Setup module
+// Init module
 // ************************************************************************************************
 
-export function init()
+export function initTermlist()
 {
-  debug.log('init()');
+  debug.log('initTermlist()');
 
   m.listContainer = document.getElementById('termlist-container');
   m.uiElements    = new UiElements('#termlist-container');
@@ -113,7 +113,7 @@ function initTermlistFilter()
 {
   if (m.listContainer.getAttribute('data-term-type') === 'artists')
   {
-    m.navTitleFoundCount  = document.querySelectorAll('div.navbar-title span.found-items');
+    m.navTitleFoundItems  = document.querySelectorAll('div.navbar-title span.found-items');
     m.termlistFilterInput = document.getElementById('termlist-filter-input');
     m.termlistEntries     = m.listContainer.querySelectorAll('.termlist-entry');
 
@@ -173,7 +173,7 @@ function filterTermsList(event)
   }
 
   const currentFilterInput = (filterString.length >= 3) ? `"${filterString}" - ` : '';
-  m.navTitleFoundCount.forEach(element => (element.textContent = ` ( ${currentFilterInput}${foundCount} found )`));
+  m.navTitleFoundItems.forEach(element => (element.textContent = ` ( ${currentFilterInput}${foundCount} found )`));
 
   // Cancel previous timeout if already running to prevent multiple setTimeout()s
   clearTimeout(m.transitionTimeoutId);

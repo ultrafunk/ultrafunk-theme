@@ -5,7 +5,7 @@
 //
 
 
-import PlaybackTimer              from '../playback-timer.js';
+import { PlaybackTimer }          from '../playback-timer.js';
 import { settings }               from '../../shared/session-data.js';
 import { CROSSFADE_TYPE }         from './crossfade.js';
 import { updateTimerAndProgress } from '../playback-controls.js';

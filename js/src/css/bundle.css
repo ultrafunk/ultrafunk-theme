@@ -7,6 +7,7 @@
 
 @import '..\\js\\src\\shared\\modal.css';
 @import '..\\js\\src\\shared\\snackbar.css';
+@import '..\\js\\src\\shared\\settings\\settings-ui.css';
 @import '..\\js\\src\\playback\\playback-controls.css';
 @import '..\\js\\src\\playback\\gallery\\crossfade-controls.css';
 @import '..\\js\\src\\playback\\gallery\\gallery-track.css';

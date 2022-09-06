@@ -5,14 +5,15 @@
 //
 
 
-import * as debugLogger from './shared/debuglogger.js';
-import * as storage     from './shared/storage.js';
-import * as utils       from './shared/utils.js';
-import * as interaction from './site/interaction.js';
-import * as termlist    from './site/termlist.js';
-import { navMenu }      from './site/nav-menu.js';
-import { navSearch }    from './site/nav-search.js';
-import { noPlayback }   from './playback/shared-gallery-list.js';
+import * as debugLogger   from './shared/debuglogger.js';
+import * as storage       from './shared/storage.js';
+import * as utils         from './shared/utils.js';
+import * as interaction   from './site/interaction.js';
+import { initTermlist }   from './site/termlist.js';
+import { initSettingsUi } from './shared/settings/settings-ui.js';
+import { navMenu }        from './site/nav-menu.js';
+import { navSearch }      from './site/nav-search.js';
+import { noPlayback }     from './playback/shared-gallery-list.js';
 
 import {
   response,
@@ -50,7 +51,10 @@ document.addEventListener('DOMContentLoaded', () =>
     showIntroBanner();
 
   if (document.getElementById('termlist-container') !== null)
-    termlist.init();
+    initTermlist();
+
+  if (document.getElementById('settings-container') !== null)
+    initSettingsUi();
 
   if (elements.siteContentSearch !== null)
   {

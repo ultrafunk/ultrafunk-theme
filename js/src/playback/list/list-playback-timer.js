@@ -5,7 +5,7 @@
 //
 
 
-import PlaybackTimer          from '../playback-timer.js';
+import { PlaybackTimer }      from '../playback-timer.js';
 import { EVENT, addListener } from '../playback-events.js';
 
 import {

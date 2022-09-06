@@ -4,7 +4,7 @@ The source code is provided as is with no warranties or support of any kind.
 
 # Client configurations
 Tested on mobile and desktop Chrome, Firefox and misc. Chromium based browsers that supports ES2020.
-WebKit desktop browsers like Safari have only been tested manually using [Playwright](https://github.com/microsoft/playwright),
+WebKit desktop browsers have only been tested manually using [Playwright](https://github.com/microsoft/playwright),
 so additional minor issues and bugs might be present.
 
 # Server configurations

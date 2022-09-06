@@ -88,6 +88,7 @@ function ultrafunk_enqueue_styles() : void
     wp_enqueue_style('ultrafunk-style', get_stylesheet_uri(), [], $version);
     wp_enqueue_style('modal-style', get_theme_file_uri('/js/src/shared/modal.css'), [], $version);
     wp_enqueue_style('snackbar-style', get_theme_file_uri('/js/src/shared/snackbar.css'), [], $version);
+    wp_enqueue_style('settings-ui-style', get_theme_file_uri('/js/src/shared/settings/settings-ui.css'), [], $version);
     wp_enqueue_style('playback-controls-style', get_theme_file_uri('/js/src/playback/playback-controls.css'), [], $version);
     wp_enqueue_style('crossfade-controls-style', get_theme_file_uri('/js/src/playback/gallery/crossfade-controls.css'), [], $version);
     wp_enqueue_style('gallery-track-style', get_theme_file_uri('/js/src/playback/gallery/gallery-track.css'), [], $version);

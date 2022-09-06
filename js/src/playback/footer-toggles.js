@@ -5,7 +5,7 @@
 //
 
 
-import ElementToggle          from '../shared/element-toggle.js';
+import { ElementToggle }      from '../shared/element-toggle.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { response, settings } from '../shared/session-data.js';
 

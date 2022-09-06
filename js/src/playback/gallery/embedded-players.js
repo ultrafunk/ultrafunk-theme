@@ -11,6 +11,7 @@ import * as mediaPlayers   from '../mediaplayers.js';
 import * as playbackEvents from '../playback-events.js';
 import { settings }        from '../../shared/session-data.js';
 import { playbackTimer }   from './gallery-playback-timer.js';
+import { getTimeString }   from '../../shared/utils.js';
 
 
 /*************************************************************************************************/
@@ -287,7 +288,7 @@ function onYouTubeStateCued(iframeId)
     if (player.embedded.getDuration() === 0)
       player.setIsPlayable(false);
 
-    debug.log(`onYouTubePlayerStateChange: CUED      Duration: ${player.embedded.getDuration()} - isPlayable: ${player.isPlayable()}`);
+    debug.log(`onYouTubePlayerStateChange: CUED      Duration: ${getTimeString(player.embedded.getDuration())} - isPlayable: ${player.isPlayable()}`);
   }
 }
 

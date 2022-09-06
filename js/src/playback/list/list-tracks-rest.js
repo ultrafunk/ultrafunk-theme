@@ -103,12 +103,12 @@ function fetchTracks(termType = '', termId = '', page = 1, tracksPerPage = 25)
   else if (responseData.params.search)
     params = getSearchQueryParams();
 
-  return fetchRest('tracks', `${params}${pagination}${fields}`);
+  return fetchRest({ endpoint: 'tracks', query: `${params}${pagination}${fields}` });
 }
 
 function fetchTerms(termType, termIds, maxItems = 50)
 {
-  return fetchRest(termType, `include=${termIds}&per_page=${maxItems}&_fields=id,link,name`);
+  return fetchRest({ endpoint: termType, query: `include=${termIds}&per_page=${maxItems}&_fields=id,link,name` });
 }
 
 function getTermQueryParams(termType, termId)

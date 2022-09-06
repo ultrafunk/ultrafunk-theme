@@ -1,20 +1,21 @@
 //
-// View / change settings
+// View / change settings UI
 //
 // https://ultrafunk.com
 //
 
 
-import * as debugLogger from '../debuglogger.js?ver=1.44.38';
-import { addListener }  from '../utils.js?ver=1.44.38';
-import { showSnackbar } from '../snackbar.js?ver=1.44.38';
+import * as debugLogger from '../debuglogger.js';
+import { addListener }  from '../utils.js';
+import { showSnackbar } from '../snackbar.js';
+import { showModal }    from '../modal.js';
 
 import {
   KEY,
   deleteCookie,
   readJson,
   writeJson,
-} from '../storage.js?ver=1.44.38';
+} from '../storage.js';
 
 import {
   TYPE_INTEGER,
@@ -22,7 +23,7 @@ import {
   TYPE_STRING,
   settingsSchema,
   defaultSettings,
-} from './settings.js?ver=1.44.38';
+} from './settings.js';
 
 
 /*************************************************************************************************/
@@ -61,12 +62,12 @@ const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and
 
 
 // ************************************************************************************************
-// Document loaded init + settings read error handling
+// Init + settings read error handling
 // ************************************************************************************************
 
-document.addEventListener('DOMContentLoaded', () =>
+export function initSettingsUi()
 {
-  debug.log('DOMContentLoaded');
+  debug.log('initSettingsUi');
 
   m.container = document.getElementById(config.containerId);
 
@@ -100,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () =>
   {
     debug.error(`Unable to getElementById() for '#${config.containerId}'`);
   }
-});
+}
 
 function readSettingsError()
 {
@@ -233,10 +234,8 @@ function getTypeValueClasses(entry)
 // Update row data and DOM
 // ************************************************************************************************
 
-function updateRowData(element, settings, schema)
+function updateRowData(element, settings, settingsKey, schemaEntry)
 {
-  const settingsKey   = element.id.split(':')[1];
-  const schemaEntry   = schema[settingsKey];
   schemaEntry.current = ((schemaEntry.current + 1) < schemaEntry.values.length)
                           ? schemaEntry.current + 1
                           : schemaEntry.current = 0;
@@ -271,10 +270,29 @@ function settingClicked(event)
 
   if (clickedSetting !== null)
   {
-    const settingsId = clickedSetting.id.split(':')[0];
-    const index      = settingsSections.findIndex(entry => (entry.id === settingsId));
-    updateRowData(clickedSetting, m.settings[settingsSections[index].id], settingsSections[index].schema);
+    const settingsId  = clickedSetting.id.split(':')[0];
+    const settingsKey = clickedSetting.id.split(':')[1];
+    const index       = settingsSections.findIndex(entry => (entry.id === settingsId));
+
+    if (event.shiftKey === false)
+      updateRowData(clickedSetting, m.settings[settingsSections[index].id], settingsKey, settingsSections[index].schema[settingsKey]);
+    else
+      showSettingDetailsModal(settingsSections[index].name, settingsSections[index].schema[settingsKey]);
   }
+}
+
+function showSettingDetailsModal(sectionName ,schemaEntry)
+{
+  let valueStrings = '';
+  schemaEntry.valueStrings.forEach(entry => (valueStrings += `${entry}, `));
+
+  showModal(
+    `${sectionName} setting details`,
+    `<p><b>Description</b><br>${schemaEntry.description}</p>
+     <p><b>Values</b><br>${valueStrings.slice(0, (valueStrings.length - 2))}</p>
+     <p><b>Current Value</b><br>${schemaEntry.valueStrings[schemaEntry.current]}</p>
+     <p><b>Default Value</b><br>${schemaEntry.valueStrings[getValueStringsIndex(schemaEntry, schemaEntry.default)]}</p>`,
+  );
 }
 
 function settingsSaveClick()

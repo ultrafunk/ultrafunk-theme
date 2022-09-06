@@ -115,7 +115,7 @@ function fetchTracks(tracksDateTime)
     beforeTrackDateTime = (m.startTrackDateTime !== '') ? m.startTrackDateTime : '3000-01-01T00:00:01'; // Before the year 3000 should be enough for a while...
 
   if (beforeTrackDateTime !== null)
-    return fetchRest('tracks', `before=${beforeTrackDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, true);
+    return fetchRest({ endpoint: 'tracks', query: `before=${beforeTrackDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, returnStatus: true });
 
   return null;
 }

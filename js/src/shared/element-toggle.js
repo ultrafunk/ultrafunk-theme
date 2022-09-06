@@ -11,7 +11,7 @@ import { getCssPropString } from "./utils.js";
 /*************************************************************************************************/
 
 
-export default class ElementToggle
+export class ElementToggle
 {
   #element      = null;
   #valueElement = null;

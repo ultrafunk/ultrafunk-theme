@@ -13,7 +13,7 @@ import { EVENT, dispatch } from './playback-events.js';
 /*************************************************************************************************/
 
 
-export default class PlaybackTimer
+export class PlaybackTimer
 {
   #intervalId     = -1;
   #lastPosSeconds = 0;

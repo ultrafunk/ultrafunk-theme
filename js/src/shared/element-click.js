@@ -14,7 +14,7 @@ import {
 /*************************************************************************************************/
 
 
-export default class ElementClick
+export class ElementClick
 {
   #event   = null;
   #element = null;

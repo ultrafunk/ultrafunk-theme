@@ -71,7 +71,7 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
     {
       if (('topArtists' in m.termCache[termId]) === false)
       {
-        const restResponse = await fetchRest('top-artists', `channelId=${termId}`, true, '/wp-json/ultrafunk/v1/');
+        const restResponse = await fetchRest({ endpoint: 'top-artists', query: `channelId=${termId}`, returnStatus: true, path: '/wp-json/ultrafunk/v1/' });
 
         if ((restResponse !== null) && (restResponse.status.code === 200))
           m.termCache[termId]['topArtists'] = restResponse.data;
@@ -91,7 +91,7 @@ async function fetchTracks(termType, termId, maxItems, callback)
 {
   if ((termId in m.termCache) === false)
   {
-    const restResponse = await fetchRest('tracks', `${termType}=${termId}&per_page=${maxItems}&_fields=id,link,artists,channels,meta`, true);
+    const restResponse = await fetchRest({ endpoint: 'tracks', query: `${termType}=${termId}&per_page=${maxItems}&_fields=id,link,artists,channels,meta`, returnStatus: true });
 
     if ((restResponse !== null) && (restResponse.status.code === 200))
       m.termCache[termId] = { tracks: restResponse.data };
@@ -140,7 +140,7 @@ async function fetchMeta(
 {
   if (termIds.length > 0)
   {
-    const restResponse = await fetchRest(termType, `include=${termIds}&per_page=${maxItems}&_fields=link,name`, true);
+    const restResponse = await fetchRest({ endpoint: termType, query: `include=${termIds}&per_page=${maxItems}&_fields=link,name`, returnStatus: true });
 
     if ((restResponse !== null) && (restResponse.status.code === 200))
       m.termCache[termId][termType] = restResponse.data;

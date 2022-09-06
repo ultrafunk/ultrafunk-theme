@@ -8,7 +8,7 @@
 import * as debugLogger       from '../../shared/debuglogger.js';
 import * as upNextModal       from './up-next-modal.js';
 import * as playbackEvents    from '../playback-events.js';
-import ElementClick           from '../../shared/element-click.js';
+import { ElementClick }       from '../../shared/element-click.js';
 import { STATE }              from '../element-wrappers.js';
 import { TRACK_TYPE }         from '../mediaplayers.js';
 import { loadTracks }         from './list-tracks-rest.js';

@@ -7,8 +7,8 @@
 
 import * as debugLogger      from '../shared/debuglogger.js';
 import * as utils            from '../shared/utils.js';
-import ElementToggle         from '../shared/element-toggle.js';
-import ElementClick          from '../shared/element-click.js';
+import { ElementToggle }     from '../shared/element-toggle.js';
+import { ElementClick }      from '../shared/element-click.js';
 import { settings }          from '../shared/session-data.js';
 import { showModal }         from '../shared/modal.js';
 import { KEY, setValue }     from '../shared/storage.js';

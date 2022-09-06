@@ -12,7 +12,7 @@ import * as listPlayback      from './list/list-playback.js';
 import * as playbackEvents    from './playback-events.js';
 import * as utils             from '../shared/utils.js';
 import * as footerToggles     from './footer-toggles.js';
-import ElementClick           from '../shared/element-click.js';
+import { ElementClick }       from '../shared/element-click.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { initScreenWakeLock } from './screen-wakelock.js';
 import { TRACK_TYPE }         from './mediaplayers.js';

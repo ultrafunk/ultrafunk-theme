@@ -248,12 +248,13 @@ export const FETCH_ERROR_TYPE = {
   TIMEOUT: 2,
 };
 
-export async function fetchRest(
+export async function fetchRest({
   endpoint,
   query,
   returnStatus = false,
+  timeoutSeconds = 10,
   path = '/wp-json/wp/v2/',
-  timeoutSeconds = 10
+} = {}
 )
 {
   debug.log(`fetchRest(): "${path}${endpoint}?${query}" - returnStatus: ${returnStatus} - timeoutSeconds: ${timeoutSeconds}`);
