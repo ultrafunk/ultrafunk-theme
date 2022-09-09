@@ -6,9 +6,9 @@
 
 
 import * as debugLogger from '../debuglogger.js';
-import { addListener }  from '../utils.js';
 import { showSnackbar } from '../snackbar.js';
 import { showModal }    from '../modal.js';
+import { addListener }  from '../utils.js';
 
 import {
   KEY,
@@ -88,6 +88,8 @@ export function initSettingsUi()
 
       insertSettingsHtml();
       m.container.style.opacity = 1;
+      m.container.addEventListener('click',       (event) => settingClicked(event));
+      m.container.addEventListener('contextmenu', (event) => settingClicked(event));
 
       addListener(`#${config.saveResetId} .settings-save`,  'click', settingsSaveClick);
       addListener(`#${config.saveResetId} .settings-reset`, 'click', settingsResetClick);
@@ -198,7 +200,6 @@ function insertSettingsHtml()
   });
 
   m.container.insertAdjacentHTML('afterbegin', html + '\n</tbody>\n</table>\n');
-  m.container.addEventListener('click', (event) => settingClicked(event));
 }
 
 function addTableRow(idPrefix, entry)
@@ -274,10 +275,22 @@ function settingClicked(event)
     const settingsKey = clickedSetting.id.split(':')[1];
     const index       = settingsSections.findIndex(entry => (entry.id === settingsId));
 
-    if (event.shiftKey === false)
-      updateRowData(clickedSetting, m.settings[settingsSections[index].id], settingsKey, settingsSections[index].schema[settingsKey]);
+    if (event.type === 'contextmenu')
+    {
+      // showSettingDetailsModal() for Touch and Hold input on Chromium and Firefox browsers
+      if ((event.pointerType === 'touch') || (event.mozInputSource === 5))
+      {
+        event.preventDefault();
+        showSettingDetailsModal(settingsSections[index].name, settingsSections[index].schema[settingsKey]);
+      }
+    }
     else
-      showSettingDetailsModal(settingsSections[index].name, settingsSections[index].schema[settingsKey]);
+    {
+      if (event.shiftKey === true)
+        showSettingDetailsModal(settingsSections[index].name, settingsSections[index].schema[settingsKey]);
+      else
+        updateRowData(clickedSetting, m.settings[settingsSections[index].id], settingsKey, settingsSections[index].schema[settingsKey]);
+    }
   }
 }
 
