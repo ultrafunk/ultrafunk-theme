@@ -18,9 +18,10 @@ import { initScreenWakeLock } from './screen-wakelock.js';
 import { TRACK_TYPE }         from './mediaplayers.js';
 
 import {
+  SINGLE_TRACK_PLAY,
   isSingleTrackFetch,
-  isNextSingleTrackLoading,
-  playNextSingleTrack,
+  isSingleTrackLoading,
+  playSingleTrack,
 } from './gallery/single-track-fetch.js';
 
 import {
@@ -121,8 +122,8 @@ function initPlaybackEvents()
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_NEXT,       playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,          playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_TIME_REMAINING, playbackEventMediaTimeRemaining);
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PREV_TRACK,     () => prevNextNavTo(null, response.prevPage));
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_NEXT_TRACK,     () => playNextTrack(null));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PREV_TRACK,     () => playPrevNextTrack(null, SINGLE_TRACK_PLAY.PREV, response.prevPage));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_NEXT_TRACK,     () => playPrevNextTrack(null, SINGLE_TRACK_PLAY.NEXT, response.nextPage));
 }
 
 function initListeners()
@@ -256,7 +257,7 @@ function onKeyArrowLeft(event)
   event.preventDefault();
 
   if (event.shiftKey === true)
-    prevNextNavTo(null, response.prevPage);
+    playPrevNextTrack(null, SINGLE_TRACK_PLAY.PREV, response.prevPage);
   else
     m.player.prevTrack();
 }
@@ -266,12 +267,12 @@ function onKeyArrowRight(event)
   event.preventDefault();
 
   if (event.shiftKey === true)
-    playNextTrack(null);
+    playPrevNextTrack(null, SINGLE_TRACK_PLAY.NEXT, response.nextPage);
   else
     m.player.nextTrack();
 }
 
-function playNextTrack(event)
+function playPrevNextTrack(event, playPrevNext, prevNextPage)
 {
   event?.preventDefault();
 
@@ -279,19 +280,19 @@ function playNextTrack(event)
   {
     if (m.player.getStatus().trackType === TRACK_TYPE.YOUTUBE)
     {
-      if (isNextSingleTrackLoading() === false)
-        playNextSingleTrack(m.player.getStatus().isPlaying);
+      if (isSingleTrackLoading() === false)
+        playSingleTrack(playPrevNext, m.player.getStatus().isPlaying);
       else
-        showSnackbar('Loading next track, please wait...', 3);
+        showSnackbar('Loading track, please wait...', 3);
     }
     else
     {
-      prevNextNavTo(null, response.nextPage);
+      prevNextNavTo(null, prevNextPage);
     }
   }
   else
   {
-    prevNextNavTo(null, response.nextPage);
+    prevNextNavTo(null, prevNextPage);
   }
 }
 
@@ -392,10 +393,10 @@ class siteNavUiElements extends ElementClick
   elementClicked()
   {
     if (this.clicked('a.navbar-prev-link'))
-      return prevNextNavTo(this.event, response.prevPage);
+      return playPrevNextTrack(this.event, SINGLE_TRACK_PLAY.PREV, response.prevPage);
 
     if (this.clicked('a.navbar-next-link'))
-      return playNextTrack(this.event);
+      return playPrevNextTrack(this.event, SINGLE_TRACK_PLAY.NEXT, response.nextPage);
   }
 }
 
@@ -404,10 +405,10 @@ class trackNavUiElements extends ElementClick
   elementClicked()
   {
     if (this.clicked('div.nav-previous a'))
-      return prevNextNavTo(this.event, response.prevPage);
+      return playPrevNextTrack(this.event, SINGLE_TRACK_PLAY.PREV, response.prevPage);
 
     if (this.clicked('div.nav-next a'))
-      return playNextTrack(this.event);
+      return playPrevNextTrack(this.event, SINGLE_TRACK_PLAY.NEXT, response.nextPage);
   }
 }
 

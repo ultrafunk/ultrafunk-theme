@@ -13,8 +13,9 @@ import { response, settings } from '../../shared/session-data.js';
 import { EVENT, addListener } from '../playback-events.js';
 
 import {
+  SINGLE_TRACK_PLAY,
   isSingleTrackFetch,
-  playNextSingleTrack,
+  playSingleTrack,
 } from './single-track-fetch.js';
 
 import {
@@ -117,7 +118,7 @@ function continueAutoplay(playbackEvent)
   debug.log(playbackEvent);
 
   if (isSingleTrackFetch() && (playbackEvent.data.trackType === TRACK_TYPE.YOUTUBE))
-    playNextSingleTrack(true);
+    playSingleTrack(SINGLE_TRACK_PLAY.NEXT, true);
   else
     autoplayNavTo(response.nextPage, true);
 }
@@ -192,10 +193,10 @@ function playbackEventErrorTryNext(playbackEvent)
   {
     if (isSingleTrackFetch())
     {
-      // ToDo: Make below behaviour consistent throughout instead of: playNextSingleTrack(true) or
-      //                                                              playNextSingleTrack(isPlaying()) ?
+      // ToDo: Make below behaviour consistent throughout instead of: playSingleTrack(true) or
+      //                                                              playSingleTrack(isPlaying()) ?
       // Meaning settings.playback.autoplay must be TRUE for autoplay triggering on next track played...?
-      playNextSingleTrack(settings.playback.autoplay);
+      playSingleTrack(SINGLE_TRACK_PLAY.NEXT, settings.playback.autoplay);
     }
     else if (response.nextPage !== null)
     {

@@ -14,12 +14,12 @@ use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 /**************************************************************************************************************************/
 
 
-function get_track_date_time() : string
+function get_prev_next_track_date_time(bool $get_prev_track) : string
 {
-  $next_post = get_next_post();
+  $post_data = $get_prev_track ? get_previous_post() : get_next_post();
 
-  if (!empty($next_post))
-    return str_replace(' ', 'T', $next_post->post_date);
+  if (!empty($post_data))
+    return str_replace(' ', 'T', $post_data->post_date);
 
   return '';
 }
@@ -62,7 +62,8 @@ $track_title_split = '<h2 class="track-title type-split">' . $post->track_artist
   <?php if ($is_youtube_track) { ?>
     data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
   <?php } ?>
-  data-track-date-time="<?php echo esc_html(get_track_date_time()); ?>"
+  data-prev-track-date-time="<?php echo esc_html(get_prev_next_track_date_time(true)); ?>"
+  data-next-track-date-time="<?php echo esc_html(get_prev_next_track_date_time(false)); ?>"
   >
   <header class="track-header">
     <?php

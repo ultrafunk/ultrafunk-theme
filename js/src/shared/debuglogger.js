@@ -111,7 +111,7 @@ export function measureStartupExecutionTime()
 }
 
 const logCss = `
-  background-color: rgb(40, 80, 160);
+  background-color: rgb(30, 60, 120);
   padding: 2px 5px`;
 
 const SITE_URL = DEBUG

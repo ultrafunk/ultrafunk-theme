@@ -1,5 +1,5 @@
 //
-// Fetch & play next single (standalone) track without page reload SPA style...
+// Fetch & play single (standalone) tracks without page load
 //
 // https://ultrafunk.com
 //
@@ -29,9 +29,14 @@ const debug = debugLogger.newInstance('single-track-fetch');
 
 const m = {
   cueOrPlayTrackById: null,
-  startTrackDateTime: null,
-  loadTracksDateTime: null,
-  isNextTrackLoading: false,
+  prevTrackDateTime:  null,
+  nextTrackDateTime:  null,
+  isTrackLoading:     false,
+};
+
+export const SINGLE_TRACK_PLAY = {
+  PREV: 1,
+  NEXT: 2,
 };
 
 
@@ -41,40 +46,50 @@ const m = {
 
 export function isSingleTrackFetch()
 {
-  return (document.body.matches('.single.track') && settings.gallery.fetchNextSingleTrack);
+  return (document.body.matches('.single.track') && settings.gallery.fetchSingleTracks);
 }
 
-export function isNextSingleTrackLoading()
+export function isSingleTrackLoading()
 {
-  return m.isNextTrackLoading;
+  return m.isTrackLoading;
 }
 
 export function singleTrackFetchReady(cueOrPlayTrackByIdCallback)
 {
   if (isSingleTrackFetch())
   {
-    debug.log('ready()');
+    debug.log('singleTrackFetchReady()');
 
     m.cueOrPlayTrackById = cueOrPlayTrackByIdCallback;
-    m.startTrackDateTime = document.querySelector('single-track').getAttribute('data-track-date-time');
+    m.prevTrackDateTime  = document.querySelector('single-track').getAttribute('data-prev-track-date-time');
+    m.nextTrackDateTime  = document.querySelector('single-track').getAttribute('data-next-track-date-time');
 
     window.addEventListener('popstate', (event) => onPopState(event));
   }
 }
 
-export async function playNextSingleTrack(playTrack = false)
+export async function playSingleTrack(playPrevNext, playTrack = false)
 {
   if (isSingleTrackFetch())
   {
-    m.isNextTrackLoading = true;
-    const restResponse   = await fetchTracks(m.loadTracksDateTime);
+    m.isTrackLoading   = true;
+    const restResponse = await fetchTracks(playPrevNext);
 
     if ((restResponse !== null) && (restResponse.status.code === 200) && (restResponse.data.length > 1))
     {
-      m.loadTracksDateTime = restResponse.data[0].date;
-      const currentTrack   = restResponse.data[1];
+      if (playPrevNext === SINGLE_TRACK_PLAY.PREV)
+      {
+        restResponse.data.reverse();
 
-      debug.log(`playNextSingleTrack() - playTrack: ${playTrack} - trackType: ${debug.getKeyForValue(TRACK_TYPE, currentTrack.meta.track_source_type)} => ${getTrackTitle(currentTrack.meta)}`);
+        if (restResponse.data.length === 2)
+          restResponse.data.unshift(null);
+      }
+
+      m.prevTrackDateTime = (restResponse.data.length === 3) ? restResponse.data[2].date : '';
+      m.nextTrackDateTime = (restResponse.data[0] !== null)  ? restResponse.data[0].date : '';
+      const currentTrack  = restResponse.data[1];
+
+      debug.log(`playSingleTrack() - playPrevNext: ${debug.getKeyForValue(SINGLE_TRACK_PLAY, playPrevNext)} - playTrack: ${playTrack} - trackType: ${debug.getKeyForValue(TRACK_TYPE, currentTrack.meta.track_source_type)} => ${getTrackTitle(currentTrack.meta)}`);
 
       if (currentTrack.meta.track_source_type === TRACK_TYPE.YOUTUBE)
       {
@@ -87,19 +102,19 @@ export async function playNextSingleTrack(playTrack = false)
           sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: true, trackId: null, position: 0 }));
           window.location.href = currentTrack.link;
         },
-        () => playNextSingleTrack(playTrack));
+        () => playSingleTrack(playPrevNext, playTrack));
       }
     }
     else
     {
       if (restResponse.status.code !== 200)
-        showSnackbar('Failed to fetch track data!', 30, 'Retry', () => playNextSingleTrack(playTrack));
+        showSnackbar('Failed to fetch track data!', 30, 'Retry', () => playSingleTrack(playPrevNext, playTrack));
       else if ((restResponse.status.code === 200) && (restResponse.data.length === 1))
         showSnackbar('No more tracks to play...', 5, 'Shuffle', () => shuffleClickNavTo());
     }
   }
 
-  m.isNextTrackLoading = false;
+  m.isTrackLoading = false;
 }
 
 
@@ -107,17 +122,18 @@ export async function playNextSingleTrack(playTrack = false)
 // Support functions
 // ************************************************************************************************
 
-function fetchTracks(tracksDateTime)
+function fetchTracks(playPrevNext)
 {
-  let beforeTrackDateTime = tracksDateTime;
-
-  if (tracksDateTime === null)
-    beforeTrackDateTime = (m.startTrackDateTime !== '') ? m.startTrackDateTime : '3000-01-01T00:00:01'; // Before the year 3000 should be enough for a while...
-
-  if (beforeTrackDateTime !== null)
-    return fetchRest({ endpoint: 'tracks', query: `before=${beforeTrackDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, returnStatus: true });
-
-  return null;
+  if (playPrevNext === SINGLE_TRACK_PLAY.NEXT)
+  {
+    const queryTracksDateTime = (m.nextTrackDateTime !== '') ? m.nextTrackDateTime : '3000-01-01T00:00:01'; // Before the year 3000 should be enough for a while...
+    return fetchRest({ endpoint: 'tracks', query: `before=${queryTracksDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, returnStatus: true });
+  }
+  else
+  {
+    const queryTracksDateTime = (m.prevTrackDateTime !== '') ? m.prevTrackDateTime : '1000-01-01T00:00:01'; // After the year 1000 should be enough for a while...
+    return fetchRest({ endpoint: 'tracks', query: `after=${queryTracksDateTime}&order=asc&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, returnStatus: true });
+  }
 }
 
 function onPopState(event)
@@ -128,8 +144,10 @@ function onPopState(event)
   }
   else
   {
-    // Set load next track DateTime to the right value for this page
-    m.loadTracksDateTime = event.state[0].date;
+    // Set prev next track DateTime to the right values for this page
+    m.prevTrackDateTime = (event.state.length === 3) ? event.state[2].date : '';
+    m.nextTrackDateTime = (event.state[0] !== null)  ? event.state[0].date : '';
+
     updatePlayerAndPage(event.state, false, false);
   }
 }
@@ -172,7 +190,7 @@ function getTrackNavHtml(isNavPrev, navUrl, trackMeta)
 
 function updatePage(trackData, thumbnailData, pushState = true)
 {
-  response.prevPage = trackData[0].link;
+  response.prevPage = (trackData[0] !== null)  ? trackData[0].link : null;
   response.nextPage = (trackData.length === 3) ? trackData[2].link : null;
 
   updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-prev'), response.prevPage);
@@ -194,7 +212,10 @@ function updateSiteNavLinks(elements, url)
 
 function updateTrackNavLinks(element, trackData)
 {
-  let trackNavHtml = getTrackNavHtml(true, response.prevPage, trackData[0].meta);
+  let trackNavHtml = '';
+
+  if (trackData[0] !== null)
+    trackNavHtml += getTrackNavHtml(true, response.prevPage, trackData[0].meta);
 
   if (trackData.length === 3)
     trackNavHtml += getTrackNavHtml(false, response.nextPage, trackData[2].meta);

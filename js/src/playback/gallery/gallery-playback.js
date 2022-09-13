@@ -225,9 +225,9 @@ function resumeAutoplay(autoplayData, iframeId = null)
   }
 }
 
-function cueOrPlayNextSingleTrackById(trackData, thumbnailData, playMedia = false)
+function cueOrPlaySingleTrackById(trackData, thumbnailData, playMedia = false)
 {
-  debug.log(`cueOrPlayNextSingleTrackById() - playMedia: ${playMedia}`);
+  debug.log(`cueOrPlaySingleTrackById() - playMedia: ${playMedia}`);
 
   m.players.current.setIsPlayable(true);
   m.players.current.setArtistTitle(trackData.track_artist, trackData.track_title);
@@ -317,7 +317,7 @@ function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
 
     case playbackEvents.EVENT.PLAYBACK_READY:
       playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
-      singleTrackFetchReady(cueOrPlayNextSingleTrackById);
+      singleTrackFetchReady(cueOrPlaySingleTrackById);
       playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, embeddedEventData);
       playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
       break;
