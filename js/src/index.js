@@ -204,9 +204,9 @@ function notFullscreenElement()
 function showIntroBanner()
 {
   // Only show intro banners if they can be permanently dismissed
-  if (storage.isAvailable('localStorage') && bannerProperty) // eslint-disable-line no-undef
+  if (storage.isAvailable('localStorage') && UF_BannerProperty) // eslint-disable-line no-undef
   {
-    if (settings.banners[bannerProperty]) // eslint-disable-line no-undef
+    if (settings.banners[UF_BannerProperty]) // eslint-disable-line no-undef
     {
       elements.introBanner.style.display = 'block';
       resize.trigger();
@@ -215,7 +215,7 @@ function showIntroBanner()
       {
         elements.introBanner.style.display   = '';
         elements.siteContent.style.marginTop = '';
-        settings.banners[bannerProperty]     = false; // eslint-disable-line no-undef
+        settings.banners[UF_BannerProperty]  = false; // eslint-disable-line no-undef
       });
     }
   }

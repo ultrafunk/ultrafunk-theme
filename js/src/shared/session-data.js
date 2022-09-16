@@ -29,8 +29,8 @@ export let settings = {};
 
 export function getSessionData()
 {
-  debug.log('UF_RESPONSE_DATA');
-  response = UF_RESPONSE_DATA; // eslint-disable-line no-undef
+  debug.log('UF_ResponseData');
+  response = UF_ResponseData; // eslint-disable-line no-undef
   debug.log(response);
 
   readSettings();

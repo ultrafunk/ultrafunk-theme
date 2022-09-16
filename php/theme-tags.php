@@ -53,13 +53,13 @@ function pre_wp_head() : void
 {
   ?>
   <script>
-    const siteTheme      = localStorage.getItem('uf_site_theme');
-    let   siteThemeClass = 'site-theme-light';
+    const UF_SiteTheme      = localStorage.getItem('uf_site_theme');
+    let   UF_SiteThemeClass = 'site-theme-light';
 
-    if (siteTheme !== null)
-      siteThemeClass = (siteTheme === 'dark') ? 'site-theme-dark' : 'site-theme-light';
+    if (UF_SiteTheme !== null)
+      UF_SiteThemeClass = (UF_SiteTheme === 'dark') ? 'site-theme-dark' : 'site-theme-light';
 
-    document.documentElement.classList.add(siteThemeClass);
+    document.documentElement.classList.add(UF_SiteThemeClass);
 
     if (document.documentElement.classList.contains('gallery-layout'))
     {
@@ -111,7 +111,7 @@ function scripts_styles() : void
   \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Theme\Functions\get_session_vars());
 
   ?>
-  <script><?php echo 'const UF_RESPONSE_DATA = ' . json_encode(\Ultrafunk\Plugin\Globals\get_session_vars()); ?></script>
+  <script><?php echo 'const UF_ResponseData = ' . json_encode(\Ultrafunk\Plugin\Globals\get_session_vars()); ?></script>
   <script type="module" src="<?php echo $template_uri . $js_path  . 'playback/interaction.js?ver='     . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
   <script type="module" src="<?php echo $template_uri . $js_path  . 'index.js?ver='                    . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
   <noscript><link rel="stylesheet" href="<?php echo $template_uri . '/inc/css/style-noscript.css?ver=' . \Ultrafunk\Theme\Constants\VERSION; ?>" media="all" /></noscript>
@@ -549,7 +549,7 @@ function intro_banner_html(string $theme_env_key, string $property) : void
   $content = apply_filters('the_content', wp_kses_post($post->post_content));
 
   ?>
-  <script>const bannerProperty = '<?php echo $property; ?>';</script>
+  <script>const UF_BannerProperty = '<?php echo $property; ?>';</script>
   <div id="intro-banner">
     <div class="intro-banner-container">
       <?php echo $content; ?>

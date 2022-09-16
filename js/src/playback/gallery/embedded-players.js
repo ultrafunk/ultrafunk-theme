@@ -11,7 +11,6 @@ import * as mediaPlayers   from '../mediaplayers.js';
 import * as playbackEvents from '../playback-events.js';
 import { settings }        from '../../shared/session-data.js';
 import { playbackTimer }   from './gallery-playback-timer.js';
-import { getTimeString }   from '../../shared/utils.js';
 
 
 /*************************************************************************************************/
@@ -114,7 +113,7 @@ function getAllPlayers()
   });
 }
 
-function getYouTubePlayer(playerId, element, addYTPlayerVideoId = false)
+function getYouTubePlayer(playerId, element, isSingleTrackPlayer = false)
 {
   const videoId = element.getAttribute('data-track-source-uid');
 
@@ -126,10 +125,16 @@ function getYouTubePlayer(playerId, element, addYTPlayerVideoId = false)
       onStateChange: (event) => onYouTubePlayerStateChange(event, playerId),
       onError:       (event) => onYouTubePlayerError(event, playerId),
     },
-    ...addYTPlayerVideoId && { videoId: videoId },
+    ...isSingleTrackPlayer && { videoId: videoId },
   });
 
-  const player = new mediaPlayers.YouTube(element.id, playerId, embeddedPlayer, videoId);
+  let player = null;
+
+  if (isSingleTrackPlayer)
+    player = new mediaPlayers.SingleTrack(element.id, playerId, embeddedPlayer, videoId);
+  else
+    player = new mediaPlayers.YouTube(element.id, playerId, embeddedPlayer, videoId);
+
   player.setDuration(parseInt(element.getAttribute('data-track-duration')));
 
   return player;
@@ -202,12 +207,18 @@ function onYouTubePlayerReady(event, iframeId)
 {
   const player = m.players.playerFromUid(iframeId);
 
-  debug.log(`onYouTubePlayerReady(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - ${player.getTitle()}`);
-
   // YT.PlayerState.UNSTARTED (-1) here means the video is not available or playable anymore,
   // so we set playbable to false for later use...
+  // ToDo: This is _NOT_ documented or official behaviour, so it could change at any time!
   if (event.target.getPlayerState() === -1)
+  {
+    debug.warn(`onYouTubePlayerReady() - MEDIA_UNAVAILABLE: ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - "${player.getTitle()}"`);
     player.setIsPlayable(false);
+  }
+  else
+  {
+    debug.log(`onYouTubePlayerReady(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - ${player.getTitle()}`);
+  }
 
   updatePlayersReady();
 }
@@ -277,19 +288,6 @@ function onYouTubeStatePaused(iframeId)
 function onYouTubeStateCued(iframeId)
 {
   debug.log(`onYouTubePlayerStateChange: CUED      (uID: ${iframeId})`);
-
-  const player = m.players.playerFromUid(iframeId);
-
-  // Handle next single track cued and check for track duration, if it is 0, it is not playable
-  if (('isNextSingleTrackCued' in player) && player.isNextSingleTrackCued)
-  {
-    delete player.isNextSingleTrackCued;
-
-    if (player.embedded.getDuration() === 0)
-      player.setIsPlayable(false);
-
-    debug.log(`onYouTubePlayerStateChange: CUED      Duration: ${getTimeString(player.embedded.getDuration())} - isPlayable: ${player.isPlayable()}`);
-  }
 }
 
 function onYouTubeStateEnded(iframeId)
@@ -311,16 +309,18 @@ function onYouTubePlayerError(event, iframeId)
 {
   const player = m.players.playerFromUid(iframeId);
 
-  if ((event.data !== null) && player.isPlayable())
+  // Handle single track fetched cueOrPlaySingleTrackById() errors for unplayable tracks (= 150)
+  if ((event.data === 150) && (player instanceof mediaPlayers.SingleTrack) && player.isCued())
+  {
+    debug.log(`onYouTubePlayerError(150) - SingleTrack.isCued(): true`);
+    player.setIsCued(false);
+    player.setIsPlayable(false);
+  }
+  else if ((event.data !== null) && player.isPlayable())
   {
     debug.log('onYouTubePlayerError: ' + event.data);
-
     player.setIsPlayable(false);
     onPlayerError(player, event.target.getVideoUrl());
-  }
-  else
-  {
-    debug.warn(`onYouTubePlayerError(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - "${player.getTitle()}"\nNo YouTube API error given! ((event.data === null) && (isPlayable === false))`);
   }
 }
 

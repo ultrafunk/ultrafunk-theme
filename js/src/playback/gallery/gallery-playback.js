@@ -229,6 +229,7 @@ function cueOrPlaySingleTrackById(trackData, thumbnailData, playMedia = false)
 {
   debug.log(`cueOrPlaySingleTrackById() - playMedia: ${playMedia}`);
 
+  m.players.current.setIsCued(false);
   m.players.current.setIsPlayable(true);
   m.players.current.setArtistTitle(trackData.track_artist, trackData.track_title);
   m.players.current.setDuration(parseInt(trackData.track_duration));
@@ -245,7 +246,6 @@ function cueOrPlaySingleTrackById(trackData, thumbnailData, playMedia = false)
   else
   {
     m.players.current.cueTrackById(thumbnailData.uid);
-    m.players.current.isNextSingleTrackCued = true;
   }
 }
 
