@@ -166,7 +166,7 @@ export function ready(prevClickCallback, playPauseClickCallback, nextClickCallba
   addListener(EVENT.MEDIA_PLAYING,     setPlayState);
   addListener(EVENT.MEDIA_PAUSED ,     setPauseState);
   addListener(EVENT.MEDIA_ENDED,       setMediaEndState);
-  addListener(EVENT.MEDIA_CUE_NEXT,    () => updateProgressPercent(0));
+  addListener(EVENT.MEDIA_CUE_TRACK,   () => updateProgressPercent(0));
   addListener(EVENT.AUTOPLAY_BLOCKED,  setPauseState);
   addListener(EVENT.PLAYBACK_BLOCKED,  setPauseState);
   addListener(EVENT.MEDIA_UNAVAILABLE, setPauseState);

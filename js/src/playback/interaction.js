@@ -119,7 +119,7 @@ function initShared()
 function initPlaybackEvents()
 {
   playbackEvents.addListener(playbackEvents.EVENT.PLAYBACK_READY,       playbackEventPlaybackReady);
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_NEXT,       playbackEventMediaEnded);
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_TRACK,      playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,          playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_TIME_REMAINING, playbackEventMediaTimeRemaining);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PREV_TRACK,     () => playPrevNextTrack(null, SINGLE_TRACK_PLAY.PREV, response.prevPage));

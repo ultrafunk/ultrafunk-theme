@@ -57,7 +57,7 @@ export function init()
   addListener(EVENT.MEDIA_PLAYING,     mediaPlaying);
   addListener(EVENT.MEDIA_PAUSED,      mediaPaused);
   addListener(EVENT.MEDIA_ENDED,       mediaEnded);
-  addListener(EVENT.MEDIA_CUE_NEXT,    mediaCueNext);
+  addListener(EVENT.MEDIA_CUE_TRACK,   mediaCueTrack);
   addListener(EVENT.CONTINUE_AUTOPLAY, continueAutoplay);
   addListener(EVENT.RESUME_AUTOPLAY,   resumeAutoplay);
   addListener(EVENT.AUTOPLAY_BLOCKED,  autoplayBlocked);
@@ -105,7 +105,7 @@ function mediaEnded(playbackEvent)
     resetNowPlayingIcons();
 }
 
-function mediaCueNext(playbackEvent)
+function mediaCueTrack(playbackEvent)
 {
   debug.log(playbackEvent);
 

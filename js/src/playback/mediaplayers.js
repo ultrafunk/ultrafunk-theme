@@ -270,22 +270,43 @@ export class SoundCloud extends MediaPlayer
 
 export class Playlist extends MediaPlayer
 {
-  #playerState  = -1; // YT.PlayerState.UNSTARTED
+  #playerError = -1;
+  #isTrackCued = false;
 
   constructor(embeddedPlayer)
   {
     super(TRACK_TYPE.YOUTUBE, null, null, embeddedPlayer);
   }
 
-  setPlayerState(state) { this.#playerState = state; }
+  isTrackCued()         { return this.#isTrackCued;  }
+  setPlayerError(error) { this.#playerError = error; }
+
+  reset()
+  {
+    this.#playerError = -1;
+    this.#isTrackCued = false;
+  }
+
+  cueTrackById(sourceUid)
+  {
+    this.embedded.cueVideoById(sourceUid);
+    this.#isTrackCued = true;
+  }
+
+  playTrackById(sourceUid)
+  {
+    this.embedded.loadVideoById(sourceUid);
+    this.#isTrackCued = false;
+  }
 
   play(onErrorCallback)
   {
-    //YT.PlayerState.CUED === 5
-    if ((this.#playerState === 5) && (this.embedded.getDuration() === 0))
+    this.#isTrackCued = false;
+
+    if (this.#playerError !== -1)
     {
-      onErrorCallback({ data: 'Unable to play track -- No YouTube API error given!' });
-      this.#playerState = -1; // YT.PlayerState.UNSTARTED
+      onErrorCallback({ data: this.#playerError });
+      this.#playerError = -1;
     }
     else
     {

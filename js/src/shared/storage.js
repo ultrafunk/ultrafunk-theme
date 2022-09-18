@@ -31,10 +31,10 @@ export const KEY = {
   UF_SITE_THEME:       'uf_site_theme',
   UF_GALLERY_LAYOUT:   'uf_gallery_layout',
 //document.cookie keys
-//Merge all cookies into one cookie (UF_USER_SETTINGS) as a JSON encoded string
+//ToDo: Merge all cookies into one cookie (UF_USER_SETTINGS) as a JSON encoded string?
 //UF_USER_SETTINGS:    'uf_user_settings',
-//UF_LIST_PER_PAGE:    'uf_list_per_page',
   UF_GALLERY_PER_PAGE: 'uf_gallery_per_page',
+//UF_LIST_PER_PAGE:    'uf_list_per_page',
   UF_PREFERRED_PLAYER: 'uf_preferred_player',
   UF_SHUFFLE_UID:      'uf_shuffle_uid',
 //Temp document.cookie keys

@@ -143,7 +143,7 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
       m.player.embedded.stopVideo();
 
     m.currentTrackId = nextTrackId;
-    playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_NEXT, { nextTrackId: nextTrackId, isPointerClick: isPointerClick });
+    playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_TRACK, { nextTrackId: nextTrackId, isPointerClick: isPointerClick });
     cueOrPlayCurrentTrack(playNextTrack);
   }
 }
@@ -152,15 +152,17 @@ function cueOrPlayCurrentTrack(playTrack)
 {
   const sourceUid = listControls.updateTrackDetails();
 
+  m.player.reset();
+
   if (playTrack)
   {
-    m.player.embedded.loadVideoById(sourceUid);
+    m.player.playTrackById(sourceUid);
     listControls.setCurrentTrackState(STATE.PLAYING);
     playbackControls.updateTrackData();
   }
   else
   {
-    m.player.embedded.cueVideoById(sourceUid);
+    m.player.cueTrackById(sourceUid);
     listControls.setCurrentTrackState(STATE.PAUSED);
   }
 }
@@ -377,11 +379,6 @@ function onYouTubePlayerStateChange(event)
       break;
 
     // eslint-disable-next-line no-undef
-    case YT.PlayerState.CUED:
-      m.player.setPlayerState(event.data); // For internal state when trying to play a track that does not exist
-      break;
-
-    // eslint-disable-next-line no-undef
     case YT.PlayerState.BUFFERING:
       playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
       break;
@@ -451,14 +448,19 @@ function onYouTubeStatePlaying()
 
 function onYouTubePlayerError(event)
 {
-  debug.log(`onYouTubePlayerError(): ${event.data} - trackId: ${m.currentTrackId}`);
+  debug.log(`onYouTubePlayerError(): playerError: ${event.data} - currentTrackId: ${m.currentTrackId} - isTrackCued: ${m.player.isTrackCued()}`);
 
-  listControls.setTrackMessage('Error!');
-  eventLog.add(eventLogger.SOURCE.YOUTUBE, eventLogger.EVENT.PLAYER_ERROR, m.currentTrackId);
-  showSnackbar('Unable to play track, skipping to next', 5, 'Stop', stopSkipToNextTrack, skipToNextTrack);
+  m.player.setPlayerError(event.data);
 
-  debugLogger.logErrorOnServer('EVENT_MEDIA_UNAVAILABLE', {
-    mediaUrl:   m.player.embedded.getVideoUrl(),
-    mediaTitle: `${m.player.getArtist()} - ${m.player.getTitle()}`,
-  });
+  if (m.player.isTrackCued() === false)
+  {
+    listControls.setTrackMessage('Error!');
+    eventLog.add(eventLogger.SOURCE.YOUTUBE, eventLogger.EVENT.PLAYER_ERROR, m.currentTrackId);
+    showSnackbar('Unable to play track, skipping to next', 5, 'Stop', stopSkipToNextTrack, skipToNextTrack);
+
+    debugLogger.logErrorOnServer('EVENT_MEDIA_UNAVAILABLE', {
+      mediaUrl:   m.player.embedded.getVideoUrl(),
+      mediaTitle: `${m.player.getArtist()} - ${m.player.getTitle()}`,
+    });
+  }
 }

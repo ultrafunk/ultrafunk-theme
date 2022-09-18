@@ -60,9 +60,9 @@ export function ready(player)
   m.player = player;
   m.trackElement.classList.add('current');
 
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_LOADING,  () => setCurrentTrackState(STATE.LOADING));
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING,  () => setCurrentTrackState(STATE.PLAYING));
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_NEXT, (event) => setNextTrackState(event.data.nextTrackId, event.data.isPointerClick));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_LOADING,   () => setCurrentTrackState(STATE.LOADING));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING,   () => setCurrentTrackState(STATE.PLAYING));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_TRACK, (event) => setNextTrackState(event.data.nextTrackId, event.data.isPointerClick));
 
   if (settings.list.showLoadMoreTracks)
     initLoadMoreTracks();

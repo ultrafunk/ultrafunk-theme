@@ -119,6 +119,7 @@ function readSettingsError()
     localStorage.removeItem(KEY.UF_SITE_THEME);
     localStorage.removeItem(KEY.UF_GALLERY_LAYOUT);
     deleteCookie(KEY.UF_GALLERY_PER_PAGE);
+  //deleteCookie(KEY.UF_LIST_PER_PAGE);
     deleteCookie(KEY.UF_PREFERRED_PLAYER);
     deleteCookie(KEY.UF_SHUFFLE_UID);
 
