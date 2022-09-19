@@ -39,17 +39,14 @@ use function Ultrafunk\Plugin\Globals\ {
 //
 function get_session_vars() : array
 {
-  $params = get_request_params();
+  $is_user_per_page = (is_shuffle(PLAYER_TYPE::GALLERY) || is_shuffle(PLAYER_TYPE::LIST) || is_search() || is_list_player('search'));
+
   $session_vars = [
-    'prevPage' => null,
-    'nextPage' => null,
-    'shufflePath' => esc_url(PLUGIN_ENV['site_url'] . get_shuffle_path()),
-    'listPerPage' => isset($params['items_per_page'])
-                       ? $params['items_per_page']
-                       : PLUGIN_ENV['list_per_page'],
-    'galleryPerPage' => (is_shuffle(PLAYER_TYPE::GALLERY) || is_shuffle(PLAYER_TYPE::LIST))
-                          ? get_globals_prop('gallery_per_page')
-                          : intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])),
+    'prevPage'       => null,
+    'nextPage'       => null,
+    'shufflePath'    => esc_url(PLUGIN_ENV['site_url'] . get_shuffle_path()),
+    'listPerPage'    => $is_user_per_page ? get_globals_prop('list_per_page')    : PLUGIN_ENV['list_per_page'],
+    'galleryPerPage' => $is_user_per_page ? get_globals_prop('gallery_per_page') : intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])),
   ];
 
   // Return defaults because get_next_posts_link() returns results even when a 404 happens

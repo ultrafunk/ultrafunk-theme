@@ -121,5 +121,5 @@ const SITE_URL = DEBUG
 export function logStartupExecutionTime()
 {
   executionStop = performance.now();
-  console.log(`%cJavaScript startup execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms. for: ${SITE_URL}`, logCss);
+  console.log(`%cJavaScript startup execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms. for ${SITE_URL}`, logCss);
 }

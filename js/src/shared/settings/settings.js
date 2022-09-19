@@ -27,15 +27,13 @@ export const PREF_PLAYER = {
 // Ultrafunk (internal) settings: Tips and Banners
 // ************************************************************************************************
 
-/*
 const listPerPageValues          = [ 10,   15,   20,   25,   30,   35,   40,   45,   50];
 const listPerPageValueStrings    = ['10', '15', '20', '25', '30', '35', '40', '45', '50'];
-*/
 const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18,   20,   22,   24];
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 21, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 22, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -51,7 +49,7 @@ export const settingsSchema = {
     moveTrackOnPlayNext: { description: 'Move Track on Play as Next',        type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
     showUpNextModal:     { description: 'Show Up Next Modal',                type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
     showLoadMoreTracks:  { description: 'Show "Load More Tracks..." prompt', type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-  //tracksPerPage:       { description: 'Tracks Per Page: Search & Shuffle', type: INTEGER, values: listPerPageValues, default: 25,   valueStrings: listPerPageValueStrings },
+    tracksPerPage:       { description: 'Tracks Per Page: Search & Shuffle', type: INTEGER, values: listPerPageValues, default: 25,   valueStrings: listPerPageValueStrings },
   },
   gallery: {
     layout:                  { description: 'Track Layout',                         type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
@@ -110,7 +108,7 @@ export const defaultSettings = {
     moveTrackOnPlayNext: settingsSchema.list.moveTrackOnPlayNext.default,
     showUpNextModal:     settingsSchema.list.showUpNextModal.default,
     showLoadMoreTracks:  settingsSchema.list.showLoadMoreTracks.default,
-  //tracksPerPage:       settingsSchema.list.tracksPerPage.default,
+    tracksPerPage:       settingsSchema.list.tracksPerPage.default,
   },
   gallery: {
     layout:                  settingsSchema.gallery.layout.default,

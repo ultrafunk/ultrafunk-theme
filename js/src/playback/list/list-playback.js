@@ -143,7 +143,7 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
       m.player.embedded.stopVideo();
 
     m.currentTrackId = nextTrackId;
-    playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_TRACK, { nextTrackId: nextTrackId, isPointerClick: isPointerClick });
+    playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_TRACK, { trackId: nextTrackId, isPointerClick: isPointerClick });
     cueOrPlayCurrentTrack(playNextTrack);
   }
 }

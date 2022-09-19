@@ -62,7 +62,7 @@ export function ready(player)
 
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_LOADING,   () => setCurrentTrackState(STATE.LOADING));
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING,   () => setCurrentTrackState(STATE.PLAYING));
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_TRACK, (event) => setNextTrackState(event.data.nextTrackId, event.data.isPointerClick));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_TRACK, (event) => setNextTrackState(event.data.trackId, event.data.isPointerClick));
 
   if (settings.list.showLoadMoreTracks)
     initLoadMoreTracks();

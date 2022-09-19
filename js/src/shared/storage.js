@@ -34,7 +34,7 @@ export const KEY = {
 //ToDo: Merge all cookies into one cookie (UF_USER_SETTINGS) as a JSON encoded string?
 //UF_USER_SETTINGS:    'uf_user_settings',
   UF_GALLERY_PER_PAGE: 'uf_gallery_per_page',
-//UF_LIST_PER_PAGE:    'uf_list_per_page',
+  UF_LIST_PER_PAGE:    'uf_list_per_page',
   UF_PREFERRED_PLAYER: 'uf_preferred_player',
   UF_SHUFFLE_UID:      'uf_shuffle_uid',
 //Temp document.cookie keys
@@ -251,7 +251,7 @@ function cleanDeep(mergedSettings, newSettings)
 //
 // Clean up (delete) any localStorage or cookie-data that is no longer in use...
 //
-function cleanupOldData(skipOldDataCheck = false)
+export function cleanupOldData(skipOldDataCheck = false)
 {
   debug.log(`cleanupOldData(): ${skipOldDataCheck ? 'Skipping' : 'Performing quick'} old data cleanup check...`);
 

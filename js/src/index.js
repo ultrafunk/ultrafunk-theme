@@ -94,7 +94,7 @@ document.addEventListener('settingsUpdated', () =>
   readSettings();
   interaction.settingsUpdated();
   storage.setCookie(storage.KEY.UF_GALLERY_PER_PAGE, settings.gallery.tracksPerPage,    (storage.YEAR_IN_SECONDS * 5));
-//storage.setCookie(storage.KEY.UF_LIST_PER_PAGE,    settings.list.tracksPerPage,       (storage.YEAR_IN_SECONDS * 5));
+  storage.setCookie(storage.KEY.UF_LIST_PER_PAGE,    settings.list.tracksPerPage,       (storage.YEAR_IN_SECONDS * 5));
   storage.setCookie(storage.KEY.UF_PREFERRED_PLAYER, settings.playback.preferredPlayer, (storage.YEAR_IN_SECONDS * 5));
 });
 
