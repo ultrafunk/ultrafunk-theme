@@ -16,9 +16,8 @@ use Ultrafunk\Plugin\Constants\ {
 use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 use const Ultrafunk\Theme\Constants\THEME_ENV;
 
-use function Ultrafunk\Plugin\Shared\get_shuffle_transient_name;
-
 use function Ultrafunk\Plugin\Globals\ {
+  get_settings_value,
   get_globals_prop,
   get_request_params,
   is_custom_query,
@@ -46,7 +45,7 @@ function rest_uf_track_query(array $args, object $request) : array
     $shuffle_path = 'all';
     $shuffle_type = $request->get_param('shuffle_type');
     $shuffle_slug = $request->get_param('shuffle_slug');
-    $transient    = get_transient(get_shuffle_transient_name());
+    $transient    = get_transient(\Ultrafunk\Plugin\Shared\get_shuffle_transient_name());
 
     if ($shuffle_slug !== null)
       $shuffle_path = $shuffle_type . '/' . $shuffle_slug;
@@ -74,6 +73,8 @@ function pre_get_posts(object $query) : void
 
     if ($query->is_search() || is_shuffle(PLAYER_TYPE::GALLERY))
       $query->set('posts_per_page', get_globals_prop('gallery_per_page'));
+    else if (is_page() === false)
+      $query->set('posts_per_page', get_settings_value('gallery_tracks_per_page'));
   }
 }
 add_action('pre_get_posts', '\Ultrafunk\Theme\Filters\pre_get_posts');

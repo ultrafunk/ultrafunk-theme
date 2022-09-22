@@ -28,6 +28,7 @@ use function Ultrafunk\Plugin\Globals\ {
   get_cached_title,
   set_cached_title,
   get_globals_prop,
+  get_settings_value,
 };
 
 
@@ -45,8 +46,8 @@ function get_session_vars() : array
     'prevPage'       => null,
     'nextPage'       => null,
     'shufflePath'    => esc_url(PLUGIN_ENV['site_url'] . get_shuffle_path()),
-    'listPerPage'    => $is_user_per_page ? get_globals_prop('list_per_page')    : PLUGIN_ENV['list_per_page'],
-    'galleryPerPage' => $is_user_per_page ? get_globals_prop('gallery_per_page') : intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])),
+    'listPerPage'    => $is_user_per_page ? get_globals_prop('list_per_page')    : get_settings_value('list_tracks_per_page'),
+    'galleryPerPage' => $is_user_per_page ? get_globals_prop('gallery_per_page') : get_settings_value('gallery_tracks_per_page'),
   ];
 
   // Return defaults because get_next_posts_link() returns results even when a 404 happens

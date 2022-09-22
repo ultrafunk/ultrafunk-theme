@@ -281,7 +281,7 @@ export class Playlist extends MediaPlayer
   isTrackCued()         { return this.#isTrackCued;  }
   setPlayerError(error) { this.#playerError = error; }
 
-  reset()
+  resetState()
   {
     this.#playerError = -1;
     this.#isTrackCued = false;

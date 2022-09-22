@@ -152,7 +152,7 @@ function cueOrPlayCurrentTrack(playTrack)
 {
   const sourceUid = listControls.updateTrackDetails();
 
-  m.player.reset();
+  m.player.resetState();
 
   if (playTrack)
   {
