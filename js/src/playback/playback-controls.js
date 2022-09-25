@@ -332,6 +332,7 @@ function setMediaEndState()
 export function setPlayState()
 {
   ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
+  ctrl.progressBar.setState(STATE.PLAYING);
   ctrl.playPause.setState(STATE.PLAYING);
   ctrl.playPause.icon.textContent = 'pause_circle_filled';
   ctrl.prevTrack.setState(STATE.ENABLED);
@@ -342,16 +343,23 @@ export function setPlayState()
 export function setPauseState()
 {
   ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
+  ctrl.progressBar.setState(STATE.PAUSED);
   ctrl.playPause.setState(STATE.PAUSED);
   ctrl.playPause.icon.textContent = 'play_circle_filled';
 }
 
-export function blinkPlayPause(toggleBlink)
+export function timeRemainingWarningBlink(toggleBlink)
 {
   if (toggleBlink)
+  {
+    ctrl.progressBar.toggleClass('time-remaining-warning');
     ctrl.playPause.toggleClass('time-remaining-warning');
+  }
   else
+  {
+    ctrl.progressBar.removeClass('time-remaining-warning');
     ctrl.playPause.removeClass('time-remaining-warning');
+  }
 }
 
 

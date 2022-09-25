@@ -31,8 +31,8 @@ function orderReccentFiles(dir)
   return readdirSync(dir)
     .filter((file) => lstatSync(join(dir, file)).isFile())
     .filter((file) => file.match(jsChunkFilesRegEx))
-    .map((file) => ({ file, mtime: lstatSync(join(dir, file)).mtime }))
-    .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
+    .map((file)    => ({ file, mtime: lstatSync(join(dir, file)).mtime }))
+    .sort((a, b)   => b.mtime.getTime() - a.mtime.getTime());
 }
 
 

@@ -60,6 +60,10 @@ body.autoplay-off .progress-bar-control {
   background: var(--progress-bar-color-autoplay-off);
 }
 
+body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
+  opacity: 0.5;
+}
+
 
 /**************************************************************************************************
 * Playback controls

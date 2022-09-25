@@ -5,9 +5,9 @@
 //
 
 
-import { settings }        from '../shared/session-data.js';
-import { blinkPlayPause }  from './playback-controls.js';
+import { settings } from '../shared/session-data.js';
 import { EVENT, dispatch } from './playback-events.js';
+import { timeRemainingWarningBlink } from './playback-controls.js';
 
 
 /*************************************************************************************************/
@@ -50,7 +50,7 @@ export class PlaybackTimer
     }
 
     this.#lastPosSeconds = 0;
-    blinkPlayPause(false);
+    timeRemainingWarningBlink(false);
   }
 
   updateTimeRemainingWarning(positionSeconds, durationSeconds)
@@ -64,12 +64,12 @@ export class PlaybackTimer
 
       if (remainingSeconds <= settings.playback.timeRemainingSeconds)
       {
-        blinkPlayPause(true);
+        timeRemainingWarningBlink(true);
         dispatch(EVENT.MEDIA_TIME_REMAINING, { timeRemainingSeconds: remainingSeconds });
       }
       else
       {
-        blinkPlayPause(false);
+        timeRemainingWarningBlink(false);
       }
     }
   }

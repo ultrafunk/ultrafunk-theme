@@ -94,11 +94,6 @@
   font-size: 25px;
   line-height: 30px;
   font-weight: 700;
-  text-transform: uppercase;
-}
-
-.modal-type-default .modal-dialog-title {
-  text-transform: none;
 }
 
 .modal-dialog-close-icon {
