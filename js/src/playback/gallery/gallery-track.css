@@ -225,40 +225,47 @@ gallery-track .track-content {
   text-decoration: underline;
 }
 
-.track-meta-channels,
-.track-meta-artists {
+.track-meta .track-meta-channels,
+.track-meta .track-meta-artists {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.track-meta-controls .track-share-control {
+.track-meta-controls .share-details-controls {
   display: none;
+  margin-left: 10px;
+  margin-right: -7px;
+}
+
+body.autoplay-on .track-meta-controls .share-details-controls {
+  display: flex;
+}
+
+.track-meta-controls .track-share-control,
+.track-meta-controls .track-details-control {
   width: 45px;
   height: 45px;
-  margin-left: 10px;
-  margin-right: -9px;
+}
+
+.track-meta-controls .track-share-control   .material-icons,
+.track-meta-controls .track-details-control .material-icons-outlined {
   -webkit-tap-highlight-color: transparent;
-}
-
-body.autoplay-on .track-meta-controls .track-share-control {
-  display: block;
-}
-
-.track-meta-controls .track-share-control .material-icons {
   font-size: 35px;
   color: var(--primary-icon-color);
   cursor: pointer;
   padding: 5px;
 }
 
-.track-meta-controls .track-share-control .material-icons:hover {
+.track-meta-controls .track-share-control   .material-icons:hover,
+.track-meta-controls .track-details-control .material-icons-outlined:hover {
   opacity: var(--control-hover-opacity);
 }
 
 @media not all and (pointer: fine) {
 
-  .track-meta-controls .track-share-control .material-icons:hover {
+  .track-meta-controls .track-share-control   .material-icons:hover,
+  .track-meta-controls .track-details-control .material-icons-outlined:hover {
     opacity: 1;
   }
 
@@ -271,13 +278,14 @@ body.autoplay-on .track-meta-controls .track-share-control {
 
 @media screen and (max-width: 500px) {
 
-  .track-meta-controls .track-share-control {
+  .track-meta-controls .track-share-control,
+  .track-meta-controls .track-details-control {
     width: 40px;
     height: 40px;
-    margin-right: -9px;
   }
 
-  .track-meta-controls .track-share-control .material-icons {
+  .track-meta-controls .track-share-control   .material-icons,
+  .track-meta-controls .track-details-control .material-icons-outlined {
     font-size: 26px;
     padding: 7px;
   }

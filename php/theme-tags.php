@@ -492,8 +492,9 @@ function track_meta_controls() : void
 {
   ?>
   <div class="track-meta-controls">
-    <div class="track-share-control">
-      <span class="material-icons" title="Share track / Play On">share</span>
+    <div class="share-details-controls">
+      <div class="track-share-control" title="Share track / Play On"><span class="material-icons">share</span></div>
+      <div class="track-details-control" title="Track Details"><span class="material-icons-outlined">info</span></div>
     </div>
     <div class="crossfade-controls">
       <div class="crossfade-preset-control state-disabled"></div>

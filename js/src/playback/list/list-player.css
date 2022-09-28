@@ -113,8 +113,8 @@ body.list-player {
   100% { opacity: 0; }
 }
 
-.track-artists-links,
-.track-channels-links {
+.track-entry .track-artists-links,
+.track-entry .track-channels-links {
   display: none;
 }
 

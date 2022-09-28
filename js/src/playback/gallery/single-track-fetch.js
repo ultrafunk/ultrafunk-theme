@@ -227,8 +227,8 @@ function updateTrackHeader(element, trackData)
 {
   element.querySelector('h2.track-title').textContent          = getTrackTitle(trackData.meta);
   element.querySelector('h2.track-title.type-split').innerHTML = `${trackData.meta.track_artist}<br><span class="light-text">${trackData.meta.track_title}</span>`;
-  element.querySelector('div.track-meta-artists  .term-links').innerHTML = trackData.artists_links;
-  element.querySelector('div.track-meta-channels .term-links').innerHTML = trackData.channels_links;
+  element.querySelector('div.track-meta-artists  .track-artists-links').innerHTML  = trackData.artists_links;
+  element.querySelector('div.track-meta-channels .track-channels-links').innerHTML = trackData.channels_links;
 }
 
 function updateTrackAttributes(element, trackData, thumbnailData)

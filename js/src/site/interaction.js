@@ -74,7 +74,13 @@ class MetaUiElements extends ElementClick
     if (this.clicked('div.track-share-control'))
       return sharePlayClick(this.closest('single-track, gallery-track'));
 
-    if (this.clicked('span.term-links'))
+    if (this.clicked('div.track-details-control'))
+      return detailsClick(this.closest('single-track, gallery-track'));
+
+    if (this.clicked('span.track-artists-links'))
+      return linkClick(this.event);
+
+    if (this.clicked('span.track-channels-links'))
       return linkClick(this.event);
   }
 }

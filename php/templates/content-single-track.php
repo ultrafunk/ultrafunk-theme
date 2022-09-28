@@ -72,10 +72,10 @@ $track_title_split = '<h2 class="track-title type-split">' . $post->track_artist
     ?>
     <div class="track-meta">
       <div class="track-meta-artists">
-        <b><a href="/artists/" title="View Artists">Artists</a>: </b><span class="term-links"><?php the_terms(get_the_ID(), 'uf_artist'); ?></span>
+        <b><a href="/artists/" title="View Artists">Artists</a>: </b><span class="track-artists-links"><?php the_terms(get_the_ID(), 'uf_artist'); ?></span>
       </div>
       <div class="track-meta-channels">
-        <b><a href="/channels/" title="View Channels">Channels</a>: </b><span class="term-links"><?php the_terms(get_the_ID(), 'uf_channel'); ?></span>
+        <b><a href="/channels/" title="View Channels">Channels</a>: </b><span class="track-channels-links"><?php the_terms(get_the_ID(), 'uf_channel'); ?></span>
       </div>
       <?php \Ultrafunk\Theme\Tags\track_meta_controls(); ?>
     </div>

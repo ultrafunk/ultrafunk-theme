@@ -104,14 +104,17 @@
 }
 
 .gallery-2-col .track-meta-controls .track-share-control,
-.gallery-3-col .track-meta-controls .track-share-control {
+.gallery-2-col .track-meta-controls .track-details-control,
+.gallery-3-col .track-meta-controls .track-share-control,
+.gallery-3-col .track-meta-controls .track-details-control {
   width: 40px;
   height: 40px;
-  margin-right: -8px;
 }
 
-.gallery-2-col .track-meta-controls .track-share-control .material-icons,
-.gallery-3-col .track-meta-controls .track-share-control .material-icons {
+.gallery-2-col .track-meta-controls .track-share-control   .material-icons,
+.gallery-2-col .track-meta-controls .track-details-control .material-icons-outlined,
+.gallery-3-col .track-meta-controls .track-share-control   .material-icons,
+.gallery-3-col .track-meta-controls .track-details-control .material-icons-outlined {
   font-size: 30px;
 }
 

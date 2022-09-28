@@ -460,10 +460,10 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
   }
 
   #playback-controls {
-    margin-right: -11px;
+    margin-right: -9px;
     height: 48px;
-    max-width: calc(100% + 11px);
-    width: calc(100% + 11px);
+    max-width: calc(100% + 9px);
+    width: calc(100% + 9px);
   }
 
   #playback-controls .material-icons {
