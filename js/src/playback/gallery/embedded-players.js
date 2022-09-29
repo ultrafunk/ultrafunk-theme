@@ -90,11 +90,17 @@ function getAllPlayers()
       const embeddedPlayer = SC.Widget(iframe.id);
       player = new mediaPlayers.SoundCloud(element.id, iframe.id, embeddedPlayer, iframe.src);
 
-      // Preload thumbnail image as early as possible
+      // Set thumbnail and duration as early as possible
       embeddedPlayer.bind(SC.Widget.Events.READY, () =>
       {
         player.setThumbnail(element);
-        embeddedPlayer.getDuration(durationMilliseconds => player.setDuration(Math.round(durationMilliseconds / 1000)));
+
+        embeddedPlayer.getDuration(durationMilliseconds =>
+        {
+          player.setDuration(Math.round(durationMilliseconds / 1000))
+          element.setAttribute('data-track-duration', player.getDuration());
+        });
+
         onSoundCloudPlayerEventReady(player, iframe.id);
       });
 
