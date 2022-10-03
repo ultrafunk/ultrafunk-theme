@@ -143,7 +143,7 @@ function detailsClick(element)
   {
     modalEntries.push({
       clickId: `entry-${modalEntries.length}`,
-      class:   `icon-text ${item.classList[0]}`,
+      class:   `icon-text ${item.classList[0] ?? ''}`,
       title:   'Go to Artist',
       content: item.innerText,
       link:    item.href,

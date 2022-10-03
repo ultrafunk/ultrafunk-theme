@@ -10,6 +10,8 @@ namespace Ultrafunk\Theme\Templates\SingleTrack;
 
 use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 
+use function Ultrafunk\Plugin\Shared\get_term_links;
+
 
 /**************************************************************************************************************************/
 
@@ -48,6 +50,8 @@ function track_content(object $post) : void
 
 $track_data        = \Ultrafunk\Theme\Functions\get_track_data($post);
 $is_youtube_track  = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
+$artists           = get_object_term_cache($post->ID, 'uf_artist');
+$channels          = get_object_term_cache($post->ID, 'uf_channel');
 $track_title_split = '<h2 class="track-title type-split">' . $post->track_artist . '<br><span class="light-text">' . $post->track_title . '</span></h2>';
 
 
@@ -72,10 +76,12 @@ $track_title_split = '<h2 class="track-title type-split">' . $post->track_artist
     ?>
     <div class="track-meta">
       <div class="track-meta-artists">
-        <b><a href="/artists/" title="View Artists">Artists</a>: </b><span class="track-artists-links"><?php the_terms(get_the_ID(), 'uf_artist'); ?></span>
+        <b><a href="/artists/" title="View Artists">Artists</a>: </b>
+        <span class="track-artists-links"><?php echo get_term_links($artists, '/artist/', ', ', (int)$post->track_artist_id); ?></span>
       </div>
       <div class="track-meta-channels">
-        <b><a href="/channels/" title="View Channels">Channels</a>: </b><span class="track-channels-links"><?php the_terms(get_the_ID(), 'uf_channel'); ?></span>
+        <b><a href="/channels/" title="View Channels">Channels</a>: </b>
+        <span class="track-channels-links"><?php echo get_term_links($channels, '/channel/', ', '); ?></span>
       </div>
       <?php \Ultrafunk\Theme\Tags\track_meta_controls(); ?>
     </div>

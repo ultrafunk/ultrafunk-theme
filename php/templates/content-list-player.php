@@ -10,6 +10,8 @@ namespace Ultrafunk\Theme\Templates;
 
 use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 
+use function Ultrafunk\Plugin\Shared\get_term_links;
+
 
 /**************************************************************************************************************************/
 
@@ -78,8 +80,8 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\Base
           data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
         <?php } ?>
         >
-        <div class="track-artists-links"><?php $this->term_links($artists, 'artist', (int)$track->track_artist_id); ?></div>
-        <div class="track-channels-links"><?php $this->term_links($channels, 'channel'); ?></div>
+        <div class="track-artists-links"><?php echo get_term_links($artists, '/list/artist/', '', (int)$track->track_artist_id); ?></div>
+        <div class="track-channels-links"><?php echo get_term_links($channels, '/list/channel/'); ?></div>
         <div class="track-details">
           <div class="thumbnail" <?php echo ($is_youtube_track ? 'title="Play Track"' : 'title="SoundCloud Track"'); ?>>
             <?php if ($ultrafunk_is_prod_build) { ?>
@@ -123,15 +125,6 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\Base
 
   /**************************************************************************************************************************/
 
-
-  private function term_links(array $tags, string $path, int $track_artist_id = -1) : void
-  {
-    foreach ($tags as $tag)
-    {
-      $class = (($track_artist_id !== -1) && ($tag->term_id === $track_artist_id)) ? 'primary' : 'secondary';
-      echo "<a class='$class' href='/list/$path/$tag->slug/'>$tag->name</a>";
-    }
-  }
 
   private function is_video(array $channels) : bool
   {

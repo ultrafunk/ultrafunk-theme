@@ -55,7 +55,7 @@ function get_session_vars() : array
     return $session_vars;
 
   if (is_termlist() || is_list_player())
-    return \Ultrafunk\Plugin\Shared\set_list_session_vars($session_vars);
+    return \Ultrafunk\Plugin\Shared\set_request_session_vars($session_vars);
 
   if (is_single())
   {
