@@ -169,7 +169,10 @@ function getTrackNavHtml(isNavPrev, navUrl, trackMeta)
 {
   const trackArtistTitle  = `<b>${trackMeta.track_artist}</b><br>${trackMeta.track_title}`;
   const prevNextThumbnail = getThumbnailData(trackMeta);
-  const prevNextThumbHtml = `<div class="${isNavPrev ? 'prev' : 'next'}-track-nav-thumbnail ${prevNextThumbnail.class}"><img src="${prevNextThumbnail.src}"></div>`;
+  const prevNextThumbHtml = /*html*/ `
+    <div class="${isNavPrev ? 'prev' : 'next'}-track-nav-thumbnail ${prevNextThumbnail.class}">
+      <img src="${prevNextThumbnail.src}" alt="${isNavPrev ? 'Previous' : 'Next'} Track Thumbnail">
+    </div>`;
 
   return /*html*/ `
     <div class="${isNavPrev ? 'nav-previous' : 'nav-next'}">

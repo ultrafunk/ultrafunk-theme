@@ -36,6 +36,75 @@ use function Ultrafunk\Plugin\Globals\ {
 
 
 //
+// Set request session variables for client side use (JavaScript)
+//
+function set_request_session_vars(array $session_vars) : array
+{
+  $params = \Ultrafunk\Plugin\Globals\get_request_params();
+  $data   = $params['data'];
+  $query  = $params['query'];
+  $path   = isset($params['route_path']) ? $params['route_path'] : '';
+
+  $session_vars['params']      = $params['get'];
+  $session_vars['currentPage'] = $params['current_page'];
+  $session_vars['maxPages']    = $params['max_pages'];
+
+  if (isset($params['max_pages']) && ($params['max_pages'] > 1))
+  {
+    if ($params['current_page'] === 1)
+    {
+      $session_vars['nextPage'] = '/' . $path . '/page/' . ($params['current_page'] + 1) . '/';
+    }
+    else if ($params['current_page'] < $params['max_pages'])
+    {
+      $session_vars['prevPage'] = '/' . $path . '/page/' . ($params['current_page'] - 1) . '/';
+      $session_vars['nextPage'] = '/' . $path . '/page/' . ($params['current_page'] + 1) . '/';
+    }
+    else
+    {
+      $session_vars['prevPage'] = '/' . $path . '/page/' . ($params['current_page'] - 1) . '/';
+    }
+
+    if ($params['current_page'] === 2)
+      $session_vars['prevPage'] = '/' . $path . '/';
+  }
+  else if (isset($data['first_letter']))
+  {
+    $letters = $data['letters_range'];
+    $index   = array_search($data['first_letter'], $letters);
+
+    if ($index === 0)
+    {
+      $session_vars['nextPage'] = '/' . $path . '/b/';
+    }
+    else if (($index + 1) < count($letters))
+    {
+      $session_vars['prevPage'] = '/' . $path . '/' . $letters[$index - 1] . '/';
+      $session_vars['nextPage'] = '/' . $path . '/' . $letters[$index + 1] . '/';
+    }
+    else
+    {
+      $session_vars['prevPage'] = '/' . $path . '/' . $letters[$index - 1] . '/';
+    }
+  }
+
+  // Prepend full site url for better client side validation + append parameters if present
+  if ($session_vars['prevPage'] !== null)
+  {
+    $session_vars['prevPage']  = PLUGIN_ENV['site_url'] . $session_vars['prevPage'];
+    $session_vars['prevPage'] .= ($query['string'] !== null) ? "?{$query['string']}" : '';
+  }
+
+  if ($session_vars['nextPage'] !== null)
+  {
+    $session_vars['nextPage']  = PLUGIN_ENV['site_url'] . $session_vars['nextPage'];
+    $session_vars['nextPage'] .= ($query['string'] !== null) ? "?{$query['string']}" : '';
+  }
+
+  return $session_vars;
+}
+
+//
 // Get prev + next post/posts URLs + other navigation variables
 //
 function get_session_vars() : array
@@ -55,7 +124,7 @@ function get_session_vars() : array
     return $session_vars;
 
   if (is_termlist() || is_list_player())
-    return \Ultrafunk\Plugin\Shared\set_request_session_vars($session_vars);
+    return set_request_session_vars($session_vars);
 
   if (is_single())
   {

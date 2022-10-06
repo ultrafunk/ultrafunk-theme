@@ -16,38 +16,6 @@ use function Ultrafunk\Plugin\Shared\get_term_links;
 /**************************************************************************************************************************/
 
 
-function get_prev_next_track_date_time(bool $get_prev_track) : string
-{
-  $post_data = $get_prev_track ? get_previous_post() : get_next_post();
-
-  if (!empty($post_data))
-    return str_replace(' ', 'T', $post_data->post_date);
-
-  return '';
-}
-
-function track_content(object $post) : void
-{
-  if (intval($post->track_source_type) === TRACK_TYPE::SOUNDCLOUD)
-  {
-    the_content();
-  }
-  else
-  {
-    ?>
-    <figure class="wp-block-embed">
-      <div class="wp-block-embed__wrapper">
-        <div id="youtube-player"></div>
-      </div>
-    </figure>
-    <?php
-  }
-}
-
-
-/**************************************************************************************************************************/
-
-
 $track_data        = \Ultrafunk\Theme\Functions\get_track_data($post);
 $is_youtube_track  = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
 $artists           = get_object_term_cache($post->ID, 'uf_artist');
@@ -90,3 +58,36 @@ $track_title_split = '<h2 class="track-title type-split">' . $post->track_artist
     <?php track_content($post); ?>
   </div>
 </single-track>
+<?php
+
+
+/**************************************************************************************************************************/
+
+
+function get_prev_next_track_date_time(bool $get_prev_track) : string
+{
+  $post_data = $get_prev_track ? get_previous_post() : get_next_post();
+
+  if (!empty($post_data))
+    return str_replace(' ', 'T', $post_data->post_date);
+
+  return '';
+}
+
+function track_content(object $post) : void
+{
+  if (intval($post->track_source_type) === TRACK_TYPE::SOUNDCLOUD)
+  {
+    the_content();
+  }
+  else
+  {
+    ?>
+    <figure class="wp-block-embed">
+      <div class="wp-block-embed__wrapper">
+        <div id="youtube-player"></div>
+      </div>
+    </figure>
+    <?php
+  }
+}

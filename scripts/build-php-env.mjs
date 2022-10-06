@@ -17,7 +17,7 @@ const jsChunkFilesRegEx = /^chunk.*\.js$/i;
 
 
 // ************************************************************************************************
-// Get newest ESBuild chunk file
+// Get newest esbuild chunk file
 // ************************************************************************************************
 
 function getMostRecentFile(dir)
@@ -37,7 +37,7 @@ function orderReccentFiles(dir)
 
 
 // ************************************************************************************************
-// Create preload-chunck.php
+// Create build-env.php
 // ************************************************************************************************
 
 const newestChunk = getMostRecentFile(jsChunksPath);

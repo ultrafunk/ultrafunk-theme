@@ -86,13 +86,13 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\Base
           <div class="thumbnail" <?php echo ($is_youtube_track ? 'title="Play Track"' : 'title="SoundCloud Track"'); ?>>
             <?php if ($ultrafunk_is_prod_build) { ?>
               <div class="thumbnail-overlay"><div class="spinner"></div></div>
-              <img src="<?php echo $track_data['thumnail_src']; ?>" alt="">
+              <img src="<?php echo $track_data['thumnail_src']; ?>" alt="Track Thumbnail">
             <?php } else { ?>
               <div class="thumbnail-overlay"><div class="spinner"></div></div>
               <?php if ($is_youtube_track) { ?>
-                <img src="/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png" alt="">
+                <img src="/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png" alt="Track Thumbnail">
               <?php } else { ?>
-                <img src="/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png" alt="">
+                <img src="/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png" alt="Track Thumbnail">
               <?php } ?>
             <?php } ?>
           </div>

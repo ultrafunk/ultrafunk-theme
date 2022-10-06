@@ -78,7 +78,7 @@ export function getTrackEntryHtml(track)
       <div class="track-details">
         <div class="thumbnail" ${isYouTubeTrack ? 'title="Play Track"' : 'title="SoundCloud Track"'}>
           <div class="thumbnail-overlay"><div class="spinner"></div></div>
-          <img src="${trackThumbnailUrl}" alt="">
+          <img src="${trackThumbnailUrl}" alt="Track Thumbnail">
         </div>
         <div class="artist-title text-nowrap-ellipsis" ${(isYouTubeTrack === false) ? 'title="Link: Play SoundCloud track"' : ''}>
           ${trackArtistTitle}

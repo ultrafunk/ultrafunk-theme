@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="footer-logo">
-      <a href="<?php echo \Ultrafunk\Plugin\Globals\get_cached_home_url('/'); ?>" aria-label="Home"><img src="<?php echo esc_url(get_theme_mod('ultrafunk_footer_logo')); ?>" loading="lazy" alt=""></a>
+      <a href="<?php echo \Ultrafunk\Plugin\Globals\get_cached_home_url('/'); ?>" aria-label="Home"><img src="<?php echo esc_url(get_theme_mod('ultrafunk_footer_logo')); ?>" loading="lazy" alt="Site Logo"></a>
     </div>
   </div>
 </footer>

@@ -243,8 +243,8 @@ function header_site_branding() : void
   <div class="site-branding">
     <?php echo $nav_icons['menu']; ?>
     <a href="<?php echo (is_list_player() ? get_cached_home_url('/list/') : get_cached_home_url('/')); ?>" aria-label="Home">
-      <img id="branding-logo-mobile"  src="<?php echo THEME_ENV['uploads_branding']; ?>ultrafunk_logo_mobile_12.png"  title="Ultrafunk home" alt="">
-      <img id="branding-logo-desktop" src="<?php echo THEME_ENV['uploads_branding']; ?>ultrafunk_logo_desktop_12.png" title="Ultrafunk home" alt="">
+      <img id="branding-logo-mobile"  src="<?php echo THEME_ENV['uploads_branding']; ?>ultrafunk_logo_mobile_12.png"  title="Ultrafunk home" alt="Site Homepage">
+      <img id="branding-logo-desktop" src="<?php echo THEME_ENV['uploads_branding']; ?>ultrafunk_logo_desktop_12.png" title="Ultrafunk home" alt="Site Homepage">
     </a>
     <?php echo $nav_icons['search']; ?>
   </div>
@@ -263,7 +263,7 @@ function header_playback_controls() : void
     </div>
     <div class="playback-thumbnail-control state-disabled" title="<?php echo (is_list_player() ? 'Show player' : 'Double click / tap: Toggle Fullscreen (f)'); ?>">
       <div class="thumbnail-overlay"><div class="spinner"></div></div>
-      <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/playback_thumbnail_placeholder.png" alt="">
+      <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/playback_thumbnail_placeholder.png" alt="Track Thumbnail">
     </div>
     <div class="playback-timer-control state-disabled" title="Toggle Autoplay (shift + a)">
       <span class="playback-timer-position"></span><br><span class="playback-timer-duration"></span>
@@ -456,11 +456,11 @@ function single_track_nav_link(bool $is_nav_prev, mixed $post) : void
       <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_nav_prev ? 'prev' : 'next'); ?>" title="<?php echo $prev_next_title; ?>">
         <?php if ($is_nav_prev) { ?>
           <div class="prev-track-arrow">&#10094</div>
-          <div class="prev-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>"></div>
+          <div class="prev-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>" alt="Previous Track Thumbnail"></div>
         <?php } ?>
         <div class="<?php echo ($is_nav_prev ? 'prev-track-artist-title' : 'next-track-artist-title'); ?>"><?php echo $track_artist_title; ?></div>
         <?php if (!$is_nav_prev) { ?>
-          <div class="next-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>"></div>
+          <div class="next-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>" alt="Next Track Thumbnail"></div>
           <div class="next-track-arrow">&#10095</div>
         <?php } ?>
       </a>
@@ -499,7 +499,7 @@ function track_meta_controls() : void
     <div class="crossfade-controls">
       <div class="crossfade-preset-control state-disabled"></div>
       <div class="crossfade-fadeto-control state-disabled">
-        <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/crossfade_icon.png" alt="" title="Crossfade to this track">
+        <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/crossfade_icon.png" alt="Crossfade Icon" title="Crossfade to this track">
       </div>
     </div>
   </div>
