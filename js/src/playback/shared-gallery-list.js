@@ -77,6 +77,24 @@ export function autoplayNavTo(destUrl, continueAutoplay = false)
   }
 }
 
+export function updateVolumeMuteSettings(currentVolume, isMuted)
+{
+  // settings.playback.masterVolume has a range of 0 => 100 in multiples of 5 (0, 5, 10, 15, 20 etc.)
+  const multipleOf5Volume = (Math.round(currentVolume / 5) * 5);
+
+  if (multipleOf5Volume !== settings.playback.masterVolume)
+  {
+    debug.log(`updateVolumeMuteSettings() - multipleOf5Volume: ${multipleOf5Volume}`);
+    settings.playback.masterVolume = multipleOf5Volume;
+  }
+
+  if (isMuted !== settings.playback.masterMute)
+  {
+    debug.log(`updateVolumeMuteSettings() - isMuted: ${isMuted}`);
+    settings.playback.masterMute = isMuted;
+  }
+}
+
 
 // ************************************************************************************************
 //
@@ -162,7 +180,7 @@ function galleryPlayerScrollTo(trackId)
 //
 // ************************************************************************************************
 
-export function playerOnKeyScroll(event)
+export function playerOnKeysScroll(event)
 {
   if (isListPlayer() && (event.shiftKey === true) && (window.innerWidth > 1350))
   {

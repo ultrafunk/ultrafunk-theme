@@ -157,10 +157,11 @@ export function ready(prevClickCallback, playPauseClickCallback, nextClickCallba
 
   ctrl.mute.setState(STATE.ENABLED);
   ctrl.mute.addListener('click', () => muteClickCallback());
-  updateMuteState();
+  updateVolumeMuteState();
 
-  addSettingsObserver('autoplay',   updateAutoplayState);
-  addSettingsObserver('masterMute', updateMuteState);
+  addSettingsObserver('autoplay',     updateAutoplayState);
+  addSettingsObserver('masterVolume', updateVolumeMuteState);
+  addSettingsObserver('masterMute',   updateVolumeMuteState);
 
   addListener(EVENT.MEDIA_LOADING,     setLoadState);
   addListener(EVENT.MEDIA_PLAYING,     setPlayState);
@@ -398,9 +399,18 @@ export function toggleRepeat()
 // Set Mute control and Autoplay states
 // ************************************************************************************************
 
-function updateMuteState()
+function updateVolumeMuteState()
 {
-  ctrl.mute.icon.textContent = settings.playback.masterMute ? 'volume_off' : 'volume_up';
+  if (settings.playback.masterMute)
+  {
+    ctrl.mute.elementTitle     = `Muted (m to Unmute)`;
+    ctrl.mute.icon.textContent = 'volume_off';
+  }
+  else
+  {
+    ctrl.mute.elementTitle     = `Volume: ${settings.playback.masterVolume}% (+ = Up, - = Down, m = Mute)`;
+    ctrl.mute.icon.textContent = (settings.playback.masterVolume > 50) ? 'volume_up' : 'volume_down';
+  }
 }
 
 function updateAutoplayState()

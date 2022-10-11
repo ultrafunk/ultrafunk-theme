@@ -32,8 +32,9 @@ export class PlaybackTimer
     });
   }
 
-  // Abstract method that must be overriden in child class
+  // Abstract methods to override in child class(es)
   updateTimer() {}
+  updateVolumeMute() {}
 
   start()
   {
@@ -53,23 +54,26 @@ export class PlaybackTimer
     timeRemainingWarningBlink(false);
   }
 
-  updateTimeRemainingWarning(positionSeconds, durationSeconds)
+  updateOncePerSecond(positionSeconds, durationSeconds)
   {
-    if ((settings.playback.autoplay === false)  &&
-         settings.playback.timeRemainingWarning &&
-        (this.#lastPosSeconds !== positionSeconds))
+    if (this.#lastPosSeconds !== positionSeconds)
     {
-      const remainingSeconds = durationSeconds - positionSeconds;
-      this.#lastPosSeconds   = positionSeconds;
+      this.#lastPosSeconds = positionSeconds;
+      this.updateVolumeMute();
 
-      if (remainingSeconds <= settings.playback.timeRemainingSeconds)
+      if ((settings.playback.autoplay === false) && settings.playback.timeRemainingWarning)
       {
-        timeRemainingWarningBlink(true);
-        dispatch(EVENT.MEDIA_TIME_REMAINING, { timeRemainingSeconds: remainingSeconds });
-      }
-      else
-      {
-        timeRemainingWarningBlink(false);
+        const remainingSeconds = durationSeconds - positionSeconds;
+
+        if (remainingSeconds <= settings.playback.timeRemainingSeconds)
+        {
+          timeRemainingWarningBlink(true);
+          dispatch(EVENT.MEDIA_TIME_REMAINING, { timeRemainingSeconds: remainingSeconds });
+        }
+        else
+        {
+          timeRemainingWarningBlink(false);
+        }
       }
     }
   }

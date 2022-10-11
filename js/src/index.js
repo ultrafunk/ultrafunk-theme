@@ -130,20 +130,20 @@ function documentEventKeyDown(event)
   {
     switch (event.key)
     {
-      case 'c':
-      case 'C':
-        if (searchNotFocused())
-        {
-          event.preventDefault();
-          navMenu.toggle();
-        }
-        break;
-
       case 'L':
         if (searchNotFocused() && notSettingsPage())
         {
           interaction.galleryLayout.toggle(event);
           resize.trigger();
+        }
+        break;
+
+      case 'n':
+      case 'N':
+        if (searchNotFocused())
+        {
+          event.preventDefault();
+          navMenu.toggle();
         }
         break;
 

@@ -187,9 +187,14 @@ export function togglePlayPause()
   }
 }
 
-export function toggleMute(setCurrentSetting = false)
+export function setVolume()
 {
-  if (setCurrentSetting === false)
+  m.player.setVolume(settings.playback.masterVolume);
+}
+
+export function toggleMute(setMuteSetting = true)
+{
+  if (setMuteSetting)
     settings.playback.masterMute = (settings.playback.masterMute === true) ? false : true;
 
   if (settings.playback.masterMute)
@@ -357,7 +362,8 @@ function onYouTubePlayerReady()
   playbackTimer.ready(m.player);
   listControls.ready(m.player);
 
-  toggleMute(true);
+  toggleMute(false);
+  m.player.setVolume(settings.playback.masterVolume);
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: false });
   cueOrPlayCurrentTrack(m.autoplayData?.autoplay === true);
 }

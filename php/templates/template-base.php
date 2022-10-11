@@ -11,7 +11,7 @@ namespace Ultrafunk\Theme\Templates;
 /**************************************************************************************************************************/
 
 
-abstract class Base
+abstract class TemplateBase
 {
   protected ?object $request  = null;
   protected ?string $home_url = null;

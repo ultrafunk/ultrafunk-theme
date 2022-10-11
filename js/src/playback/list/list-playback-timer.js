@@ -5,8 +5,9 @@
 //
 
 
-import { PlaybackTimer }      from '../playback-timer.js';
-import { EVENT, addListener } from '../playback-events.js';
+import { PlaybackTimer }            from '../playback-timer.js';
+import { EVENT, addListener }       from '../playback-events.js';
+import { updateVolumeMuteSettings } from '../shared-gallery-list.js';
 
 import {
   isPlaying,
@@ -30,7 +31,7 @@ class ListPlaybackTimer extends PlaybackTimer
       updateTimerAndProgress((positionSecondsDecimal * 1000), positionSeconds, durationSeconds);
 
       if ((positionSeconds > 0) && (durationSeconds > 0))
-        super.updateTimeRemainingWarning(positionSeconds, durationSeconds);
+        super.updateOncePerSecond(positionSeconds, durationSeconds);
     }
   }
 
@@ -45,6 +46,11 @@ class ListPlaybackTimer extends PlaybackTimer
   {
     if (this.isVisible && isPlaying())
       this.#update(this.#player.embedded.getCurrentTime(), this.#player.getDuration());
+  }
+
+  updateVolumeMute()
+  {
+    updateVolumeMuteSettings(this.#player.embedded.getVolume(), this.#player.embedded.isMuted());
   }
 }
 

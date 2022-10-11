@@ -16,7 +16,7 @@ use function Ultrafunk\Plugin\Shared\get_term_links;
 /**************************************************************************************************************************/
 
 
-class ListPlayer extends \Ultrafunk\Theme\Templates\Base
+class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
 {
   public function render_response() : void
   {

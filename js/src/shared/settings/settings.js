@@ -27,9 +27,13 @@ export const PREF_PLAYER = {
 // Ultrafunk (internal) settings: Tips and Banners
 // ************************************************************************************************
 
-const listPerPageValues          = [ 10,   15,   20,   25,   30,   35,   40,   45,   50];
+const masterVolumeValues         = [ 5,    10,    15,    20,    25,    30,    35,    40,    45,    50,    55,    60,    65,    70,    75,    80,    85,    90,    95,    100  ];
+const masterVolumeValueStrings   = ['5%', '10%', '15%', '20%', '25%', '30%', '35%', '40%', '45%', '50%', '55%', '60%', '65%', '70%', '75%', '80%', '85%', '90%', '95%', '100%'];
+
+const listPerPageValues          = [ 10,   15,   20,   25,   30,   35,   40,   45,   50 ];
 const listPerPageValueStrings    = ['10', '15', '20', '25', '30', '35', '40', '45', '50'];
-const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18,   20,   22,   24];
+
+const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18,   20,   22,   24 ];
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
@@ -37,7 +41,7 @@ export const settingsSchema = {
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
-    masterVolume:         { description: 'Master Volume',                   type: INTEGER, values: [0, 25, 50, 75, 100], default: 100,   valueStrings: ['0%', '25%', '50%', '75%', '100%'] },
+    masterVolume:         { description: 'Master Volume',                   type: INTEGER, values: masterVolumeValues,   default: 100,   valueStrings: masterVolumeValueStrings },
     masterMute:           { description: 'Master Mute',                     type: BOOLEAN, values: [true, false],        default: false, valueStrings: ['ON', 'OFF'] },
     autoplay:             { description: 'Autoplay next track',             type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
     autoExitFullscreen:   { description: 'Exit Fullscreen on next track',   type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },

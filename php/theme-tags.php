@@ -108,7 +108,7 @@ function scripts_styles() : void
   $template_uri = esc_url(get_template_directory_uri());
   $js_path      = $ultrafunk_is_prod_build ? '/js/dist/' : '/js/src/';
 
-  \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Theme\Functions\get_session_vars());
+  \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Plugin\Request\get_session_vars());
 
   ?>
   <script><?php echo 'const UF_ResponseData = ' . json_encode(\Ultrafunk\Plugin\Globals\get_session_vars()); ?></script>
@@ -284,7 +284,7 @@ function header_playback_controls() : void
 function get_nav_bar_icons() : array
 {
   $nav_icons['search'] = '<div class="nav-search-toggle" title="Show / Hide search (s)"><span class="material-icons">search</span></div>';
-  $nav_icons['menu']   = '<div class="nav-menu-toggle" title="Toggle Channel menu (c)"><span class="material-icons">menu</span></div>';
+  $nav_icons['menu']   = '<div class="nav-menu-toggle" title="Toggle Navigation menu (n)"><span class="material-icons">menu</span></div>';
 
   return $nav_icons;
 }

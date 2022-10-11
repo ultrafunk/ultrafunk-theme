@@ -171,6 +171,11 @@ function seekClick(positionSeconds)
   m.players.current.seekTo(positionSeconds);
 }
 
+export function setVolume()
+{
+  m.players.current.setVolume(settings.playback.masterVolume);
+}
+
 export function toggleMute()
 {
   settings.playback.masterMute = (settings.playback.masterMute === true) ? false : true;

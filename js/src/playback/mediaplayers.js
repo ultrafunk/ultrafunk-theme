@@ -125,6 +125,11 @@ export class YouTube extends MediaPlayer
       this.embedded.unMute();
   }
 
+  isMuted()
+  {
+    return this.embedded.isMuted();
+  }
+
   getPosition(callback)
   {
     callback((this.embedded.getCurrentTime() * 1000), this.duration);
@@ -255,6 +260,11 @@ export class SoundCloud extends MediaPlayer
       this.setVolume(0);
     else
       this.setVolume(this.#volume);
+  }
+
+  isMuted()
+  {
+    return this.#isMuted;
   }
 
   getPosition(callback)

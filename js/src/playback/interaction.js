@@ -41,7 +41,7 @@ import {
   isGalleryPlayer,
   isListPlayer,
   playerScrollTo,
-  playerOnKeyScroll,
+  playerOnKeysScroll,
   shuffleClickNavTo,
   autoplayNavTo,
   fullscreenElement,
@@ -166,7 +166,7 @@ function documentEventKeyDown(event)
       case 'End':
       case 'PageUp':
       case 'PageDown':
-        playerOnKeyScroll(event);
+        playerOnKeysScroll(event);
         break;
 
       case 'ArrowLeft':
@@ -175,6 +175,11 @@ function documentEventKeyDown(event)
 
       case 'ArrowRight':
         onKeyArrowRight(event);
+        break;
+
+      case '+':
+      case '-':
+        onKeysVolumeChange(event);
         break;
 
       case 'A':
@@ -191,7 +196,7 @@ function documentEventKeyDown(event)
       case 'M':
         event.preventDefault();
         m.player.toggleMute();
-        showSnackbar(settings.playback.masterMute ? 'Volume is muted (<b>m</b> to unmute)' : 'Volume is unmuted (<b>m</b> to mute)', 3);
+        showSnackbar(settings.playback.masterMute ? '<b>Muted</b> (<b>m</b> to Unmute)' : '<b>Unmuted</b> (<b>m</b> to Mute)', 3);
         break;
 
       case 'p':
@@ -294,6 +299,18 @@ function playPrevNextTrack(event, playPrevNext, prevNextPage)
   {
     prevNextNavTo(null, prevNextPage);
   }
+}
+
+function onKeysVolumeChange(event)
+{
+  event.preventDefault();
+
+  settings.playback.masterVolume = (event.key === '+')
+    ? (settings.playback.masterVolume < 100) ? (settings.playback.masterVolume + 5) : 100
+    : (settings.playback.masterVolume > 5  ) ? (settings.playback.masterVolume - 5) : 5;
+
+  m.player.setVolume();
+  showSnackbar(`<b>Volume:</b> ${settings.playback.masterVolume}% (<b>+</b> = Up, <b>-</b> = Down, <b>m</b> = Mute)`);
 }
 
 

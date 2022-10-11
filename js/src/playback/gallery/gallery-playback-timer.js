@@ -5,10 +5,11 @@
 //
 
 
-import { PlaybackTimer }          from '../playback-timer.js';
-import { settings }               from '../../shared/session-data.js';
-import { CROSSFADE_TYPE }         from './crossfade.js';
-import { updateTimerAndProgress } from '../playback-controls.js';
+import { PlaybackTimer }            from '../playback-timer.js';
+import { settings }                 from '../../shared/session-data.js';
+import { CROSSFADE_TYPE }           from './crossfade.js';
+import { updateTimerAndProgress }   from '../playback-controls.js';
+import { updateVolumeMuteSettings } from '../shared-gallery-list.js';
 
 
 /*************************************************************************************************/
@@ -27,7 +28,7 @@ class GalleryPlaybackTimer extends PlaybackTimer
 
     if ((positionSeconds > 0) && (durationSeconds > 0))
     {
-      super.updateTimeRemainingWarning(positionSeconds, durationSeconds);
+      super.updateOncePerSecond(positionSeconds, durationSeconds);
       this.#updateAutoCrossfade(positionSeconds, durationSeconds);
     }
   }
@@ -68,6 +69,12 @@ class GalleryPlaybackTimer extends PlaybackTimer
   {
     if (this.isVisible || this.#isAutoCrossfade())
       this.#players.current.getPosition((position, duration) => this.#updateCallback(position, duration));
+  }
+
+  updateVolumeMute()
+  {
+    if (this.#players.crossfade.isFading() === false)
+      this.#players.current.getVolume((volume) => updateVolumeMuteSettings(Math.round(volume), this.#players.current.isMuted()));
   }
 }
 
