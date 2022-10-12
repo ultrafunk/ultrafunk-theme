@@ -79,20 +79,20 @@ export function autoplayNavTo(destUrl, continueAutoplay = false)
 
 export function updateVolumeMuteSettings(currentVolume, isMuted)
 {
-  // settings.playback.masterVolume has a range of 0 => 100 in multiples of 5 (0, 5, 10, 15, 20 etc.)
-  const multipleOf5Volume = (Math.round(currentVolume / 5) * 5);
+  // settings.playback.masterVolume has a range of 5 => 100% in multiples of 5 (5, 10, 15, 20 etc...)
+  let multipleOf5Volume = (Math.round(currentVolume / 5) * 5);
+
+  if (currentVolume < 5)
+  {
+    multipleOf5Volume = 5;
+    isMuted = true;
+  }
 
   if (multipleOf5Volume !== settings.playback.masterVolume)
-  {
-    debug.log(`updateVolumeMuteSettings() - multipleOf5Volume: ${multipleOf5Volume}`);
     settings.playback.masterVolume = multipleOf5Volume;
-  }
 
   if (isMuted !== settings.playback.masterMute)
-  {
-    debug.log(`updateVolumeMuteSettings() - isMuted: ${isMuted}`);
     settings.playback.masterMute = isMuted;
-  }
 }
 
 
@@ -114,11 +114,6 @@ function scrollToYPos(element, destYPos)
     behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'),
   });
 }
-
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
 
 function listPlayerScrollTo(trackId = 0)
 {
@@ -174,11 +169,6 @@ function galleryPlayerScrollTo(trackId)
     return (getCssPropValue('--site-content-margin-top', document.body) - 1);
   }
 }
-
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
 
 export function playerOnKeysScroll(event)
 {
