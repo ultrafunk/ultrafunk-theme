@@ -143,76 +143,82 @@ function documentEventKeyDown(event)
 {
   if (m.isPlaybackReady           &&
       m.keyboardShortcuts.allow() &&
-      (event.repeat  === false)   &&
       (event.ctrlKey === false)   &&
       (event.altKey  === false))
   {
-    switch(event.code)
+    // Events that need event.repeat goes here
+    switch(event.key)
     {
-      case 'Backquote':
-        event.preventDefault();
-        playerScrollTo(m.player.getStatus().trackId);
-        break;
-    }
-
-    switch (event.key)
-    {
-      case ' ':
-        event.preventDefault();
-        m.player.togglePlayPause();
-        break;
-
-      case 'Home':
-      case 'End':
-      case 'PageUp':
-      case 'PageDown':
-        playerOnKeysScroll(event);
-        break;
-
-      case 'ArrowLeft':
-        onKeyArrowLeft(event);
-        break;
-
-      case 'ArrowRight':
-        onKeyArrowRight(event);
-        break;
-
       case '+':
       case '-':
         onKeysVolumeChange(event);
         break;
+    }
 
-      case 'A':
-        footerToggles.autoplay.toggle();
-        break;
+    if (event.repeat === false)
+    {
+      switch(event.code)
+      {
+        case 'Backquote':
+          event.preventDefault();
+          playerScrollTo(m.player.getStatus().trackId);
+          break;
+      }
 
-      case 'f':
-      case 'F':
-        event.preventDefault();
-        fullscreenElement.toggle(document.getElementById(m.player.getStatus().iframeId));
-        break;
+      switch (event.key)
+      {
+        case ' ':
+          event.preventDefault();
+          m.player.togglePlayPause();
+          break;
 
-      case 'm':
-      case 'M':
-        event.preventDefault();
-        m.player.toggleMute();
-        showSnackbar(settings.playback.masterMute ? '<b>Muted</b> (<b>m</b> to Unmute)' : '<b>Unmuted</b> (<b>m</b> to Mute)', 3);
-        break;
+        case 'Home':
+        case 'End':
+        case 'PageUp':
+        case 'PageDown':
+          playerOnKeysScroll(event);
+          break;
 
-      case 'p':
-      case 'P':
-        footerToggles.playerType.toggle();
-        break;
+        case 'ArrowLeft':
+          onKeyArrowLeft(event);
+          break;
 
-      case 'r':
-      case 'R':
-        showSnackbar(`${toggleRepeat().title} (<b>r</b> to change)`, 3);
-        break;
+        case 'ArrowRight':
+          onKeyArrowRight(event);
+          break;
 
-      case 'x':
-      case 'X':
-        footerToggles.crossfade.toggle();
-        break;
+        case 'A':
+          footerToggles.autoplay.toggle();
+          break;
+
+        case 'f':
+        case 'F':
+          event.preventDefault();
+          fullscreenElement.toggle(document.getElementById(m.player.getStatus().iframeId));
+          break;
+
+        case 'm':
+        case 'M':
+          event.preventDefault();
+          m.player.toggleMute();
+          showSnackbar(settings.playback.masterMute ? '<b>Muted</b> (<b>m</b> to Unmute)' : '<b>Unmuted</b> (<b>m</b> to Mute)', 3);
+          break;
+
+        case 'p':
+        case 'P':
+          footerToggles.playerType.toggle();
+          break;
+
+        case 'r':
+        case 'R':
+          showSnackbar(`${toggleRepeat().title} (<b>r</b> to change)`, 3);
+          break;
+
+        case 'x':
+        case 'X':
+          footerToggles.crossfade.toggle();
+          break;
+      }
     }
   }
 }
@@ -310,7 +316,6 @@ function onKeysVolumeChange(event)
     : (settings.playback.masterVolume > 5  ) ? (settings.playback.masterVolume - 5) : 5;
 
   m.player.setVolume();
-  showSnackbar(`<b>Volume:</b> ${settings.playback.masterVolume}% (<b>+</b> = Up, <b>-</b> = Down, <b>m</b> = Mute)`);
 }
 
 

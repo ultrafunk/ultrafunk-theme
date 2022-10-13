@@ -239,7 +239,8 @@ export class SoundCloud extends MediaPlayer
 
   getVolume(callback)
   {
-    this.embedded.getVolume(volume => callback(volume));
+    if (this.#isMuted === false)
+      this.embedded.getVolume(volume => callback(volume));
   }
 
   // Override parent setVolume() because we use it for mute() as well

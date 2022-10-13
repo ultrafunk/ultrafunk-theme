@@ -113,6 +113,8 @@ export function init(mediaPlayers, seekClickCallback)
 
     ctrl.mute      = ElementWrapper('.playback-mute-control', playbackControls);
     ctrl.mute.icon = ctrl.mute.getElement('span.material-icons');
+
+    ctrl.volume = ElementWrapper('.playback-volume-control', playbackControls);
   }
   else
   {
@@ -157,6 +159,7 @@ export function ready(prevClickCallback, playPauseClickCallback, nextClickCallba
 
   ctrl.mute.setState(STATE.ENABLED);
   ctrl.mute.addListener('click', () => muteClickCallback());
+  ctrl.volume.setState(STATE.ENABLED);
   updateVolumeMuteState();
 
   addSettingsObserver('autoplay',     updateAutoplayState);
@@ -388,7 +391,7 @@ export function toggleRepeat()
                   : 0;
 
   ctrl.repeat.setAttribute('data-repeat-mode', index);
-  ctrl.repeat.elementTitle     = `${repeatModes[index].title} (r)`;
+  ctrl.repeat.element.title    = `${repeatModes[index].title} (r)`;
   ctrl.repeat.icon.textContent = repeatModes[index].icon;
 
   return repeatModes[index];
@@ -401,15 +404,19 @@ export function toggleRepeat()
 
 function updateVolumeMuteState()
 {
+  ctrl.volume.element.textContent = `${settings.playback.masterVolume}`;
+
   if (settings.playback.masterMute)
   {
-    ctrl.mute.elementTitle     = `Muted (m to Unmute)`;
+    ctrl.mute.element.title    = `Muted (m to Unmute)`;
     ctrl.mute.icon.textContent = 'volume_off';
+    ctrl.volume.setState(STATE.DISABLED);
   }
   else
   {
-    ctrl.mute.elementTitle     = `Volume: ${settings.playback.masterVolume}% (+ = Up, - = Down, m = Mute)`;
-    ctrl.mute.icon.textContent = (settings.playback.masterVolume > 50) ? 'volume_up' : 'volume_down';
+    ctrl.mute.element.title    = `Unmuted (m to Mute)`;
+    ctrl.mute.icon.textContent = (settings.playback.masterVolume > 50) ? 'volume_up' : 'volume_down_alt';
+    ctrl.volume.setState(STATE.ENABLED);
   }
 }
 

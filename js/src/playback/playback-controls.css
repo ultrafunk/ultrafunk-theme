@@ -76,6 +76,7 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
 * - Repeat:       Repeat Off, All or One
 * - Shuffle:      Shuffle All, Artist or Channel
 * - Mute:         Master mute
+* - Volume:       Master volume level
 * - Player:       Gallery or List toggle
 ***************************************************************************************************/
 
@@ -85,7 +86,7 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   display: flex;
   align-items: center;
   height: 54px;
-  margin-right: -8px;
+  margin-right: 2px;
   min-width: 0;
 }
 
@@ -245,7 +246,8 @@ body.single.track .playback-player-type-control {
 .playback-next-control,
 .playback-repeat-control,
 .playback-shuffle-control,
-.playback-mute-control {
+.playback-mute-control,
+.playback-volume-control {
   display: inline-block;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -258,7 +260,8 @@ body.single.track .playback-player-type-control {
 .playback-next-control.state-disabled,
 .playback-repeat-control.state-disabled,
 .playback-shuffle-control.state-disabled,
-.playback-mute-control.state-disabled {
+.playback-mute-control.state-disabled,
+.playback-volume-control.state-disabled {
   opacity: var(--control-disabled-opacity);
   color: var(--primary-icon-color);
   cursor: default;
@@ -271,7 +274,8 @@ body.single.track .playback-player-type-control {
 .playback-next-control.state-disabled:hover,
 .playback-repeat-control.state-disabled:hover,
 .playback-shuffle-control.state-disabled:hover,
-.playback-mute-control.state-disabled:hover {
+.playback-mute-control.state-disabled:hover,
+.playback-volume-control.state-disabled:hover {
   opacity: var(--control-disabled-opacity);
   cursor: default;
 }
@@ -337,6 +341,19 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
 
 .playback-shuffle-control:hover {
   color: var(--link-hover-color);
+}
+
+.playback-volume-control {
+  color: var(--primary-icon-color);
+  cursor: default;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 32px;
+  min-width: 30px;
+  max-width: 30px;
+  min-height: 30px;
+  max-height: 30px;
+  text-align: center;
 }
 
 
@@ -425,7 +442,8 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
   .playback-timer-control,
   .playback-repeat-control,
   .playback-shuffle-control,
-  .playback-mute-control {
+  .playback-mute-control,
+  .playback-volume-control {
     display: none;
   }
 

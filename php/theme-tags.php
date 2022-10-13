@@ -277,6 +277,7 @@ function header_playback_controls() : void
     <div class="playback-repeat-control state-disabled" title="Repeat off (r)" data-repeat-mode="0"><span class="material-icons">repeat</span></div>
     <div class="playback-shuffle-control state-disabled" title="<?php echo esc_attr(get_shuffle_title()); ?>"><span class="material-icons">shuffle</span></div>
     <div class="playback-mute-control state-disabled" title="Mute / Unmute (m)"><span class="material-icons">volume_up</span></div>
+    <div class="playback-volume-control state-disabled" title="Volume (+ = Up, - = Down)">00</div>
   </div>
   <?php
 }

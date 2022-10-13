@@ -37,8 +37,6 @@ export const ElementWrapper = function(elmentSelector, parentElement = document,
     get state()   { return state;         },
     get style()   { return element.style; },
 
-    set elementTitle(title) { element.title = title; },
-
     getElement(selector)         { return element.querySelector(selector);    },
     addListener(event, listener) { element.addEventListener(event, listener); },
 
