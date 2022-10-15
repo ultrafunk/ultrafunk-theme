@@ -153,6 +153,14 @@ function documentEventKeyDown(event)
       case '-':
         onKeysVolumeChange(event);
         break;
+
+      case 'ArrowUp':
+      case 'ArrowDown':
+        if (event.shiftKey)
+        {
+          onKeysVolumeChange(event);
+        }
+        break;
     }
 
     if (event.repeat === false)
@@ -311,7 +319,7 @@ function onKeysVolumeChange(event)
 {
   event.preventDefault();
 
-  settings.playback.masterVolume = (event.key === '+')
+  settings.playback.masterVolume = ((event.key === '+') || (event.key === 'ArrowUp'))
     ? (settings.playback.masterVolume < 100) ? (settings.playback.masterVolume + 5) : 100
     : (settings.playback.masterVolume > 5  ) ? (settings.playback.masterVolume - 5) : 5;
 

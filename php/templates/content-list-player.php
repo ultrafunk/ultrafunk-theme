@@ -10,6 +10,8 @@ namespace Ultrafunk\Theme\Templates;
 
 use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 
+use const Ultrafunk\Theme\Constants\THEME_ENV;
+
 use function Ultrafunk\Plugin\Shared\get_term_links;
 
 
@@ -130,7 +132,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
   {
     foreach ($channels as $channel)
     {
-      if ($channel->slug === 'video')
+      if ($channel->term_id === THEME_ENV['channel_videos_id'])
         return true;
     }
 

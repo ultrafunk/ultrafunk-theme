@@ -11,7 +11,7 @@ namespace Ultrafunk\Theme\Constants;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.44.54';
+const VERSION = '1.44.55';
 
 const THEME_ENV = [
   'menu_item_all_tracks_id' => WP_DEBUG ? 4057 : 4430,
@@ -23,5 +23,6 @@ const THEME_ENV = [
   'block_premium_intro_id'  => WP_DEBUG ? 1500 : 1500,
   'block_promo_intro_id'    => WP_DEBUG ? 2717 : 2717,
   'page_about_id'           => WP_DEBUG ?  806 :  806,
+  'channel_videos_id'       => WP_DEBUG ?  875 :  899,
   'uploads_branding'        => WP_DEBUG ? '/wp-content/uploads/branding/' : '/wp-content/uploads/branding/',
 ];

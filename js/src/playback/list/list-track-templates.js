@@ -21,6 +21,10 @@ import {
 
 const debug = debugLogger.newInstance('list-track-templates');
 
+const THEME_ENV = {
+  'channel_videos_id': debug.isDebug() ? 875 : 899,
+};
+
 
 // ************************************************************************************************
 //
@@ -119,7 +123,7 @@ export function setTrackMeta(
       const linkClass = (track.meta.track_artist_id === mapKey) ? 'primary' : 'secondary';
       linksHtml      +=`<a class="${linkClass}" href="${getListPlayerUrl(linksMap.get(mapKey).link)}">${linksMap.get(mapKey).name}</a>`;
 
-      if (isChannels && (linksMap.get(mapKey).name === 'Video'))
+      if (isChannels && (mapKey === THEME_ENV.channel_videos_id))
         isVideo = true;
     });
 
