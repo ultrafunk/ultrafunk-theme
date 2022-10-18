@@ -217,6 +217,7 @@ class SiteThemeToggle extends ElementToggle
     this.themes = {
       light: { id: 'light', text: 'light', class: 'site-theme-light' },
       dark:  { id: 'dark',  text: 'dark',  class: 'site-theme-dark'  },
+      black: { id: 'black', text: 'black', class: 'site-theme-black' },
       auto:  { id: 'auto',  text: 'auto'                             }, // This has no CSS class since auto is always light or dark
     };
 
@@ -261,7 +262,7 @@ class SiteThemeToggle extends ElementToggle
     {
       debug.log(`SiteThemeToggle.update() - newSiteTheme: ${newTheme.id}`);
 
-      htmlClassList.remove(this.themes.light.class, this.themes.dark.class);
+      htmlClassList.remove(this.themes.light.class, this.themes.dark.class, this.themes.black.class);
       htmlClassList.add(newTheme.class);
     }
 

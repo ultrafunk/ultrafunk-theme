@@ -46,7 +46,8 @@ body.tracks.autoplay-off .crossfade-controls {
   image-rendering: -webkit-optimize-contrast;
 }
 
-.site-theme-dark .crossfade-fadeto-control img {
+.site-theme-dark .crossfade-fadeto-control img,
+.site-theme-black .crossfade-fadeto-control img {
   filter: invert(1);
 }
 

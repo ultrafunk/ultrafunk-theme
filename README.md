@@ -27,6 +27,7 @@ PHP version 8.0 or greater
 **Optional:**  
 [ESLint](https://eslint.org/) (Static code analyzer for JavaScript)  
 [PHP Intelephense](https://intelephense.com/) (PHP code intelligence for Visual Studio Code)  
+[Playwright](https://github.com/microsoft/playwright/) (Playwright is a framework for Web Testing and Automation)  
 [Theme Check](https://wordpress.org/plugins/theme-check/) (WordPress Plugin from The WordPress Theme Review Team)  
 [WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) (WordPress Plugin)  
 [WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) (WordPress Plugin)  

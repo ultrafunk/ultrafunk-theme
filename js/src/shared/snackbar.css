@@ -23,6 +23,15 @@
   --snackbar-close-icon-hover-color: #fff;
 }
 
+.site-theme-black {
+  --snackbar-background-color: #333;
+  --snackbar-text-color: #fff;
+  --snackbar-action-text-color: #4b96ff;
+  --snackbar-action-text-hover-color: #fff;
+  --snackbar-close-icon-color: #999;
+  --snackbar-close-icon-hover-color: #fff;
+}
+
 #snackbar {
   display: flex;
   visibility: hidden;

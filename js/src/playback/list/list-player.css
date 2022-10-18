@@ -26,6 +26,13 @@ body.list-player {
   --tracklist-page-separator-color: #303030;
 }
 
+.site-theme-black {
+  --track-separator-color: #222;
+  --track-current-color: #222;
+  --track-thumbnail-placeholder-color: #222;
+  --tracklist-page-separator-color: #303030;
+}
+
 .player-container {
   display: flex;
   align-items: center;

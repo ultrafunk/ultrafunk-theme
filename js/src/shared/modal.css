@@ -17,6 +17,12 @@
   --item-click-background-hover-color: #666;
 }
 
+.site-theme-black {
+  --modal-background-color: #222;
+  --item-click-hover-color: #fff;
+  --item-click-background-hover-color: #444;
+}
+
 #modal-dialog-overlay {
   display: none;
   cursor: pointer;

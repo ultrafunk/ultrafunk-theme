@@ -29,6 +29,15 @@ body.termlist {
   --track-thumbnail-odd-placeholder-color: #555;
 }
 
+.site-theme-black {
+  --artist-letter-hover: #333;
+  --artist-letter-current: #222;
+  --border-top-even-row: 2px solid #333;
+  --border-top-odd-row: 2px solid #333;
+  --track-thumbnail-even-placeholder-color: #222;
+  --track-thumbnail-odd-placeholder-color: #333;
+}
+
 term-list {
   display: block;
 }

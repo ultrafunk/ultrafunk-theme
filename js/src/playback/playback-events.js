@@ -83,6 +83,9 @@ function playbackReady(playbackEvent)
 {
   debug.log(playbackEvent);
 
+  // Prevents fractional pixel "extra" 1px bottom border
+  document.querySelector('.wp-block-embed__wrapper').style = 'background-color: var(--body-background-color)';
+
   if (playbackEvent?.data.resetProgressBar)
     updateProgressPercent(0);
 }

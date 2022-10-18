@@ -57,7 +57,14 @@ function pre_wp_head() : void
     let   UF_SiteThemeClass = 'site-theme-light';
 
     if (UF_SiteTheme !== null)
-      UF_SiteThemeClass = (UF_SiteTheme === 'dark') ? 'site-theme-dark' : 'site-theme-light';
+    {
+      if (UF_SiteTheme === 'light')
+        UF_SiteThemeClass = 'site-theme-light';
+      else if (UF_SiteTheme === 'dark')
+        UF_SiteThemeClass = 'site-theme-dark'
+      else if (UF_SiteTheme === 'black')
+        UF_SiteThemeClass = 'site-theme-black'
+    }
 
     document.documentElement.classList.add(UF_SiteThemeClass);
 

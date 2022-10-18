@@ -5,20 +5,11 @@
 *
 */
 
-.site-theme-light {
+.site-theme-light,
+.site-theme-dark,
+.site-theme-black {
   --progress-bar-color: #dd0000;
   --progress-bar-color-autoplay-off: #4080ff;
-
-  --playback-play-pause-color: #dd0000;
-  --playback-play-pause-hover-color: #ff0000;
-  --playback-play-pause-color-autoplay-off: #3264c8;
-  --playback-play-pause-hover-color-autoplay-off: #4080ff;
-}
-
-.site-theme-dark {
-  --progress-bar-color: #dd0000;
-  --progress-bar-color-autoplay-off: #4080ff;
-
   --playback-play-pause-color: #dd0000;
   --playback-play-pause-hover-color: #ff0000;
   --playback-play-pause-color-autoplay-off: #3264c8;

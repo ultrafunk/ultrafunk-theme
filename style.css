@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.55
+Version:           1.44.56
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -75,6 +75,7 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
 
   --intro-banner-background: #505050;
   --intro-banner-button-background: #323232;
+  --intro-banner-button-background-hover: #777;
 
   --form-search-field-background: #eee;
   --form-search-field-background-focus: #fff;
@@ -93,8 +94,10 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --list-row-odd-color: #e8e8e8;
   --list-row-hover-color: #bbb;
 
+  /*
   --header-bg-blur: rgba(235, 235, 235, 0.85);
   --header-no-blur: rgba(250, 250, 250, 1.00);
+  */
   --header-gradient-no-blur: linear-gradient(0deg, rgba(240, 240, 240, 1) 0%, rgba(250, 250, 250, 1) 100%);
 }
 
@@ -121,6 +124,7 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
 
   --intro-banner-background: #444;
   --intro-banner-button-background: #222;
+  --intro-banner-button-background-hover: #777;
 
   --form-search-field-background: #333;
   --form-search-field-background-focus: #222;
@@ -139,9 +143,62 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --list-row-odd-color: #333;
   --list-row-hover-color: #666;
 
+  /*
   --header-bg-blur: rgba(59, 59, 59, 0.85);
   --header-no-blur: rgba(45, 45, 45, 1.00);
+  */
   --header-gradient-no-blur: linear-gradient(0deg, rgba(45, 45, 45, 1) 0%, rgba(55, 55, 55, 1) 100%);
+}
+
+
+/**************************************************************************************************
+* Black theme CSS variables
+***************************************************************************************************/
+
+.site-theme-black {
+  --site-theme-dark-color: rgb(5, 10, 20);
+
+  --body-background-color: #000;
+  --branding-logo-filter: invert(100%) brightness(200%);
+
+  --primary-font-color: #efefef;
+  --primary-icon-color: #fff;
+
+  --control-hover-opacity: 0.75;
+  --control-highlight-color: rgba(255, 255, 255, 0.2);
+  --control-disabled-opacity: 0.20;
+  --control-disabled-background-rgba: rgba(127, 127, 127, 0.26);
+
+  --button-text-color: #fff;
+  --button-background-color: #444;
+  --button-background-hover-rgba: rgba(127, 127, 127, 0.33);
+
+  --intro-banner-background: #171717;
+  --intro-banner-button-background: #333;
+  --intro-banner-button-background-hover: #555;
+
+  --form-search-field-background: #222;
+  --form-search-field-background-focus: #000;
+  --form-search-field-outline: none !important;
+  --form-search-field-border: 2px solid #333;
+  --form-search-field-border-focus: 2px solid #444;
+  --form-input-autofill-box-shadow: 0 0 0 50px #222 inset;
+
+  --iframe-placeholder-color: #111;
+  --iframe-placeholder-icon: url(/wp-content/themes/ultrafunk/inc/img/player_placeholder_icon_dark.png);
+
+  --date-page-border-color: #bbb;
+  --page-numbers-background: rgba(127, 127, 127, 0.25);
+  --page-numbers-background-hover: rgba(127, 127, 127, 0.4);
+
+  --list-row-odd-color: #222;
+  --list-row-hover-color: #444;
+
+  /*
+  --header-bg-blur: rgba(0, 0, 0, 1.00);
+  --header-no-blur: rgba(0, 0, 0, 1.00);
+  */
+  --header-gradient-no-blur: rgba(0, 0, 0, 1.00);
 }
 
 
@@ -181,6 +238,10 @@ body {
   transform: translateZ(0);
   background: var(--header-gradient-no-blur);
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+.site-theme-black #site-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body.no-playback #progress-controls {
@@ -577,7 +638,7 @@ a[href="#"] .navbar-arrow-next {
 }
 
 .intro-banner-close-button:hover {
-  background: #888;
+  background: var(--intro-banner-button-background-hover);
 }
 
 

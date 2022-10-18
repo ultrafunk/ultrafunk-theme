@@ -10,8 +10,10 @@
   --site-header-height-no-playback: 0px;
 
   --link-hover-color: #dd0000;
+  --link-bright-hover-color: #ff0000;
 
   --site-theme-dark-color: rgb(10, 20, 40);
+  --site-theme-medium-dark-color: rgb(20, 40, 80);
   --site-theme-medium-color: rgb(30, 60, 120);
   --site-theme-light-color: rgb(40, 80, 160);
   --site-theme-font-color: #efefef;
@@ -37,6 +39,7 @@
 
   --intro-banner-background: #505050;
   --intro-banner-button-background: #323232;
+  --intro-banner-button-background-hover: #777;
 
   --form-search-field-background: #eee;
   --form-search-field-background-focus: #fff;
@@ -46,7 +49,7 @@
   --form-input-autofill-box-shadow: 0 0 0 50px #fff inset;
 
   --iframe-placeholder-color: #eee;
-  --iframe-placeholder-icon: url(inc/img/player_placeholder_icon_light.png);
+  --iframe-placeholder-icon: url(/wp-content/themes/ultrafunk/inc/img/player_placeholder_icon_light.png);
 
   --date-page-border-color: #888;
   --page-numbers-background: rgba(127, 127, 127, 0.15);
@@ -54,10 +57,11 @@
 
   --list-row-odd-color: #e8e8e8;
   --list-row-hover-color: #bbb;
-  --track-separator-color: #ddd;
 
+  /*
   --header-bg-blur: rgba(235, 235, 235, 0.85);
   --header-no-blur: rgba(250, 250, 250, 1.00);
+  */
   --header-gradient-no-blur: linear-gradient(0deg, rgba(240, 240, 240, 1) 0%, rgba(250, 250, 250, 1) 100%);
 }
 
