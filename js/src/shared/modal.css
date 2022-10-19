@@ -18,9 +18,9 @@
 }
 
 .site-theme-black {
-  --modal-background-color: #222;
+  --modal-background-color: #333;
   --item-click-hover-color: #fff;
-  --item-click-background-hover-color: #444;
+  --item-click-background-hover-color: #555;
 }
 
 #modal-dialog-overlay {

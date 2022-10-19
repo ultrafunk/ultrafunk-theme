@@ -30,12 +30,12 @@ body.termlist {
 }
 
 .site-theme-black {
-  --artist-letter-hover: #333;
-  --artist-letter-current: #222;
-  --border-top-even-row: 2px solid #333;
-  --border-top-odd-row: 2px solid #333;
-  --track-thumbnail-even-placeholder-color: #222;
-  --track-thumbnail-odd-placeholder-color: #333;
+  --artist-letter-hover: #505050;
+  --artist-letter-current: #303030;
+  --border-top-even-row: 2px solid #505050;
+  --border-top-odd-row: 2px solid #505050;
+  --track-thumbnail-even-placeholder-color: #303030;
+  --track-thumbnail-odd-placeholder-color: #505050;
 }
 
 term-list {

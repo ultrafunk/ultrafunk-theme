@@ -27,9 +27,9 @@ body.list-player {
 }
 
 .site-theme-black {
-  --track-separator-color: #222;
-  --track-current-color: #222;
-  --track-thumbnail-placeholder-color: #222;
+  --track-separator-color: #303030;
+  --track-current-color: #303030;
+  --track-thumbnail-placeholder-color: #303030;
   --tracklist-page-separator-color: #303030;
 }
 

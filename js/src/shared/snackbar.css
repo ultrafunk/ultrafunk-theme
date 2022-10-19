@@ -24,7 +24,7 @@
 }
 
 .site-theme-black {
-  --snackbar-background-color: #333;
+  --snackbar-background-color: #444;
   --snackbar-text-color: #fff;
   --snackbar-action-text-color: #4b96ff;
   --snackbar-action-text-hover-color: #fff;

@@ -28,6 +28,8 @@
   --primary-font-color: #111;
   --primary-icon-color: #000;
 
+  --nav-menu-item-background-rgba: rgba(127, 127, 127, 0.2);
+
   --control-hover-opacity: 0.66;
   --control-highlight-color: rgba(0, 0, 0, 0.2);
   --control-disabled-opacity: 0.25;
@@ -51,17 +53,12 @@
   --iframe-placeholder-color: #eee;
   --iframe-placeholder-icon: url(/wp-content/themes/ultrafunk/inc/img/player_placeholder_icon_light.png);
 
-  --date-page-border-color: #888;
   --page-numbers-background: rgba(127, 127, 127, 0.15);
   --page-numbers-background-hover: rgba(127, 127, 127, 0.3);
 
   --list-row-odd-color: #e8e8e8;
   --list-row-hover-color: #bbb;
 
-  /*
-  --header-bg-blur: rgba(235, 235, 235, 0.85);
-  --header-no-blur: rgba(250, 250, 250, 1.00);
-  */
   --header-gradient-no-blur: linear-gradient(0deg, rgba(240, 240, 240, 1) 0%, rgba(250, 250, 250, 1) 100%);
 }
 
