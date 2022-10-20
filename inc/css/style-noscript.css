@@ -39,10 +39,6 @@
   --button-background-color: #707070;
   --button-background-hover-rgba: rgba(0, 0, 0, 0.75);
 
-  --intro-banner-background: #505050;
-  --intro-banner-button-background: #323232;
-  --intro-banner-button-background-hover: #777;
-
   --form-search-field-background: #eee;
   --form-search-field-background-focus: #fff;
   --form-search-field-outline: none !important;

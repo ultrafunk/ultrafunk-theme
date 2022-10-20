@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.57
+Version:           1.44.58
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -29,8 +29,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
 
   --site-header-height-down: 75px;
   --site-header-height-up: 120px;
-
-  --intro-banner-max-width: 1100px;
 
   --site-content-margin-top: 75px;
   --site-content-margin-bottom: 100px;
@@ -75,10 +73,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --button-background-color: #707070;
   --button-background-hover-rgba: rgba(0, 0, 0, 0.75);
 
-  --intro-banner-background: #505050;
-  --intro-banner-button-background: #323232;
-  --intro-banner-button-background-hover: #777;
-
   --form-search-field-background: #eee;
   --form-search-field-background-focus: #fff;
   --form-search-field-outline: none !important;
@@ -120,10 +114,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --button-text-color: #fff;
   --button-background-color: #666;
   --button-background-hover-rgba: rgba(127, 127, 127, 0.33);
-
-  --intro-banner-background: #444;
-  --intro-banner-button-background: #222;
-  --intro-banner-button-background-hover: #777;
 
   --form-search-field-background: #333;
   --form-search-field-background-focus: #222;
@@ -171,10 +161,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --button-text-color: #fff;
   --button-background-color: #555;
   --button-background-hover-rgba: rgba(127, 127, 127, 0.33);
-
-  --intro-banner-background: #171717;
-  --intro-banner-button-background: #333;
-  --intro-banner-button-background-hover: #555;
 
   --form-search-field-background: #222;
   --form-search-field-background-focus: #000;
@@ -587,52 +573,6 @@ a[href="#"] .navbar-arrow-next {
 
 #menu-primary-sections .menu-item-settings .menu-item-icon::after {
   content: "\e8b8";
-}
-
-
-/**************************************************************************************************
-* Intro banners
-***************************************************************************************************/
-
-#intro-banner {
-  width: 100%;
-  background: var(--intro-banner-background);
-  display: none;
-  box-sizing: border-box;
-  clear: both;
-  color: var(--button-text-color);
-  padding: 50px 0;
-}
-
-#intro-banner a {
-  color: var(--button-text-color);
-  text-decoration: underline;
-}
-
-#intro-banner a:hover {
-  color: var(--link-hover-color);
-  text-decoration: underline;
-}
-
-.intro-banner-container {
-  max-width: var(--intro-banner-max-width);
-  margin: 0 auto;
-}
-
-.intro-banner-close-button {
-  width: 100%;
-  text-align: center;
-  background: var(--intro-banner-button-background);
-  margin: 55px auto 15px auto;
-  padding: 15px 20px;
-  width: 375px;
-  font-weight: 700;
-  cursor: pointer;
-  border-radius: var(--button-border-radius);
-}
-
-.intro-banner-close-button:hover {
-  background: var(--intro-banner-button-background-hover);
 }
 
 
@@ -1319,7 +1259,6 @@ body.no-playback .sticky-nav-up .site-header-container {
 
   .site-header-container,
   nav.navigation,
-  #intro-banner,
   #site-footer,
   .entry-header,
   .entry-content h2,
@@ -1430,7 +1369,6 @@ body.no-playback .sticky-nav-up .site-header-container {
     margin-top: 60px;
   }
 
-  #intro-banner,
   .entry-content p,
   .entry-content ul {
     font-size: 21px;
@@ -1475,7 +1413,6 @@ body.no-playback .sticky-nav-up .site-header-container {
 
   .site-header-container,
   nav.navigation,
-  #intro-banner,
   #site-footer,
   .entry-header,
   .entry-content h2,
@@ -1493,7 +1430,6 @@ body.no-playback .sticky-nav-up .site-header-container {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  #intro-banner,
   .entry-content p,
   .entry-content ul {
     font-size: unset;
@@ -1528,7 +1464,6 @@ body.no-playback .sticky-nav-up .site-header-container {
 
   .site-header-container,
   nav.navigation,
-  #intro-banner,
   #site-footer,
   .entry-header,
   .entry-content h2,
@@ -1546,10 +1481,6 @@ body.no-playback .sticky-nav-up .site-header-container {
     font-size: 18px;
     line-height: 26px;
     font-weight: 400;
-  }
-
-  #intro-banner {
-    font-weight: 300;
   }
 
   h1 {
@@ -1636,7 +1567,6 @@ body.no-playback .sticky-nav-up .site-header-container {
 
   .site-header-container,
   nav.navigation,
-  #intro-banner,
   #site-footer,
   .entry-header,
   .entry-content h2,
@@ -1819,16 +1749,6 @@ body.no-playback .sticky-nav-up .site-header-container {
 
   #menu-primary-sections .menu-item-icon {
     font-size: 22px;
-  }
-
-  #intro-banner {
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-
-  .intro-banner-close-button {
-    margin-top: 30px;
-    width: 230px;
   }
 
   .nav-links .page-numbers li a,

@@ -10,7 +10,11 @@ namespace Ultrafunk\Theme\Tags;
 
 use Ultrafunk\Plugin\Constants\PLAYER_TYPE;
 
-use const Ultrafunk\Theme\Constants\THEME_ENV;
+use const Ultrafunk\Theme\Constants\ {
+  THEME_ENV,
+  IS_PROD_BUILD,
+  JS_PRELOAD_CHUNK,
+};
 
 use function Ultrafunk\Plugin\Globals\ {
   is_request,
@@ -91,10 +95,8 @@ function pre_wp_head() : void
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <?php
 
-  global $ultrafunk_is_prod_build, $ultrafunk_js_preload_chunk;
-
-  if (!empty($ultrafunk_js_preload_chunk) && $ultrafunk_is_prod_build)
-    echo '<link rel="modulepreload" href="' . esc_url(get_template_directory_uri()) . $ultrafunk_js_preload_chunk . '" as="script" crossorigin>' . PHP_EOL;
+  if (!empty(JS_PRELOAD_CHUNK) && IS_PROD_BUILD)
+    echo '<link rel="modulepreload" href="' . esc_url(get_template_directory_uri()) . JS_PRELOAD_CHUNK . '" as="script" crossorigin>' . PHP_EOL;
 }
 
 function meta_description() : void
@@ -103,7 +105,7 @@ function meta_description() : void
 
   if (is_front_page() && !is_paged() && !is_shuffle(PLAYER_TYPE::GALLERY))
     echo $meta_description;
-  else if (is_list_player_frontpage())
+  else if (is_list_player('all') && (get_request_params()['current_page'] === 1))
     echo $meta_description;
   else if (get_the_ID() === THEME_ENV['page_about_id'])
     echo $meta_description;
@@ -111,9 +113,8 @@ function meta_description() : void
 
 function scripts_styles() : void
 {
-  global $ultrafunk_is_prod_build;
   $template_uri = esc_url(get_template_directory_uri());
-  $js_path      = $ultrafunk_is_prod_build ? '/js/dist/' : '/js/src/';
+  $js_path      = IS_PROD_BUILD ? '/js/dist/' : '/js/src/';
 
   \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Plugin\Request\get_session_vars());
 
@@ -523,53 +524,6 @@ function content_excerpt() : void
   <?php
 }
 
-function is_list_player_frontpage() : bool
-{
-  return (is_list_player('all') && (get_request_params()['current_page'] === 1));
-}
-
-function intro_banner() : void
-{
-  // Exit early since banners are not shown on paginated content
-  if (is_paged())
-    return;
-
-  if (is_front_page() && !is_shuffle(PLAYER_TYPE::GALLERY))
-  {
-    intro_banner_html('block_gallery_intro_id', 'showFrontpageIntro');
-  }
-  else if (is_list_player_frontpage())
-  {
-    intro_banner_html('block_list_intro_id', 'showFrontpageIntro');
-  }
-  else if (is_tax('uf_channel', 'premium') && have_posts())
-  {
-    intro_banner_html('block_premium_intro_id', 'showPremiumIntro');
-  }
-  else if (is_tax('uf_channel', 'promo') && have_posts())
-  {
-    intro_banner_html('block_promo_intro_id', 'showPromoIntro');
-  }
-}
-
-function intro_banner_html(string $theme_env_key, string $property) : void
-{
-  $post    = get_post(THEME_ENV[$theme_env_key]);
-  $content = apply_filters('the_content', wp_kses_post($post->post_content));
-
-  ?>
-  <script>const UF_BannerProperty = '<?php echo $property; ?>';</script>
-  <div id="intro-banner">
-    <div class="intro-banner-container">
-      <?php echo $content; ?>
-      <div class="intro-banner-close-button">
-        Close <span class="light-text">(and don't show again)</span>
-      </div>
-    </div>
-  </div>
-  <?php
-}
-
 function content_widgets() : void
 {
   if (is_active_sidebar('content-widgets-1'))
@@ -593,12 +547,11 @@ function content_widgets() : void
 
 function perf_results() : void
 {
-  global $ultrafunk_is_prod_build;
   $perf_data = get_perf_data();
 
   if ($perf_data['display_perf_results'])
   {
-    $results = ($ultrafunk_is_prod_build ? 'PROD - ' : 'DEV - ') . get_num_queries() . ' queries in ' . timer_stop(0) . ' seconds';
+    $results = (IS_PROD_BUILD ? 'PROD - ' : 'DEV - ') . get_num_queries() . ' queries in ' . timer_stop(0) . ' seconds';
 
     if (($perf_data['create_rnd_transient'] !== 0) || ($perf_data['get_rnd_transient'] !== 0))
       $results .= ' - cRnd: ' . $perf_data['create_rnd_transient'] . ' ms - gRnd: ' . $perf_data['get_rnd_transient'] . ' ms';

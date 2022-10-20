@@ -55,6 +55,4 @@ use \Ultrafunk\Theme\Tags as ultrafunk;
   </div>
 </header>
 
-<?php ultrafunk\intro_banner(); ?>
-
 <main id="site-content">

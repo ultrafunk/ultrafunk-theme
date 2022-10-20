@@ -72,13 +72,12 @@ add_filter('widget_archives_args', 'ultrafunk_limit_archives');
 //
 function ultrafunk_enqueue_styles() : void
 {
-  global $ultrafunk_is_prod_build;
   $version = \Ultrafunk\Theme\Constants\VERSION;
 
   wp_enqueue_style('google-fonts-roboto', 'https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap', [], null);
   wp_enqueue_style('google-fonts-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Sharp&display=block', [], null);
 
-  if ($ultrafunk_is_prod_build)
+  if (\Ultrafunk\Theme\Constants\IS_PROD_BUILD)
   {
     wp_enqueue_style('ultrafunk-style', get_theme_file_uri('/inc/css/style.min.css'), [], $version);
     wp_enqueue_style('bundle-style', get_theme_file_uri('/js/dist/css/bundle.min.css'), [], $version);
@@ -147,7 +146,6 @@ else
 
     if (is_admin() === false)
     {
-      require get_template_directory() . '/php/build-env.php';
       require get_template_directory() . '/php/theme-functions.php';
       require get_template_directory() . '/php/theme-filters.php';
       require get_template_directory() . '/php/theme-tags.php';

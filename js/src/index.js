@@ -30,7 +30,6 @@ const m     = { keyboardShortcuts: null };
 
 const elements = {
   siteHeader:        null,
-  introBanner:       null,
   siteContent:       null,
   siteContentSearch: null,
   fullscreenTarget:  null,
@@ -46,9 +45,6 @@ document.addEventListener('DOMContentLoaded', () =>
   debug.log('DOMContentLoaded');
 
   initIndex();
-
-  if (elements.introBanner !== null)
-    showIntroBanner();
 
   if (document.getElementById('termlist-container') !== null)
     initTermlist();
@@ -74,7 +70,6 @@ function initIndex()
   m.keyboardShortcuts = utils.keyboardShortcuts(settings.site.keyboardShortcuts);
 
   elements.siteHeader        = document.getElementById('site-header');
-  elements.introBanner       = document.getElementById('intro-banner');
   elements.siteContent       = document.getElementById('site-content');
   elements.siteContentSearch = document.querySelector('#site-content form input.search-field');
 
@@ -199,28 +194,8 @@ function notFullscreenElement()
 
 
 // ************************************************************************************************
-// Misc. support functions
+//
 // ************************************************************************************************
-
-function showIntroBanner()
-{
-  // Only show intro banners if they can be permanently dismissed
-  if (storage.isAvailable('localStorage') && UF_BannerProperty) // eslint-disable-line no-undef
-  {
-    if (settings.banners[UF_BannerProperty]) // eslint-disable-line no-undef
-    {
-      elements.introBanner.style.display = 'block';
-      resize.trigger();
-
-      utils.addListener('#intro-banner .intro-banner-close-button', 'click', () =>
-      {
-        elements.introBanner.style.display   = '';
-        elements.siteContent.style.marginTop = '';
-        settings.banners[UF_BannerProperty]  = false; // eslint-disable-line no-undef
-      });
-    }
-  }
-}
 
 function setPreviousPageTitle()
 {
@@ -293,12 +268,6 @@ const resize = (() =>
       headerHeight = utils.getCssPropValue('--site-header-height');
 
     siteHeaderYOffset = Math.round((headerHeight > 150) ? (headerHeight / 2) : (headerHeight / 3));
-
-    if ((elements.introBanner !== null) && (elements.introBanner.style.display.length !== 0))
-    {
-      elements.introBanner.style.marginTop = `${headerHeight}px`;
-      elements.siteContent.style.marginTop = `${utils.getCssPropValue('--site-content-margin-top', document.body)}px`;
-    }
   }
 })();
 
