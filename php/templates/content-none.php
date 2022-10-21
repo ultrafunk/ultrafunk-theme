@@ -11,9 +11,9 @@ namespace Ultrafunk\Theme\Templates\None;
 ?>
 <div class="entry-content">
   <?php if (is_search()) { ?>
-    <h1 class="entry-header">Sorry, no content matched your search criteria...</h1>
+    <h2 class="entry-header">Sorry, no content matched your search criteria...</h2>
   <?php } else { ?>
-    <h1 class="entry-header">Sorry, unable to find the content you were looking for...</h1>
+    <h2 class="entry-header">Sorry, unable to find the content you were looking for...</h2>
   <?php } ?>
   <?php \Ultrafunk\Theme\Tags\search_form(); ?>
   <p><b>Ultrafunk past projects:</b> ProTracker, Sonitus:fx DX / VST audio plug-ins, Popcorn email client,

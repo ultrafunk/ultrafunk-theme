@@ -153,19 +153,8 @@ function playbackBlocked(playbackEvent)
 function mediaUnavailable(playbackEvent)
 {
   debug.log(playbackEvent);
-
-  if (isPremiumTrack(playbackEvent.data.trackId))
-  {
-    showSnackbar('YouTube Premium track, skipping', 5, 'help',
-      () => (window.location.href = '/channel/premium/'),
-      () => playbackEventErrorTryNext(playbackEvent)
-    );
-  }
-  else
-  {
-    showSnackbar('Unable to play track, skipping to next', 5, 'Stop', () => {}, () => playbackEventErrorTryNext(playbackEvent));
-    debugLogger.logErrorOnServer('EVENT_MEDIA_UNAVAILABLE', playbackEvent.data);
-  }
+  showSnackbar('Unable to play track, skipping to next', 5, 'Stop', () => {}, () => playbackEventErrorTryNext(playbackEvent));
+  debugLogger.logErrorOnServer('EVENT_MEDIA_UNAVAILABLE', playbackEvent.data);
 }
 
 
@@ -203,14 +192,4 @@ function playbackEventErrorTryNext(playbackEvent)
       autoplayNavTo(response.nextPage, true);
     }
   }
-}
-
-function isPremiumTrack(trackId)
-{
-  const postWithId = document.getElementById(trackId);
-
-  if (postWithId !== null)
-    return postWithId.classList.contains('uf_channel-premium');
-
-  return false;
 }

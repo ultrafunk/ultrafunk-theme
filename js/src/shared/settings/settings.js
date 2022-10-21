@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 23, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 24, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -81,18 +81,6 @@ export const settingsSchema = {
   experimental: {
     fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   },
-  tips: {
-    showTrackDetailsHint:          { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
-    showUpNextModalHint:           { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
-    showGalleryTrackThumbnailHint: { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
-    showListTrackThumbnailHint:    { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
-    showTrackTimerHint:            { description: '', type: BOOLEAN, values: [true, false], default: true,  valueStrings: [] },
-  },
-  banners: {
-    showFrontpageIntro: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
-    showPremiumIntro:   { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
-    showPromoIntro:     { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
-  }
 };
 
 export const defaultSettings = {
@@ -139,18 +127,6 @@ export const defaultSettings = {
   },
   experimental: {
     fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,
-  },
-  tips: {
-    showTrackDetailsHint:          settingsSchema.tips.showTrackDetailsHint.default,
-    showUpNextModalHint:           settingsSchema.tips.showUpNextModalHint.default,
-    showGalleryTrackThumbnailHint: settingsSchema.tips.showGalleryTrackThumbnailHint.default,
-    showListTrackThumbnailHint:    settingsSchema.tips.showListTrackThumbnailHint.default,
-    showTrackTimerHint:            settingsSchema.tips.showTrackTimerHint.default,
-  },
-  banners: {
-    showFrontpageIntro: settingsSchema.banners.showFrontpageIntro.default,
-    showPremiumIntro:   settingsSchema.banners.showPremiumIntro.default,
-    showPromoIntro:     settingsSchema.banners.showPromoIntro.default,
   },
 };
 

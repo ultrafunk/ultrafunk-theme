@@ -388,11 +388,6 @@ function windowEventBlur()
 function playbackDetailsClick()
 {
   playerScrollTo(m.player.getStatus().trackId);
-
-  if (isListPlayer() && settings.list.showUpNextModal)
-    showSnackbarHint('showUpNextModalHint', '<b>Tip:</b> Click or tap Artist &amp; Title to show Up Next queue');
-  else
-    showSnackbarHint('showTrackDetailsHint', '<b>Tip:</b> Click or tap Artist &amp; Title to show current track');
 }
 
 function playbackThumbnailClick()
@@ -400,7 +395,6 @@ function playbackThumbnailClick()
   if (isGalleryPlayer())
   {
     eventLog.add(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, null);
-    showSnackbarHint('showGalleryTrackThumbnailHint', '<b>Tip:</b> Double click or tap Track Thumbnail for full screen');
 
     if (eventLog.doubleClicked(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, config.doubleClickDelay))
       fullscreenElement.enter(document.getElementById(m.player.getStatus().iframeId));
@@ -408,14 +402,12 @@ function playbackThumbnailClick()
   else if (isListPlayer())
   {
     playerScrollTo(0);
-    showSnackbarHint('showListTrackThumbnailHint', '<b>Tip:</b> Click or tap Track Thumbnail to show player');
   }
 }
 
 function playbackTimerClick()
 {
   footerToggles.autoplay.toggle();
-  showSnackbarHint('showTrackTimerHint', '<b>Tip:</b> Click or tap Track Timer to toggle Autoplay On / Off');
 }
 
 class siteNavUiElements extends ElementClick
@@ -439,15 +431,6 @@ class trackNavUiElements extends ElementClick
 
     if (this.clicked('div.nav-next a'))
       return playPrevNextTrack(this.event, SINGLE_TRACK_PLAY.NEXT, response.nextPage);
-  }
-}
-
-function showSnackbarHint(hintKey, hintText, snackbarTimeout = 0)
-{
-  if (settings.tips[hintKey])
-  {
-    showSnackbar(hintText, snackbarTimeout);
-    settings.tips[hintKey] = false;
   }
 }
 
