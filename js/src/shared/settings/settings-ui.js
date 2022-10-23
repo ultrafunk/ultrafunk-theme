@@ -11,6 +11,10 @@ import { showModal }    from '../modal.js';
 import { addListener }  from '../utils.js';
 
 import {
+  settings as storedSettings
+} from '../session-data.js';
+
+import {
   KEY,
   deleteCookie,
   readJson,
@@ -211,6 +215,8 @@ function addTableRow(idPrefix, entry)
 
   const html = /*html*/
     `\n<tr id="${idPrefix}:${entry[0]}" class="settings-entry" title="Default: ${defaultValueString}">
+      <td class="changed-indicator"></td>
+      <td class="spacer"></td>
       <td class="description">${entry[1].description}</td>
       <td class="${getTypeValueClasses(entry[1])}">${entry[1].valueStrings[entry[1].current]}</td>
     </tr>`;
@@ -238,12 +244,17 @@ function getTypeValueClasses(entry)
 // Update row data and DOM
 // ************************************************************************************************
 
-function updateRowData(element, settings, settingsKey, schemaEntry)
+function updateRowData(element, settingsSection, settingsKey, schemaEntry)
 {
   schemaEntry.current = ((schemaEntry.current + 1) < schemaEntry.values.length)
                           ? schemaEntry.current + 1
                           : schemaEntry.current = 0;
-  settings[settingsKey] = schemaEntry.values[schemaEntry.current];
+  m.settings[settingsSection][settingsKey] = schemaEntry.values[schemaEntry.current];
+
+  if (m.settings[settingsSection][settingsKey] !== storedSettings[settingsSection][settingsKey])
+    element.classList.add('value-changed');
+  else
+    element.classList.remove('value-changed');
 
   updateRowDOM(element.querySelector('.value-string'), schemaEntry);
 }
@@ -292,7 +303,7 @@ function settingClicked(event)
       if (event.shiftKey === true)
         showSettingDetailsModal(settingsSections[index].name, settingsSections[index].schema[settingsKey]);
       else
-        updateRowData(clickedSetting, m.settings[settingsSections[index].id], settingsKey, settingsSections[index].schema[settingsKey]);
+        updateRowData(clickedSetting, settingsSections[index].id, settingsKey, settingsSections[index].schema[settingsKey]);
     }
   }
 }
@@ -311,9 +322,18 @@ function showSettingDetailsModal(sectionName ,schemaEntry)
   );
 }
 
+function clearValueChanged()
+{
+  document.querySelectorAll('#settings-container table').forEach(table =>
+  {
+    table.querySelectorAll('tr').forEach(row => row.classList.remove('value-changed'));
+  });
+}
+
 function settingsSaveClick()
 {
   writeSettings();
+  clearValueChanged();
   showSnackbar('All settings saved', 3);
 }
 
@@ -325,5 +345,6 @@ function settingsResetClick()
     updateSettingsDOM(m.settings[entry.id], entry.schema, entry.id);
   });
 
+  clearValueChanged();
   showSnackbar('All settings reset', 4, 'Undo', () => location.reload(), () => writeSettings());
 }

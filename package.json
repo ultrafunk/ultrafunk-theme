@@ -1,22 +1,22 @@
 {
   "name": "ultrafunk-theme",
-  "version": "1.44.59",
+  "version": "1.44.60",
   "description": "WordPress theme",
   "homepage": "https://github.com/ultrafunk/ultrafunk-theme",
   "repository": "git@github.com:ultrafunk/ultrafunk-theme.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-js": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting --minify --sourcemap js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
+    "build-js-release": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting --minify --sourcemap js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
     "build-js-debug": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
     "build-js-css": "node_modules\\.bin\\esbuild --bundle --minify --sourcemap --loader:.png=dataurl js\\src\\css\\bundle.css --outfile=js\\dist\\css\\bundle.min.css",
     "build-css": "node_modules\\.bin\\esbuild --minify --sourcemap style.css --outfile=inc\\css\\style.min.css",
-    "build-php-env": "node scripts\\build-php-env.mjs",
-    "build-release": "scripts\\build-js.bat & npm run build-js-css & npm run build-css",
+    "set-php-build-consts": "node scripts\\set-php-build-consts.mjs",
+    "build-release": "scripts\\build-js-release.bat & npm run build-js-css & npm run build-css",
     "build-debug": "scripts\\build-js-debug.bat & npm run build-js-css & npm run build-css",
-    "build-release-win": "start /min cmd /c scripts\\build-js.bat && start /min cmd /c npm run build-js-css && start /min cmd /c npm run build-css",
-    "build-release-linux": "npm run build-js & npm run build-js-css & npm run build-css & npm run build-php-env",
-    "build-debug-linux": "npm run build-js-debug & npm run build-js-css & npm run build-css & npm run build-php-env"
+    "build-release-win": "start /min cmd /c scripts\\build-js-release.bat && start /min cmd /c npm run build-js-css && start /min cmd /c npm run build-css",
+    "build-release-linux": "npm run build-js-release & npm run build-js-css & npm run build-css & npm run set-php-build-consts",
+    "build-debug-linux": "npm run build-js-debug & npm run build-js-css & npm run build-css & npm run set-php-build-consts"
   },
   "keywords": [],
   "author": {
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@playwright/test": "^1.27.1",
     "esbuild": "^0.15.12",
-    "eslint": "^8.25.0"
+    "eslint": "^8.26.0"
   },
   "eslintIgnore": [
     "js/dist/",

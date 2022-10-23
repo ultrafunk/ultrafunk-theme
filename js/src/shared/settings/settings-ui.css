@@ -5,6 +5,17 @@
 *
 */
 
+.site-theme-light {
+  --has-changed-color-odd: #bb0000;
+  --has-changed-color-even: #ee0000;
+}
+
+.site-theme-dark,
+.site-theme-black {
+  --has-changed-color-odd: #aa0000;
+  --has-changed-color-even: #770000;
+}
+
 #settings-container {
   width: 100%;
   min-height: 75vh;
@@ -58,10 +69,31 @@ table.settings td {
   padding: 10px 15px;
 }
 
-table.settings td.description {
-  white-space: nowrap;
+table.settings td.changed-indicator {
+  padding: 0;
   border-top-left-radius: var(--button-border-radius);
   border-bottom-left-radius: var(--button-border-radius);
+  width: 6px;
+}
+
+table.settings tr.value-changed:nth-child(odd) td.changed-indicator {
+  background-color: var(--has-changed-color-odd);
+  border-radius: 0;
+}
+
+table.settings tr.value-changed:nth-child(even) td.changed-indicator {
+  background-color: var(--has-changed-color-even);
+  border-radius: 0;
+}
+
+table.settings td.spacer {
+  padding: 0;
+  width: 9px;
+}
+
+table.settings td.description {
+  white-space: nowrap;
+  padding-left: 0;
 }
 
 table.settings td.value-string {

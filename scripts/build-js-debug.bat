@@ -1,3 +1,3 @@
 del js\dist\chunk*.*   &^
 npm run build-js-debug &^
-npm run build-php-env debug
+npm run set-php-build-consts debug
