@@ -49,7 +49,8 @@ export function showSnackbar(
   timeout = 5,
   actionText = null,
   actionClickCallback = null,
-  afterCloseCallback = () => {}
+  afterCloseCallback = null,
+  backgroundColor = 'var(--snackbar-background-color)',
 )
 {
   debug.log(`showSnackbar(): ${message} (${timeout} sec.)`);
@@ -58,9 +59,10 @@ export function showSnackbar(
   resetState(false);
 
   elements.snackbar.querySelector(`.${config.id}-message`).innerHTML = message;
+  elements.snackbar.querySelector(`.${config.id}-container`).style = `background-color: ${backgroundColor};`;
   elements.snackbar.classList.add('show');
   elements.actionText.style.display = 'none';
-  m.afterClose = afterCloseCallback;
+  m.afterClose = (afterCloseCallback !== null) ? afterCloseCallback : () => {};
 
   if ((actionText !== null) && (actionClickCallback !== null))
   {

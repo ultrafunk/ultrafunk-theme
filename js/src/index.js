@@ -13,7 +13,13 @@ import { initTermlist }   from './site/termlist.js';
 import { initSettingsUi } from './shared/settings/settings-ui.js';
 import { navMenu }        from './site/nav-menu.js';
 import { navSearch }      from './site/nav-search.js';
-import { noPlayback }     from './playback/shared-gallery-list.js';
+import { showSnackbar }   from './shared/snackbar.js';
+
+import {
+  noPlayback,
+  isGalleryPlayer,
+  isListPlayer,
+} from './playback/shared-gallery-list.js';
 
 import {
   response,
@@ -83,6 +89,18 @@ function initIndex()
   document.addEventListener('fullscreenElement', (event) => (elements.fullscreenTarget = event.fullscreenTarget));
   document.addEventListener('keydown', documentEventKeyDown);
 }
+
+window.addEventListener('load', () =>
+{
+  if (window.localStorage && settings.internal.showSiteInfoOnLoad)
+  {
+    if (isGalleryPlayer() || isListPlayer())
+    {
+      const message = 'Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres. <a href="/about/">More Details</a>';
+      showSnackbar(message, 15, null, null, () => { settings.internal.showSiteInfoOnLoad = false; }, 'rgb(122, 30, 30)');
+    }
+  }
+});
 
 document.addEventListener('settingsUpdated', () =>
 {

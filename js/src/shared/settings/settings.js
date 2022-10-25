@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 24, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 27, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -80,6 +80,9 @@ export const settingsSchema = {
   },
   experimental: {
     fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
+  },
+  internal: {
+    showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
   },
 };
 
@@ -127,6 +130,9 @@ export const defaultSettings = {
   },
   experimental: {
     fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,
+  },
+  internal: {
+    showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,
   },
 };
 

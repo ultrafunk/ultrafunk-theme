@@ -10,8 +10,7 @@
   --snackbar-text-color: #fff;
   --snackbar-action-text-color: #4b96ff;
   --snackbar-action-text-hover-color: #fff;
-  --snackbar-close-icon-color: #999;
-  --snackbar-close-icon-hover-color: #fff;
+  --snackbar-close-icon-color: #fff;
 }
 
 .site-theme-dark {
@@ -19,8 +18,7 @@
   --snackbar-text-color: #fff;
   --snackbar-action-text-color: #4b96ff;
   --snackbar-action-text-hover-color: #fff;
-  --snackbar-close-icon-color: #999;
-  --snackbar-close-icon-hover-color: #fff;
+  --snackbar-close-icon-color: #fff;
 }
 
 .site-theme-black {
@@ -28,8 +26,7 @@
   --snackbar-text-color: #fff;
   --snackbar-action-text-color: #4b96ff;
   --snackbar-action-text-hover-color: #fff;
-  --snackbar-close-icon-color: #999;
-  --snackbar-close-icon-hover-color: #fff;
+  --snackbar-close-icon-color: #fff;
 }
 
 #snackbar {
@@ -63,6 +60,17 @@
 .snackbar-message {
   float: left;
   width: 100%;
+}
+
+.snackbar-message a {
+  color: var(--snackbar-text-color);
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.snackbar-message a:hover {
+  text-decoration: underline;
 }
 
 .snackbar-action-text {
@@ -99,7 +107,7 @@
 }
 
 .snackbar-close-icon:hover {
-  color: var(--snackbar-close-icon-hover-color);
+  opacity: var(--control-hover-opacity);
 }
 
 #snackbar.show {
@@ -146,7 +154,7 @@
     margin: 0px 10px;
     padding: 6px 10px 6px 15px;
     font-size: 15px;
-    line-height: 22px;
+    line-height: 21px;
     max-width: 100%;
     min-width: unset;
     width: 100%;
@@ -182,7 +190,7 @@
 
   .snackbar-container {
     font-size: 14px;
-    line-height: 21px;
+    line-height: 20px;
   }
 
 }

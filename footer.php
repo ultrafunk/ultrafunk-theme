@@ -23,7 +23,7 @@
       <div id="footer-crossfade-toggle" title="Toggle Auto Crossfade On / Off (x)">
         <span class="label">Auto Crossfade</span><span class="value">...</span>
       </div>
-      <div id="footer-site-theme-toggle" title="Light, Dark, Black or Auto theme (shift + t)">
+      <div id="footer-site-theme-toggle" title="Light, Dark, Black or Auto / System (shift + t)">
         <span class="label">Theme</span><span class="value">...</span>
       </div>
       <div id="footer-gallery-layout-toggle" title="Gallery Player: 1, 2 or 3 / 4 column layout (shift + l)">

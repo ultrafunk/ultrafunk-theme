@@ -60,40 +60,6 @@ export const YEAR_IN_SECONDS = (60 * 60 * 24 * 365);
 
 
 // ************************************************************************************************
-// https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
-// ************************************************************************************************
-
-export function isAvailable(storageType)
-{
-  let storage;
-
-  try
-  {
-    storage = window[storageType];
-    const test = '__storage_test__';
-    storage.setItem(test, test);
-    storage.removeItem(test);
-    return true;
-  }
-  catch(exception)
-  {
-    return exception instanceof DOMException && (
-      // everything except Firefox
-      exception.code === 22 ||
-      // Firefox
-      exception.code === 1014 ||
-      // test name field too, because code might not be present
-      // everything except Firefox
-      exception.name === 'QuotaExceededError' ||
-      // Firefox
-      exception.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-      // acknowledge QuotaExceededError only if there's something already stored
-      (storage && storage.length !== 0);
-  }
-}
-
-
-// ************************************************************************************************
 // Set and delete cookie key => value pairs
 // ************************************************************************************************
 
