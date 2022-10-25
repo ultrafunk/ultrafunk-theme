@@ -96,8 +96,9 @@ window.addEventListener('load', () =>
   {
     if (isGalleryPlayer() || isListPlayer())
     {
-      const message = 'Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres. <a href="/about/">More Details</a>';
+      const message = 'Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres. <a class="snackbar-message-link" href="/about/">More Details</a>';
       showSnackbar(message, 15, null, null, () => { settings.internal.showSiteInfoOnLoad = false; }, 'rgb(122, 30, 30)');
+      document.querySelector('.snackbar-message-link').addEventListener('click', () => { settings.internal.showSiteInfoOnLoad = false; });
     }
   }
 });
