@@ -86,9 +86,16 @@ export function showSnackbar(
   return ++m.snackbarId;
 }
 
+export function isShowingSnackbar()
+{
+  return ((elements.snackbar !== null)               &&
+          (elements.snackbar.classList.length === 1) &&
+           elements.snackbar.classList.contains('show'));
+}
+
 export function dismissSnackbar(dismissId = 0)
 {
-  if (isShowing())
+  if (isShowingSnackbar())
   {
     if ((m.snackbarId === 0) || (m.snackbarId === dismissId))
       elements.snackbar.classList.add('hide');
@@ -131,13 +138,6 @@ function actionTextClick()
 {
   resetState(true);
   m.actionClick();
-}
-
-function isShowing()
-{
-  return ((elements.snackbar !== null)               &&
-          (elements.snackbar.classList.length === 1) &&
-           elements.snackbar.classList.contains('show'));
 }
 
 function resetState(hideSnackbar = false)

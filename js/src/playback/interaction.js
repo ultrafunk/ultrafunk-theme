@@ -394,7 +394,7 @@ function playbackThumbnailClick()
 {
   if (isGalleryPlayer())
   {
-    eventLog.add(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, null);
+    eventLog.add(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK);
 
     if (eventLog.doubleClicked(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, config.doubleClickDelay))
       fullscreenElement.enter(document.getElementById(m.player.getStatus().iframeId));

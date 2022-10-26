@@ -250,7 +250,7 @@ function onYouTubeStateUnstarted(iframeId)
 {
   debug.log(`onYouTubePlayerStateChange: UNSTARTED (uID: ${iframeId})`);
 
-  if (eventLog.ytAutoplayBlocked(iframeId, 3000))
+  if (eventLog.ytAutoplayBlocked(iframeId, 3000) || eventLog.ytSingleTrackAutoplayBlocked(iframeId, 3000))
     m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
 }
 

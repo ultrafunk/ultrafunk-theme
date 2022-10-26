@@ -275,7 +275,7 @@ function skipToNextTrack()
 {
   if ((playbackControls.isPlaying() === false) && (m.autoplayData !== null))
   {
-    eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
+    eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
     eventLog.add(eventLogger.SOURCE.YOUTUBE, -1, listControls.getNextPlayableId());
   }
 
@@ -355,7 +355,7 @@ function onYouTubePlayerReady()
   debug.log('onYouTubePlayerReady()');
 
   if (m.autoplayData?.autoplay === true)
-    eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
+    eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
 
   playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 66 });

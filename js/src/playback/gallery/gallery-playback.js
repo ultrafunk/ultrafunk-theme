@@ -205,7 +205,7 @@ function skipToTrack(trackNum, playMedia = true)
 
   if ((playMedia === true) && (playbackControls.isPlaying() === false))
   {
-    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
+    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
 
     if (m.players.jumpToTrack(trackNum, playMedia))
       playbackControls.updateTrackData();
@@ -225,7 +225,7 @@ function resumeAutoplay(autoplayData, iframeId = null)
   }
   else if (autoplayData.autoplay)
   {
-    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
+    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
     togglePlayPause();
   }
 }
@@ -233,6 +233,7 @@ function resumeAutoplay(autoplayData, iframeId = null)
 function cueOrPlaySingleTrackById(trackData, thumbnailData, playMedia = false)
 {
   debug.log(`cueOrPlaySingleTrackById() - playMedia: ${playMedia}`);
+  m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.CUE_PLAY_SINGLE_TRACK);
 
   m.players.current.setIsCued(false);
   m.players.current.setIsPlayable(true);
@@ -245,7 +246,7 @@ function cueOrPlaySingleTrackById(trackData, thumbnailData, playMedia = false)
 
   if (playMedia)
   {
-    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY, null);
+    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
     m.players.current.playTrackById(thumbnailData.uid);
   }
   else
@@ -295,7 +296,7 @@ function crossfadeToClick(fadeInUid, crossfadePreset)
 
 function crossfadeInit(crossfadeType, crossfadePreset, crossfadeInUid = null)
 {
-  m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.CROSSFADE_START, null);
+  m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.CROSSFADE_START);
 
   const playersIndex = m.players.crossfade.init(crossfadeType, crossfadePreset, crossfadeInUid);
 

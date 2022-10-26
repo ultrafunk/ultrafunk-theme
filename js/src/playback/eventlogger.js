@@ -43,6 +43,7 @@ export const EVENT = {
   RESUME_AUTOPLAY: 50,
   PLAYER_ERROR:    60,
   CROSSFADE_START: 70,
+  CUE_PLAY_SINGLE_TRACK: 80,
 };
 
 const entry = {
@@ -69,7 +70,7 @@ class EventLog
     this.#maxEntries = maxEntries;
   }
 
-  add(eventSource, eventType, uId, timeStamp = Date.now())
+  add(eventSource, eventType, uId = null, timeStamp = Date.now())
   {
     const logEntry = Object.create(entry);
 
@@ -179,6 +180,22 @@ export class Playback extends EventLog
     }
 
     return this.isPatternMatch(5, 'YouTube Autoplay Blocked');
+  }
+
+  ytSingleTrackAutoplayBlocked(uId, deltaTime)
+  {
+    this.initMatch();
+
+    if (this.getLastPos() >= 3)
+    {
+      this.matchesEvent(3, SOURCE.ULTRAFUNK, EVENT.CUE_PLAY_SINGLE_TRACK, null);
+      this.matchesEvent(2, SOURCE.ULTRAFUNK, EVENT.RESUME_AUTOPLAY,       null);
+      this.matchesEvent(1, SOURCE.YOUTUBE,   EVENT.STATE_BUFFERING,       uId);
+      this.matchesEvent(0, SOURCE.YOUTUBE,   EVENT.STATE_UNSTARTED,       uId);
+      this.matchesDelta(3, deltaTime);
+    }
+
+    return this.isPatternMatch(5, 'YouTube Single Track Autoplay Blocked');
   }
 
   scAutoplayBlocked(uId, deltaTime)
