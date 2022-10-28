@@ -20,7 +20,7 @@ $track_data        = \Ultrafunk\Theme\Functions\get_track_data($post);
 $is_youtube_track  = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
 $artists           = get_object_term_cache($post->ID, 'uf_artist');
 $channels          = get_object_term_cache($post->ID, 'uf_channel');
-$track_title_split = '<h2 class="track-title type-split">' . $post->track_artist . '<br><span class="light-text">' . $post->track_title . '</span></h2>';
+$track_title_split = '<h2 class="track-artist-title type-split">' . $post->track_artist . '<br><span class="track-title-part">' . $post->track_title . '</span></h2>';
 
 
 ?>
@@ -39,7 +39,7 @@ $track_title_split = '<h2 class="track-title type-split">' . $post->track_artist
   >
   <header class="track-header">
     <?php
-    \Ultrafunk\Theme\Tags\entry_title('track');
+    \Ultrafunk\Theme\Tags\entry_title('track-artist');
     echo $track_title_split;
     ?>
     <div class="track-meta">

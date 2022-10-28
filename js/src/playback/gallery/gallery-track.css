@@ -17,10 +17,10 @@ gallery-track:first-child {
   margin-top: 0;
 }
 
-single-track h2.track-title,
-single-track h2.track-title a,
-gallery-track h2.track-title,
-gallery-track h2.track-title a {
+single-track h2.track-artist-title,
+single-track h2.track-artist-title a,
+gallery-track h2.track-artist-title,
+gallery-track h2.track-artist-title a {
   font-size: 30px;
   line-height: 40px;
   text-decoration: none;
@@ -30,7 +30,7 @@ gallery-track h2.track-title a {
   text-overflow: ellipsis;
 }
 
-gallery-track h2.track-title a:hover {
+gallery-track h2.track-artist-title a:hover {
   color: var(--link-hover-color);
 }
 
@@ -54,10 +54,10 @@ gallery-track .track-content {
     margin: 20px 0;
   }
 
-  single-track h2.track-title,
-  single-track h2.track-title a,
-  gallery-track h2.track-title,
-  gallery-track h2.track-title a {
+  single-track h2.track-artist-title,
+  single-track h2.track-artist-title a,
+  gallery-track h2.track-artist-title,
+  gallery-track h2.track-artist-title a {
     font-size: 25px;
     line-height: 35px;
     margin-bottom: 15px;
@@ -118,8 +118,8 @@ gallery-track .track-content {
     padding-right: 25px;
   }
 
-  gallery-track h2.track-title,
-  gallery-track h2.track-title a {
+  gallery-track h2.track-artist-title,
+  gallery-track h2.track-artist-title a {
     font-size: 25px;
     line-height: 35px;
   }
@@ -143,10 +143,10 @@ gallery-track .track-content {
     padding-right: 20px;
   }
 
-  single-track h2.track-title,
-  single-track h2.track-title a,
-  gallery-track h2.track-title,
-  gallery-track h2.track-title a {
+  single-track h2.track-artist-title,
+  single-track h2.track-artist-title a,
+  gallery-track h2.track-artist-title,
+  gallery-track h2.track-artist-title a {
     font-size: 18px;
     line-height: 26px;
   }
@@ -171,10 +171,10 @@ gallery-track .track-content {
 
 @media screen and (max-width: 400px) {
 
-  single-track h2.track-title,
-  single-track h2.track-title a,
-  gallery-track h2.track-title,
-  gallery-track h2.track-title a {
+  single-track h2.track-artist-title,
+  single-track h2.track-artist-title a,
+  gallery-track h2.track-artist-title,
+  gallery-track h2.track-artist-title a {
     font-size: 17px;
     line-height: 25px;
   }
@@ -320,7 +320,7 @@ body.autoplay-off .playing-animate::before {
   animation-play-state: paused !important;
 }
 
-h2.track-title.now-playing-icon::before {
+h2.track-artist-title.now-playing-icon::before {
   font-family: "Material Icons";
   font-weight: 400;
   content: "\E01D";
@@ -340,7 +340,7 @@ h2.track-title.now-playing-icon::before {
 
 @media screen and (max-width: 1920px) {
 
-  h2.track-title.now-playing-icon::before {
+  h2.track-artist-title.now-playing-icon::before {
     font-size: 27px;
     top: 4px;
     margin-right: 8px;
@@ -356,7 +356,7 @@ h2.track-title.now-playing-icon::before {
 
 @media screen and (max-width: 500px) {
 
-  h2.track-title.now-playing-icon::before {
+  h2.track-artist-title.now-playing-icon::before {
     font-size: 20px;
     top: 3px;
     margin-right: 6px;

@@ -14,14 +14,14 @@ single-track {
   display: block;
 }
 
-single-track h2.track-title,
-single-track h2.track-title a {
+single-track h2.track-artist-title,
+single-track h2.track-artist-title a {
   white-space: initial;
   overflow: initial;
   text-overflow: initial;
 }
 
-single-track h2.track-title.type-split {
+single-track h2.track-artist-title.type-split {
   display: none;
 }
 
@@ -232,13 +232,19 @@ nav.navigation.single-track-nav {
     --site-content-margin-bottom: 50px;
   }
 
-  single-track h2.track-title {
+  single-track h2.track-artist-title {
     display: none;
   }
 
-  single-track h2.track-title.type-split {
+  single-track h2.track-artist-title.type-split {
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+  }
+
+  single-track h2 .track-title-part {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
   }
 
   nav.navigation.single-track-nav {

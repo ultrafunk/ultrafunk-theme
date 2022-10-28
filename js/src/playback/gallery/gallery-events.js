@@ -40,7 +40,7 @@ const m = {
 };
 
 const config = {
-  nowPlayingIconsSelector: 'h2.track-title',
+  nowPlayingIconsSelector: 'h2.track-artist-title',
 };
 
 

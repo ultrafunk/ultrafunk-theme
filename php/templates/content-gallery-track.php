@@ -35,7 +35,7 @@ $channels         = get_object_term_cache($post->ID, 'uf_channel');
   <?php } ?>
   >
   <header class="track-header">
-    <?php \Ultrafunk\Theme\Tags\entry_title('track'); ?>
+    <?php \Ultrafunk\Theme\Tags\entry_title('track-artist'); ?>
     <div class="track-meta">
       <div class="track-meta-artists">
         <b><a href="/artists/" title="View Artists">Artists</a>: </b>
