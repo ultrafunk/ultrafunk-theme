@@ -228,7 +228,7 @@ function updateTrackNavLinks(element, trackData)
 
 function updateTrackHeader(element, trackData)
 {
-  element.querySelector('h2.track-artist-title').textContent          = getTrackTitle(trackData.meta);
+  element.querySelector('h2.track-artist-title').innerHTML            = `${trackData.meta.track_artist}<span class="normal-text"> &nbsp;&#8212;&nbsp; ${trackData.meta.track_title}</span>`;
   element.querySelector('h2.track-artist-title.type-split').innerHTML = `${trackData.meta.track_artist}<br><span class="track-title-part">${trackData.meta.track_title}</span>`;
   element.querySelector('div.track-meta-artists  .track-artists-links').innerHTML  = trackData.artists_links;
   element.querySelector('div.track-meta-channels .track-channels-links').innerHTML = trackData.channels_links;

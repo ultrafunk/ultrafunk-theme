@@ -489,12 +489,28 @@ function content_pagination() : void
   ]);
 }
 
-function entry_title(string $prefix = 'entry') : void
+function entry_title() : void
 {
   if (is_singular())
-    esc_html(the_title('<h2 class="' . $prefix . '-title">', '</h2>'));
+    esc_html(the_title('<h2 class="entry-title">', '</h2>'));
   else
-    esc_html(the_title(sprintf('<h2 class="' . $prefix . '-title"><a href="%s" rel="bookmark">', esc_url(get_permalink())), '</a></h2>'));
+    esc_html(the_title(sprintf('<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url(get_permalink())), '</a></h2>'));
+}
+
+function track_title(object $post) : void
+{
+  $artist = esc_html($post->track_artist);
+  $title  = esc_html($post->track_title);
+
+  if (is_singular())
+  {
+    echo "<h2 class=\"track-artist-title\">$artist<span class=\"normal-text\"> &nbsp;&#8212;&nbsp; $title</span></h2>";
+  }
+  else
+  {
+    $link = esc_url(get_permalink());
+    echo "<h2 class=\"track-artist-title\"><a href=\"$link\">$artist<span class=\"normal-text\"> &nbsp;&#8212;&nbsp; $title</span></a></h2>";
+  }
 }
 
 function track_meta_controls() : void

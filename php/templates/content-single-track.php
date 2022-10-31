@@ -39,7 +39,7 @@ $track_title_split = '<h2 class="track-artist-title type-split">' . $post->track
   >
   <header class="track-header">
     <?php
-    \Ultrafunk\Theme\Tags\entry_title('track-artist');
+    \Ultrafunk\Theme\Tags\track_title($post);
     echo $track_title_split;
     ?>
     <div class="track-meta">

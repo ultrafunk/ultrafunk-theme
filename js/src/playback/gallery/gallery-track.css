@@ -238,7 +238,8 @@ gallery-track .track-content {
   margin-right: -7px;
 }
 
-body.autoplay-on .track-meta-controls .share-details-controls {
+body.autoplay-on .track-meta-controls .share-details-controls,
+body.single.track .track-meta-controls .share-details-controls  {
   display: flex;
 }
 

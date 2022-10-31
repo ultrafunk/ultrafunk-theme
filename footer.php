@@ -11,7 +11,7 @@
 <footer id="site-footer">
   <div class="site-footer-container">
     <div class="footer-settings">
-      <a href="/settings/" id="footer-settings-button" title="Playback and Site Settings">
+      <a href="/settings/" id="footer-settings-button" title="Ultrafunk Settings">
         <span class="label">Settings</span><span class="material-icons">settings</span>
       </a>
       <a href="<?php echo (\Ultrafunk\Plugin\Globals\is_list_player() ? '/' : '/list/'); ?>" id="footer-player-type-toggle" title="Gallery or List Player (p)">
