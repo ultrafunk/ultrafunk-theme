@@ -34,6 +34,12 @@ gallery-track h2.track-artist-title a:hover {
   color: var(--link-hover-color);
 }
 
+single-track .track-meta-artists a.primary,
+gallery-track .track-meta-artists a.primary {
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
 gallery-track .track-content {
   clear: both;
 }

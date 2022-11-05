@@ -6,14 +6,14 @@
 */
 
 .site-theme-light {
-  --has-changed-color-odd: #bb0000;
-  --has-changed-color-even: #ee0000;
+  --has-changed-color-odd: rgb(55, 110, 220);
+  --has-changed-color-even: rgb(64, 128, 255);
 }
 
 .site-theme-dark,
 .site-theme-black {
-  --has-changed-color-odd: #aa0000;
-  --has-changed-color-even: #770000;
+  --has-changed-color-odd: rgb(50, 100, 200);
+  --has-changed-color-even: rgb(40, 80, 160);
 }
 
 #settings-container {
