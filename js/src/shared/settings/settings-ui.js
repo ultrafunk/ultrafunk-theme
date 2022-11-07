@@ -16,6 +16,8 @@ import {
 
 import {
   KEY,
+  YEAR_IN_SECONDS,
+  setCookie,
   deleteCookie,
   readJson,
   writeJson,
@@ -72,41 +74,44 @@ const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and
 
 export function initSettingsUi()
 {
-  debug.log('initSettingsUi');
-
-  m.container = document.getElementById(config.containerId);
-
-  if (m.container !== null)
+  if (document.getElementById('settings-container') !== null)
   {
-    // For quick access to the Clear All Settings page...
-    if (document.URL.includes('?clear=true'))
+    debug.log('initSettingsUi');
+
+    m.container = document.getElementById(config.containerId);
+
+    if (m.container !== null)
     {
-      readSettingsError();
-      return;
-    }
+      // For quick access to the Clear All Settings page...
+      if (document.URL.includes('?clear=true'))
+      {
+        readSettingsError();
+        return;
+      }
 
-    readSettings(false);
+      readSettings(false);
 
-    if (m.settings !== null)
-    {
-      settingsSections.forEach(entry => setCurrentSettings(m.settings[entry.id], entry.schema));
+      if (m.settings !== null)
+      {
+        settingsSections.forEach(entry => setCurrentSettings(m.settings[entry.id], entry.schema));
 
-      insertSettingsHtml();
-      m.container.style.opacity = 1;
-      m.container.addEventListener('click',       (event) => settingClicked(event));
-      m.container.addEventListener('contextmenu', (event) => settingClicked(event));
+        insertSettingsHtml();
+        m.container.style.opacity = 1;
+        m.container.addEventListener('click',       (event) => settingClicked(event));
+        m.container.addEventListener('contextmenu', (event) => settingClicked(event));
 
-      addListener(`#${config.saveResetId} .settings-save`,  'click', settingsSaveClick);
-      addListener(`#${config.saveResetId} .settings-reset`, 'click', settingsResetClick);
+        addListener(`#${config.saveResetId} .settings-save`,  'click', settingsSaveClick);
+        addListener(`#${config.saveResetId} .settings-reset`, 'click', settingsResetClick);
+      }
+      else
+      {
+        readSettingsError();
+      }
     }
     else
     {
-      readSettingsError();
+      debug.error(`Unable to getElementById() for '#${config.containerId}'`);
     }
-  }
-  else
-  {
-    debug.error(`Unable to getElementById() for '#${config.containerId}'`);
   }
 }
 
@@ -151,6 +156,11 @@ function readSettings(setDefault = false)
 function writeSettings()
 {
   writeJson(KEY.UF_SETTINGS, m.settings);
+
+  setCookie(KEY.UF_GALLERY_PER_PAGE, m.settings.gallery.tracksPerPage,    (YEAR_IN_SECONDS * 5));
+  setCookie(KEY.UF_LIST_PER_PAGE,    m.settings.list.tracksPerPage,       (YEAR_IN_SECONDS * 5));
+  setCookie(KEY.UF_PREFERRED_PLAYER, m.settings.playback.preferredPlayer, (YEAR_IN_SECONDS * 5));
+
   document.dispatchEvent(config.updatedEvent);
 }
 

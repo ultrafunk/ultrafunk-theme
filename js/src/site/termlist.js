@@ -40,13 +40,16 @@ const denyKeyboardShortcutsEvent  = new Event('denyKeyboardShortcuts');
 
 export function initTermlist()
 {
-  debug.log('initTermlist()');
+  if (document.getElementById('termlist-container') !== null)
+  {
+    debug.log('initTermlist()');
 
-  m.listContainer = document.getElementById('termlist-container');
-  m.uiElements    = new UiElements('#termlist-container');
+    m.listContainer = document.getElementById('termlist-container');
+    m.uiElements    = new UiElements('#termlist-container');
 
-  initTermlistFilter();
-  restoreState();
+    initTermlistFilter();
+    restoreState();
+  }
 }
 
 

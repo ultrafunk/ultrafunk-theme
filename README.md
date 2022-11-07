@@ -20,9 +20,12 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 PHP version 8.0 or greater  
 [WordPress](https://wordpress.org/download/) version 6.0 or greater  
 [Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.44.X or greater  
-[DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) in **/inc/js/drag-drop-touch.js** and **/inc/js/drag-drop-touch.min.js**  
 [ESBuild](https://github.com/evanw/esbuild/) (JavaScript / CSS bundler and minifier)  
 [Google Material Icons font](https://google.github.io/material-design-icons/#icon-font-for-the-web)  
+[DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) (Polyfill that enables HTML5 drag drop support on mobile (touch) devices.)  
+  • Original: /inc/js/DragDropTouch.js  
+  • Modified: /inc/js/drag-drop-touch.js  
+  • Modified + Minified: /inc/js/drag-drop-touch.min.js  
 
 **Optional:**  
 [ESLint](https://eslint.org/) (Static code analyzer for JavaScript)  

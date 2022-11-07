@@ -6,7 +6,6 @@
 
 
 import * as debugLogger   from './shared/debuglogger.js';
-import * as storage       from './shared/storage.js';
 import * as utils         from './shared/utils.js';
 import * as interaction   from './site/interaction.js';
 import { initTermlist }   from './site/termlist.js';
@@ -55,19 +54,9 @@ document.addEventListener('DOMContentLoaded', () =>
   debug.log('DOMContentLoaded');
 
   initIndex();
-
-  if (document.getElementById('termlist-container') !== null)
-    initTermlist();
-
-  if (document.getElementById('settings-container') !== null)
-    initSettingsUi();
-
-  if (elements.siteContentSearch !== null)
-  {
-    elements.siteContentSearch.focus();
-    elements.siteContentSearch.setSelectionRange(9999, 9999);
-  }
-
+  initTermlist();
+  initSettingsUi();
+  setSiteContentSearchFocus();
   setPreviousPageTitle();
 
   debugLogger.logStartupExecutionTime();
@@ -118,9 +107,6 @@ document.addEventListener('settingsUpdated', () =>
 {
   readSettings();
   interaction.settingsUpdated();
-  storage.setCookie(storage.KEY.UF_GALLERY_PER_PAGE, settings.gallery.tracksPerPage,    (storage.YEAR_IN_SECONDS * 5));
-  storage.setCookie(storage.KEY.UF_LIST_PER_PAGE,    settings.list.tracksPerPage,       (storage.YEAR_IN_SECONDS * 5));
-  storage.setCookie(storage.KEY.UF_PREFERRED_PLAYER, settings.playback.preferredPlayer, (storage.YEAR_IN_SECONDS * 5));
 });
 
 
@@ -224,8 +210,17 @@ function notFullscreenElement()
 
 
 // ************************************************************************************************
-//
+// Misc. support functions
 // ************************************************************************************************
+
+function setSiteContentSearchFocus()
+{
+  if (elements.siteContentSearch !== null)
+  {
+    elements.siteContentSearch.focus();
+    elements.siteContentSearch.setSelectionRange(9999, 9999);
+  }
+}
 
 function setPreviousPageTitle()
 {
