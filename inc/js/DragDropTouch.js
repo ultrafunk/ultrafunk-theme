@@ -296,7 +296,7 @@ var DragDropTouch;
             var delta = this._getDelta(e);
             return delta > DragDropTouch._THRESHOLD ||
                 (DragDropTouch._ISPRESSHOLDMODE && delta >= DragDropTouch._PRESSHOLDTHRESHOLD);
-        }
+        };
 
         // clear all members
         DragDropTouch.prototype._reset = function () {

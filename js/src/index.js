@@ -327,7 +327,7 @@ const scroll = (() =>
     {
       scrolledTop();
     }
-    if (currentScrollPos > previousScrollPos)
+    else if (currentScrollPos > previousScrollPos)
     {
       scrollDeltaDown += (currentScrollPos - previousScrollPos);
 

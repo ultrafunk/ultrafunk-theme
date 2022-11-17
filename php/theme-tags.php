@@ -271,7 +271,7 @@ function header_playback_controls() : void
     </div>
     <div class="playback-thumbnail-control state-disabled" title="<?php echo (is_list_player() ? 'Show player' : 'Double click / tap: Toggle Fullscreen (f)'); ?>">
       <div class="thumbnail-overlay"><div class="spinner"></div></div>
-      <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/playback_thumbnail_placeholder.png" alt="Track Thumbnail">
+      <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/playback_thumbnail_placeholder.png" alt="">
     </div>
     <div class="playback-timer-control state-disabled" title="Toggle Autoplay (shift + a)">
       <span class="playback-timer-position"></span><br><span class="playback-timer-duration"></span>

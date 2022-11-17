@@ -78,6 +78,7 @@ export function deleteCookie(keyName, path = '/')
 // get / set local storage key => value pairs
 // ************************************************************************************************
 
+/*
 export function getValue(keyName, defaultValue = null, setDefault = false)
 {
   const keyValue = localStorage.getItem(keyName);
@@ -92,6 +93,7 @@ export function getValue(keyName, defaultValue = null, setDefault = false)
 
   return keyValue;
 }
+*/
 
 export function setValue(keyName, keyValue)
 {
