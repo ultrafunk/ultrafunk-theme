@@ -48,7 +48,7 @@ function get_title() : string
   else if (is_termlist())
   {
     $title = is_termlist('artists')
-               ? ('Artists: ' . strtoupper($params['data']['first_letter']))
+               ? ('Artists: ' . strtoupper($params['query']['first_letter']))
                : 'All Channels';
   }
   else if (is_list_player())
@@ -81,13 +81,13 @@ function get_title() : string
 //
 // Get title string for results filtering
 //
-function get_filter_result_by(array $params) : string
+function get_filter_result_by(array $request_params) : string
 {
   $filter_slug = isset($_GET['channel']) ? $_GET['channel'] : null;
   $filter_tax  = 'uf_channel';
 
-  if (isset($params['filter']))
-    $filter_slug = $params['filter']['slug'];
+  if (isset($request_params['filter']))
+    $filter_slug = $request_params['filter']['slug'];
   else if ($filter_slug !== null)
     $filter_slug = sanitize_title($filter_slug);
 

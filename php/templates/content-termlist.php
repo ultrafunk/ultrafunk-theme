@@ -16,7 +16,7 @@ class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
   private bool  $is_artists = false;
   private array $terms_list = [];
 
-  public function render_response() : void
+  protected function render_response() : void
   {
     $this->is_artists = \Ultrafunk\Plugin\Globals\is_termlist('artists');
 
@@ -25,8 +25,8 @@ class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
 
     ?>
     <term-list id="termlist-container"
-      class="<?php echo "term-{$this->request->term_type}"; ?>"
-      data-term-type="<?php echo $this->request->term_type; ?>"
+      class="<?php echo "term-{$this->params['query']['term_type']}"; ?>"
+      data-term-type="<?php echo $this->params['query']['term_type']; ?>"
       >
       <?php if ($this->is_artists === false) { ?>
         <div class="termlist-title"><b>All Channels</b> (tracks)</div>
@@ -45,9 +45,9 @@ class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
 
   private function termlist_entries() : void
   {
-    $term_path = $this->request->term_path;
+    $term_path = $this->params['query']['term_path'];
 
-    foreach($this->request->query_result as $term)
+    foreach($this->query_result as $term)
     {
       $term_name = esc_html($term->name);
       $term_slug = esc_html($term->slug);
@@ -107,10 +107,10 @@ class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
   {
     ?><div class="artist-letters-container"><?php
 
-    foreach($this->request->letters_range as $letter)
+    foreach($this->params['query']['letters_range'] as $letter)
     {
       ?>
-      <div class="artist-letter <?php echo ($this->request->first_letter === $letter) ? 'current' : ''; ?>">
+      <div class="artist-letter <?php echo ($this->params['query']['first_letter'] === $letter) ? 'current' : ''; ?>">
         <a href="/artists/<?php echo $letter; ?>/"><?php echo $letter; ?></a>
       </div>
       <?php

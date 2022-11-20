@@ -416,12 +416,12 @@ function get_nav_bar_title() : string
     $prefix     = is_termlist('artists') ? '<b>Artists</b>' : '<b>All Channels</b>';
     $title      = '';
     $pagination = '';
-    $data       = $params['data'];
+    $query      = $params['query'];
 
     if ($params['max_pages'] > 1)
       $prefix = $prefix . ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )';
-    else if (isset($data['first_letter']))
-      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($data['first_letter']) . '</span><span class="found-items"> ( ' . $params['found_items'] . ' found )</span>';
+    else if (isset($query['first_letter']))
+      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($query['first_letter']) . '</span><span class="found-items"> ( ' . $params['found_items'] . ' found )</span>';
     else
       $prefix = '<span class="go-back-to"><b>Go Back: </b><span class="go-back-title"></span></span>';
   }

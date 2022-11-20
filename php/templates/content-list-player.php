@@ -16,9 +16,9 @@ use function Ultrafunk\Plugin\Shared\get_term_links;
 
 class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
 {
-  public function render_response() : void
+  protected function render_response() : void
   {
-    $is_first_video = $this->is_video(get_object_term_cache($this->request->query_result[0]->ID, 'uf_channel'));
+    $is_first_video = $this->is_video(get_object_term_cache($this->query_result[0]->ID, 'uf_channel'));
 
     ?>
     <div id="list-player-container" class="player-container">
@@ -28,8 +28,8 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         </div>
       </div>
       <div id="tracklist"
-        data-term-type="<?php echo $this->request->term_type       ?? ''; ?>"
-        data-term-id="<?php  echo $this->request->wp_term->term_id ?? ''; ?>"
+        data-term-type="<?php echo $this->params['query']['term_type'] ?? ''; ?>"
+        data-term-id="<?php   echo $this->params['query']['term_id']   ?? ''; ?>"
         >
         <?php $this->tracklist_entries(); ?>
         <div id="tracklist-load-more">
@@ -51,7 +51,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
 
   private function tracklist_entries() : void
   {
-    foreach($this->request->query_result as $track)
+    foreach($this->query_result as $track)
     {
       $track_artist     = esc_html($track->track_artist);
       $track_title      = esc_html($track->track_title);

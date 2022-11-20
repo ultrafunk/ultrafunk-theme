@@ -13,32 +13,34 @@ namespace Ultrafunk\Theme\Templates;
 
 abstract class TemplateBase
 {
-  protected ?object $request  = null;
-  protected ?string $home_url = null;
+  protected array  $params;
+  protected mixed  $query_result;
+  protected string $home_url;
 
-  public function __construct(object $request_handler)
+  public function __construct(array $request_params, mixed $query_result)
   {
-    $this->request  = $request_handler;
-    $this->home_url = \Ultrafunk\Plugin\Globals\get_cached_home_url();
+    $this->params       = $request_params;
+    $this->query_result = $query_result;
+    $this->home_url     = \Ultrafunk\Plugin\Globals\get_cached_home_url();
   }
 
   public function render() : void
   {
-    if (!empty($this->request->query_result))
+    if (!empty($this->query_result))
       $this->render_response();
   }
 
-  abstract function render_response() : void;
+  abstract protected function render_response() : void;
 
   protected function content_pagination() : void
   {
-    if (isset($this->request->max_pages) && ($this->request->max_pages > 1))
+    if ($this->params['max_pages'] > 1)
     {
       $args = [
-        'base'      => "/{$this->request->route_path}/%_%",
+        'base'      => "/{$this->params['route_path']}/%_%",
         'format'    => 'page/%#%/',
-        'total'     => $this->request->max_pages,
-        'current'   => $this->request->current_page,
+        'total'     => $this->params['max_pages'],
+        'current'   => $this->params['current_page'],
         'type'      => 'list',
         'mid_size'  => 4,
         'prev_text' => '&#10094;&#10094; Prev.',

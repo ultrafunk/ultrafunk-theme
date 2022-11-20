@@ -73,7 +73,7 @@ function wp_setup_nav_menu_item(object $menu_item) : object
 
     if (is_list_player())
     {
-      $data = get_request_params()['data'];
+      $query = get_request_params()['query'];
 
       if ($menu_item->ID === $menu_item_all_tracks_id)
         $menu_item->url = '/list/';
@@ -84,7 +84,7 @@ function wp_setup_nav_menu_item(object $menu_item) : object
         $menu_item->classes[] = 'current-menu-item';
       else if (($menu_item->ID === $menu_item_shuffle_id) && is_shuffle(PLAYER_TYPE::LIST))
         $menu_item->classes[] = 'current-menu-item';
-      else if (isset($data['wp_term']) && ($data['wp_term']->term_id === intval($menu_item->object_id)))
+      else if (isset($query['term_id']) && ($query['term_id'] === intval($menu_item->object_id)))
         $menu_item->classes[] = 'current-menu-item';
     }
     else
