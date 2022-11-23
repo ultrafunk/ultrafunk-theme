@@ -43,20 +43,20 @@ function get_title() : string
 
   if (is_shuffle(PLAYER_TYPE::GALLERY))
   {
-    $title = isset($params['slug_name']) ? $params['slug_name'] : 'All Tracks';
+    $title = isset($params->slug_name) ? $params->slug_name : 'All Tracks';
   }
   else if (is_termlist())
   {
     $title = is_termlist('artists')
-               ? ('Artists: ' . strtoupper($params['query']['first_letter']))
+               ? ('Artists: ' . strtoupper($params->query['first_letter']))
                : 'All Channels';
   }
   else if (is_list_player())
   {
     if (is_list_player('search'))
-      $title = 'Search Results for "' . $params['title_parts']['title'] . '"';
+      $title = 'Search Results for "' . $params->title_parts['title'] . '"';
     else
-      $title = $params['title_parts']['title'];
+      $title = $params->title_parts['title'];
   }
   else if (is_tax())
   {
@@ -81,13 +81,13 @@ function get_title() : string
 //
 // Get title string for results filtering
 //
-function get_filter_result_by(array $request_params) : string
+function get_filter_result_by(?object $request_params) : string
 {
   $filter_slug = isset($_GET['channel']) ? $_GET['channel'] : null;
   $filter_tax  = 'uf_channel';
 
-  if (isset($request_params['filter']))
-    $filter_slug = $request_params['filter']['slug'];
+  if (isset($request_params->filter))
+    $filter_slug = $request_params->filter['slug'];
   else if ($filter_slug !== null)
     $filter_slug = sanitize_title($filter_slug);
 
@@ -108,7 +108,7 @@ function get_filter_result_by(array $request_params) : string
 function get_shuffle_title() : string
 {
   if (is_list_player() && !is_list_player('date') && !is_list_player('search'))
-    return ('Shuffle: ' . get_request_params()['title_parts']['title']);
+    return ('Shuffle: ' . get_request_params()->title_parts['title']);
 
   $title = '';
 

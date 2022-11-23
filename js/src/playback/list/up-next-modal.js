@@ -161,7 +161,7 @@ function getEntries(isPlayingTrack)
     content: getUpNextTrackHtml(trackElement, 'data-track-artist', 'data-track-title'),
   });
 
-  modalEntries.push({ class: 'header-entry', content: 'Up Next' });
+  modalEntries.push({ class: 'header-entry', content: 'Up Next <span class="light-text">(drag to reorder)</span>' });
 
   for (let i = 0; i < 10; i++)
   {

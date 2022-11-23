@@ -11,12 +11,13 @@ namespace Ultrafunk\Theme\Templates\SingleTrack;
 use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 
 use function Ultrafunk\Plugin\Shared\get_term_links;
+use function Ultrafunk\Theme\Functions\get_track_data;
 
 
 /**************************************************************************************************************************/
 
 
-$track_data        = \Ultrafunk\Theme\Functions\get_track_data($post);
+$track_data        = get_track_data($post);
 $is_youtube_track  = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
 $artists           = get_object_term_cache($post->ID, 'uf_artist');
 $channels          = get_object_term_cache($post->ID, 'uf_channel');
@@ -58,6 +59,15 @@ $track_title_split = '<h2 class="track-artist-title type-split">' . $post->track
     <?php track_content($post); ?>
   </div>
 </single-track>
+<nav class="navigation single-track-nav" aria-label="Single Track Navigation">
+  <h2 class="screen-reader-text">Track navigation</h2>
+  <div class="nav-links">
+    <?php
+    track_nav_link(true,  get_next_post());
+    track_nav_link(false, get_previous_post());
+    ?>
+  </div>
+</nav>
 <?php
 
 
@@ -88,6 +98,33 @@ function track_content(object $post) : void
         <div id="youtube-player"></div>
       </div>
     </figure>
+    <?php
+  }
+}
+
+function track_nav_link(bool $is_nav_prev, mixed $post) : void
+{
+  if (($post !== null) && ($post !== ''))
+  {
+    $track_artist_title = '<b>' . esc_html($post->track_artist) . '</b><br>' . esc_html($post->track_title);
+    $prev_next_title    = $is_nav_prev ? "Go to Previous track" : "Go to Next track";
+    $prev_next_post     = $is_nav_prev ? get_next_post() : get_previous_post();
+    $track_data         = ($prev_next_post !== null) ? get_track_data($prev_next_post) : null;
+
+    ?>
+    <div class="<?php echo ($is_nav_prev ? 'nav-previous' : 'nav-next'); ?>">
+      <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_nav_prev ? 'prev' : 'next'); ?>" title="<?php echo $prev_next_title; ?>">
+        <?php if ($is_nav_prev) { ?>
+          <div class="prev-track-arrow">&#10094</div>
+          <div class="prev-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>" alt="Previous Track Thumbnail"></div>
+        <?php } ?>
+        <div class="<?php echo ($is_nav_prev ? 'prev-track-artist-title' : 'next-track-artist-title'); ?>"><?php echo $track_artist_title; ?></div>
+        <?php if (!$is_nav_prev) { ?>
+          <div class="next-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>" alt="Next Track Thumbnail"></div>
+          <div class="next-track-arrow">&#10095</div>
+        <?php } ?>
+      </a>
+    </div>
     <?php
   }
 }

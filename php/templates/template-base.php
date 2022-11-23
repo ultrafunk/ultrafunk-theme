@@ -13,11 +13,11 @@ namespace Ultrafunk\Theme\Templates;
 
 abstract class TemplateBase
 {
-  protected array  $params;
+  protected object $params;
   protected mixed  $query_result;
   protected string $home_url;
 
-  public function __construct(array $request_params, mixed $query_result)
+  public function __construct(object $request_params, mixed $query_result)
   {
     $this->params       = $request_params;
     $this->query_result = $query_result;
@@ -34,13 +34,13 @@ abstract class TemplateBase
 
   protected function content_pagination() : void
   {
-    if ($this->params['max_pages'] > 1)
+    if ($this->params->max_pages > 1)
     {
       $args = [
-        'base'      => "/{$this->params['route_path']}/%_%",
+        'base'      => "/{$this->params->route_path}/%_%",
         'format'    => 'page/%#%/',
-        'total'     => $this->params['max_pages'],
-        'current'   => $this->params['current_page'],
+        'total'     => $this->params->max_pages,
+        'current'   => $this->params->current_page,
         'type'      => 'list',
         'mid_size'  => 4,
         'prev_text' => '&#10094;&#10094; Prev.',

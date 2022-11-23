@@ -28,8 +28,8 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         </div>
       </div>
       <div id="tracklist"
-        data-term-type="<?php echo $this->params['query']['term_type'] ?? ''; ?>"
-        data-term-id="<?php   echo $this->params['query']['term_id']   ?? ''; ?>"
+        data-term-type="<?php echo $this->params->query['term_type'] ?? ''; ?>"
+        data-term-id="<?php   echo $this->params->query['term_id']   ?? ''; ?>"
         >
         <?php $this->tracklist_entries(); ?>
         <div id="tracklist-load-more">

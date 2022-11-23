@@ -40,19 +40,19 @@ function document_title_parts(array $title) : array
   }
   else if (is_termlist())
   {
-    if ($params['max_pages'] > 1)
-      $title['title'] = esc_html(get_title() . ' - Page ' . $params['current_page']);
+    if ($params->max_pages > 1)
+      $title['title'] = esc_html(get_title() . ' - Page ' . $params->current_page);
     else
       $title['title'] = esc_html(get_title());
   }
   else if (is_list_player())
   {
     $title_parts = is_shuffle(PLAYER_TYPE::LIST)
-                     ? ($params['title_parts']['prefix'] . ': ' . get_title())
+                     ? ($params->title_parts['prefix'] . ': ' . get_title())
                      : get_title();
 
-    if ($params['current_page'] > 1)
-      $title_parts .= ' - Page ' . $params['current_page'];
+    if ($params->current_page > 1)
+      $title_parts .= ' - Page ' . $params->current_page;
 
     $title['title'] = esc_html($title_parts);
   }
@@ -73,7 +73,7 @@ function wp_setup_nav_menu_item(object $menu_item) : object
 
     if (is_list_player())
     {
-      $query = get_request_params()['query'];
+      $query = get_request_params()->query;
 
       if ($menu_item->ID === $menu_item_all_tracks_id)
         $menu_item->url = '/list/';

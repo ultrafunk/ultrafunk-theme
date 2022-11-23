@@ -30,7 +30,6 @@ use function Ultrafunk\Plugin\Globals\ {
 use function Ultrafunk\Theme\Functions\ {
   get_title,
   get_shuffle_title,
-  get_track_data,
 };
 
 
@@ -105,7 +104,7 @@ function meta_description() : void
 
   if (is_front_page() && !is_paged() && !is_shuffle(PLAYER_TYPE::GALLERY))
     echo $meta_description;
-  else if (is_list_player('all') && (get_request_params()['current_page'] === 1))
+  else if (is_list_player('all') && (get_request_params()->current_page === 1))
     echo $meta_description;
   else if (get_the_ID() === THEME_ENV['page_about_id'])
     echo $meta_description;
@@ -362,18 +361,18 @@ function get_wp_pagination(string $before = ' ( ', string $separator = ' / ', st
   return $pagination;
 }
 
-function get_uf_pagination(array $params) : string
+function get_uf_pagination(object $params) : string
 {
   if (is_list_player('search'))
   {
-    return ($params['max_pages'] <= 1)
-      ? ' (' . $params['found_items'] . ' hits)'
-      : ' (' . $params['found_items'] . ' hits - page ' . $params['current_page'] . ' of ' . $params['max_pages'] . ')';
+    return ($params->max_pages <= 1)
+      ? ' (' . $params->found_items . ' hits)'
+      : ' (' . $params->found_items . ' hits - page ' . $params->current_page . ' of ' . $params->max_pages . ')';
   }
   else
   {
-    return ($params['max_pages'] > 1)
-      ? ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )'
+    return ($params->max_pages > 1)
+      ? ' ( ' . $params->current_page . ' / ' . $params->max_pages . ' )'
       : '';
   }
 }
@@ -416,18 +415,18 @@ function get_nav_bar_title() : string
     $prefix     = is_termlist('artists') ? '<b>Artists</b>' : '<b>All Channels</b>';
     $title      = '';
     $pagination = '';
-    $query      = $params['query'];
+    $query      = $params->query;
 
-    if ($params['max_pages'] > 1)
-      $prefix = $prefix . ' ( ' . $params['current_page'] . ' / ' . $params['max_pages'] . ' )';
+    if ($params->max_pages > 1)
+      $prefix = $prefix . ' ( ' . $params->current_page . ' / ' . $params->max_pages . ' )';
     else if (isset($query['first_letter']))
-      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($query['first_letter']) . '</span><span class="found-items"> ( ' . $params['found_items'] . ' found )</span>';
+      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($query['first_letter']) . '</span><span class="found-items"> ( ' . $params->found_items . ' found )</span>';
     else
       $prefix = '<span class="go-back-to"><b>Go Back: </b><span class="go-back-title"></span></span>';
   }
   else if (is_list_player())
   {
-    $prefix     = '<b>' . $params['title_parts']['prefix'] . ': </b>';
+    $prefix     = '<b>' . $params->title_parts['prefix'] . ': </b>';
     $title      = is_list_player('search') ? get_search_string() : $title;
     $pagination = esc_html(get_uf_pagination($params));
   }
@@ -449,33 +448,6 @@ function get_nav_bar_title() : string
   }
 
   return '<div class="navbar-title text-nowrap-ellipsis">' . $prefix . $title . $pagination . '</div>';
-}
-
-function single_track_nav_link(bool $is_nav_prev, mixed $post) : void
-{
-  if (($post !== null) && ($post !== ''))
-  {
-    $track_artist_title = '<b>' . esc_html($post->track_artist) . '</b><br>' . esc_html($post->track_title);
-    $prev_next_title    = $is_nav_prev ? "Go to Previous track" : "Go to Next track";
-    $prev_next_post     = $is_nav_prev ? get_next_post() : get_previous_post();
-    $track_data         = ($prev_next_post !== null) ? get_track_data($prev_next_post) : null;
-
-    ?>
-    <div class="<?php echo ($is_nav_prev ? 'nav-previous' : 'nav-next'); ?>">
-      <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_nav_prev ? 'prev' : 'next'); ?>" title="<?php echo $prev_next_title; ?>">
-        <?php if ($is_nav_prev) { ?>
-          <div class="prev-track-arrow">&#10094</div>
-          <div class="prev-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>" alt="Previous Track Thumbnail"></div>
-        <?php } ?>
-        <div class="<?php echo ($is_nav_prev ? 'prev-track-artist-title' : 'next-track-artist-title'); ?>"><?php echo $track_artist_title; ?></div>
-        <?php if (!$is_nav_prev) { ?>
-          <div class="next-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>" alt="Next Track Thumbnail"></div>
-          <div class="next-track-arrow">&#10095</div>
-        <?php } ?>
-      </a>
-    </div>
-    <?php
-  }
 }
 
 function content_pagination() : void
