@@ -95,7 +95,7 @@ window.addEventListener('load', () =>
       {
         if (isShowingSnackbar() === false)
         {
-          showSnackbar(message, 20, null, null, () => { settings.internal.showSiteInfoOnLoad = false; }, 'rgb(122, 30, 30)');
+          showSnackbar(message, 10, null, null, () => { settings.internal.showSiteInfoOnLoad = false; }, 'rgb(122, 30, 30)');
           document.querySelector('.snackbar-message-link').addEventListener('click', () => { settings.internal.showSiteInfoOnLoad = false; });
         }
       }, 2000);

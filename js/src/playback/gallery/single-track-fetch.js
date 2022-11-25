@@ -127,12 +127,22 @@ function fetchTracks(playPrevNext)
   if (playPrevNext === SINGLE_TRACK_PLAY.NEXT)
   {
     const queryTracksDateTime = (m.nextTrackDateTime !== '') ? m.nextTrackDateTime : '3000-01-01T00:00:01'; // Before the year 3000 should be enough for a while...
-    return fetchRest({ endpoint: 'tracks', query: `before=${queryTracksDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, returnStatus: true });
+
+    return fetchRest({
+      endpoint: 'tracks',
+      query: `before=${queryTracksDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`,
+      returnStatus: true,
+    });
   }
   else
   {
     const queryTracksDateTime = (m.prevTrackDateTime !== '') ? m.prevTrackDateTime : '1000-01-01T00:00:01'; // After the year 1000 should be enough for a while...
-    return fetchRest({ endpoint: 'tracks', query: `after=${queryTracksDateTime}&order=asc&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`, returnStatus: true });
+
+    return fetchRest({
+      endpoint: 'tracks',
+      query: `after=${queryTracksDateTime}&order=asc&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`,
+      returnStatus: true,
+    });
   }
 }
 
