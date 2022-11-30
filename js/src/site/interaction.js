@@ -50,9 +50,9 @@ export function init()
 
   window.addEventListener('load', () =>
   {
-    document.querySelector('.widget ul.uf_channel')?.addEventListener('click', linkClick);
-    document.querySelector('.widget ul.uf_artist')?.addEventListener('click', linkClick);
-    document.querySelector('.widget.widget_archive ul')?.addEventListener('click', linkClick);
+    utils.addListener('.widget ul.uf_channel',     'click', linkClick);
+    utils.addListener('.widget ul.uf_artist',      'click', linkClick);
+    utils.addListener('.widget.widget_archive ul', 'click', linkClick);
   });
 }
 

@@ -9,6 +9,9 @@ body.termlist {
   --site-max-width: 1000px;
   --site-content-margin-top: 50px;
   --site-content-margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .site-theme-light {
@@ -36,6 +39,10 @@ body.termlist {
   --border-top-odd-row: 2px solid #505050;
   --track-thumbnail-even-placeholder-color: #303030;
   --track-thumbnail-odd-placeholder-color: #505050;
+}
+
+body.termlist #site-content {
+  flex: 1;
 }
 
 term-list {

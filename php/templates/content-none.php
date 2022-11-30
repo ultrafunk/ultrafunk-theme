@@ -2,7 +2,7 @@
 /*
  * Content cannot be found template
  *
-*/
+ */
 
 
 namespace Ultrafunk\Theme\Templates\None;
