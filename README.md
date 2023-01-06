@@ -2,7 +2,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CodeQL](https://github.com/ultrafunk/ultrafunk-theme/workflows/CodeQL/badge.svg)](https://github.com/ultrafunk/ultrafunk-theme/actions/workflows/codeql-analysis.yml)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/ultrafunk/ultrafunk-theme.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ultrafunk/ultrafunk-theme/context:javascript)
 
 This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress theme, updated each time a new release is published.
 The source code is provided as is with no warranties or support of any kind.
