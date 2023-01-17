@@ -85,7 +85,7 @@ function initIndex()
 
 window.addEventListener('load', () =>
 {
-  if (window.localStorage && settings.internal.showSiteInfoOnLoad)
+  if (window.localStorage && settings.internal.showSiteInfoOnLoad && document.body.classList.contains('home'))
   {
     if (isGalleryPlayer() || isListPlayer())
     {

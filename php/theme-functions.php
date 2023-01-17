@@ -147,3 +147,19 @@ function get_track_data(object $track) : array
 
   return DEFAULT_TRACK_DATA;
 }
+
+//
+// Conditional for Gallery Player home page
+//
+function is_gallery_home() : bool
+{
+  return (is_front_page() && !is_paged() && !is_shuffle(PLAYER_TYPE::GALLERY));
+}
+
+//
+// Conditional for List Player home page
+//
+function is_list_home() : bool
+{
+  return (is_list_player('all') && (get_request_params()->current_page === 1));
+}

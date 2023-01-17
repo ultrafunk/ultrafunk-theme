@@ -30,6 +30,8 @@ use function Ultrafunk\Plugin\Globals\ {
 use function Ultrafunk\Theme\Functions\ {
   get_title,
   get_shuffle_title,
+  is_gallery_home,
+  is_list_home,
 };
 
 
@@ -98,18 +100,6 @@ function pre_wp_head() : void
     echo '<link rel="modulepreload" href="' . esc_url(get_template_directory_uri()) . JS_PRELOAD_CHUNK . '" as="script" crossorigin>' . PHP_EOL;
 }
 
-function meta_description() : void
-{
-  $meta_description = '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
-
-  if (is_front_page() && !is_paged() && !is_shuffle(PLAYER_TYPE::GALLERY))
-    echo $meta_description;
-  else if (is_list_player('all') && (get_request_params()->current_page === 1))
-    echo $meta_description;
-  else if (get_the_ID() === THEME_ENV['page_about_id'])
-    echo $meta_description;
-}
-
 function scripts_styles() : void
 {
   $template_uri = esc_url(get_template_directory_uri());
@@ -130,7 +120,9 @@ function scripts_styles() : void
 
 function head() : void
 {
-  meta_description();
+  if (is_gallery_home() || is_list_home() || (get_the_ID() === THEME_ENV['page_about_id']))
+    echo '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
+
   scripts_styles();
 
   if (WP_DEBUG)
@@ -176,6 +168,9 @@ function body_attributes() : void
         $gallery_track_count++;
     }
   }
+
+  if (is_gallery_home() || is_list_home())
+    $classes[] = 'home';
 
   if (($gallery_track_count === 0) && !is_list_player())
     $classes[] = 'no-playback';

@@ -19,8 +19,8 @@ use function Ultrafunk\Theme\Functions\get_track_data;
 
 $track_data        = get_track_data($post);
 $is_youtube_track  = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
-$artists           = get_object_term_cache($post->ID, 'uf_artist');
-$channels          = get_object_term_cache($post->ID, 'uf_channel');
+$artists           = is_preview() ? wp_get_post_terms($post->ID, 'uf_artist')  : get_object_term_cache($post->ID, 'uf_artist');
+$channels          = is_preview() ? wp_get_post_terms($post->ID, 'uf_channel') : get_object_term_cache($post->ID, 'uf_channel');
 $track_title_split = '<h2 class="track-artist-title type-split">' . $post->track_artist . '<br><span class="track-title-part">' . $post->track_title . '</span></h2>';
 
 
