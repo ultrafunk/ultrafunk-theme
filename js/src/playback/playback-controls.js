@@ -69,57 +69,40 @@ export function init(mediaPlayers, seekClickCallback)
   debug.log('init()');
 
   m.players = mediaPlayers;
-
-  const playbackProgress = document.getElementById('progress-controls');
-
-  if (playbackProgress !== null)
-  {
-    ctrl.progressSeek = ElementWrapper('.progress-seek-control', playbackProgress);
-    ctrl.progressSeek.clickCallback = seekClickCallback;
-    ctrl.progressBar  = ElementWrapper('.progress-bar-control', playbackProgress);
-  }
-  else
-  {
-    debug.error('init(): Unable to getElementById() for #progress-controls');
-  }
-
   const playbackControls = document.getElementById('playback-controls');
 
-  if (playbackControls !== null)
-  {
-    ctrl.details        = ElementWrapper('.playback-details-control', playbackControls);
-    ctrl.details.artist = ctrl.details.getElement('.playback-details-artist');
-    ctrl.details.title  = ctrl.details.getElement('.playback-details-title');
+  ctrl.progressSeek = ElementWrapper('.progress-seek-control', document.getElementById('progress-controls'));
+  ctrl.progressSeek.clickCallback = seekClickCallback;
+  ctrl.progressBar  = ElementWrapper('.progress-bar-control', document.getElementById('progress-controls'));
 
-    ctrl.thumbnail     = ElementWrapper('.playback-thumbnail-control', playbackControls);
-    ctrl.thumbnail.img = ctrl.thumbnail.getElement('img');
+  ctrl.details        = ElementWrapper('.playback-details-control', playbackControls);
+  ctrl.details.artist = ctrl.details.getElement('.playback-details-artist');
+  ctrl.details.title  = ctrl.details.getElement('.playback-details-title');
 
-    ctrl.timer                 = ElementWrapper('.playback-timer-control', playbackControls);
-    ctrl.timer.position        = ctrl.timer.getElement('.playback-timer-position');
-    ctrl.timer.duration        = ctrl.timer.getElement('.playback-timer-duration');
-    ctrl.timer.positionSeconds = -1; // Make sure initial value is set + shown when track plays
-    ctrl.timer.durationSeconds = -1; // Make sure initial value is set + shown when track plays
+  ctrl.thumbnail     = ElementWrapper('.playback-thumbnail-control', playbackControls);
+  ctrl.thumbnail.img = ctrl.thumbnail.getElement('img');
 
-    ctrl.playerType = ElementWrapper('.playback-player-type-control', playbackControls);
+  ctrl.timer                 = ElementWrapper('.playback-timer-control', playbackControls);
+  ctrl.timer.position        = ctrl.timer.getElement('.playback-timer-position');
+  ctrl.timer.duration        = ctrl.timer.getElement('.playback-timer-duration');
+  ctrl.timer.positionSeconds = -1; // Make sure initial value is set + shown when track plays
+  ctrl.timer.durationSeconds = -1; // Make sure initial value is set + shown when track plays
 
-    ctrl.playPause.icon = ctrl.playPause.getElement('span.material-icons');
+  ctrl.playerType = ElementWrapper('.playback-player-type-control', playbackControls);
 
-    ctrl.nextTrack = ElementWrapper('.playback-next-control', playbackControls);
+  ctrl.playPause.icon = ctrl.playPause.getElement('span.material-icons');
 
-    ctrl.repeat      = ElementWrapper('.playback-repeat-control', playbackControls);
-    ctrl.repeat.icon = ctrl.repeat.getElement('span.material-icons');
+  ctrl.nextTrack = ElementWrapper('.playback-next-control', playbackControls);
 
-    ctrl.shuffle = ElementWrapper('.playback-shuffle-control', playbackControls);
+  ctrl.repeat      = ElementWrapper('.playback-repeat-control', playbackControls);
+  ctrl.repeat.icon = ctrl.repeat.getElement('span.material-icons');
 
-    ctrl.mute      = ElementWrapper('.playback-mute-control', playbackControls);
-    ctrl.mute.icon = ctrl.mute.getElement('span.material-icons');
+  ctrl.shuffle = ElementWrapper('.playback-shuffle-control', playbackControls);
 
-    ctrl.volume = ElementWrapper('.playback-volume-control', playbackControls);
-  }
-  else
-  {
-    debug.error('init(): Unable to getElementById() for #playback-controls');
-  }
+  ctrl.mute      = ElementWrapper('.playback-mute-control', playbackControls);
+  ctrl.mute.icon = ctrl.mute.getElement('span.material-icons');
+
+  ctrl.volume = ElementWrapper('.playback-volume-control', playbackControls);
 }
 
 export function ready(prevClickCallback, playPauseClickCallback, nextClickCallback, muteClickCallback)

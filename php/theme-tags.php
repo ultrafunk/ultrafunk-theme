@@ -100,6 +100,32 @@ function pre_wp_head() : void
     echo '<link rel="modulepreload" href="' . esc_url(get_template_directory_uri()) . JS_PRELOAD_CHUNK . '" as="script" crossorigin>' . PHP_EOL;
 }
 
+function meta_description_keywords() : void
+{
+  global $wp_query;
+
+  if (isset($wp_query) && $wp_query->have_posts())
+  {
+    $description    = $wp_query->post->track_artist . ' - ' . $wp_query->post->track_title;
+    $keywords       = '';
+    $track_artists  = get_object_term_cache($wp_query->post->ID, 'uf_artist');
+    $track_channels = get_object_term_cache($wp_query->post->ID, 'uf_channel');
+
+    foreach($track_artists as $artist)
+      $keywords .= $artist->name . ', ';
+
+    foreach($track_channels as $channel)
+      $keywords .= strtolower($channel->name) . ', ';
+
+    $description = (strlen($description) > 155) ? (substr($description, 0, 150) . '...') : $description;
+    $keywords    = substr($keywords, 0, -2);
+    $keywords    = (strlen($keywords) > 155) ? (substr($keywords, 0, 150) . '...') : $keywords;
+
+    echo '<meta name="description" content="' . esc_attr($description) . '" />' . PHP_EOL;
+    echo '<meta name="keywords"    content="' . esc_attr($keywords)    . '" />' . PHP_EOL;
+  }
+}
+
 function scripts_styles() : void
 {
   $template_uri = esc_url(get_template_directory_uri());
@@ -122,6 +148,8 @@ function head() : void
 {
   if (is_gallery_home() || is_list_home() || (get_the_ID() === THEME_ENV['page_about_id']))
     echo '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
+  else if (is_single())
+    meta_description_keywords();
 
   scripts_styles();
 

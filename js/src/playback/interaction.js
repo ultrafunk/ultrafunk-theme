@@ -12,6 +12,7 @@ import * as listPlayback      from './list/list-playback.js';
 import * as playbackEvents    from './playback-events.js';
 import * as utils             from '../shared/utils.js';
 import * as footerToggles     from './footer-toggles.js';
+import * as shared            from './shared-gallery-list.js';
 import { ElementClick }       from '../shared/element-click.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { initScreenWakeLock } from './screen-wakelock.js';
@@ -35,18 +36,6 @@ import {
   getSessionData,
 } from '../shared/session-data.js';
 
-import {
-  hasGalleryPlayer,
-  hasListPlayer,
-  isGalleryPlayer,
-  isListPlayer,
-  playerScrollTo,
-  playerOnKeysScroll,
-  shuffleClickNavTo,
-  autoplayNavTo,
-  fullscreenElement,
-} from './shared-gallery-list.js';
-
 
 /*************************************************************************************************/
 
@@ -62,10 +51,6 @@ const m = {
   keyboardShortcuts:  null,
 };
 
-const config = {
-  doubleClickDelay: 500,
-};
-
 
 // ************************************************************************************************
 // Document ready and document / window event listeners
@@ -79,13 +64,13 @@ document.addEventListener('DOMContentLoaded', () =>
 
   getSessionData();
 
-  if (hasGalleryPlayer())
+  if (shared.hasGalleryPlayer())
     m.player = galleryPlayback;
-  else if (hasListPlayer())
+  else if (shared.hasListPlayer())
     m.player = listPlayback;
 
   if (m.player !== null)
-    initShared();
+    initCommon();
 
   footerToggles.init(m.player?.getStatus);
 });
@@ -95,9 +80,9 @@ document.addEventListener('DOMContentLoaded', () =>
 // Read settings and interaction init
 // ************************************************************************************************
 
-function initShared()
+function initCommon()
 {
-  debug.log('initShared()');
+  debug.log('initCommon()');
 
   // Set user settings CSS with JS as early as possible...
   setPlaybackControlsCss();
@@ -109,7 +94,7 @@ function initShared()
   m.siteNavUiElements  = new siteNavUiElements('#site-navigation');
   m.trackNavUiElements = new trackNavUiElements('nav.single-track-nav .nav-links');
 
-  fullscreenElement.init();
+  shared.fullscreenElement.init();
   m.keyboardShortcuts = utils.keyboardShortcuts(settings.playback.keyboardShortcuts);
 
   initListeners();
@@ -128,7 +113,7 @@ function initPlaybackEvents()
 
 function initListeners()
 {
-  utils.addListener('.playback-shuffle-control span', 'click', shuffleClickNavTo);
+  utils.addListener('.playback-shuffle-control span', 'click', shared.shuffleClickNavTo);
   document.addEventListener('keydown', documentEventKeyDown);
   document.addEventListener('keydown', documentEventMediaKeyDown);
   window.addEventListener('blur', windowEventBlur);
@@ -169,7 +154,7 @@ function documentEventKeyDown(event)
       {
         case 'Backquote':
           event.preventDefault();
-          playerScrollTo(m.player.getStatus().trackId);
+          shared.playerScrollTo(m.player.getStatus().trackId);
           break;
       }
 
@@ -184,7 +169,7 @@ function documentEventKeyDown(event)
         case 'End':
         case 'PageUp':
         case 'PageDown':
-          playerOnKeysScroll(event);
+          shared.playerOnKeysScroll(event);
           break;
 
         case 'ArrowLeft':
@@ -202,7 +187,7 @@ function documentEventKeyDown(event)
         case 'f':
         case 'F':
           event.preventDefault();
-          fullscreenElement.toggle(document.getElementById(m.player.getStatus().iframeId));
+          shared.fullscreenElement.toggle(document.getElementById(m.player.getStatus().iframeId));
           break;
 
         case 'm':
@@ -342,13 +327,13 @@ function playbackEventPlaybackReady()
 function playbackEventMediaEnded()
 {
   if (settings.playback.autoExitFullscreen)
-    fullscreenElement.exit();
+    shared.fullscreenElement.exit();
 }
 
 function playbackEventMediaTimeRemaining(playbackEvent)
 {
   if (settings.playback.autoExitFsOnWarning && (playbackEvent.data.timeRemainingSeconds <= settings.playback.timeRemainingSeconds))
-    fullscreenElement.exit();
+    shared.fullscreenElement.exit();
 }
 
 
@@ -359,7 +344,7 @@ function playbackEventMediaTimeRemaining(playbackEvent)
 function windowEventBlur()
 {
   // ToDo: This is only for gallery players for now...?
-  if (isListPlayer())
+  if (shared.isListPlayer())
     return;
 
   // setTimeout(0) = Yield
@@ -387,21 +372,21 @@ function windowEventBlur()
 
 function playbackDetailsClick()
 {
-  playerScrollTo(m.player.getStatus().trackId);
+  shared.playerScrollTo(m.player.getStatus().trackId);
 }
 
 function playbackThumbnailClick()
 {
-  if (isGalleryPlayer())
+  if (shared.isGalleryPlayer())
   {
     eventLog.add(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK);
 
-    if (eventLog.doubleClicked(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, config.doubleClickDelay))
-      fullscreenElement.enter(document.getElementById(m.player.getStatus().iframeId));
+    if (eventLog.doubleClicked(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, 500))
+      shared.fullscreenElement.enter(document.getElementById(m.player.getStatus().iframeId));
   }
-  else if (isListPlayer())
+  else if (shared.isListPlayer())
   {
-    playerScrollTo(0);
+    shared.playerScrollTo(0);
   }
 }
 
@@ -437,5 +422,5 @@ class trackNavUiElements extends ElementClick
 function prevNextNavTo(event, destUrl)
 {
   event?.preventDefault();
-  autoplayNavTo(destUrl, m.player.getStatus().isPlaying);
+  shared.autoplayNavTo(destUrl, m.player.getStatus().isPlaying);
 }
