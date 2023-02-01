@@ -106,23 +106,19 @@ function meta_description_keywords() : void
 
   if (isset($wp_query) && $wp_query->have_posts())
   {
-    $description    = $wp_query->post->track_artist . ' - ' . $wp_query->post->track_title;
-    $keywords       = '';
-    $track_artists  = get_object_term_cache($wp_query->post->ID, 'uf_artist');
-    $track_channels = get_object_term_cache($wp_query->post->ID, 'uf_channel');
+    $track_artist_title = $wp_query->post->track_artist . ' - ' . $wp_query->post->track_title;
+    $track_artists      = get_object_term_cache($wp_query->post->ID, 'uf_artist');
+    $track_channels     = get_object_term_cache($wp_query->post->ID, 'uf_channel');
+    $artists            = '';
+    $channels           = '';
 
     foreach($track_artists as $artist)
-      $keywords .= $artist->name . ', ';
+      $artists .= $artist->name . ', ';
 
     foreach($track_channels as $channel)
-      $keywords .= strtolower($channel->name) . ', ';
+      $channels .= strtolower($channel->name) . ', ';
 
-    $description = (strlen($description) > 155) ? (substr($description, 0, 150) . '...') : $description;
-    $keywords    = substr($keywords, 0, -2);
-    $keywords    = (strlen($keywords) > 155) ? (substr($keywords, 0, 150) . '...') : $keywords;
-
-    echo '<meta name="description" content="' . esc_attr($description) . '" />' . PHP_EOL;
-    echo '<meta name="keywords"    content="' . esc_attr($keywords)    . '" />' . PHP_EOL;
+    echo '<meta name="description" content="' . esc_attr($track_artist_title) . ', Artists: ' . esc_attr(substr($artists, 0, -2)) . ', Genres: ' . esc_attr(substr($channels, 0, -2)) . '" />' . PHP_EOL;
   }
 }
 
