@@ -163,3 +163,11 @@ function is_list_home() : bool
 {
   return (is_list_player('all') && (get_request_params()->current_page === 1));
 }
+
+//
+// Get term data from object cache, revert to database fetch if previewing...
+//
+function get_cached_terms(int $id, string $taxonomy) : mixed
+{
+  return (is_preview() ? wp_get_post_terms($id, $taxonomy) : get_object_term_cache($id, $taxonomy));
+}

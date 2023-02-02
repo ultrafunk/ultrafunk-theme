@@ -28,6 +28,7 @@ use function Ultrafunk\Plugin\Globals\ {
 };
 
 use function Ultrafunk\Theme\Functions\ {
+  get_cached_terms,
   get_title,
   get_shuffle_title,
   is_gallery_home,
@@ -100,15 +101,15 @@ function pre_wp_head() : void
     echo '<link rel="modulepreload" href="' . esc_url(get_template_directory_uri()) . JS_PRELOAD_CHUNK . '" as="script" crossorigin>' . PHP_EOL;
 }
 
-function meta_description_keywords() : void
+function meta_description() : void
 {
   global $wp_query;
 
   if (isset($wp_query) && $wp_query->have_posts())
   {
     $track_artist_title = $wp_query->post->track_artist . ' - ' . $wp_query->post->track_title;
-    $track_artists      = get_object_term_cache($wp_query->post->ID, 'uf_artist');
-    $track_channels     = get_object_term_cache($wp_query->post->ID, 'uf_channel');
+    $track_artists      = get_cached_terms($wp_query->post->ID, 'uf_artist');
+    $track_channels     = get_cached_terms($wp_query->post->ID, 'uf_channel');
     $artists            = '';
     $channels           = '';
 
@@ -116,7 +117,7 @@ function meta_description_keywords() : void
       $artists .= $artist->name . ', ';
 
     foreach($track_channels as $channel)
-      $channels .= strtolower($channel->name) . ', ';
+      $channels .= $channel->name . ', ';
 
     echo '<meta name="description" content="' . esc_attr($track_artist_title) . ', Artists: ' . esc_attr(substr($artists, 0, -2)) . ', Genres: ' . esc_attr(substr($channels, 0, -2)) . '" />' . PHP_EOL;
   }
@@ -145,7 +146,7 @@ function head() : void
   if (is_gallery_home() || is_list_home() || (get_the_ID() === THEME_ENV['page_about_id']))
     echo '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
   else if (is_single())
-    meta_description_keywords();
+    meta_description();
 
   scripts_styles();
 
