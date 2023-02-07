@@ -62,6 +62,15 @@ function document_title_parts(array $title) : array
 add_filter('document_title_parts', '\Ultrafunk\Theme\Filters\document_title_parts');
 
 //
+// Customize WP Site Title separator character
+//
+function document_title_separator() : string
+{
+  return '|';
+}
+add_filter ('document_title_separator', '\Ultrafunk\Theme\Filters\document_title_separator') ;
+
+//
 // Do needed magic to the nav menu items here from context
 //
 function wp_setup_nav_menu_item(object $menu_item) : object

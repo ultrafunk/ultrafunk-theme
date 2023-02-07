@@ -11,7 +11,7 @@ namespace Ultrafunk\Theme\Constants;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.44.78';
+const VERSION = '1.44.79';
 
 const THEME_ENV = [
   'menu_item_all_tracks_id' => WP_DEBUG ? 4057 : 4430,
@@ -29,4 +29,4 @@ const THEME_ENV = [
 */
 
 const IS_PROD_BUILD    = true;
-const JS_PRELOAD_CHUNK = '/js/dist/chunk-YQNDXOJV.js';
+const JS_PRELOAD_CHUNK = '/js/dist/chunk-66EZCBHH.js';

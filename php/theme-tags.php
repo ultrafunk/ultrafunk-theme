@@ -107,11 +107,10 @@ function meta_description() : void
 
   if (isset($wp_query) && $wp_query->have_posts())
   {
-    $track_artist_title = $wp_query->post->track_artist . ' - ' . $wp_query->post->track_title;
-    $track_artists      = get_cached_terms($wp_query->post->ID, 'uf_artist');
-    $track_channels     = get_cached_terms($wp_query->post->ID, 'uf_channel');
-    $artists            = '';
-    $channels           = '';
+    $track_artists  = get_cached_terms($wp_query->post->ID, 'uf_artist');
+    $track_channels = get_cached_terms($wp_query->post->ID, 'uf_channel');
+    $artists        = '';
+    $channels       = '';
 
     foreach($track_artists as $artist)
       $artists .= $artist->name . ', ';
@@ -119,7 +118,7 @@ function meta_description() : void
     foreach($track_channels as $channel)
       $channels .= $channel->name . ', ';
 
-    echo '<meta name="description" content="' . esc_attr($track_artist_title) . ', Artists: ' . esc_attr(substr($artists, 0, -2)) . ', Genres: ' . esc_attr(substr($channels, 0, -2)) . '" />' . PHP_EOL;
+    echo '<meta name="description" content="Listen to &quot;' . esc_attr($wp_query->post->track_title) . '&quot;, Artists: ' . esc_attr(substr($artists, 0, -2)) . ', Genres: ' . esc_attr(substr($channels, 0, -2)) . '" />' . PHP_EOL;
   }
 }
 
