@@ -130,6 +130,7 @@ function initTermlistFilter()
 
     // Scroll current selection (artist letter) into view if needed...
     document.querySelector('div.artist-letter.current').scrollIntoView(false);
+    m.termlistFilterInput.focus();
   }
 }
 

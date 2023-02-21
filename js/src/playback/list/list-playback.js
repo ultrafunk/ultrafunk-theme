@@ -464,7 +464,7 @@ function onYouTubePlayerError(event)
     eventLog.add(eventLogger.SOURCE.YOUTUBE, eventLogger.EVENT.PLAYER_ERROR, m.currentTrackId);
     showSnackbar('Unable to play track, skipping to next', 5, 'Stop', stopSkipToNextTrack, skipToNextTrack);
 
-    debugLogger.logErrorOnServer('EVENT_MEDIA_UNAVAILABLE', {
+    debugLogger.logErrorOnServer('media_unavailable', {
       mediaUrl:   m.player.embedded.getVideoUrl(),
       mediaTitle: `${m.player.getArtist()} - ${m.player.getTitle()}`,
     });

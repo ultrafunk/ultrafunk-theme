@@ -84,17 +84,17 @@ function padString(string, maxLength, padChar)
            : string.padEnd(maxLength, padChar));
 }
 
-export function logErrorOnServer(errorCategory, errorData)
+export function logErrorOnServer(errorType, errorData)
 {
-  const eventAction = errorData.mediaUrl + ' | ' + errorData.mediaTitle;
+  console.warn(`logErrorOnServer(): ${errorType} => ${errorData.mediaTitle} | ${errorData.mediaUrl}`);
 
-  console.warn(`logErrorOnServer(): ${errorCategory} - ${eventAction}`);
-
-  gtag('event', eventAction, // eslint-disable-line no-undef
+  /*
+  gtag('event', errorType, // eslint-disable-line no-undef
   {
-    event_category: errorCategory,
-    event_label:    'Ultrafunk Client Error',
+    link_text: errorData.mediaTitle,
+    link_url:  errorData.mediaUrl,
   });
+  */
 }
 
 
