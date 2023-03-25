@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.44.82
+Version:           1.44.83
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -32,10 +32,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
 
   --site-content-margin-top: 75px;
   --site-content-margin-bottom: 100px;
-
-  /*
-  --sidebar-width: 200px;
-  */
 
   --link-hover-color: #dd0000;
   --link-bright-hover-color: #ff0000;
@@ -67,11 +63,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --primary-icon-color: #000;
 
   --nav-menu-item-background-rgba: rgba(127, 127, 127, 0.2);
-
-  /*
-  --sidebar-menu-background: #f0f0f0;
-  --sidebar-menu-right-border: none;
-  */
 
   --control-hover-opacity: 0.66;
   --control-highlight-color: rgba(0, 0, 0, 0.2);
@@ -114,11 +105,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --primary-icon-color: #fff;
 
   --nav-menu-item-background-rgba: rgba(127, 127, 127, 0.2);
-
-  /*
-  --sidebar-menu-background: #2d2d2d;
-  --sidebar-menu-right-border: none;
-  */
 
   --control-hover-opacity: 0.75;
   --control-highlight-color: rgba(255, 255, 255, 0.2);
@@ -166,11 +152,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --primary-icon-color: #fff;
 
   --nav-menu-item-background-rgba: rgba(127, 127, 127, 0.25);
-
-  /*
-  --sidebar-menu-background: #000;
-  --sidebar-menu-right-border: 1px solid rgba(255, 255, 255, 0.1);
-  */
 
   --control-hover-opacity: 0.75;
   --control-highlight-color: rgba(255, 255, 255, 0.2);
@@ -574,7 +555,7 @@ a[href="#"] .navbar-arrow-next {
 }
 
 #menu-primary-sections .menu-item-all-channels .menu-item-icon::after {
-  content: "\e8fe";
+  content: "\e03e";
 }
 
 #menu-primary-sections .menu-item-pref-player {

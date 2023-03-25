@@ -242,7 +242,7 @@ export function getThumbnailData(metaData)
 //
 // ************************************************************************************************
 
-export const FETCH_ERROR_TYPE = {
+export const FETCH_ERROR = {
   UNKNOWN: 0,
   NETWORK: 1,
   TIMEOUT: 2,
@@ -294,12 +294,12 @@ export async function fetchRest({
 function getFetchErrorType(error)
 {
   if (error instanceof TypeError)
-    return FETCH_ERROR_TYPE.NETWORK;
+    return FETCH_ERROR.NETWORK;
 
   if (error instanceof DOMException)
-    return FETCH_ERROR_TYPE.TIMEOUT;
+    return FETCH_ERROR.TIMEOUT;
 
-  return FETCH_ERROR_TYPE.UNKNOWN;
+  return FETCH_ERROR.UNKNOWN;
 }
 
 
