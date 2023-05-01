@@ -17,6 +17,7 @@ import {
 } from '../../shared/session-data.js';
 
 import {
+  HTTP_RESPONSE,
   fetchRest,
   getThumbnailData,
 } from '../../shared/utils.js';
@@ -75,7 +76,7 @@ export async function playSingleTrack(playPrevNext, playTrack = false)
     m.isTrackLoading   = true;
     const restResponse = await fetchTracks(playPrevNext);
 
-    if ((restResponse !== null) && (restResponse.status.code === 200) && (restResponse.data.length > 1))
+    if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length > 1))
     {
       if (playPrevNext === SINGLE_TRACK_PLAY.PREV)
       {
@@ -107,9 +108,9 @@ export async function playSingleTrack(playPrevNext, playTrack = false)
     }
     else
     {
-      if (restResponse.status.code !== 200)
+      if (restResponse.status.code !== HTTP_RESPONSE.OK)
         showSnackbar('Failed to fetch track data!', 30, 'Retry', () => playSingleTrack(playPrevNext, playTrack));
-      else if ((restResponse.status.code === 200) && (restResponse.data.length === 1))
+      else if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length === 1))
         showSnackbar('No more tracks to play...', 5, 'Shuffle', () => shuffleClickNavTo());
     }
   }
@@ -130,8 +131,7 @@ function fetchTracks(playPrevNext)
 
     return fetchRest({
       endpoint: 'tracks',
-      query: `before=${queryTracksDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`,
-      returnStatus: true,
+      query:    `before=${queryTracksDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`,
     });
   }
   else
@@ -140,8 +140,7 @@ function fetchTracks(playPrevNext)
 
     return fetchRest({
       endpoint: 'tracks',
-      query: `after=${queryTracksDateTime}&order=asc&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`,
-      returnStatus: true,
+      query:    `after=${queryTracksDateTime}&order=asc&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`,
     });
   }
 }

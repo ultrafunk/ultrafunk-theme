@@ -31,7 +31,7 @@ export function getTermlistHtml(header, termSlug, termData)
         data-term-slug="${termSlug}"
         data-track-num="${index + 1}"
         data-track-type="${track.meta.track_source_type}"
-        data-track-id="track-${track.id}"
+        data-track-id="${track.id}"
         data-track-source-uid="${thumbnailData.uid}" title="Play Track"
         >
         <img src="${thumbnailData.src}">

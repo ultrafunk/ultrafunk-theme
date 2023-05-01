@@ -64,9 +64,9 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
       $is_video_class   = $this->is_video($channels) ? ' is-video' : ' is-audio';
 
       ?>
-      <div id="<?php echo uniqid(); ?>" class="track-entry <?php echo $track_data['css_class'] . $is_video_class; ?>"
+      <div id="<?php echo uniqid(); ?>" class="track-entry default-density <?php echo $track_data['css_class'] . $is_video_class; ?>"
         data-track-type="<?php echo $track_data['track_type']; ?>"
-        data-track-id="track-<?php echo $track->ID; ?>"
+        data-track-id="<?php echo $track->ID; ?>"
         data-track-artist="<?php echo $track_artist; ?>"
         data-track-title="<?php echo $track_title; ?>"
         data-track-duration="<?php echo $track_duration; ?>"

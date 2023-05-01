@@ -26,7 +26,7 @@ use \Ultrafunk\Theme\Tags as ultrafunk;
 <header id="site-header" class="hide-nav-menu">
   <?php ultrafunk\header_progress_controls(); ?>
   <div class="site-header-container">
-    <div id="search-container"><?php ultrafunk\search_form(); ?></div>
+    <div id="site-search-container"><?php ultrafunk\search_form(); ?></div>
     <div class="site-branding-container">
       <?php
       ultrafunk\header_site_branding();
@@ -52,6 +52,11 @@ use \Ultrafunk\Theme\Tags as ultrafunk;
         </div>
       </div>
     </nav>
+  </div>
+  <div id="track-search-results">
+    <div class="track-results-container">
+      <div class="results-tracklist"></div>
+    </div>
   </div>
 </header>
 

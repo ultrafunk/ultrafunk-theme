@@ -23,7 +23,7 @@ $channels         = get_object_term_cache($post->ID, 'uf_channel');
 
 
 ?>
-<gallery-track id="track-<?php the_ID(); ?>" class=""
+<gallery-track id="<?php the_ID(); ?>" class=""
   data-track-type="<?php echo intval($post->track_source_type); ?>"
   data-track-artist="<?php echo esc_html($post->track_artist); ?>"
   data-track-title="<?php echo esc_html($post->track_title); ?>"

@@ -352,7 +352,7 @@ export class Playlist extends MediaPlayer
 const defThumbnailObj = { src: '/wp-content/themes/ultrafunk/inc/img/photo_filled_grey.png', class: 'type-default', uid: '' };
 
 // https://webapps.stackexchange.com/a/101153
-export const youTubeVideoIdRegEx = /[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/;
+const youTubeVideoIdRegEx = /[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/;
 
 export function getYouTubeImgUrl(trackSourceUrl)
 {

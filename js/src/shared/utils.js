@@ -239,8 +239,12 @@ export function getThumbnailData(metaData)
 
 
 // ************************************************************************************************
-//
+// JavaScript async fetch() wrapper with timeout and better result data + details
 // ************************************************************************************************
+
+export const HTTP_RESPONSE = {
+  OK: 200,
+};
 
 export const FETCH_ERROR = {
   UNKNOWN: 0,
@@ -249,45 +253,44 @@ export const FETCH_ERROR = {
 };
 
 export async function fetchRest({
-  endpoint,
-  query,
-  returnStatus = false,
+  path     = '/wp-json/wp/v2/',
+  endpoint = null,
+  id       = null,
+  query    = null,
   timeoutSeconds = 10,
-  path = '/wp-json/wp/v2/',
 } = {}
 )
 {
-  debug.log(`fetchRest(): "${path}${endpoint}?${query}" - returnStatus: ${returnStatus} - timeoutSeconds: ${timeoutSeconds}`);
+  let restRequest = path;
+
+  if ((endpoint !== null) && (id !== null))
+    restRequest += `${endpoint}/${parseInt(id)}`;
+  else if (endpoint !== null)
+    restRequest += endpoint;
+
+  if (query !== null)
+    restRequest += `?${query}`;
+
+  debug.log(`fetchRest(): "${restRequest}" - timeoutSeconds: ${timeoutSeconds}`);
 
   const controller = new AbortController();
   setTimeout(() => controller.abort(), (timeoutSeconds * 1000));
 
-  return fetch(`${path}${endpoint}?${query}`, { signal: controller.signal })
+  return fetch(restRequest, { signal: controller.signal })
   .then(async (response) =>
   {
     if (!response.ok)
     {
       debug.warn(response);
-
-      if (returnStatus)
-        return { status: { code: response.status, details: await response.json() }};
-
-      return null;
+      return { status: { code: response.status, details: await response.json() }};
     }
 
-    if (returnStatus)
-      return { status: { code: response.status }, data: await response.json() };
-
-    return response.json();
+    return { status: { code: response.status }, data: await response.json() };
   })
   .catch(exception =>
   {
     debug.error(exception);
-
-    if (returnStatus)
-      return { status: { code: 0, errorType: getFetchErrorType(exception), errorMessage: exception.message }};
-
-    return null;
+    return { status: { code: 0, errorType: getFetchErrorType(exception), errorMessage: exception.message }};
   });
 }
 
@@ -327,3 +330,12 @@ export const keyboardShortcuts = ((keyboardShortcutsSetting) =>
     allow() { return allow; },
   };
 });
+
+export function skipControlKeys(key)
+{
+  return ((key === 'ArrowLeft')  ||
+          (key === 'ArrowRight') ||
+          (key === 'Home')       ||
+          (key === 'End')        ||
+          (key === 'Shift'));
+}

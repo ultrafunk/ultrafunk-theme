@@ -353,7 +353,7 @@ const scroll = (() =>
 
   function scrolledTop()
   {
-    elements.siteHeader.classList.remove('sticky-nav-down', 'sticky-nav-up');
+    elements.siteHeader.classList.remove('scrolling-down', 'scrolling-up');
     elements.siteHeader.classList.add('hide-nav-menu');
     navSearch.hide();
     navMenu.scrolledTop();
@@ -364,7 +364,7 @@ const scroll = (() =>
     if (isScrolledDown === false)
     {
       isScrolledDown = true;
-      utils.replaceClass(elements.siteHeader, 'sticky-nav-up', 'sticky-nav-down');
+      utils.replaceClass(elements.siteHeader, 'scrolling-up', 'scrolling-down');
       navSearch.hide();
     }
   }
@@ -374,7 +374,7 @@ const scroll = (() =>
     if (isScrolledDown === true)
     {
       isScrolledDown = false;
-      utils.replaceClass(elements.siteHeader, 'sticky-nav-down', 'sticky-nav-up');
+      utils.replaceClass(elements.siteHeader, 'scrolling-down', 'scrolling-up');
     }
   }
 })();

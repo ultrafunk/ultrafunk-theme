@@ -7,6 +7,11 @@
 
 import * as utils from '../shared/utils.js';
 
+import {
+  isTrackSearchResultsVisible,
+  setTrackSearchResultsVisible,
+} from '../playback/list/track-search.js';
+
 
 // ************************************************************************************************
 // Main navigation search handling closure
@@ -16,7 +21,7 @@ const navSearchClosure = (() =>
 {
   const allowKeyboardShortcutsEvent = new Event('allowKeyboardShortcuts');
   const denyKeyboardShortcutsEvent  = new Event('denyKeyboardShortcuts');
-  let siteHeader = null, searchContainer = null, searchField = null, brandingContainer = null;
+  let siteHeader = null, searchContainer = null, searchField = null;
   let isVisible = false;
 
   return {
@@ -28,16 +33,21 @@ const navSearchClosure = (() =>
 
   function init()
   {
-    siteHeader        = document.getElementById('site-header');
-    searchContainer   = document.getElementById('search-container');
-    searchField       = searchContainer.querySelector('.search-field');
-    brandingContainer = siteHeader.querySelector('div.site-branding-container');
+    siteHeader      = document.getElementById('site-header');
+    searchContainer = document.getElementById('site-search-container');
+    searchField     = searchContainer.querySelector('.search-field');
 
     utils.addListenerAll('.nav-search-toggle', 'click', toggle);
+
     // To prevent extra 'blur' event before 'click' event
     utils.addListenerAll('.nav-search-toggle', 'mousedown', (event) => event.preventDefault());
+
     // Hide nav search bar on focus loss
-    searchField.addEventListener('blur', hide);
+    searchField.addEventListener('blur', () =>
+    {
+      if (isTrackSearchResultsVisible() === false)
+        hide();
+    });
 
     // Hide nav search bar on ESC
     searchField.addEventListener('keydown', (event) =>
@@ -53,6 +63,13 @@ const navSearchClosure = (() =>
   function toggle()
   {
     hasVisibleSearchContainer() ? show() : hide();
+  }
+
+  function show()
+  {
+    setNavSearchProps(true, denyKeyboardShortcutsEvent, 'flex', 'close');
+    searchField.focus();
+    searchField.setSelectionRange(9999, 9999);
   }
 
   function hide()
@@ -85,58 +102,18 @@ const navSearchClosure = (() =>
     return false;
   }
 
-  function show()
-  {
-    setPosSize();
-    setNavSearchProps(true, denyKeyboardShortcutsEvent, 'flex', 'close');
-    searchField.focus();
-    searchField.setSelectionRange(9999, 9999);
-  }
-
   function setNavSearchProps(visible, keyboardShortcutsEvent, display, icon)
   {
     isVisible = visible;
     document.dispatchEvent(keyboardShortcutsEvent);
     searchContainer.style.display = display;
     document.querySelectorAll('div.nav-search-toggle span').forEach(element => (element.textContent = icon));
+    setTrackSearchResultsVisible(isVisible);
 
     if (isVisible)
       document.getElementById('playback-controls').classList.add('hide');
     else
       document.getElementById('playback-controls').classList.remove('hide');
-  }
-
-  function setPosSize()
-  {
-    let position = {};
-
-    if (utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
-    {
-      if (brandingContainer.offsetHeight !== 0)
-        position.top = brandingContainer.offsetTop;
-      else
-        position.top = siteHeader.querySelector('.navbar-container-mobile-up').offsetTop;
-
-      position = new DOMRect(63, (position.top + 3), (document.body.clientWidth - 60), 30);
-    }
-    else
-    {
-      if (brandingContainer.offsetHeight !== 0)
-      {
-        const rect = brandingContainer.getBoundingClientRect();
-        position   = new DOMRect(rect.left, (rect.top + 7), rect.right, (rect.height - 15));
-      }
-      else
-      {
-        const rect = siteHeader.querySelector('.navbar-container').getBoundingClientRect();
-        position   = new DOMRect((rect.left + 88), rect.top, (rect.right - 90), (rect.height - 1));
-      }
-    }
-
-    searchContainer.style.left   = `${position.left}px`;
-    searchContainer.style.top    = `${position.top}px`;
-    searchContainer.style.width  = `${position.width - position.left}px`;
-    searchContainer.style.height = `${position.height}px`;
   }
 });
 

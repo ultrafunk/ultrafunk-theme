@@ -9,6 +9,7 @@ import { KEY }          from '../shared/storage.js';
 import { showSnackbar } from '../shared/snackbar.js';
 
 import {
+  HTTP_RESPONSE,
   fetchRest,
   stripAttribute,
 } from '../shared/utils.js';
@@ -73,12 +74,11 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
       {
         const restResponse = await fetchRest({
           endpoint: 'top-artists',
-          query: `channelId=${termId}`,
-          returnStatus: true,
-          path: '/wp-json/ultrafunk/v1/',
+          query:    `channel_id=${termId}`,
+          path:     '/wp-json/ultrafunk/v1/',
         });
 
-        if ((restResponse !== null) && (restResponse.status.code === 200))
+        if (restResponse.status.code === HTTP_RESPONSE.OK)
           m.termCache[termId]['topArtists'] = restResponse.data;
       }
 
@@ -98,11 +98,10 @@ async function fetchTracks(termType, termId, maxItems, callback)
   {
     const restResponse = await fetchRest({
       endpoint: 'tracks',
-      query: `${termType}=${termId}&per_page=${maxItems}&_fields=id,link,artists,channels,meta`,
-      returnStatus: true,
+      query:    `${termType}=${termId}&per_page=${maxItems}&_fields=id,link,artists,channels,meta`,
     });
 
-    if ((restResponse !== null) && (restResponse.status.code === 200))
+    if (restResponse.status.code === HTTP_RESPONSE.OK)
       m.termCache[termId] = { tracks: restResponse.data };
   }
 
@@ -151,11 +150,10 @@ async function fetchMeta(
   {
     const restResponse = await fetchRest({
       endpoint: termType,
-      query: `include=${termIds}&per_page=${maxItems}&_fields=link,name`,
-      returnStatus: true,
+      query:    `include=${termIds}&per_page=${maxItems}&_fields=link,name`,
     });
 
-    if ((restResponse !== null) && (restResponse.status.code === 200))
+    if (restResponse.status.code === HTTP_RESPONSE.OK)
       m.termCache[termId][termType] = restResponse.data;
   }
   else

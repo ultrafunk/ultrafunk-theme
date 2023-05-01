@@ -29,7 +29,9 @@
 }
 
 .gallery-2-col .site-header-container,
-.gallery-3-col .site-header-container {
+.gallery-3-col .site-header-container,
+.gallery-2-col #site-search-container,
+.gallery-3-col #site-search-container {
   padding-left: 65px;
   padding-right: 65px;
 }
@@ -275,6 +277,7 @@
 @media screen and (max-width: 1350px) {
 
   .gallery-1-col .site-header-container,
+  .gallery-1-col #site-search-container,
   .gallery-1-col #site-content {
     max-width: 100%;
   }

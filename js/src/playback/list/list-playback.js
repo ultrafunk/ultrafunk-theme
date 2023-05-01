@@ -17,6 +17,7 @@ import { STATE }              from '../element-wrappers.js';
 import { showModal }          from '../../shared/modal.js';
 import { playbackTimer }      from './list-playback-timer.js';
 import { response, settings } from '../../shared/session-data.js';
+import { initTrackSearch }    from './track-search.js';
 
 import {
   playerScrollTo,
@@ -59,6 +60,7 @@ export function init()
   debug.log('init()');
 
   listControls.init(setCurrentTrack);
+  initTrackSearch(setCurrentTrack);
 
   if (cueInitialTrack() !== null)
     initYouTubeAPI();
@@ -81,30 +83,18 @@ function cueInitialTrack()
   {
     if ((m.autoplayData !== null) && (m.autoplayData.trackId !== null))
     {
-      const matchesVideoId = m.autoplayData.trackId.match(mediaPlayers.youTubeVideoIdRegEx);
+      const trackElement = listControls.queryTrack(`[data-track-id="${m.autoplayData.trackId}"]`);
 
-      if (matchesVideoId !== null)
+      if (trackElement !== null)
       {
-        const trackElement = listControls.queryTrack(`[data-track-source-uid="${matchesVideoId[0]}"]`);
-
-        if (trackElement !== null)
+        if (listControls.getTrackType(trackElement) === mediaPlayers.TRACK_TYPE.YOUTUBE)
           m.currentTrackId = trackElement.id;
-      }
-      else if (m.autoplayData.trackId.match(/^track-(?!0)\d{1,9}$/i) !== null)
-      {
-        const trackElement = listControls.queryTrack(`[data-track-id="${m.autoplayData.trackId}"]`);
-
-        if (trackElement !== null)
-        {
-          if (listControls.getTrackType(trackElement) === mediaPlayers.TRACK_TYPE.YOUTUBE)
-            m.currentTrackId = trackElement.id;
-          else
-            showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', noPlayableTracksError));
-        }
         else
-        {
-          showSnackbar('Unable to cue track (not found)', 5);
-        }
+          showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', noPlayableTracksError));
+      }
+      else
+      {
+        showSnackbar('Unable to cue track (not found)', 5);
       }
     }
 

@@ -94,6 +94,7 @@ function ultrafunk_enqueue_styles() : void
     wp_enqueue_style('gallery-player-style', get_theme_file_uri('/js/src/playback/gallery/gallery-player.css'), [], $version);
     wp_enqueue_style('single-track-style', get_theme_file_uri('/js/src/playback/gallery/single-track.css'), [], $version);
     wp_enqueue_style('list-player-style', get_theme_file_uri('/js/src/playback/list/list-player.css'), [], $version);
+    wp_enqueue_style('track-search-style', get_theme_file_uri('/js/src/playback/list/track-search.css'), [], $version);
     wp_enqueue_style('up-next-modal-style', get_theme_file_uri('/js/src/playback/list/up-next-modal.css'), [], $version);
     wp_enqueue_style('termlist-style', get_theme_file_uri('/js/src/site/termlist.css'), [], $version);
   }

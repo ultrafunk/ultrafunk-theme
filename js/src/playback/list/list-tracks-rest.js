@@ -6,7 +6,11 @@
 
 
 import * as debugLogger from '../../shared/debuglogger.js';
-import { fetchRest }    from '../../shared/utils.js';
+
+import {
+  HTTP_RESPONSE,
+  fetchRest,
+} from '../../shared/utils.js';
 
 import {
   response as responseData
@@ -36,11 +40,12 @@ const m = {
 
 export async function loadTracks(termType, termId)
 {
-  const loadingPage = parseInt(responseData.currentPage + 1);
-  const trackData   = await fetchTracks(termType, termId, loadingPage, parseInt(responseData.listPerPage));
+  const loadingPage  = parseInt(responseData.currentPage + 1);
+  const restResponse = await fetchTracks(termType, termId, loadingPage, parseInt(responseData.listPerPage));
 
-  if (trackData !== null)
+  if (restResponse.status.code === HTTP_RESPONSE.OK)
   {
+    const trackData  = restResponse.data;
     const artistIds  = new Set();
     const channelIds = new Set();
     let tracksHtml   = getPageSeparatorHtml(responseData, loadingPage);
@@ -66,16 +71,16 @@ export async function loadTracks(termType, termId)
     if (channelIds.size > 0)
       channelsPromise = fetchTerms('channels', [...channelIds], 100);
 
-    const [artistsData, channelsData] = await Promise.all([artistsPromise, channelsPromise]);
+    const [artistsRestResponse, channelsRestResponse] = await Promise.all([artistsPromise, channelsPromise]);
 
-    if (artistsData !== null)
-      artistsData.forEach(entry => m.artistsCache.set(entry.id, { name: entry.name, link: entry.link }));
+    if ((artistsRestResponse !== null) && (artistsRestResponse.status.code === HTTP_RESPONSE.OK))
+      artistsRestResponse.data.forEach(entry => m.artistsCache.set(entry.id, { name: entry.name, link: entry.link }));
 
-    if (channelsData !== null)
-      channelsData.forEach(entry => m.channelsCache.set(entry.id, { name: entry.name, link: entry.link }));
+    if ((channelsRestResponse !== null) && (channelsRestResponse.status.code === HTTP_RESPONSE.OK))
+      channelsRestResponse.data.forEach(entry => m.channelsCache.set(entry.id, { name: entry.name, link: entry.link }));
 
-    setTrackMeta(trackData, '.track-artists-links',  'data-track-artist-ids',  m.artistsCache,  false);
-    setTrackMeta(trackData, '.track-channels-links', 'data-track-channel-ids', m.channelsCache, true);
+    setTrackMeta(trackData, '.track-artists-links',  'data-track-artist-ids',  m.artistsCache);
+    setTrackMeta(trackData, '.track-channels-links', 'data-track-channel-ids', m.channelsCache);
 
     return true;
   }
@@ -103,12 +108,18 @@ function fetchTracks(termType = '', termId = '', page = 1, tracksPerPage = 25)
   else if (responseData.params.list_player === 'search')
     params = getSearchQueryParams();
 
-  return fetchRest({ endpoint: 'tracks', query: `${params}${pagination}${fields}` });
+  return fetchRest({
+    endpoint: 'tracks',
+    query:    `${params}${pagination}${fields}`
+  });
 }
 
 function fetchTerms(termType, termIds, maxItems = 50)
 {
-  return fetchRest({ endpoint: termType, query: `include=${termIds}&per_page=${maxItems}&_fields=id,link,name` });
+  return fetchRest({
+    endpoint: termType,
+    query:    `include=${termIds}&per_page=${maxItems}&_fields=id,link,name`
+  });
 }
 
 function getTermQueryParams(termType, termId)

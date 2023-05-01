@@ -1,0 +1,126 @@
+/*
+* List-player realtime track search
+*
+* https://ultrafunk.com
+*
+*/
+
+#track-search-results {
+  width: 100%;
+  position: fixed;
+  top: 60px;
+  z-index: 2000;
+  display: none;
+}
+
+#track-search-results .track-results-container {
+  max-width: var(--site-max-width);
+  max-height: 490px;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  box-sizing: border-box;
+  margin: 0 auto;
+  box-shadow: 0px 15px 25px 0px rgba(0,0,0,0.75);
+  border: var(--form-search-field-border-focus);
+  border-top: none;
+}
+
+#track-search-results .results-tracklist {
+  background-color: var(--body-background-color);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+#track-search-results .track-entry:first-of-type {
+  border-top: none;
+}
+
+#track-search-results .track-entry:last-of-type {
+  border-bottom: none;
+}
+
+#track-search-results .track-action-buttons .remove-button,
+#track-search-results .track-action-buttons .share-play-button,
+#track-search-results .track-action-buttons .details-button {
+  display: none;
+}
+
+#track-search-results .no-track-results {
+  width: 100%;
+  text-align: center;
+  padding: 5px;
+  box-sizing: border-box;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+@media screen and (max-width: 1920px) {
+
+  #track-search-results .results-tracklist {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+@media screen and (max-width: 1500px) {
+
+  #track-search-results .results-tracklist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+@media screen and (max-width: 1100px) {
+
+  #track-search-results .results-tracklist {
+    display: block;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+
+  #track-search-results .no-track-results {
+    font-size: unset;
+    line-height: unset;
+    padding: 7px;
+  }
+
+}
+
+@media screen and (max-width: 500px) {
+
+  #track-search-results {
+    top: 72px;
+  }
+
+  #site-header.scrolling-up #track-search-results {
+    top: 110px;
+  }
+
+  #track-search-results .track-results-container {
+    max-height: 296px;
+    max-width: calc(100% - 40px);
+    border-top: var(--form-search-field-border-focus);
+  }
+
+  #track-search-results .track-entry {
+    padding: 0 6px 0 0;
+    border-bottom: 2px solid var(--track-separator-color);
+    font-size: 13px;
+    line-height: 16px;
+  }
+
+  #track-search-results .track-entry .thumbnail {
+    margin-right: 8px;
+  }
+
+  #track-search-results .track-actions-toggle {
+    display: none;
+  }
+
+  #track-search-results .track-action-buttons {
+    display: flex;
+  }
+
+}

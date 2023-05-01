@@ -42,13 +42,14 @@ export function getPageSeparatorHtml(responseData, loadingPage)
     </div>`;
 }
 
-export function getTrackEntryHtml(track)
+export function getTrackEntryHtml(track, density = 'default')
 {
-  const isYouTubeTrack = (track.meta.track_source_type === TRACK_TYPE.YOUTUBE);
-  const thumbnailData  = getThumbnailData(track.meta);
-  const trackArtist    = escHtml(track.meta.track_artist);
-  const trackTitle     = escHtml(track.meta.track_title);
-  const trackDuration  = parseInt(track.meta.track_duration);
+  const isYouTubeTrack    = (track.meta.track_source_type === TRACK_TYPE.YOUTUBE);
+  const thumbnailData     = getThumbnailData(track.meta);
+  const trackArtist       = escHtml(track.meta.track_artist);
+  const trackTitle        = escHtml(track.meta.track_title);
+  const trackDuration     = parseInt(track.meta.track_duration);
+  const isAudioVideoClass = track.channels.includes(THEME_ENV.channel_videos_id) ? 'is-video' : 'is-audio';
 
   const youTubeTrackThumbnailUrl = debug.isDebug()
                                      ? "/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png"
@@ -67,9 +68,9 @@ export function getTrackEntryHtml(track)
                           : '';
 
   return /*html*/ `
-    <div id="${track.uid}" class="track-entry ${thumbnailData.class}"
+    <div id="${track.uid}" class="track-entry ${density}-density ${thumbnailData.class} ${isAudioVideoClass}"
       data-track-type="${track.meta.track_source_type}"
-      data-track-id="track-${track.id}"
+      data-track-id="${track.id}"
       data-track-artist="${trackArtist}"
       data-track-title="${trackTitle}"
       data-track-duration="${trackDuration}"
@@ -107,7 +108,6 @@ export function setTrackMeta(
   trackLinksSelector,
   linkIdsAttribute,
   linksMap,
-  isChannels = false
 )
 {
   trackData.forEach(track =>
@@ -115,19 +115,14 @@ export function setTrackMeta(
     const linksElement = document.getElementById(track.uid).querySelector(trackLinksSelector);
     const linkIds      = linksElement.getAttribute(linkIdsAttribute)?.split(',');
     let   linksHtml    = '';
-    let   isVideo      = false;
 
     linkIds?.forEach(linkId =>
     {
       const mapKey    = parseInt(linkId);
       const linkClass = (track.meta.track_artist_id === mapKey) ? 'primary' : 'secondary';
       linksHtml      +=`<a class="${linkClass}" href="${getListPlayerUrl(linksMap.get(mapKey).link)}">${linksMap.get(mapKey).name}</a>`;
-
-      if (isChannels && (mapKey === THEME_ENV.channel_videos_id))
-        isVideo = true;
     });
 
-    document.getElementById(track.uid).classList.add(isVideo ? 'is-video' : 'is-audio');
     linksElement.insertAdjacentHTML('afterbegin', linksHtml);
   });
 }

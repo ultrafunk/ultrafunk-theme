@@ -58,13 +58,13 @@ const navMenuClosure = (() =>
   {
     siteHeaderHeight = siteHeader.offsetHeight;
 
-    if (siteHeader.classList.contains('sticky-nav-up'))
+    if (siteHeader.classList.contains('scrolling-up'))
     {
       navMenuOuter.style.display = isVisible ? 'none' : 'flex';
     }
     else
     {
-      if (siteHeader.classList.contains('sticky-nav-down') === false)
+      if (siteHeader.classList.contains('scrolling-down') === false)
         siteHeader.classList.toggle('hide-nav-menu');
     }
   }

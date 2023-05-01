@@ -573,12 +573,14 @@ body.list-player .site-footer-container {
 @media screen and (max-width: 1350px) {
 
   body.list-player .site-header-container,
+  body.list-player #site-search-container,
   body.list-player #site-footer {
     padding-left: unset;
     padding-right: unset;
   }
 
   body.list-player.search .site-header-container,
+  body.list-player.search #site-search-container,
   body.list-player #site-content,
   body.list-player .site-footer-container {
     max-width: var(--site-max-width);
@@ -668,39 +670,39 @@ body.list-player .site-footer-container {
     max-width: var(--site-max-width);
   }
 
-  .track-entry {
+  .track-entry.default-density {
     font-size: 14px;
     line-height: 18px;
     padding: 8px 6px 8px 13px;
   }
 
-  .track-entry .thumbnail-overlay::before {
+  .track-entry.default-density .thumbnail-overlay::before {
     font-size: 26px;
     line-height: 36px;
   }
 
-  .track-entry .thumbnail-overlay {
+  .track-entry.default-density .thumbnail-overlay {
     width: 36px;
     height: 36px;
   }
 
-  .track-entry.current.state-loading .spinner {
+  .track-entry.default-density.current.state-loading .spinner {
     width: 18px;
     height: 18px;
   }
 
-  .track-entry .thumbnail {
+  .track-entry.default-density .thumbnail {
     width: 36px;
     min-width: 36px;
     height: 36px;
   }
 
-  .track-entry .thumbnail img {
+  .track-entry.default-density .thumbnail img {
     width: 36px;
     height: 36px;
   }
 
-  .track-entry.type-youtube .thumbnail img {
+  .track-entry.default-density.type-youtube .thumbnail img {
     height: 48px;
     margin-top: -6px;
   }

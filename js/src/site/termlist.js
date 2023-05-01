@@ -134,19 +134,10 @@ function initTermlistFilter()
   }
 }
 
-function skipKeys(key)
-{
-  return ((key === 'ArrowLeft')  ||
-          (key === 'ArrowRight') ||
-          (key === 'Home')       ||
-          (key === 'End')        ||
-          (key === 'Shift'));
-}
-
 function filterTermsList(event)
 {
   // Skip updating on keys that are not relevant
-  if (skipKeys(event.key))
+  if (utils.skipControlKeys(event.key))
     return;
 
   const filterStart  = performance.now();

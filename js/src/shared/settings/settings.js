@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 27, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 28, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -79,7 +79,8 @@ export const settingsSchema = {
     modalOverlayOpacity: { description: 'Modal overlay opacity',                 type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
   },
   experimental: {
-    fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
+    realtimeTrackSearch:  { description: '<b>List Player</b><br>Show realtime track search results',        type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
+  //fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   },
   internal: {
     showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
@@ -129,7 +130,8 @@ export const defaultSettings = {
     modalOverlayOpacity: settingsSchema.site.modalOverlayOpacity.default,
   },
   experimental: {
-    fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,
+    realtimeTrackSearch:  settingsSchema.experimental.realtimeTrackSearch.default,
+  //fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,
   },
   internal: {
     showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,
