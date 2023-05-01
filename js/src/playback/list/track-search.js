@@ -201,7 +201,7 @@ async function showSearchResults(event, searchString)
       if ((cachedResult.status.code === utils.HTTP_RESPONSE.OK) && (cachedResult.data.length !== 0))
         setResultsHtml(cachedResult);
       else
-        m.resultsTracklist.innerHTML = `<div class="no-track-results">No results found for: "<b>${searchString}</b>"</div>`;
+        m.resultsTracklist.innerHTML = `<div class="no-track-results">No results found for: "<b>${utils.stripHtml(searchString)}</b>"</div>`;
 
       debug.log(`showSearchResults() from cache for: '${searchString}' - Cached Results: ${m.resultsCache.size}`);
     }
@@ -244,7 +244,7 @@ async function showRestResults(searchString)
     else if ((restResponse.status.code === utils.HTTP_RESPONSE.OK) && (restResponse.data.length === 0))
     {
       m.resultsCache.set(searchString, restResponse);
-      m.resultsTracklist.innerHTML = `<div class="no-track-results">No results found for: "<b>${searchString}</b>"</div>`;
+      m.resultsTracklist.innerHTML = `<div class="no-track-results">No results found for: "<b>${utils.stripHtml(searchString)}</b>"</div>`;
     }
   }
 }
