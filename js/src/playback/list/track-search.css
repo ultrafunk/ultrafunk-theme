@@ -45,7 +45,7 @@
   display: none;
 }
 
-#track-search-results .no-track-results {
+#track-search-results .track-results-message {
   width: 100%;
   text-align: center;
   padding: 5px;
@@ -80,7 +80,7 @@
 
 @media screen and (max-width: 768px) {
 
-  #track-search-results .no-track-results {
+  #track-search-results .track-results-message {
     font-size: unset;
     line-height: unset;
     padding: 7px;

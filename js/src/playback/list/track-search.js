@@ -201,7 +201,7 @@ async function showSearchResults(event, searchString)
       if ((cachedResult.status.code === utils.HTTP_RESPONSE.OK) && (cachedResult.data.length !== 0))
         setResultsHtml(cachedResult);
       else
-        m.resultsTracklist.innerHTML = `<div class="no-track-results">No results found for: "<b>${utils.stripHtml(searchString)}</b>"</div>`;
+        showResultsMessage(`No results found for: ${searchString}`);
 
       debug.log(`showSearchResults() from cache for: '${searchString}' - Cached Results: ${m.resultsCache.size}`);
     }
@@ -239,12 +239,12 @@ async function showRestResults(searchString)
   {
     if (restResponse.status.code !== utils.HTTP_RESPONSE.OK)
     {
-      m.resultsTracklist.innerHTML = `<div class="no-track-results">Failed to fetch search result!</div>`;
+      showResultsMessage('Failed to fetch search results!');
     }
     else if ((restResponse.status.code === utils.HTTP_RESPONSE.OK) && (restResponse.data.length === 0))
     {
       m.resultsCache.set(searchString, restResponse);
-      m.resultsTracklist.innerHTML = `<div class="no-track-results">No results found for: "<b>${utils.stripHtml(searchString)}</b>"</div>`;
+      showResultsMessage(`No results found for: ${searchString}`);
     }
   }
 }
@@ -260,4 +260,10 @@ function setResultsHtml(restResponse)
   });
 
   m.resultsTracklist.innerHTML = tracksHtml;
+}
+
+function showResultsMessage(message)
+{
+  m.resultsTracklist.innerHTML = '<div class="track-results-message"></div>';
+  m.resultsTracklist.querySelector('div.track-results-message').innerText = message;
 }
