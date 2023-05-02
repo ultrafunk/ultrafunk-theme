@@ -32,6 +32,8 @@ const m = {
   prevSearchString:   '',
 };
 
+const minSearchStringLength = 3;
+
 const notPlayableTrack = /*html*/ `
   <p>The <b>List Player</b> only supports YouTube tracks, SoundCloud tracks cannot be played or queued.
   SoundCloud tracks must be played using the <b>Gallery Player</b> or by clicking / tapping on the
@@ -69,7 +71,7 @@ export function setTrackSearchResultsVisible(isSearchVisible)
 
   if (isSearchVisible)
   {
-    m.trackSearchResults.style.display = (m.searchField.value.length >= 4) ? 'block' : 'none';
+    m.trackSearchResults.style.display = (m.searchField.value.length >= minSearchStringLength) ? 'block' : 'none';
     document.addEventListener('click', onClickCloseSearch, { capture: true });
   }
   else
@@ -176,7 +178,7 @@ async function showSearchResults(event, searchString)
 
   const searchStart = performance.now();
 
-  if (searchString.length < 3)
+  if (searchString.length < minSearchStringLength)
   {
     m.searchField.autocomplete = 'on';
     m.trackSearchResults.style.display = 'none';
@@ -201,7 +203,7 @@ async function showSearchResults(event, searchString)
       if ((cachedResult.status.code === utils.HTTP_RESPONSE.OK) && (cachedResult.data.length !== 0))
         setResultsHtml(cachedResult);
       else
-        showResultsMessage(`No results found for: ${searchString}`);
+        showResultsMessage(`No results found for: <b>${utils.escHtml(searchString)}</b>`);
 
       debug.log(`showSearchResults() from cache for: '${searchString}' - Cached Results: ${m.resultsCache.size}`);
     }
@@ -209,7 +211,7 @@ async function showSearchResults(event, searchString)
     m.trackSearchResults.style.display = 'block';
   }
 
-  // Free up some memory... (1000 entries is about 5.5 MB)
+  // Free up some memory... (1000 entries is about 10 MB)
   if (m.resultsCache.size > 1000)
     m.resultsCache.clear();
 
@@ -244,7 +246,7 @@ async function showRestResults(searchString)
     else if ((restResponse.status.code === utils.HTTP_RESPONSE.OK) && (restResponse.data.length === 0))
     {
       m.resultsCache.set(searchString, restResponse);
-      showResultsMessage(`No results found for: ${searchString}`);
+      showResultsMessage(`No results found for: <b>${utils.escHtml(searchString)}</b>`);
     }
   }
 }
@@ -265,5 +267,5 @@ function setResultsHtml(restResponse)
 function showResultsMessage(message)
 {
   m.resultsTracklist.innerHTML = '<div class="track-results-message"></div>';
-  m.resultsTracklist.querySelector('div.track-results-message').innerText = message;
+  m.resultsTracklist.querySelector('div.track-results-message').innerHTML = message;
 }

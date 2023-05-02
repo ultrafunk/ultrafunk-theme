@@ -47,11 +47,11 @@
 
 #track-search-results .track-results-message {
   width: 100%;
-  text-align: center;
   padding: 5px;
   box-sizing: border-box;
   font-size: 20px;
   line-height: 30px;
+  font-weight: 400;
 }
 
 @media screen and (max-width: 1920px) {
@@ -121,6 +121,10 @@
 
   #track-search-results .track-action-buttons {
     display: flex;
+  }
+
+  #track-search-results .track-results-message {
+    text-align: center;
   }
 
 }
