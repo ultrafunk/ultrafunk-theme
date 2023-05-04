@@ -331,7 +331,7 @@ export const keyboardShortcuts = ((keyboardShortcutsSetting) =>
   };
 });
 
-export function skipControlKeys(key)
+export function isControlKey(key)
 {
   return ((key === 'ArrowLeft')  ||
           (key === 'ArrowRight') ||

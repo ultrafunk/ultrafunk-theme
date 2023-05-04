@@ -24,6 +24,7 @@ const debug = debugLogger.newInstance('track-search');
 
 const m = {
   setCurrentTrack:    null,
+  debounceKeyup:      null,
   uiElements:         null,
   searchField:        null,
   trackSearchResults: null,
@@ -51,6 +52,7 @@ export function initTrackSearch(setCurrentTrackCallback)
   if (settings.experimental.realtimeTrackSearch)
   {
     m.setCurrentTrack    = setCurrentTrackCallback;
+    m.debounceKeyup      = debounceKeyup(showSearchResults, 250);
     m.uiElements         = new uiElements('#track-search-results .results-tracklist');
     m.searchField        = document.querySelector('#site-search-container .search-field');
     m.trackSearchResults = document.getElementById('track-search-results');
@@ -58,8 +60,8 @@ export function initTrackSearch(setCurrentTrackCallback)
 
     window.addEventListener('load', () =>
     {
-      m.searchField.addEventListener('keyup',  (event) => showSearchResults(event, m.searchField.value.toLowerCase()));
-      m.searchField.addEventListener('search', (event) => showSearchResults(event, m.searchField.value.toLowerCase()));
+      m.searchField.addEventListener('keyup',  (event) => m.debounceKeyup(event, m.searchField.value.toLowerCase()));
+      m.searchField.addEventListener('search', () => showSearchResults(m.searchField.value.toLowerCase()));
     });
   }
 }
@@ -100,6 +102,33 @@ function onClickCloseSearch(event)
     navSearch.hide();
   }
 }
+
+function debounceKeyup(callback, delayMilliseconds)
+{
+  let delayTimer = 0;
+
+  return function(event, searchString)
+  {
+    clearTimeout(delayTimer);
+
+    if (utils.isControlKey(event.key))
+      return;
+
+    if ((searchString.length >= minSearchStringLength) && (m.resultsCache.get(searchString) === undefined))
+    {
+      delayTimer = setTimeout(() => callback(searchString), delayMilliseconds);
+    }
+    else
+    {
+      callback(searchString);
+    }
+  };
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
 
 class uiElements extends ElementClick
 {
@@ -170,12 +199,8 @@ async function setTrackLinks(element)
 //
 // ************************************************************************************************
 
-async function showSearchResults(event, searchString)
+async function showSearchResults(searchString)
 {
-  // Skip searching on keys that are not relevant
-  if (utils.skipControlKeys(event.key))
-    return;
-
   const searchStart = performance.now();
 
   if (searchString.length < minSearchStringLength)

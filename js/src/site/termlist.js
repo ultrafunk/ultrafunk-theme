@@ -137,7 +137,7 @@ function initTermlistFilter()
 function filterTermsList(event)
 {
   // Skip updating on keys that are not relevant
-  if (utils.skipControlKeys(event.key))
+  if (utils.isControlKey(event.key))
     return;
 
   const filterStart  = performance.now();
