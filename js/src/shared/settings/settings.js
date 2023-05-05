@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 28, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 29, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -50,6 +50,7 @@ export const settingsSchema = {
     autoExitFsOnWarning:  { description: 'Exit Fullscreen on Time Warning', type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
   },
   list: {
+    realtimeTrackSearch: { description: 'Show realtime Track Search results',type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
     moveTrackOnPlayNext: { description: 'Move Track on Play as Next',        type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
     showUpNextModal:     { description: 'Show Up Next Modal',                type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
     showLoadMoreTracks:  { description: 'Show "Load More Tracks..." prompt', type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
@@ -79,7 +80,7 @@ export const settingsSchema = {
     modalOverlayOpacity: { description: 'Modal overlay opacity',                 type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
   },
   experimental: {
-    realtimeTrackSearch:  { description: '<b>List Player</b><br>Show realtime track search results',        type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
+  //realtimeTrackSearch:  { description: '<b>List Player</b><br>Show realtime track search results',        type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   },
   internal: {
@@ -101,6 +102,7 @@ export const defaultSettings = {
     autoExitFsOnWarning:  settingsSchema.playback.autoExitFsOnWarning.default,
   },
   list: {
+    realtimeTrackSearch: settingsSchema.list.realtimeTrackSearch.default,
     moveTrackOnPlayNext: settingsSchema.list.moveTrackOnPlayNext.default,
     showUpNextModal:     settingsSchema.list.showUpNextModal.default,
     showLoadMoreTracks:  settingsSchema.list.showLoadMoreTracks.default,
@@ -130,7 +132,7 @@ export const defaultSettings = {
     modalOverlayOpacity: settingsSchema.site.modalOverlayOpacity.default,
   },
   experimental: {
-    realtimeTrackSearch:  settingsSchema.experimental.realtimeTrackSearch.default,
+  //realtimeTrackSearch:  settingsSchema.experimental.realtimeTrackSearch.default,
   //fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,
   },
   internal: {

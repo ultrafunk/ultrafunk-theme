@@ -1,6 +1,6 @@
 {
   "name": "ultrafunk-theme",
-  "version": "1.45.4",
+  "version": "1.45.5",
   "description": "WordPress theme",
   "homepage": "https://github.com/ultrafunk/ultrafunk-theme",
   "repository": "git@github.com:ultrafunk/ultrafunk-theme.git",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@playwright/test": "^1.33.0",
     "esbuild": "^0.17.18",
-    "eslint": "^8.38.1"
+    "eslint": "^8.40.0"
   },
   "eslintIgnore": [
     "js/dist/",

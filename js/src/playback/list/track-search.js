@@ -49,7 +49,7 @@ export function initTrackSearch(setCurrentTrackCallback)
 {
   debug.log('init()');
 
-  if (settings.experimental.realtimeTrackSearch)
+  if (settings.list.realtimeTrackSearch)
   {
     m.setCurrentTrack    = setCurrentTrackCallback;
     m.debounceKeyup      = debounceKeyup(showSearchResults, 250);
