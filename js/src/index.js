@@ -127,7 +127,7 @@ function documentEventKeyDown(event)
         if (navMenu.isVisible())
         {
           event.preventDefault();
-          navMenu.toggle();
+          navMenu.hide();
         }
         return;
     }
@@ -356,7 +356,7 @@ const scroll = (() =>
     elements.siteHeader.classList.remove('scrolling-down', 'scrolling-up');
     elements.siteHeader.classList.add('hide-nav-menu');
     navSearch.hide();
-    navMenu.scrolledTop();
+    navMenu.hide();
   }
 
   function scrolledDown()
@@ -366,6 +366,7 @@ const scroll = (() =>
       isScrolledDown = true;
       utils.replaceClass(elements.siteHeader, 'scrolling-up', 'scrolling-down');
       navSearch.hide();
+      navMenu.hide();
     }
   }
 

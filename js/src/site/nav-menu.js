@@ -22,8 +22,7 @@ import {
 
 const navMenuClosure = (() =>
 {
-  const observer = new ResizeObserver(observerCallback);
-  let siteHeader = null, navMenuOuter = null, navMenuInner = null, modalOverlay = null;
+  let siteHeader = null, navMenuOuter = null, navMenuInner = null, navMenuOverlay = null;
   let isVisible = false;
   let siteHeaderHeight = 0;
 
@@ -35,38 +34,57 @@ const navMenuClosure = (() =>
   });
 
   return {
-    isVisible()   { return isVisible;                },
-    scrolledTop() { navMenuOuter.style.display = ''; },
+    isVisible() { return isVisible; },
     init,
     toggle,
+    hide,
   };
 
   function init()
   {
-    siteHeader   = document.getElementById('site-header');
-    navMenuOuter = document.querySelector('#site-navigation .nav-menu-outer');
-    navMenuInner = document.querySelector('#site-navigation .nav-menu-inner');
-    modalOverlay = document.getElementById('nav-menu-modal-overlay');
+    siteHeader     = document.getElementById('site-header');
+    navMenuOuter   = document.querySelector('#site-navigation .nav-menu-outer');
+    navMenuInner   = document.querySelector('#site-navigation .nav-menu-inner');
+    navMenuOverlay = document.getElementById('nav-menu-overlay');
 
     utils.addListenerAll('div.nav-menu-toggle', 'click', toggle);
-    modalOverlay.addEventListener('click', toggle);
+    navMenuOverlay.addEventListener('click', hide);
     window.addEventListener('resize', () => setNavMenuInnerSize());
-    observer.observe(navMenuOuter);
   }
 
   function toggle()
   {
     siteHeaderHeight = siteHeader.offsetHeight;
+    isVisible ? hide() : show();
+  }
 
-    if (siteHeader.classList.contains('scrolling-up'))
+  function show()
+  {
+    if (siteHeader.classList.contains('scrolling-down') === false)
     {
-      navMenuOuter.style.display = isVisible ? 'none' : 'flex';
+      isVisible = true;
+
+      siteHeader.classList.remove('hide-nav-menu');
+      navMenuOuter.style.display = 'flex';
+      navMenuOverlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
+      navMenuOverlay.classList.add('show');
+
+      if (utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
+        setNavMenuProps('hidden', 'close', '100vh');
+
+      setNavMenuInnerSize();
     }
-    else
-    {
-      if (siteHeader.classList.contains('scrolling-down') === false)
-        siteHeader.classList.toggle('hide-nav-menu');
-    }
+  }
+
+  function hide()
+  {
+    isVisible = false;
+
+    siteHeader.classList.add('hide-nav-menu');
+    navMenuOuter.style.display = '';
+    navMenuOverlay.className = '';
+
+    setNavMenuProps();
   }
 
   function menuClickUsePrefPlayer(event)
@@ -80,31 +98,6 @@ const navMenuClosure = (() =>
         event?.preventDefault();
         utils.navToUrl(utils.getPrefPlayerUrl(menuElement.querySelector('a').href));
       }
-    }
-  }
-
-  function observerCallback(entries)
-  {
-    isVisible = (entries[0].contentRect.height !== 0) ? true : false;
-
-    if (isVisible)
-    {
-      if (modalOverlay.className === '')
-      {
-        modalOverlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
-        modalOverlay.classList.add('show');
-
-        if (utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
-          setNavMenuProps('hidden', 'close', '100vh');
-
-        setNavMenuInnerSize();
-      }
-    }
-    else
-    {
-      modalOverlay.className     = '';
-      navMenuOuter.style.display = '';
-      setNavMenuProps();
     }
   }
 

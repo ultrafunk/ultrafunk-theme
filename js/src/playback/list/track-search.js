@@ -20,7 +20,8 @@ import { getCurrentTrackElement } from './list-controls.js';
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('track-search');
+const debug   = debugLogger.newInstance('track-search');
+const wpessid = debug.isDebug() ? 4122 : 4751;
 
 const m = {
   setCurrentTrack:    null,
@@ -103,33 +104,6 @@ function onClickCloseSearch(event)
   }
 }
 
-function debounceKeyup(callback, delayMilliseconds)
-{
-  let delayTimer = 0;
-
-  return function(event, searchString)
-  {
-    clearTimeout(delayTimer);
-
-    if (utils.isControlKey(event.key))
-      return;
-
-    if ((searchString.length >= minSearchStringLength) && (m.resultsCache.get(searchString) === undefined))
-    {
-      delayTimer = setTimeout(() => callback(searchString), delayMilliseconds);
-    }
-    else
-    {
-      callback(searchString);
-    }
-  };
-}
-
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
-
 class uiElements extends ElementClick
 {
   elementClicked()
@@ -169,7 +143,7 @@ function insertResultTrack(element)
 {
   const insertElement = element.cloneNode(true);
 
-  insertElement.id = Date.now();
+  insertElement.id = `track-${Date.now()}`;
   insertElement.classList.replace('compact-density', 'default-density');
   insertElement.classList.add('adding');
   insertElement.addEventListener('animationend', () => insertElement.classList.remove('adding'));
@@ -179,19 +153,26 @@ function insertResultTrack(element)
   return insertElement;
 }
 
-async function setTrackLinks(element)
+function debounceKeyup(callback, delayMilliseconds)
 {
-  const restResponse = await utils.fetchRest({
-    endpoint: 'tracks',
-    id:       element.getAttribute('data-track-id'),
-    query:    'links_path=list&_fields=artists_links,channels_links',
-  });
+  let delayTimer = 0;
 
-  if (restResponse.status.code === utils.HTTP_RESPONSE.OK)
+  return function(event, searchString)
   {
-    element.querySelector('div.track-artists-links').innerHTML  = restResponse.data.artists_links;
-    element.querySelector('div.track-channels-links').innerHTML = restResponse.data.channels_links;
-  }
+    clearTimeout(delayTimer);
+
+    if (utils.isControlKey(event.key))
+      return;
+
+    if ((searchString.length >= minSearchStringLength) && (m.resultsCache.get(searchString) === undefined))
+    {
+      delayTimer = setTimeout(() => callback(searchString), delayMilliseconds);
+    }
+    else
+    {
+      callback(searchString);
+    }
+  };
 }
 
 
@@ -244,8 +225,6 @@ async function showSearchResults(searchString)
   debug.log(`showSearchResults(): ${(Math.round((searchStop - searchStart) * 100) / 100)} ms.`);
 }
 
-const wpessid = debug.isDebug() ? 4122 : 4751;
-
 async function showRestResults(searchString)
 {
   const searchParams = `search=${encodeURIComponent(searchString)}&orderby=relevance&wpessid=${wpessid}&`;
@@ -282,7 +261,7 @@ function setResultsHtml(restResponse)
 
   restResponse.data.forEach((track, index) =>
   {
-    track.uid   = (Date.now() + index);
+    track.uid   = `track-${(Date.now() + index)}`;
     tracksHtml += getTrackEntryHtml(track, 'compact');
   });
 
@@ -291,6 +270,21 @@ function setResultsHtml(restResponse)
 
 function showResultsMessage(message)
 {
-  m.resultsTracklist.innerHTML = '<div class="track-results-message"></div>';
-  m.resultsTracklist.querySelector('div.track-results-message').innerHTML = message;
+  m.resultsTracklist.innerHTML = '<div class="results-message"></div>';
+  m.resultsTracklist.querySelector('div.results-message').innerHTML = message;
+}
+
+async function setTrackLinks(element)
+{
+  const restResponse = await utils.fetchRest({
+    endpoint: 'tracks',
+    id:       element.getAttribute('data-track-id').slice(6),
+    query:    'links_path=list&_fields=artists_links,channels_links',
+  });
+
+  if (restResponse.status.code === utils.HTTP_RESPONSE.OK)
+  {
+    element.querySelector('div.track-artists-links').innerHTML  = restResponse.data.artists_links;
+    element.querySelector('div.track-channels-links').innerHTML = restResponse.data.channels_links;
+  }
 }

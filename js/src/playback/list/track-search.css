@@ -25,6 +25,10 @@
   border-top: none;
 }
 
+#track-search-results .track-results-container:has(div.results-message) {
+  box-shadow: none;
+}
+
 #track-search-results .results-tracklist {
   background-color: var(--body-background-color);
   display: grid;
@@ -45,7 +49,7 @@
   display: none;
 }
 
-#track-search-results .track-results-message {
+#track-search-results .results-message {
   width: 100%;
   padding: 5px;
   box-sizing: border-box;
@@ -80,7 +84,7 @@
 
 @media screen and (max-width: 768px) {
 
-  #track-search-results .track-results-message {
+  #track-search-results .results-message {
     font-size: unset;
     line-height: unset;
     padding: 7px;
@@ -123,7 +127,7 @@
     display: flex;
   }
 
-  #track-search-results .track-results-message {
+  #track-search-results .results-message {
     text-align: center;
   }
 

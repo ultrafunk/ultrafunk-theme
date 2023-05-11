@@ -198,7 +198,7 @@ function playNextClick(trackElement)
     const nextTrackElement = trackElement.cloneNode(true);
 
     clearTrackState(nextTrackElement);
-    nextTrackElement.id = Date.now();
+    nextTrackElement.id = `track-${Date.now()}`;
 
     if (settings.list.moveTrackOnPlayNext && (trackElement !== m.trackElement))
       removeClick(trackElement, false, () => addTrack(nextTrackElement, m.trackElement, 'afterend'));

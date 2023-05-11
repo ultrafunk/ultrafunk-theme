@@ -67,7 +67,7 @@ const navSearchClosure = (() =>
 
   function show()
   {
-    setNavSearchProps(true, denyKeyboardShortcutsEvent, 'flex', 'close');
+    setNavSearchProps(true);
     searchField.focus();
     searchField.setSelectionRange(9999, 9999);
   }
@@ -75,7 +75,7 @@ const navSearchClosure = (() =>
   function hide()
   {
     if (isVisible)
-      setNavSearchProps(false, allowKeyboardShortcutsEvent, '', 'search');
+      setNavSearchProps(false);
   }
 
   function hasVisibleSearchContainer()
@@ -102,18 +102,23 @@ const navSearchClosure = (() =>
     return false;
   }
 
-  function setNavSearchProps(visible, keyboardShortcutsEvent, display, icon)
+  function setNavSearchProps(showHide)
   {
-    isVisible = visible;
-    document.dispatchEvent(keyboardShortcutsEvent);
-    searchContainer.style.display = display;
-    document.querySelectorAll('div.nav-search-toggle span').forEach(element => (element.textContent = icon));
+    isVisible = showHide;
+
+    isVisible ? document.dispatchEvent(denyKeyboardShortcutsEvent)
+              : document.dispatchEvent(allowKeyboardShortcutsEvent);
+
+    isVisible ? document.getElementById('playback-controls').classList.add('hide')
+              : document.getElementById('playback-controls').classList.remove('hide');
+
+    searchContainer.style.display = isVisible ? 'flex' : '';
     setTrackSearchResultsVisible(isVisible);
 
-    if (isVisible)
-      document.getElementById('playback-controls').classList.add('hide');
-    else
-      document.getElementById('playback-controls').classList.remove('hide');
+    document.querySelectorAll('div.nav-search-toggle span').forEach((element) =>
+    {
+      element.textContent = isVisible ? 'close' : 'search';
+    });
   }
 });
 

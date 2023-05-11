@@ -70,7 +70,7 @@ export function getTrackEntryHtml(track, density = 'default')
   return /*html*/ `
     <div id="${track.uid}" class="track-entry ${density}-density ${thumbnailData.class} ${isAudioVideoClass}"
       data-track-type="${track.meta.track_source_type}"
-      data-track-id="${track.id}"
+      data-track-id="track-${track.id}"
       data-track-artist="${trackArtist}"
       data-track-title="${trackTitle}"
       data-track-duration="${trackDuration}"

@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.45.5
+Version:           1.45.6
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -889,10 +889,10 @@ a:hover#footer-player-type-toggle {
 
 
 /**************************************************************************************************
-* Nav menu modal overlay
+* Navigation menu overlay
 ***************************************************************************************************/
 
-#nav-menu-modal-overlay {
+#nav-menu-overlay {
   display: none;
   cursor: pointer;
   position: fixed;
@@ -906,7 +906,7 @@ a:hover#footer-player-type-toggle {
   -webkit-tap-highlight-color: transparent;
 }
 
-#nav-menu-modal-overlay.show {
+#nav-menu-overlay.show {
   display: block;
   opacity: 1;
 }
@@ -1192,15 +1192,6 @@ body.no-playback .scrolling-up .site-header-container {
 ***************************************************************************************************/
 
 #site-header.hide-nav-menu .nav-menu-outer {
-  display: none;
-}
-
-/*
-* These two needs to be here (after Sticky navigation and Flyout menu)
-* to make tri-state menus function normally
-*/
-.scrolling-down #site-navigation .nav-menu-outer,
-.scrolling-up #site-navigation .nav-menu-outer {
   display: none;
 }
 

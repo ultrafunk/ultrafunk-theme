@@ -47,7 +47,7 @@
   </div>
 </footer>
 
-<div id="nav-menu-modal-overlay"></div>
+<div id="nav-menu-overlay"></div>
 
 <?php wp_footer(); ?>
 

@@ -54,7 +54,7 @@ export async function loadTracks(termType, termId)
     {
       track.artists.forEach(key => (m.artistsCache.has(key) === false) && artistIds.add(key));
       track.channels.forEach(key => (m.channelsCache.has(key) === false) && channelIds.add(key));
-      track.uid = (Date.now() + index);
+      track.uid = `track-${(Date.now() + index)}`;
       tracksHtml += getTrackEntryHtml(track);
     });
 

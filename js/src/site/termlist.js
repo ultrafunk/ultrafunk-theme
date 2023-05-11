@@ -243,10 +243,9 @@ function shareFindClick(element)
 
 function playTrackClick(event, element)
 {
-  const termType       = (m.listContainer.getAttribute('data-term-type') === 'channels') ? 'channel' : 'artist';
-  const termSlug       = utils.stripAttribute(element, 'data-term-slug');
-  const trackType      = parseInt(element.getAttribute('data-track-type'));
-  const trackSourceUid = element.getAttribute('data-track-source-uid');
+  const termType  = (m.listContainer.getAttribute('data-term-type') === 'channels') ? 'channel' : 'artist';
+  const termSlug  = utils.stripAttribute(element, 'data-term-slug');
+  const trackType = parseInt(element.getAttribute('data-track-type'));
 
   if ((settings.playback.preferredPlayer === PREF_PLAYER.GALLERY) || (trackType === TRACK_TYPE.SOUNDCLOUD))
   {
@@ -260,7 +259,7 @@ function playTrackClick(event, element)
     if (trackNum > response.listPerPage)
       pagination = `page/${Math.ceil(trackNum / response.listPerPage)}/`;
 
-    playClick(event, `${utils.SITE_URL}/list/${termType}/${termSlug}/${pagination}`, trackSourceUid);
+    playClick(event, `${utils.SITE_URL}/list/${termType}/${termSlug}/${pagination}`, utils.stripAttribute(element, 'data-track-id'));
   }
 }
 
