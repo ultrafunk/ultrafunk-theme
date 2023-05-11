@@ -5,6 +5,24 @@
 *
 */
 
+.site-theme-light {
+  --track-results-box-shadow: 0px 15px 25px 0px rgba(0,0,0,0.75);
+  --track-results-background-color: #fff;
+  --track-result-separator-color: #ddd;
+}
+
+.site-theme-dark {
+  --track-results-box-shadow: 0px 15px 25px 0px rgba(0,0,0,1.0);
+  --track-results-background-color: #444;
+  --track-result-separator-color: #666;
+}
+
+.site-theme-black {
+  --track-results-box-shadow: 0px 15px 25px 0px rgba(0,0,0,1.0);
+  --track-results-background-color: #333;
+  --track-result-separator-color: #555;
+}
+
 #track-search-results {
   width: 100%;
   position: fixed;
@@ -20,7 +38,7 @@
   overscroll-behavior-y: contain;
   box-sizing: border-box;
   margin: 0 auto;
-  box-shadow: 0px 15px 25px 0px rgba(0,0,0,0.75);
+  box-shadow: var(--track-results-box-shadow);
   border: var(--form-search-field-border-focus);
   border-top: none;
 }
@@ -30,9 +48,13 @@
 }
 
 #track-search-results .results-tracklist {
-  background-color: var(--body-background-color);
+  background-color: var(--track-results-background-color);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+#track-search-results .track-entry {
+  border-bottom: 1px solid var(--track-result-separator-color);
 }
 
 #track-search-results .track-entry:first-of-type {
@@ -110,7 +132,7 @@
 
   #track-search-results .track-entry {
     padding: 0 6px 0 0;
-    border-bottom: 2px solid var(--track-separator-color);
+    border-bottom: 2px solid var(--track-result-separator-color);
     font-size: 13px;
     line-height: 16px;
   }
