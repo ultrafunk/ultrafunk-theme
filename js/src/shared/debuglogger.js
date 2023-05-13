@@ -110,7 +110,7 @@ export function measureStartupExecutionTime()
   executionStart = performance.now();
 }
 
-const logCss = `
+export const logCss = `
   background-color: rgb(30, 60, 120);
   padding: 2px 5px`;
 

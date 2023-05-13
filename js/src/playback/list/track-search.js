@@ -222,7 +222,10 @@ async function showSearchResults(searchString)
     m.resultsCache.clear();
 
   const searchStop = performance.now();
-  debug.log(`showSearchResults(): ${(Math.round((searchStop - searchStart) * 100) / 100)} ms.`);
+
+  // ToDo: Over 50 ms., log REST search performance for production, this will be removed in the future...
+  if ((searchStop - searchStart) > 50)
+    console.log(`%cRealtime Track Search REST request: ${(Math.round((searchStop - searchStart) * 100) / 100)} ms. for ${utils.SITE_URL}`, debugLogger.logCss);
 }
 
 async function showRestResults(searchString)
@@ -231,7 +234,7 @@ async function showRestResults(searchString)
 
   const restResponse = await utils.fetchRest({
     endpoint: 'tracks',
-    query:    `${searchParams}per_page=20&_fields=id,link,artists,channels,meta`,
+    query:    `${searchParams}_fields=id,link,artists,channels,meta`,
   });
 
   if ((restResponse.status.code === utils.HTTP_RESPONSE.OK) && (restResponse.data.length >= 1))
@@ -270,7 +273,7 @@ function setResultsHtml(restResponse)
 
 function showResultsMessage(message)
 {
-  m.resultsTracklist.innerHTML = '<div class="results-message"></div>';
+  m.resultsTracklist.innerHTML = '<div class="results-message text-nowrap-ellipsis"></div>';
   m.resultsTracklist.querySelector('div.results-message').innerHTML = message;
 }
 
