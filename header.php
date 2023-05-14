@@ -53,11 +53,7 @@ use \Ultrafunk\Theme\Tags as ultrafunk;
       </div>
     </nav>
   </div>
-  <div id="track-search-results">
-    <div class="track-results-container">
-      <div class="results-tracklist"></div>
-    </div>
-  </div>
+  <?php ultrafunk\track_search_results(); ?>
 </header>
 
 <main id="site-content">

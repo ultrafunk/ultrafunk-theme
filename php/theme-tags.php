@@ -250,6 +250,21 @@ function search_form() : void
   <?php
 }
 
+function track_search_results() : void
+{
+  ?>
+  <div id="track-search-results">
+    <div class="track-results-container">
+      <div class="results-tracklist">
+        <div class="load-more-loader">
+          <div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div><div class="loader-4">&#8226;</div><div class="loader-5">&#8226;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php
+}
+
 function header_progress_controls() : void
 {
   ?>

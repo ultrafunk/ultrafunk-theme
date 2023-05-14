@@ -166,6 +166,9 @@ function debounceKeyup(callback, delayMilliseconds)
 
     if ((searchString.length >= minSearchStringLength) && (m.resultsCache.get(searchString) === undefined))
     {
+      if (m.resultsCache.size === 0)
+        m.trackSearchResults.style.display = 'block';
+
       delayTimer = setTimeout(() => callback(searchString), delayMilliseconds);
     }
     else
@@ -209,12 +212,15 @@ async function showSearchResults(searchString)
       if ((cachedResult.status.code === utils.HTTP_RESPONSE.OK) && (cachedResult.data.length !== 0))
         setResultsHtml(cachedResult);
       else
-        showResultsMessage(`No results found for: <b>${utils.escHtml(searchString)}</b>`);
+        showResultsMessage(`Sorry, no matches for <b>${utils.escHtml(searchString)}</b>`);
 
       debug.log(`showSearchResults() from cache for: '${searchString}' - Cached Results: ${m.resultsCache.size}`);
     }
 
-    m.trackSearchResults.style.display = 'block';
+    if (m.trackSearchResults.style.display === 'none')
+      m.trackSearchResults.style.display = 'block';
+    else
+      m.trackSearchResults.querySelector('.track-results-container').scrollTop = 0;
   }
 
   // Free up some memory... (1000 entries is about 10 MB)
@@ -225,7 +231,7 @@ async function showSearchResults(searchString)
 
   // ToDo: Over 50 ms., log REST search performance for production, this will be removed in the future...
   if ((searchStop - searchStart) > 50)
-    console.log(`%cRealtime Track Search REST request: ${(Math.round((searchStop - searchStart) * 100) / 100)} ms. for ${utils.SITE_URL}`, debugLogger.logCss);
+    console.log(`%cTrack Search REST request: ${Math.ceil(searchStop - searchStart)} ms. for ${utils.SITE_URL}`, debugLogger.logCss);
 }
 
 async function showRestResults(searchString)
@@ -253,7 +259,7 @@ async function showRestResults(searchString)
     else if ((restResponse.status.code === utils.HTTP_RESPONSE.OK) && (restResponse.data.length === 0))
     {
       m.resultsCache.set(searchString, restResponse);
-      showResultsMessage(`No results found for: <b>${utils.escHtml(searchString)}</b>`);
+      showResultsMessage(`Sorry, no matches for <b>${utils.escHtml(searchString)}</b>`);
     }
   }
 }
