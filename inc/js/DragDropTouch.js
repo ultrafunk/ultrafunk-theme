@@ -66,7 +66,7 @@ var DragDropTouch;
          * @param type Type of data to remove.
          */
         DataTransfer.prototype.clearData = function (type) {
-            if (type != null) {
+            if (type !== null) {
                 delete this._data[type.toLowerCase()];
             }
             else {
@@ -169,14 +169,6 @@ var DragDropTouch;
         DragDropTouch.prototype._touchstart = function (e) {
             var _this = this;
             if (this._shouldHandle(e)) {
-                // raise double-click and prevent zooming
-                if (Date.now() - this._lastClick < DragDropTouch._DBLCLICK) {
-                    if (this._dispatchEvent(e, 'dblclick', e.target)) {
-                        e.preventDefault();
-                        this._reset();
-                        return;
-                    }
-                }
                 // clear all variables
                 this._reset();
                 // get nearest draggable element
@@ -192,7 +184,7 @@ var DragDropTouch;
                         e.preventDefault();
                         // show context menu if the user hasn't started dragging after a while
                         setTimeout(function () {
-                            if (_this._dragSource == src && _this._img == null) {
+                            if (_this._dragSource === src && _this._img === null) {
                                 if (_this._dispatchEvent(e, 'contextmenu', src)) {
                                     _this._reset();
                                 }
@@ -223,7 +215,11 @@ var DragDropTouch;
                 }
                 // start dragging
                 if (this._dragSource && !this._img && this._shouldStartDragging(e)) {
-                    this._dispatchEvent(e, 'dragstart', this._dragSource);
+                    if (this._dispatchEvent(this._lastTouch, 'dragstart', this._dragSource)) {
+                        // target canceled the drag event
+                        this._dragSource = null;
+                        return;
+                    }
                     this._createImage(e);
                     this._dispatchEvent(e, 'dragenter', target);
                 }
@@ -232,7 +228,7 @@ var DragDropTouch;
                     this._lastTouch = e;
                     e.preventDefault(); // prevent scrolling
                     this._dispatchEvent(e, 'drag', this._dragSource);
-                    if (target != this._lastTarget) {
+                    if (target !== this._lastTarget) {
                         this._dispatchEvent(this._lastTouch, 'dragleave', this._lastTarget);
                         this._dispatchEvent(e, 'dragenter', target);
                         this._lastTarget = target;
@@ -296,7 +292,7 @@ var DragDropTouch;
             var delta = this._getDelta(e);
             return delta > DragDropTouch._THRESHOLD ||
                 (DragDropTouch._ISPRESSHOLDMODE && delta >= DragDropTouch._PRESSHOLDTHRESHOLD);
-        };
+        }
 
         // clear all members
         DragDropTouch.prototype._reset = function () {
@@ -407,6 +403,20 @@ var DragDropTouch;
                 this._copyStyle(src.children[i], dst.children[i]);
             }
         };
+        // compute missing offset or layer property for an event
+        DragDropTouch.prototype._setOffsetAndLayerProps = function (e, target) {
+            var rect = undefined;
+            if (e.offsetX === undefined) {
+                rect = target.getBoundingClientRect();
+                e.offsetX = e.clientX - rect.x;
+                e.offsetY = e.clientY - rect.y;
+            }
+            if (e.layerX === undefined) {
+                rect = rect || target.getBoundingClientRect();
+                e.layerX = e.pageX - rect.left;
+                e.layerY = e.pageY - rect.top;
+            }
+        }
         DragDropTouch.prototype._dispatchEvent = function (e, type, target) {
             if (e && target) {
                 var evt = document.createEvent('Event'), t = e.touches ? e.touches[0] : e;
@@ -415,6 +425,7 @@ var DragDropTouch;
                 evt.which = evt.buttons = 1;
                 this._copyProps(evt, e, DragDropTouch._kbdProps);
                 this._copyProps(evt, t, DragDropTouch._ptProps);
+                this._setOffsetAndLayerProps(evt, target);
                 evt.dataTransfer = this._dataTransfer;
                 target.dispatchEvent(evt);
                 return evt.defaultPrevented;

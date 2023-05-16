@@ -63,6 +63,17 @@ export function initTrackSearch(setCurrentTrackCallback)
     {
       m.searchField.addEventListener('keyup',  (event) => m.debounceKeyup(event, m.searchField.value.toLowerCase()));
       m.searchField.addEventListener('search', () => showSearchResults(m.searchField.value.toLowerCase()));
+
+      // "Preload" track search results if this is a serch results page
+      if ((m.searchField.value !== '') && (m.searchField.value.length >= minSearchStringLength))
+        showSearchResults(m.searchField.value.toLowerCase());
+
+      // ToDo: This does not work on Firefox...
+      window.addEventListener('blur', () =>
+      {
+        if (isTrackSearchResultsVisible() && (document.activeElement?.id === 'youtube-player'))
+          navSearch.hide();
+      });
     });
   }
 }
@@ -186,6 +197,7 @@ function debounceKeyup(callback, delayMilliseconds)
 async function showSearchResults(searchString)
 {
   const searchStart = performance.now();
+  let fetchRestTime = 0;
 
   if (searchString.length < minSearchStringLength)
   {
@@ -200,7 +212,7 @@ async function showSearchResults(searchString)
       m.searchField.autocomplete = 'off';
       m.prevSearchString = searchString;
 
-      await showRestResults(searchString);
+      fetchRestTime = await showRestResults(searchString);
     }
     else if (searchString !== m.prevSearchString)
     {
@@ -217,7 +229,7 @@ async function showSearchResults(searchString)
       debug.log(`showSearchResults() from cache for: '${searchString}' - Cached Results: ${m.resultsCache.size}`);
     }
 
-    if (m.trackSearchResults.style.display === 'none')
+    if ((m.trackSearchResults.style.display === 'none') && navSearch.isVisible())
       m.trackSearchResults.style.display = 'block';
     else
       m.trackSearchResults.querySelector('.track-results-container').scrollTop = 0;
@@ -231,17 +243,20 @@ async function showSearchResults(searchString)
 
   // ToDo: Over 50 ms., log REST search performance for production, this will be removed in the future...
   if ((searchStop - searchStart) > 50)
-    console.log(`%cTrack Search REST request: ${Math.ceil(searchStop - searchStart)} ms. for ${utils.SITE_URL}`, debugLogger.logCss);
+    console.log(`%cSearch: ${Math.ceil(searchStop - searchStart)} ms. Fetch: ${Math.ceil(fetchRestTime)} ms. for ${utils.SITE_URL}`, debugLogger.logCss);
 }
 
 async function showRestResults(searchString)
 {
   const searchParams = `search=${encodeURIComponent(searchString)}&orderby=relevance&wpessid=${wpessid}&`;
+  const fetchStart   = performance.now();
 
   const restResponse = await utils.fetchRest({
     endpoint: 'tracks',
     query:    `${searchParams}_fields=id,link,artists,channels,meta`,
   });
+
+  const fetchStop = performance.now();
 
   if ((restResponse.status.code === utils.HTTP_RESPONSE.OK) && (restResponse.data.length >= 1))
   {
@@ -262,6 +277,8 @@ async function showRestResults(searchString)
       showResultsMessage(`Sorry, no matches for <b>${utils.escHtml(searchString)}</b>`);
     }
   }
+
+  return (fetchStop - fetchStart);
 }
 
 function setResultsHtml(restResponse)

@@ -41,6 +41,7 @@
   box-shadow: var(--track-results-box-shadow);
   border: var(--form-search-field-border-focus);
   border-top: none;
+  background-color: var(--track-results-background-color);
 }
 
 #track-search-results .track-results-container:has(div.load-more-loader),
@@ -49,7 +50,6 @@
 }
 
 #track-search-results .results-tracklist {
-  background-color: var(--track-results-background-color);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
