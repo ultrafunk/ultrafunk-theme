@@ -154,7 +154,6 @@ function mediaUnavailable(playbackEvent)
 {
   debug.log(playbackEvent);
   showSnackbar('Unable to play track, skipping to next', 5, 'Stop', () => {}, () => playbackEventErrorTryNext(playbackEvent));
-  debugLogger.logErrorOnServer('media_unavailable', playbackEvent.data);
 }
 
 

@@ -95,7 +95,7 @@ window.addEventListener('load', () =>
       {
         if (isShowingSnackbar() === false)
         {
-          showSnackbar(message, 11, null, null, () => { settings.internal.showSiteInfoOnLoad = false; }, 'rgb(122, 30, 30)');
+          showSnackbar(message, 10, null, null, () => { settings.internal.showSiteInfoOnLoad = false; }, 'rgb(122, 30, 30)');
           utils.addListener('.snackbar-message-link', 'click', () => { settings.internal.showSiteInfoOnLoad = false; });
         }
       }, 2000);

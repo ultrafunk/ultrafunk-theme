@@ -7,7 +7,7 @@ This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress
 The source code is provided as is with no warranties or support of any kind.
 
 # Client configurations
-Tested on mobile and desktop Chrome, Firefox and misc. Chromium based browsers that supports ES2020.
+Tested on mobile and desktop Chrome, Firefox and misc. Chromium based browsers that supports ES2022.
 WebKit desktop browsers have only been tested manually using [Playwright](https://github.com/microsoft/playwright),
 so additional minor issues and bugs might be present.
 
@@ -16,7 +16,7 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 
 # Dependencies  
 **Required:**  
-PHP version 8.0 or greater  
+PHP version 8.1 or greater  
 [WordPress](https://wordpress.org/download/) version 6.0 or greater  
 [Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.45.X or greater  
 [ESBuild](https://github.com/evanw/esbuild/) (JavaScript / CSS bundler and minifier)  

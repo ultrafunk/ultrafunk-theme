@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 29, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 30, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -51,6 +51,7 @@ export const settingsSchema = {
   },
   list: {
     realtimeTrackSearch: { description: 'Show realtime Track Search results',type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
+    trackSearchType:     { description: 'Search Titles or Titles + Artists', type: INTEGER, values: [1, 2],            default: 1,    valueStrings: ['Titles', 'Titles + Artists'] },
     moveTrackOnPlayNext: { description: 'Move Track on Play as Next',        type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
     showUpNextModal:     { description: 'Show Up Next Modal',                type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
     showLoadMoreTracks:  { description: 'Show "Load More Tracks..." prompt', type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
@@ -103,6 +104,7 @@ export const defaultSettings = {
   },
   list: {
     realtimeTrackSearch: settingsSchema.list.realtimeTrackSearch.default,
+    trackSearchType:     settingsSchema.list.trackSearchType.default,
     moveTrackOnPlayNext: settingsSchema.list.moveTrackOnPlayNext.default,
     showUpNextModal:     settingsSchema.list.showUpNextModal.default,
     showLoadMoreTracks:  settingsSchema.list.showLoadMoreTracks.default,

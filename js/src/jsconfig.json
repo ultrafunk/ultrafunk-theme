@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "es6",
-    "target": "es2020",
+    "target": "es2022",
     "strictFunctionTypes": true,
   //"checkJs": true
   },

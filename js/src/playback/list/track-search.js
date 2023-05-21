@@ -20,8 +20,7 @@ import { getCurrentTrackElement } from './list-controls.js';
 /*************************************************************************************************/
 
 
-const debug   = debugLogger.newInstance('track-search');
-const wpessid = debug.isDebug() ? 4122 : 4751;
+const debug = debugLogger.newInstance('track-search');
 
 const m = {
   setCurrentTrack:    null,
@@ -32,6 +31,11 @@ const m = {
   resultsTracklist:   null,
   resultsCache:       new Map(),
   prevSearchString:   '',
+};
+
+const wpessid = {
+  searchTitles:        debug.isDebug() ? 4122 : 4751,
+  searchTitlesArtists: debug.isDebug() ? 4134 : 4764,
 };
 
 const minSearchStringLength = 3;
@@ -243,12 +247,16 @@ async function showSearchResults(searchString)
 
   // ToDo: Over 50 ms., log REST search performance for production, this will be removed in the future...
   if ((searchStop - searchStart) > 50)
-    console.log(`%cSearch: ${Math.ceil(searchStop - searchStart)} ms. Fetch: ${Math.ceil(fetchRestTime)} ms. for ${utils.SITE_URL}`, debugLogger.logCss);
+  {
+    const searchType = (settings.list.trackSearchType === 1) ? 'Titles' : 'Titles + Artists';
+    console.log(`%cSearch ${searchType}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${utils.SITE_URL}`, debugLogger.logCss);
+  }
 }
 
 async function showRestResults(searchString)
 {
-  const searchParams = `search=${encodeURIComponent(searchString)}&orderby=relevance&wpessid=${wpessid}&`;
+  const searchTypeId = (settings.list.trackSearchType === 1) ? wpessid.searchTitles : wpessid.searchTitlesArtists;
+  const searchParams = `search=${encodeURIComponent(searchString)}&orderby=relevance&wpessid=${searchTypeId}&`;
   const fetchStart   = performance.now();
 
   const restResponse = await utils.fetchRest({

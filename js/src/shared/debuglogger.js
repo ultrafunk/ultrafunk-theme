@@ -84,19 +84,6 @@ function padString(string, maxLength, padChar)
            : string.padEnd(maxLength, padChar));
 }
 
-export function logErrorOnServer(errorType, errorData)
-{
-  console.warn(`logErrorOnServer(): ${errorType} => ${errorData.mediaTitle} | ${errorData.mediaUrl}`);
-
-  /*
-  gtag('event', errorType, // eslint-disable-line no-undef
-  {
-    link_text: errorData.mediaTitle,
-    link_url:  errorData.mediaUrl,
-  });
-  */
-}
-
 
 // ************************************************************************************************
 // Measure JavaScript startup execution time
