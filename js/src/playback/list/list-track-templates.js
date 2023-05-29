@@ -5,8 +5,12 @@
 //
 
 
-import * as debugLogger from '../../shared/debuglogger.js';
-import { TRACK_TYPE }   from '../mediaplayers.js';
+import { TRACK_TYPE } from '../mediaplayers.js';
+
+import {
+  IS_PROD_BUILD,
+  THEME_ENV,
+} from '../../config.js';
 
 import {
   getTimeString,
@@ -14,16 +18,6 @@ import {
   getThumbnailData,
   escHtml,
 } from '../../shared/utils.js';
-
-
-/*************************************************************************************************/
-
-
-const debug = debugLogger.newInstance('list-track-templates');
-
-const THEME_ENV = {
-  'channel_videos_id': debug.isDebug() ? 875 : 899,
-};
 
 
 // ************************************************************************************************
@@ -49,11 +43,11 @@ export function getTrackEntryHtml(track, density = 'default')
   const trackArtist       = escHtml(track.meta.track_artist);
   const trackTitle        = escHtml(track.meta.track_title);
   const trackDuration     = parseInt(track.meta.track_duration);
-  const isAudioVideoClass = track.channels.includes(THEME_ENV.channel_videos_id) ? 'is-video' : 'is-audio';
+  const isAudioVideoClass = track.channels.includes(THEME_ENV.channelVideosId) ? 'is-video' : 'is-audio';
 
-  const youTubeTrackThumbnailUrl = debug.isDebug()
-                                     ? "/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png"
-                                     : thumbnailData.src;
+  const youTubeTrackThumbnailUrl = IS_PROD_BUILD
+                                     ? thumbnailData.src
+                                     : "/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png";
 
   const trackThumbnailUrl = isYouTubeTrack
                               ? youTubeTrackThumbnailUrl

@@ -5,8 +5,9 @@
 //
 
 
+import { THEME_ENV } from "../config.js";
+
 import {
-  SITE_URL,
   getPrefPlayerUrl,
   getThumbnailData,
 } from "../shared/utils.js";
@@ -60,7 +61,7 @@ export function getTopArtistsLinksHtml(header, artistsData, channelSlug)
 
   artistsData.forEach((item) =>
   {
-    const artistLink = getPrefPlayerUrl(`${SITE_URL}/artist/${item.artist_slug}/?channel=${channelSlug}`);
+    const artistLink = getPrefPlayerUrl(`${THEME_ENV.siteUrl}/artist/${item.artist_slug}/?channel=${channelSlug}`);
     html += `<a href="${artistLink}">${item.artist_name}</a> (${item.track_count})<br>`;
   });
 

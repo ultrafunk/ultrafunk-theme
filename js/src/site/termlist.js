@@ -8,6 +8,7 @@
 import * as debugLogger       from '../shared/debuglogger.js';
 import * as termlistRest      from './termlist-rest.js';
 import * as utils             from '../shared/utils.js';
+import { THEME_ENV }          from '../config.js';
 import { ElementClick }       from '../shared/element-click.js';
 import { shareModal }         from './share-modal.js';
 import { TRACK_TYPE }         from '../playback/mediaplayers.js';
@@ -259,7 +260,7 @@ function playTrackClick(event, element)
     if (trackNum > response.listPerPage)
       pagination = `page/${Math.ceil(trackNum / response.listPerPage)}/`;
 
-    playClick(event, `${utils.SITE_URL}/list/${termType}/${termSlug}/${pagination}`, utils.stripAttribute(element, 'data-track-id'));
+    playClick(event, `${THEME_ENV.siteUrl}/list/${termType}/${termSlug}/${pagination}`, utils.stripAttribute(element, 'data-track-id'));
   }
 }
 

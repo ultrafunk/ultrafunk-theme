@@ -7,6 +7,7 @@
 
 import * as debugLogger           from '../../shared/debuglogger.js';
 import * as utils                 from '../../shared/utils.js';
+import { THEME_ENV }              from '../../config.js';
 import { settings }               from '../../shared/session-data.js';
 import { navSearch }              from '../../site/nav-search.js';
 import { ElementClick }           from '../../shared/element-click.js';
@@ -31,11 +32,6 @@ const m = {
   resultsTracklist:   null,
   resultsCache:       new Map(),
   prevSearchString:   '',
-};
-
-const wpessid = {
-  searchTitles:        debug.isDebug() ? 4122 : 4751,
-  searchTitlesArtists: debug.isDebug() ? 4134 : 4764,
 };
 
 const minSearchStringLength = 3;
@@ -249,13 +245,13 @@ async function showSearchResults(searchString)
   if ((searchStop - searchStart) > 50)
   {
     const searchType = (settings.list.trackSearchType === 1) ? 'Titles' : 'Titles + Artists';
-    console.log(`%cSearch ${searchType}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${utils.SITE_URL}`, debugLogger.logCss);
+    console.log(`%cSearch ${searchType}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${THEME_ENV.siteUrl}`, debugLogger.logCss);
   }
 }
 
 async function showRestResults(searchString)
 {
-  const searchTypeId = (settings.list.trackSearchType === 1) ? wpessid.searchTitles : wpessid.searchTitlesArtists;
+  const searchTypeId = (settings.list.trackSearchType === 1) ? THEME_ENV.searchTitlesId : THEME_ENV.searchTitlesArtistsId;
   const searchParams = `search=${encodeURIComponent(searchString)}&orderby=relevance&wpessid=${searchTypeId}&`;
   const fetchStart   = performance.now();
 

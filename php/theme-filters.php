@@ -8,8 +8,9 @@
 namespace Ultrafunk\Theme\Filters;
 
 
-use Ultrafunk\Plugin\Constants\PLAYER_TYPE;
-use const Ultrafunk\Theme\Constants\THEME_ENV;
+use Ultrafunk\Plugin\Shared\PLAYER_TYPE;
+
+use const Ultrafunk\Theme\Config\THEME_ENV;
 
 use function Ultrafunk\Plugin\Globals\ {
   get_request_params,

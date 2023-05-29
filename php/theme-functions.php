@@ -8,12 +8,12 @@
 namespace Ultrafunk\Theme\Functions;
 
 
-use Ultrafunk\Plugin\Constants\ {
+use Ultrafunk\Plugin\Shared\ {
   PLAYER_TYPE,
   TRACK_TYPE,
 };
 
-use const Ultrafunk\Plugin\Constants\YOUTUBE_VIDEO_ID_REGEX;
+use const Ultrafunk\Plugin\Shared\YOUTUBE_VIDEO_ID_REGEX;
 
 use function Ultrafunk\Plugin\Globals\ {
   is_shuffle,

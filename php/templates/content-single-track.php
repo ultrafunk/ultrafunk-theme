@@ -8,11 +8,14 @@
 namespace Ultrafunk\Theme\Templates\SingleTrack;
 
 
-use Ultrafunk\Plugin\Constants\TRACK_TYPE;
+use Ultrafunk\Plugin\Shared\TRACK_TYPE;
 
 use function Ultrafunk\Plugin\Shared\get_term_links;
-use function Ultrafunk\Theme\Functions\get_track_data;
-use function Ultrafunk\Theme\Functions\get_cached_terms;
+
+use function Ultrafunk\Theme\Functions\ {
+  get_track_data,
+  get_cached_terms,
+};
 
 
 /**************************************************************************************************************************/

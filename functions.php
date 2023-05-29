@@ -72,12 +72,12 @@ add_filter('widget_archives_args', 'ultrafunk_limit_archives');
 //
 function ultrafunk_enqueue_styles() : void
 {
-  $version = \Ultrafunk\Theme\Constants\VERSION;
+  $version = \Ultrafunk\Theme\Config\VERSION;
 
   wp_enqueue_style('google-fonts-roboto', 'https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap', [], null);
   wp_enqueue_style('google-fonts-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Sharp&display=block', [], null);
 
-  if (\Ultrafunk\Theme\Constants\IS_PROD_BUILD)
+  if (\Ultrafunk\Theme\Config\IS_PROD_BUILD)
   {
     wp_enqueue_style('ultrafunk-style', get_theme_file_uri('/inc/css/style.min.css'), [], $version);
     wp_enqueue_style('bundle-style', get_theme_file_uri('/js/dist/css/bundle.min.css'), [], $version);
@@ -116,7 +116,7 @@ if (defined('WP_INSTALLING') && WP_INSTALLING)
 else
 {
   // Check if the needed (companion) Ultrafunk plugin is installed and active
-  if (defined('\Ultrafunk\Plugin\Constants\VERSION') === false)
+  if (defined('\Ultrafunk\Plugin\Config\VERSION') === false)
   {
     if (is_admin())
     {
@@ -142,7 +142,7 @@ else
   }
   else
   {
-    require get_template_directory() . '/php/constants.php';
+    require get_template_directory() . '/php/config.php';
     require get_template_directory() . '/php/theme-widgets.php';
 
     if (is_admin() === false)

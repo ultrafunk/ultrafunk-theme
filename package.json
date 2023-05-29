@@ -1,22 +1,19 @@
 {
   "name": "ultrafunk-theme",
-  "version": "1.45.11",
+  "version": "1.45.12",
   "description": "WordPress theme",
   "homepage": "https://github.com/ultrafunk/ultrafunk-theme",
   "repository": "git@github.com:ultrafunk/ultrafunk-theme.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-js-release": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting --minify --sourcemap js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
-    "build-js-debug": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
+    "build-js-prod": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting --minify --sourcemap js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
+    "build-js-dev": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
     "build-js-css": "node_modules\\.bin\\esbuild --bundle --minify --sourcemap --loader:.png=dataurl js\\src\\css\\bundle.css --outfile=js\\dist\\css\\bundle.min.css",
     "build-css": "node_modules\\.bin\\esbuild --minify --sourcemap style.css --outfile=inc\\css\\style.min.css",
-    "set-php-build-consts": "node scripts\\set-php-build-consts.mjs",
-    "build-release": "scripts\\build-js-release.bat & npm run build-js-css & npm run build-css",
-    "build-debug": "scripts\\build-js-debug.bat & npm run build-js-css & npm run build-css",
-    "build-release-win": "start /min cmd /c scripts\\build-js-release.bat && start /min cmd /c npm run build-js-css && start /min cmd /c npm run build-css",
-    "build-release-linux": "npm run build-js-release & npm run build-js-css & npm run build-css & npm run set-php-build-consts",
-    "build-debug-linux": "npm run build-js-debug & npm run build-js-css & npm run build-css & npm run set-php-build-consts"
+    "update-build-configs": "node scripts\\update-build-configs.mjs",
+    "build-prod": "scripts\\build-js-prod.bat & npm run build-js-css & npm run build-css",
+    "build-dev": "scripts\\build-js-dev.bat & npm run build-js-css & npm run build-css"
   },
   "keywords": [],
   "author": {
@@ -25,7 +22,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.34.0",
+    "@playwright/test": "^1.34.3",
     "esbuild": "^0.17.19",
     "eslint": "^8.41.0"
   },
@@ -33,5 +30,11 @@
     "js/dist/",
     "inc/js/",
     "misc/"
-  ]
+  ],
+  "com_ultrafunk": {
+    "themeJavaScriptConfig": "./js/src/config.js",
+    "themePHPConfig": "./php/config.php",
+    "pluginPHPConfig": "../ultrafunk-plugin-dev/config.php",
+    "javaScriptChunkPath": "./js/dist/"
+  }
 }

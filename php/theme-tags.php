@@ -8,11 +8,11 @@
 namespace Ultrafunk\Theme\Tags;
 
 
-use Ultrafunk\Plugin\Constants\PLAYER_TYPE;
+use Ultrafunk\Plugin\Shared\PLAYER_TYPE;
 
-use const Ultrafunk\Theme\Constants\ {
-  THEME_ENV,
+use const Ultrafunk\Theme\Config\ {
   IS_PROD_BUILD,
+  THEME_ENV,
   JS_PRELOAD_CHUNK,
 };
 
@@ -125,15 +125,14 @@ function meta_description() : void
 function scripts_styles() : void
 {
   $template_uri = esc_url(get_template_directory_uri());
-  $js_path      = IS_PROD_BUILD ? '/js/dist/' : '/js/src/';
 
   \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Plugin\Request\get_session_vars());
 
   ?>
   <script><?php echo 'const UF_ResponseData = ' . json_encode(\Ultrafunk\Plugin\Globals\get_session_vars()); ?></script>
-  <script type="module" src="<?php echo $template_uri . $js_path  . 'playback/interaction.js?ver='     . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
-  <script type="module" src="<?php echo $template_uri . $js_path  . 'index.js?ver='                    . \Ultrafunk\Theme\Constants\VERSION; ?>"></script>
-  <noscript><link rel="stylesheet" href="<?php echo $template_uri . '/inc/css/style-noscript.css?ver=' . \Ultrafunk\Theme\Constants\VERSION; ?>" media="all" /></noscript>
+  <script type="module" src="<?php echo $template_uri . THEME_ENV['js_path'] . 'playback/interaction.js?ver=' . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
+  <script type="module" src="<?php echo $template_uri . THEME_ENV['js_path'] . 'index.js?ver='                . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
+  <noscript><link rel="stylesheet" href="<?php echo $template_uri . '/inc/css/style-noscript.css?ver='        . \Ultrafunk\Theme\Config\VERSION; ?>" media="all" /></noscript>
   <?php
 
   if (!is_page() && !is_list_player() && !is_termlist())
@@ -149,20 +148,7 @@ function head() : void
 
   scripts_styles();
 
-  if (WP_DEBUG)
-  {
-    ?>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTHTLPRRR7"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-LTHTLPRRR7');
-    </script>
-    <?php
-  }
-  else
+  if (IS_PROD_BUILD)
   {
     ?>
     <!-- Google tag (gtag.js) -->
@@ -172,6 +158,19 @@ function head() : void
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-G5MQXWVC0S');
+    </script>
+    <?php
+  }
+  else
+  {
+    ?>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTHTLPRRR7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LTHTLPRRR7');
     </script>
     <?php
   }
@@ -283,8 +282,8 @@ function header_site_branding() : void
   <div class="site-branding">
     <?php echo $nav_icons['menu']; ?>
     <a href="<?php echo (is_list_player() ? get_cached_home_url('/list/') : get_cached_home_url('/')); ?>" aria-label="Home">
-      <img id="branding-logo-mobile"  src="<?php echo THEME_ENV['uploads_branding']; ?>ultrafunk_logo_mobile_12.png"  title="Ultrafunk home" alt="Site Homepage">
-      <img id="branding-logo-desktop" src="<?php echo THEME_ENV['uploads_branding']; ?>ultrafunk_logo_desktop_12.png" title="Ultrafunk home" alt="Site Homepage">
+      <img id="branding-logo-mobile"  src="/wp-content/uploads/branding/ultrafunk_logo_mobile_12.png"  title="Ultrafunk home" alt="Site Homepage">
+      <img id="branding-logo-desktop" src="/wp-content/uploads/branding/ultrafunk_logo_desktop_12.png" title="Ultrafunk home" alt="Site Homepage">
     </a>
     <?php echo $nav_icons['search']; ?>
   </div>

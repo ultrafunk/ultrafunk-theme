@@ -11,6 +11,11 @@ import { PREF_PLAYER }  from './settings/settings.js';
 import { showSnackbar } from './snackbar.js';
 
 import {
+  IS_PROD_BUILD,
+  THEME_ENV,
+} from '../config.js';
+
+import {
   TRACK_TYPE,
   getYouTubeImgUrl,
 } from '../playback/mediaplayers.js';
@@ -21,12 +26,11 @@ import {
 
 const debug = debugLogger.newInstance('utils');
 
-export const SITE_URL = debug.isDebug() ? 'https://wordpress.ultrafunk.com'      : 'https://ultrafunk.com';
-const SITE_URL_LIST   = debug.isDebug() ? 'https://wordpress.ultrafunk.com/list' : 'https://ultrafunk.com/list';
+const SITE_URL_LIST = `${THEME_ENV.siteUrl}/list`;
 
-const validUrlRegEx = debug.isDebug()
-                        ? /^https:\/\/wordpress\.ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/
-                        : /^https:\/\/ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/;
+const validUrlRegEx = IS_PROD_BUILD
+                        ? /^https:\/\/ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/
+                        : /^https:\/\/wordpress\.ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/;
 
 const DOMParserInstance = new DOMParser();
 
@@ -202,12 +206,12 @@ export function navToUrl(destUrl)
 
 export function getListPlayerUrl(destUrl)
 {
-  return destUrl.replace(SITE_URL, SITE_URL_LIST);
+  return destUrl.replace(THEME_ENV.siteUrl, SITE_URL_LIST);
 }
 
 export function getGalleryPlayerUrl(destUrl)
 {
-  return destUrl.replace(SITE_URL_LIST, SITE_URL);
+  return destUrl.replace(SITE_URL_LIST, THEME_ENV.siteUrl);
 }
 
 export function getPrefPlayerUrl(destUrl)

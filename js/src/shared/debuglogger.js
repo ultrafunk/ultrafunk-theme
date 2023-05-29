@@ -5,23 +5,30 @@
 //
 
 
-
-const DEBUG = false;
-
+import {
+  IS_DEBUG,
+  THEME_ENV,
+} from '../config.js';
 
 
 // ************************************************************************************************
 // DebugLog parent and child classes
 // ************************************************************************************************
 
+export function newInstance(moduleName)
+{
+  return (IS_DEBUG ? new DevBuild(moduleName) : new ProdBuild(moduleName));
+}
+
 class DebugLog
 {
   constructor(moduleName = 'unknown')
   {
-    this.moduleName = padString(moduleName.toUpperCase(), 20, '.');
+    this.moduleName = (moduleName.length > 20)
+      ? moduleName.slice(0, 20).toUpperCase()
+      : moduleName.padEnd(20, '.').toUpperCase();
   }
 
-  isDebug()   { return DEBUG;                               }
   warn(data)  { console.warn(`${this.moduleName}:`,  data); }
   error(data) { console.error(`${this.moduleName}:`, data); }
 }
@@ -67,25 +74,6 @@ class ProdBuild extends DebugLog
 
 
 // ************************************************************************************************
-// DebugLog class support functions
-// ************************************************************************************************
-
-export function newInstance(moduleName)
-{
-  return ((DEBUG === true)
-           ? new DevBuild(moduleName)
-           : new ProdBuild(moduleName));
-}
-
-function padString(string, maxLength, padChar)
-{
-  return ((string.length > maxLength)
-           ? string.slice(0, maxLength)
-           : string.padEnd(maxLength, padChar));
-}
-
-
-// ************************************************************************************************
 // Measure JavaScript startup execution time
 // ************************************************************************************************
 
@@ -101,12 +89,8 @@ export const logCss = `
   background-color: rgb(30, 60, 120);
   padding: 2px 5px`;
 
-const SITE_URL = DEBUG
-  ? 'https://wordpress.ultrafunk.com'
-  : 'https://ultrafunk.com';
-
 export function logStartupExecutionTime()
 {
   executionStop = performance.now();
-  console.log(`%cJavaScript startup execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms. for ${SITE_URL}`, logCss);
+  console.log(`%cJavaScript startup execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms. for ${THEME_ENV.siteUrl}`, logCss);
 }
