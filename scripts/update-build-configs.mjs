@@ -1,5 +1,5 @@
 //
-// Update config.js and config.php build environments
+// Update theme and plugin config.js and config.php build environments
 //
 // https://ultrafunk.com
 //
@@ -18,11 +18,16 @@ import {
 /*************************************************************************************************/
 
 
-let   packageUltrafunk    = null;
+let packageUltrafunk = null;
+
 const isProdBuildRegEx    = /const\s+IS_PROD_BUILD\s+=\s+(false|true)/i;
 const isDebugRegEx        = /const\s+IS_DEBUG\s+=\s+(false|true)/i;
 const jsChunkFilesRegEx   = /^chunk.*\.js$/i;
 const jsPreloadChunkRegEx = /const\s+JS_PRELOAD_CHUNK\s+=\s+'.*?'/i;
+
+const isProdBuild   = (process.argv[2]?.toLowerCase() === 'prod');  // eslint-disable-line no-undef
+const isDevBuild    = (process.argv[2]?.toLowerCase() === 'dev');   // eslint-disable-line no-undef
+const isJSChunkFile = (process.argv[2]?.toLowerCase() === 'chunk'); // eslint-disable-line no-undef
 
 
 // ************************************************************************************************
@@ -31,27 +36,20 @@ const jsPreloadChunkRegEx = /const\s+JS_PRELOAD_CHUNK\s+=\s+'.*?'/i;
 
 if (process.argv.length === 3) // eslint-disable-line no-undef
 {
-  packageUltrafunk = readPackageJson('./package.json')?.com_ultrafunk;
+  const hasValidArgument = isProdBuild || isDevBuild || isJSChunkFile;
 
-  if ((packageUltrafunk !== null) && (packageUltrafunk !== undefined))
+  if (hasValidArgument)
   {
-    const isProdBuild   = (process.argv[2].toLowerCase() === 'prod');  // eslint-disable-line no-undef
-    const isDevBuild    = (process.argv[2].toLowerCase() === 'dev');   // eslint-disable-line no-undef
-    const isJSChunkFile = (process.argv[2].toLowerCase() === 'chunk'); // eslint-disable-line no-undef
+    packageUltrafunk = getPackageUltrafunk('./package.json');
 
-    if (isProdBuild || isDevBuild)
-    {
-      updateJSConfig(isProdBuild);
-      updatePHPConfigs(isProdBuild);
-    }
-    else if (isJSChunkFile)
-    {
-      updatePHPConfigJSChunkFile();
-    }
+    if (packageUltrafunk !== null)
+      updateConfigs();
     else
-    {
-      console.error('Unknown argument! Usage: npm run update-build-configs { dev | prod | chunk }');
-    }
+      console.error('Error parsing package.json, it must contain a "com_ultrafunk" field!');
+  }
+  else
+  {
+    console.error('Unknown argument! Usage: npm run update-build-configs { dev | prod | chunk }');
   }
 }
 else
@@ -64,44 +62,50 @@ else
 // Update config.js and config.php
 // ************************************************************************************************
 
-function updateJSConfig(isProdBuild)
+function updateConfigs()
 {
-  updateConfigFile(packageUltrafunk.themeJavaScriptConfig, (fileString) =>
+  if (packageUltrafunk.theme !== undefined)
+  {
+    if (isProdBuild || isDevBuild)
+    {
+      updateConfig(packageUltrafunk.theme.javaScriptConfig);
+      updateConfig(packageUltrafunk.theme.phpConfig);
+    }
+    else if (isJSChunkFile)
+    {
+      updatePHPConfigJSChunkFile(packageUltrafunk.theme.phpConfig);
+    }
+  }
+  else if (packageUltrafunk.plugin !== undefined)
+  {
+    if (isProdBuild || isDevBuild)
+      updateConfig(packageUltrafunk.plugin.phpConfig);
+  }
+}
+
+function updateConfig(configPath)
+{
+  updateConfigFile(configPath, (fileString) =>
   {
     return fileString.replace(isProdBuildRegEx, `const IS_PROD_BUILD = ${isProdBuild}`)
                      .replace(isDebugRegEx,     `const IS_DEBUG      = ${!isProdBuild}`);
   });
 }
 
-function updatePHPConfigs(isProdBuild)
+function updatePHPConfigJSChunkFile(configPath)
 {
-  updateConfigFile(packageUltrafunk.themePHPConfig, (fileString) =>
-  {
-    return fileString.replace(isProdBuildRegEx, `const IS_PROD_BUILD = ${isProdBuild}`)
-                     .replace(isDebugRegEx,     `const IS_DEBUG      = ${!isProdBuild}`);
-  });
-
-  updateConfigFile(packageUltrafunk.pluginPHPConfig, (fileString) =>
-  {
-    return fileString.replace(isProdBuildRegEx, `const IS_PROD_BUILD = ${isProdBuild}`)
-                     .replace(isDebugRegEx,     `const IS_DEBUG      = ${!isProdBuild}`);
-  });
-}
-
-function updatePHPConfigJSChunkFile()
-{
-  const newestChunk = getMostRecentFile(packageUltrafunk.javaScriptChunkPath);
+  const newestChunk = getMostRecentFile(packageUltrafunk.theme.javaScriptChunkPath);
 
   if (newestChunk !== undefined)
   {
-    updateConfigFile(packageUltrafunk.themePHPConfig, (fileString) =>
+    updateConfigFile(configPath, (fileString) =>
     {
       return fileString.replace(jsPreloadChunkRegEx, `const JS_PRELOAD_CHUNK = '/js/dist/${newestChunk['file']}'`);
     });
   }
   else
   {
-    console.error(`getMostRecentFile() failed for: ${packageUltrafunk.javaScriptChunkPath}`);
+    console.error(`getMostRecentFile() failed for: ${packageUltrafunk.theme.javaScriptChunkPath}`);
   }
 }
 
@@ -110,11 +114,12 @@ function updatePHPConfigJSChunkFile()
 // Misc. helper functions
 // ************************************************************************************************
 
-function readPackageJson(packageJsonPath)
+function getPackageUltrafunk(packageJsonPath)
 {
   try
   {
-    return JSON.parse(readFileSync(packageJsonPath));
+    const parsedConfig = JSON.parse(readFileSync(packageJsonPath))?.com_ultrafunk;
+    return ((parsedConfig !== undefined) ? parsedConfig : null);
   }
   catch (error)
   {

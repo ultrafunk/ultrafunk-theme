@@ -1,6 +1,6 @@
 {
   "name": "ultrafunk-theme",
-  "version": "1.45.12",
+  "version": "1.45.13",
   "description": "WordPress theme",
   "homepage": "https://github.com/ultrafunk/ultrafunk-theme",
   "repository": "git@github.com:ultrafunk/ultrafunk-theme.git",
@@ -32,9 +32,10 @@
     "misc/"
   ],
   "com_ultrafunk": {
-    "themeJavaScriptConfig": "./js/src/config.js",
-    "themePHPConfig": "./php/config.php",
-    "pluginPHPConfig": "../ultrafunk-plugin-dev/config.php",
-    "javaScriptChunkPath": "./js/dist/"
+    "theme": {
+      "javaScriptConfig": "./js/src/config.js",
+      "phpConfig": "./php/config.php",
+      "javaScriptChunkPath": "./js/dist/"
+    }
   }
 }

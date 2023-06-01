@@ -1,5 +1,5 @@
 //
-// Ultrafunk JavaScript configuration
+// Ultrafunk theme JavaScript configuration
 //
 // https://ultrafunk.com
 //
@@ -15,7 +15,7 @@ export const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-export const VERSION = '1.45.12';
+export const VERSION = '1.45.13';
 
 export const THEME_ENV = {
   'siteUrl':               IS_PROD_BUILD ? 'https://ultrafunk.com' : 'https://wordpress.ultrafunk.com',
