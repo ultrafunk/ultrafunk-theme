@@ -125,7 +125,7 @@ function get_shuffle_title() : string
 //
 const DEFAULT_TRACK_DATA = [
   'track_type'   => TRACK_TYPE::SOUNDCLOUD,
-  'thumnail_src' => '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png',
+  'thumnail_src' => \Ultrafunk\Theme\Config\THEME_ENV['default_sc_thumbnail'],
   'css_class'    => 'type-soundcloud',
   'source_uid'   => null,
 ];

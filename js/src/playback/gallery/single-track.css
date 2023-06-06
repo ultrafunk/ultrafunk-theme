@@ -25,15 +25,6 @@ single-track h2.track-artist-title.type-split {
   display: none;
 }
 
-/*
-single-track .track-meta-channels,
-single-track .track-meta-artists {
-  white-space: initial;
-  overflow: initial;
-  text-overflow: initial;
-}
-*/
-
 nav.navigation.single-track-nav {
   margin: 50px auto;
 }

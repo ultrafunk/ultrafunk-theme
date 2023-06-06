@@ -95,7 +95,7 @@ window.addEventListener('load', () =>
       {
         if (isShowingSnackbar() === false)
         {
-          showSnackbar(message, 10, null, null, () => { settings.internal.showSiteInfoOnLoad = false; }, 'rgb(122, 30, 30)');
+          showSnackbar(message, 7.5, null, null, () => { settings.internal.showSiteInfoOnLoad = false; }, 'rgb(122, 30, 30)');
           utils.addListener('.snackbar-message-link', 'click', () => { settings.internal.showSiteInfoOnLoad = false; });
         }
       }, 2000);
@@ -247,9 +247,7 @@ function setPreviousPageTitle()
 
         pathParts.forEach((part, index) =>
         {
-          pathString += ((index + 1) < pathParts.length)
-                          ? part + ' / '
-                          : part;
+          pathString += ((index + 1) < pathParts.length) ? (part + ' / ') : part;
         });
       }
     }

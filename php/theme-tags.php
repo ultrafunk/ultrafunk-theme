@@ -282,8 +282,8 @@ function header_site_branding() : void
   <div class="site-branding">
     <?php echo $nav_icons['menu']; ?>
     <a href="<?php echo (is_list_player() ? get_cached_home_url('/list/') : get_cached_home_url('/')); ?>" aria-label="Home">
-      <img id="branding-logo-mobile"  src="/wp-content/uploads/branding/ultrafunk_logo_mobile_12.png"  title="Ultrafunk home" alt="Site Homepage">
-      <img id="branding-logo-desktop" src="/wp-content/uploads/branding/ultrafunk_logo_desktop_12.png" title="Ultrafunk home" alt="Site Homepage">
+      <img id="branding-logo-desktop" src="<?php echo THEME_ENV['uf_logo_desktop']; ?>" title="Ultrafunk home" alt="Site Homepage">
+      <img id="branding-logo-mobile"  src="<?php echo THEME_ENV['uf_logo_mobile'];  ?>" title="Ultrafunk home" alt="Site Homepage">
     </a>
     <?php echo $nav_icons['search']; ?>
   </div>

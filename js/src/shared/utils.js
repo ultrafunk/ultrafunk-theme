@@ -238,7 +238,7 @@ export function getThumbnailData(metaData)
   if (metaData.track_source_type === TRACK_TYPE.YOUTUBE)
     return getYouTubeImgUrl(metaData.track_source_data);
 
-  return { src: '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png', class: 'type-soundcloud', uid: '' };
+  return { src: THEME_ENV.defaultSCThumbnail, class: 'type-soundcloud', uid: '' };
 }
 
 

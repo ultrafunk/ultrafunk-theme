@@ -38,20 +38,14 @@ export function getPageSeparatorHtml(responseData, loadingPage)
 
 export function getTrackEntryHtml(track, density = 'default')
 {
-  const isYouTubeTrack    = (track.meta.track_source_type === TRACK_TYPE.YOUTUBE);
-  const thumbnailData     = getThumbnailData(track.meta);
-  const trackArtist       = escHtml(track.meta.track_artist);
-  const trackTitle        = escHtml(track.meta.track_title);
-  const trackDuration     = parseInt(track.meta.track_duration);
-  const isAudioVideoClass = track.channels.includes(THEME_ENV.channelVideosId) ? 'is-video' : 'is-audio';
-
-  const youTubeTrackThumbnailUrl = IS_PROD_BUILD
-                                     ? thumbnailData.src
-                                     : "/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png";
-
-  const trackThumbnailUrl = isYouTubeTrack
-                              ? youTubeTrackThumbnailUrl
-                              : '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png';
+  const isYouTubeTrack      = (track.meta.track_source_type === TRACK_TYPE.YOUTUBE);
+  const thumbnailData       = getThumbnailData(track.meta);
+  const trackArtist         = escHtml(track.meta.track_artist);
+  const trackTitle          = escHtml(track.meta.track_title);
+  const trackDuration       = parseInt(track.meta.track_duration);
+  const isAudioVideoClass   = track.channels.includes(THEME_ENV.channelVideosId) ? 'is-video' : 'is-audio';
+  const youTubeThumbnailUrl = IS_PROD_BUILD  ? thumbnailData.src   : THEME_ENV.defaultYTThumbnail;
+  const trackThumbnailUrl   = isYouTubeTrack ? youTubeThumbnailUrl : THEME_ENV.defaultSCThumbnail;
 
   const trackArtistTitle = isYouTubeTrack
                              ? `<span><b>${trackArtist}</b></span><br><span>${trackTitle}</span>`

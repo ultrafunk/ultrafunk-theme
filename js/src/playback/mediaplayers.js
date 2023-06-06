@@ -7,6 +7,7 @@
 
 import * as debugLogger from '../shared/debuglogger.js';
 import { VOLUME }       from './gallery/crossfade.js';
+import { THEME_ENV }    from '../config.js';
 
 
 /*************************************************************************************************/
@@ -349,7 +350,7 @@ export class Playlist extends MediaPlayer
 // ************************************************************************************************
 
 // Default / fallback track thumbnail object
-const defThumbnailObj = { src: '/wp-content/themes/ultrafunk/inc/img/photo_filled_grey.png', class: 'type-default', uid: '' };
+const defThumbnailObj = { src: THEME_ENV.defaultTrackThumbnail, class: 'type-default', uid: '' };
 
 // https://webapps.stackexchange.com/a/101153
 const youTubeVideoIdRegEx = /[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/;

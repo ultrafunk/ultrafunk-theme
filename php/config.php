@@ -21,7 +21,7 @@ const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.45.13';
+const VERSION = '1.45.14';
 
 const THEME_ENV = [
   'menu_item_all_tracks_id' => IS_PROD_BUILD ? 4430 : 4057,
@@ -31,7 +31,11 @@ const THEME_ENV = [
   'page_about_id'           => IS_PROD_BUILD ?  806 :  806,
   'channel_videos_id'       => IS_PROD_BUILD ?  899 :  875,
   'js_path'                 => IS_PROD_BUILD ? '/js/dist/' : '/js/src/',
+  'default_yt_thumbnail'    => '/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png',
+  'default_sc_thumbnail'    => '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png',
+  'uf_logo_desktop'         => '/wp-content/uploads/branding/ultrafunk_logo_desktop_12.png',
+  'uf_logo_mobile'          => '/wp-content/uploads/branding/ultrafunk_logo_mobile_12.png',
 ];
 
 // Automatically updated on 'npm run build-dev' or 'npm run build-prod'
-const JS_PRELOAD_CHUNK = '/js/dist/chunk-3KCZMWDH.js';
+const JS_PRELOAD_CHUNK = '/js/dist/chunk-3UYNH6D2.js';

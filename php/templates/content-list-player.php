@@ -8,6 +8,8 @@
 namespace Ultrafunk\Theme\Templates;
 
 
+use const Ultrafunk\Theme\Config\THEME_ENV;
+
 use function Ultrafunk\Plugin\Shared\get_term_links;
 
 
@@ -86,9 +88,9 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
             <?php } else { ?>
               <div class="thumbnail-overlay"><div class="spinner"></div></div>
               <?php if ($is_youtube_track) { ?>
-                <img src="/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png" alt="">
+                <img src="<?php echo THEME_ENV['default_yt_thumbnail']; ?>" alt="">
               <?php } else { ?>
-                <img src="/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png" alt="">
+                <img src="<?php echo THEME_ENV['default_sc_thumbnail']; ?>" alt="">
               <?php } ?>
             <?php } ?>
           </div>
