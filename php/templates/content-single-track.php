@@ -119,13 +119,13 @@ function track_nav_link(bool $is_nav_prev, mixed $post) : void
     <div class="<?php echo ($is_nav_prev ? 'nav-previous' : 'nav-next'); ?>">
       <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_nav_prev ? 'prev' : 'next'); ?>" title="<?php echo $prev_next_title; ?>">
         <?php if ($is_nav_prev) { ?>
-          <div class="prev-track-arrow">&#10094</div>
+          <div class="prev-track-arrow">&#10094;</div>
           <div class="prev-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>" alt="Previous Track Thumbnail"></div>
         <?php } ?>
         <div class="<?php echo ($is_nav_prev ? 'prev-track-artist-title' : 'next-track-artist-title'); ?>"><?php echo $track_artist_title; ?></div>
         <?php if (!$is_nav_prev) { ?>
           <div class="next-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>" alt="Next Track Thumbnail"></div>
-          <div class="next-track-arrow">&#10095</div>
+          <div class="next-track-arrow">&#10095;</div>
         <?php } ?>
       </a>
     </div>

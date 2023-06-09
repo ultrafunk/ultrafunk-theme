@@ -91,6 +91,16 @@
   font-weight: 400;
 }
 
+#track-search-results .results-message a {
+  color: var(--primary-text-color);
+  text-decoration: none;
+}
+
+#track-search-results .results-message a:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+}
+
 
 /**************************************************************************************************
 * Responsive

@@ -779,7 +779,7 @@ body.list-player .site-footer-container {
 
 @media screen and (max-width: 400px) {
 
-  .track-entry {
+  .track-entry.default-density {
     font-size: 13px;
   }
 

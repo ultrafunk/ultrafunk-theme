@@ -194,6 +194,12 @@ function debounceKeyup(callback, delayMilliseconds)
 //
 // ************************************************************************************************
 
+function getNoMatchesMessage(searchString)
+{
+  const separator = '&nbsp;&nbsp;&nbsp;&#10095;&#10095;&nbsp;&nbsp;&nbsp;';
+  return `0 tracks match <b>${utils.escHtml(searchString)}</b>${separator}<a href="/?s=${encodeURIComponent(searchString)}">Search Site</a>`;
+}
+
 async function showSearchResults(searchString)
 {
   const searchStart = performance.now();
@@ -224,7 +230,7 @@ async function showSearchResults(searchString)
       if ((cachedResult.status.code === utils.HTTP_RESPONSE.OK) && (cachedResult.data.length !== 0))
         setResultsHtml(cachedResult);
       else
-        showResultsMessage(`Sorry, no matches for <b>${utils.escHtml(searchString)}</b>`);
+        showResultsMessage(getNoMatchesMessage(searchString));
 
       debug.log(`showSearchResults() from cache for: '${searchString}' - Cached Results: ${m.resultsCache.size}`);
     }
@@ -278,7 +284,7 @@ async function showRestResults(searchString)
     else if ((restResponse.status.code === utils.HTTP_RESPONSE.OK) && (restResponse.data.length === 0))
     {
       m.resultsCache.set(searchString, restResponse);
-      showResultsMessage(`Sorry, no matches for <b>${utils.escHtml(searchString)}</b>`);
+      showResultsMessage(getNoMatchesMessage(searchString));
     }
   }
 
