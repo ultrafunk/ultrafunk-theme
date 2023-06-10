@@ -1,15 +1,15 @@
 {
   "name": "ultrafunk-theme",
-  "version": "1.45.15",
+  "version": "1.45.16",
   "description": "WordPress theme",
   "homepage": "https://github.com/ultrafunk/ultrafunk-theme",
   "repository": "git@github.com:ultrafunk/ultrafunk-theme.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-js-prod": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting --minify --sourcemap js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
-    "build-js-dev": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
-    "build-js-css": "node_modules\\.bin\\esbuild --bundle --minify --sourcemap --loader:.png=dataurl js\\src\\css\\bundle.css --outfile=js\\dist\\css\\bundle.min.css",
+    "build-js-prod": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting --target=es2022 --minify --sourcemap js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
+    "build-js-dev": "node_modules\\.bin\\esbuild --bundle --format=esm --splitting --target=es2022 js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
+    "build-js-css": "node_modules\\.bin\\esbuild --bundle --minify --sourcemap --target=es2022 --loader:.png=dataurl js\\src\\css\\bundle.css --outfile=js\\dist\\css\\bundle.min.css",
     "build-css": "node_modules\\.bin\\esbuild --minify --sourcemap style.css --outfile=inc\\css\\style.min.css",
     "update-build-configs": "node scripts\\update-build-configs.mjs",
     "build-prod": "scripts\\build-js-prod.bat & npm run build-js-css & npm run build-css",
@@ -23,7 +23,7 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.35.0",
-    "esbuild": "^0.17.19",
+    "esbuild": "^0.18.0",
     "eslint": "^8.42.0"
   },
   "eslintIgnore": [

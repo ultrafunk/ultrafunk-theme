@@ -194,12 +194,6 @@ function debounceKeyup(callback, delayMilliseconds)
 //
 // ************************************************************************************************
 
-function getNoMatchesMessage(searchString)
-{
-  const separator = '&nbsp;&nbsp;&nbsp;&#10095;&#10095;&nbsp;&nbsp;&nbsp;';
-  return `0 tracks match <b>${utils.escHtml(searchString)}</b>${separator}<a href="/?s=${encodeURIComponent(searchString)}">Search Site</a>`;
-}
-
 async function showSearchResults(searchString)
 {
   const searchStart = performance.now();
@@ -304,12 +298,6 @@ function setResultsHtml(restResponse)
   m.resultsTracklist.innerHTML = tracksHtml;
 }
 
-function showResultsMessage(message)
-{
-  m.resultsTracklist.innerHTML = '<div class="results-message text-nowrap-ellipsis"></div>';
-  m.resultsTracklist.querySelector('div.results-message').innerHTML = message;
-}
-
 async function setTrackLinks(element)
 {
   const restResponse = await utils.fetchRest({
@@ -323,4 +311,16 @@ async function setTrackLinks(element)
     element.querySelector('div.track-artists-links').innerHTML  = restResponse.data.artists_links;
     element.querySelector('div.track-channels-links').innerHTML = restResponse.data.channels_links;
   }
+}
+
+function getNoMatchesMessage(searchString)
+{
+  const separator = '&nbsp;&nbsp;&nbsp;&#10095;&#10095;&nbsp;&nbsp;&nbsp;';
+  return `0 tracks match <b>${utils.escHtml(searchString)}</b>${separator}<a href="/?s=${encodeURIComponent(searchString)}">Search Site</a>`;
+}
+
+function showResultsMessage(message)
+{
+  m.resultsTracklist.innerHTML = '<div class="results-message text-nowrap-ellipsis"></div>';
+  m.resultsTracklist.querySelector('div.results-message').innerHTML = message;
 }
