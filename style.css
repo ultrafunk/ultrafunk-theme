@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.45.16
+Version:           1.45.17
 Requires at least: 6.0
 Tested up to:      6.2.2
 Requires PHP:      8.1
@@ -487,6 +487,15 @@ a[href="#"] .navbar-arrow-next {
 .navbar-title {
   font-size: 20px;
   color: var(--primary-icon-color);
+}
+
+.navbar-title a {
+  color: var(--primary-icon-color);
+  text-decoration: none;
+}
+
+.navbar-title a:hover {
+  color: var(--link-hover-color);
 }
 
 .navbar-title .go-back-to {

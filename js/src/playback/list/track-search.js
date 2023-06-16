@@ -244,14 +244,14 @@ async function showSearchResults(searchString)
   // ToDo: Over 50 ms., log REST search performance for production, this will be removed in the future...
   if ((searchStop - searchStart) > 50)
   {
-    const searchType = (settings.list.trackSearchType === 1) ? 'Titles' : 'Titles + Artists';
+    const searchType = settings.list.queryAllTrackArtists ? 'Artist - Title + Artists' : 'Artist - Title';
     console.log(`%cSearch ${searchType}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${THEME_ENV.siteUrl}`, debugLogger.logCss);
   }
 }
 
 async function showRestResults(searchString)
 {
-  const searchTypeId = (settings.list.trackSearchType === 1) ? THEME_ENV.searchTitlesId : THEME_ENV.searchTitlesArtistsId;
+  const searchTypeId = settings.list.queryAllTrackArtists ? THEME_ENV.searchArtistTitleArtistsId : THEME_ENV.searchArtistTitleId;
   const searchParams = `search=${encodeURIComponent(searchString)}&orderby=relevance&wpessid=${searchTypeId}&`;
   const fetchStart   = performance.now();
 

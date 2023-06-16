@@ -23,8 +23,8 @@ export const PREF_PLAYER = {
 
 
 // ************************************************************************************************
-// Ultrafunk (user) settings:     Playback, List, Gallery, Mobile and Site
-// Ultrafunk (internal) settings: Tips and Banners
+// Ultrafunk (user) settings: Playback, List, Gallery, Mobile and Site (+ Experimental)
+// Other Ultrafunk settings:  Internal
 // ************************************************************************************************
 
 const masterVolumeValues         = [ 5,    10,    15,    20,    25,    30,    35,    40,    45,    50,    55,    60,    65,    70,    75,    80,    85,    90,    95,    100  ];
@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 30, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 32, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -50,12 +50,12 @@ export const settingsSchema = {
     autoExitFsOnWarning:  { description: 'Exit Fullscreen on Time Warning', type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
   },
   list: {
-    realtimeTrackSearch: { description: 'Show realtime Track Search results',type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    trackSearchType:     { description: 'Search Titles or Titles + Artists', type: INTEGER, values: [1, 2],            default: 1,    valueStrings: ['Titles', 'Titles + Artists'] },
-    moveTrackOnPlayNext: { description: 'Move Track on Play as Next',        type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    showUpNextModal:     { description: 'Show Up Next Modal',                type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    showLoadMoreTracks:  { description: 'Show "Load More Tracks..." prompt', type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    tracksPerPage:       { description: 'Tracks Per Page: Search & Shuffle', type: INTEGER, values: listPerPageValues, default: 25,   valueStrings: listPerPageValueStrings },
+    realtimeTrackSearch:  { description: 'Show realtime Track Search results',    type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
+    queryAllTrackArtists: { description: 'Track Search: Query all Track Artists', type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
+    moveTrackOnPlayNext:  { description: 'Move Track on Play as Next',            type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
+    showUpNextModal:      { description: 'Show Up Next Modal',                    type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
+    showLoadMoreTracks:   { description: 'Show "Load More Tracks..." prompt',     type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
+    tracksPerPage:        { description: 'Tracks Per Page: Search & Shuffle',     type: INTEGER, values: listPerPageValues, default: 25,   valueStrings: listPerPageValueStrings },
   },
   gallery: {
     layout:                  { description: 'Track Layout',                         type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
@@ -80,12 +80,12 @@ export const settingsSchema = {
     smoothScrolling:     { description: 'Use Smooth Scrolling (where possible)', type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
     modalOverlayOpacity: { description: 'Modal overlay opacity',                 type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
   },
+  internal: {
+    showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
+  },
   experimental: {
   //realtimeTrackSearch:  { description: '<b>List Player</b><br>Show realtime track search results',        type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
-  },
-  internal: {
-    showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
   },
 };
 
@@ -103,12 +103,12 @@ export const defaultSettings = {
     autoExitFsOnWarning:  settingsSchema.playback.autoExitFsOnWarning.default,
   },
   list: {
-    realtimeTrackSearch: settingsSchema.list.realtimeTrackSearch.default,
-    trackSearchType:     settingsSchema.list.trackSearchType.default,
-    moveTrackOnPlayNext: settingsSchema.list.moveTrackOnPlayNext.default,
-    showUpNextModal:     settingsSchema.list.showUpNextModal.default,
-    showLoadMoreTracks:  settingsSchema.list.showLoadMoreTracks.default,
-    tracksPerPage:       settingsSchema.list.tracksPerPage.default,
+    realtimeTrackSearch:  settingsSchema.list.realtimeTrackSearch.default,
+    queryAllTrackArtists: settingsSchema.list.queryAllTrackArtists.default,
+    moveTrackOnPlayNext:  settingsSchema.list.moveTrackOnPlayNext.default,
+    showUpNextModal:      settingsSchema.list.showUpNextModal.default,
+    showLoadMoreTracks:   settingsSchema.list.showLoadMoreTracks.default,
+    tracksPerPage:        settingsSchema.list.tracksPerPage.default,
   },
   gallery: {
     layout:                  settingsSchema.gallery.layout.default,
@@ -133,12 +133,12 @@ export const defaultSettings = {
     smoothScrolling:     settingsSchema.site.smoothScrolling.default,
     modalOverlayOpacity: settingsSchema.site.modalOverlayOpacity.default,
   },
+  internal: {
+    showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,
+  },
   experimental: {
   //realtimeTrackSearch:  settingsSchema.experimental.realtimeTrackSearch.default,
   //fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,
-  },
-  internal: {
-    showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,
   },
 };
 

@@ -151,7 +151,6 @@ function head() : void
   if (IS_PROD_BUILD)
   {
     ?>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5MQXWVC0S"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -164,14 +163,7 @@ function head() : void
   else
   {
     ?>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTHTLPRRR7"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-LTHTLPRRR7');
-    </script>
+    <script src="https://beamanalytics.b-cdn.net/beam.min.js" data-token="14f07ad3-faa9-41f0-b3fc-e95c8742a8f4" async></script>
     <?php
   }
 }
@@ -423,9 +415,22 @@ function get_wp_search_hits() : string
   return '';
 }
 
+function get_list_player_prefix(object $params) : string
+{
+  if (is_list_player('channel') || is_list_player('all') || is_list_player('date'))
+    return '<b><a href="/channels/" title="View Channels">' . $params->title_parts['prefix'] . '</a>: </b>';
+  else if (is_list_player('artist'))
+    return'<b><a href="/artists/" title="View Artists">' . $params->title_parts['prefix'] . '</a>: </b>';
+
+  return '<b>' . $params->title_parts['prefix'] . ': </b>';
+}
+
 function get_nav_bar_title() : string
 {
-  $prefix     = is_shuffle(PLAYER_TYPE::GALLERY) ? '<b>Shuffle: </b>' : '<b>Channel: </b>';
+  $prefix = is_shuffle(PLAYER_TYPE::GALLERY)
+    ? '<b>Shuffle: </b>'
+    : '<b><a href="/channels/" title="View Channels">Channel</a>: </b>';
+
   $title      = esc_html(get_title());
   $pagination = esc_html(get_wp_pagination());
   $params     = get_request_params();
@@ -458,7 +463,7 @@ function get_nav_bar_title() : string
   }
   else if (is_list_player())
   {
-    $prefix     = '<b>' . $params->title_parts['prefix'] . ': </b>';
+    $prefix     = get_list_player_prefix($params);
     $title      = is_list_player('search') ? get_search_string() : $title;
     $pagination = esc_html(get_uf_pagination($params));
   }
@@ -476,7 +481,9 @@ function get_nav_bar_title() : string
   }
   else if (is_tax())
   {
-    $prefix = is_tax('uf_channel') ? '<b>Channel: </b>' : '<b>Artist: </b>';
+    $prefix = is_tax('uf_channel')
+      ? '<b><a href="/channels/" title="View Channels">Channel</a>: </b>'
+      : '<b><a href="/artists/" title="View Artists">Artist</a>: </b>';
   }
 
   return '<div class="navbar-title text-nowrap-ellipsis">' . $prefix . $title . $pagination . '</div>';

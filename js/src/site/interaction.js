@@ -165,7 +165,7 @@ function detailsClick(element)
   });
 
   const modalId = showModal(
-    `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? utils.getTimeString(trackDuration) : 'N / A')}</span>`,
+    `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? utils.getTimeString(trackDuration) : 'duration N/A')}</span>`,
     modalEntries,
     'track-details',
     (clickedId) =>
