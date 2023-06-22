@@ -5,7 +5,7 @@
 //
 
 
-import * as debugLogger      from '../../shared/debuglogger.js';
+import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { IS_PROD_BUILD }     from '../../config.js';
 import { autoplay }          from '../footer-toggles.js';
 import { settings }          from '../../shared/session-data.js';
@@ -39,7 +39,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('up-next-modal');
+const debug = newDebugLogger('up-next-modal');
 
 const m = {
   setCurrentTrack: null,

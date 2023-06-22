@@ -5,9 +5,9 @@
 //
 
 
-import * as debugLogger       from '../shared/debuglogger.js';
 import * as termlistRest      from './termlist-rest.js';
 import * as utils             from '../shared/utils.js';
+import { newDebugLogger }     from '../shared/debuglogger.js';
 import { THEME_ENV }          from '../config.js';
 import { ElementClick }       from '../shared/element-click.js';
 import { shareModal }         from './share-modal.js';
@@ -20,7 +20,7 @@ import { response, settings } from '../shared/session-data.js';
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('termlist');
+const debug = newDebugLogger('termlist');
 
 const m = {
   listContainer:       null,

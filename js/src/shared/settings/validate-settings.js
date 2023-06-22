@@ -5,7 +5,7 @@
 //
 
 
-import * as debugLogger from '../debuglogger.js';
+import { newDebugLogger } from '../debuglogger.js';
 
 import {
   TYPE_INTEGER,
@@ -17,7 +17,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('validate-settings');
+const debug = newDebugLogger('validate-settings');
 
 
 // ************************************************************************************************

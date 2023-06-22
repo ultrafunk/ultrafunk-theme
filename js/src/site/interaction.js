@@ -5,8 +5,8 @@
 //
 
 
-import * as debugLogger      from '../shared/debuglogger.js';
 import * as utils            from '../shared/utils.js';
+import { newDebugLogger }    from '../shared/debuglogger.js';
 import { ElementToggle }     from '../shared/element-toggle.js';
 import { ElementClick }      from '../shared/element-click.js';
 import { settings }          from '../shared/session-data.js';
@@ -23,7 +23,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('site-interaction');
+const debug = newDebugLogger('site-interaction');
 const htmlClassList = document.documentElement.classList;
 
 const m = {

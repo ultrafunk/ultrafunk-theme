@@ -5,7 +5,7 @@
 //
 
 
-import { replaceClass } from "../shared/utils.js";
+import { replaceClass } from '../shared/utils.js';
 
 
 /*************************************************************************************************/

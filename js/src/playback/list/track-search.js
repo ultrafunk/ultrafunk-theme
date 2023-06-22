@@ -5,8 +5,7 @@
 //
 
 
-import * as debugLogger           from '../../shared/debuglogger.js';
-import * as utils                 from '../../shared/utils.js';
+import { newDebugLogger, logCss } from '../../shared/debuglogger.js';
 import { THEME_ENV }              from '../../config.js';
 import { settings }               from '../../shared/session-data.js';
 import { navSearch }              from '../../site/nav-search.js';
@@ -17,11 +16,21 @@ import { showSnackbar }           from '../../shared/snackbar.js';
 import { getTrackEntryHtml }      from './list-track-templates.js';
 import { getCurrentTrackElement } from './list-controls.js';
 
+import {
+  HTTP_RESPONSE,
+  fetchRest,
+} from '../../shared/fetch-rest.js';
+
+import {
+  isControlKey,
+  escHtml,
+} from '../../shared/utils.js';
+
 
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('track-search');
+const debug = newDebugLogger('track-search');
 
 const m = {
   setCurrentTrack:    null,
@@ -172,7 +181,7 @@ function debounceKeyup(callback, delayMilliseconds)
   {
     clearTimeout(delayTimer);
 
-    if (utils.isControlKey(event.key))
+    if (isControlKey(event.key))
       return;
 
     if ((searchString.length >= minSearchStringLength) && (m.resultsCache.get(searchString) === undefined))
@@ -221,7 +230,7 @@ async function showSearchResults(searchString)
       m.searchField.autocomplete = 'off';
       m.prevSearchString = searchString;
 
-      if ((cachedResult.status.code === utils.HTTP_RESPONSE.OK) && (cachedResult.data.length !== 0))
+      if ((cachedResult.status.code === HTTP_RESPONSE.OK) && (cachedResult.data.length !== 0))
         setResultsHtml(cachedResult);
       else
         showResultsMessage(getNoMatchesMessage(searchString));
@@ -245,7 +254,7 @@ async function showSearchResults(searchString)
   if ((searchStop - searchStart) > 50)
   {
     const searchType = settings.list.queryAllTrackArtists ? 'Artist - Title + Artists' : 'Artist - Title';
-    console.log(`%cSearch ${searchType}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${THEME_ENV.siteUrl}`, debugLogger.logCss);
+    console.log(`%cSearch ${searchType}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${THEME_ENV.siteUrl}`, logCss);
   }
 }
 
@@ -255,14 +264,14 @@ async function showRestResults(searchString)
   const searchParams = `search=${encodeURIComponent(searchString)}&orderby=relevance&wpessid=${searchTypeId}&`;
   const fetchStart   = performance.now();
 
-  const restResponse = await utils.fetchRest({
+  const restResponse = await fetchRest({
     endpoint: 'tracks',
     query:    `${searchParams}_fields=id,link,artists,channels,meta`,
   });
 
   const fetchStop = performance.now();
 
-  if ((restResponse.status.code === utils.HTTP_RESPONSE.OK) && (restResponse.data.length >= 1))
+  if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length >= 1))
   {
     m.resultsCache.set(searchString, restResponse);
     setResultsHtml(restResponse);
@@ -271,11 +280,11 @@ async function showRestResults(searchString)
   }
   else
   {
-    if (restResponse.status.code !== utils.HTTP_RESPONSE.OK)
+    if (restResponse.status.code !== HTTP_RESPONSE.OK)
     {
       showResultsMessage('Failed to fetch search results!');
     }
-    else if ((restResponse.status.code === utils.HTTP_RESPONSE.OK) && (restResponse.data.length === 0))
+    else if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length === 0))
     {
       m.resultsCache.set(searchString, restResponse);
       showResultsMessage(getNoMatchesMessage(searchString));
@@ -300,13 +309,13 @@ function setResultsHtml(restResponse)
 
 async function setTrackLinks(element)
 {
-  const restResponse = await utils.fetchRest({
+  const restResponse = await fetchRest({
     endpoint: 'tracks',
     id:       element.getAttribute('data-track-id').slice(6),
     query:    'links_path=list&_fields=artists_links,channels_links',
   });
 
-  if (restResponse.status.code === utils.HTTP_RESPONSE.OK)
+  if (restResponse.status.code === HTTP_RESPONSE.OK)
   {
     element.querySelector('div.track-artists-links').innerHTML  = restResponse.data.artists_links;
     element.querySelector('div.track-channels-links').innerHTML = restResponse.data.channels_links;
@@ -316,7 +325,7 @@ async function setTrackLinks(element)
 function getNoMatchesMessage(searchString)
 {
   const separator = '&nbsp;&nbsp;&nbsp;&#10095;&#10095;&nbsp;&nbsp;&nbsp;';
-  return `0 tracks match <b>${utils.escHtml(searchString)}</b>${separator}<a href="/?s=${encodeURIComponent(searchString)}">Search Site</a>`;
+  return `0 tracks match <b>${escHtml(searchString)}</b>${separator}<a href="/?s=${encodeURIComponent(searchString)}">Search Site</a>`;
 }
 
 function showResultsMessage(message)

@@ -5,14 +5,14 @@
 //
 
 
-import * as debugLogger          from '../shared/debuglogger.js';
+import { newDebugLogger }        from '../shared/debuglogger.js';
 import { updateProgressPercent } from './playback-controls.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('playback-events');
+const debug = newDebugLogger('playback-events');
 export let hasPlaybackStarted = false;
 
 export const EVENT = {

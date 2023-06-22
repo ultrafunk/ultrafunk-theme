@@ -33,6 +33,10 @@ body.list-player {
   --tracklist-page-separator-color: #202020;
 }
 
+body.list-player .site-branding {
+  min-width: 340px;
+}
+
 .player-container {
   display: flex;
   align-items: center;
@@ -586,6 +590,10 @@ body.list-player .site-footer-container {
     max-width: var(--site-max-width);
   }
 
+  body.list-player .site-branding {
+    min-width: 300px;
+  }
+
   body.list-player nav.navigation {
     padding-left: unset;
     padding-right: unset;
@@ -611,6 +619,19 @@ body.list-player .site-footer-container {
     margin-top: var(--site-content-margin-top);
     overflow-x: unset;
     overflow-y: unset;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 1100px
+***************************************************************************************************/
+
+@media screen and (max-width: 1100px) {
+
+  body.list-player .site-branding {
+    min-width: unset;
   }
 
 }

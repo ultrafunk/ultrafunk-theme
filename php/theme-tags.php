@@ -289,26 +289,30 @@ function header_playback_controls() : void
 
   ?>
   <div id="playback-controls">
-    <div class="playback-details-control text-nowrap-ellipsis state-disabled" title="<?php echo $player_details_title; ?>">
-      <span class="playback-details-artist"></span><br><span class="playback-details-title"></span>
+    <div class="details-container">
+      <div class="playback-thumbnail-control state-disabled" title="<?php echo (is_list_player() ? 'Show player' : 'Double click / tap: Toggle Fullscreen (f)'); ?>">
+        <div class="thumbnail-overlay"><div class="spinner"></div></div>
+        <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/playback_thumbnail_placeholder.png" alt="">
+      </div>
+      <div class="playback-details-control text-nowrap-ellipsis state-disabled" title="<?php echo $player_details_title; ?>">
+        <span class="playback-details-artist"></span><br><span class="playback-details-title"></span>
+      </div>
+      <div class="playback-timer-control state-disabled" title="Toggle Autoplay (shift + a)">
+        <span class="playback-timer-position"></span><br><span class="playback-timer-duration"></span>
+      </div>
     </div>
-    <div class="playback-thumbnail-control state-disabled" title="<?php echo (is_list_player() ? 'Show player' : 'Double click / tap: Toggle Fullscreen (f)'); ?>">
-      <div class="thumbnail-overlay"><div class="spinner"></div></div>
-      <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/playback_thumbnail_placeholder.png" alt="">
+    <div class="buttons-container">
+      <div class="playback-shuffle-control state-disabled" title="<?php echo esc_attr(get_shuffle_title()); ?>"><span class="material-icons">shuffle</span></div>
+      <div class="playback-prev-control state-disabled" title="Previous track / seek (arrow left)"><span class="material-icons">skip_previous</span></div>
+      <div class="playback-play-pause-control state-disabled" title="Play / Pause (space)"><span class="material-icons">play_circle_filled</span></div>
+      <div class="playback-next-control state-disabled" title="Next track (arrow right)"><span class="material-icons">skip_next</span></div>
+      <div class="playback-repeat-control state-disabled" title="Repeat off (r)" data-repeat-mode="0"><span class="material-icons">repeat</span></div>
+      <div class="playback-player-type-control state-disabled <?php echo (is_list_player() ? 'list-player' : 'gallery-player'); ?>" title="<?php echo $player_type_title; ?>">
+        <span class="material-icons-sharp"><?php echo (is_list_player() ? 'vertical_split' : 'grid_view'); ?></span>
+      </div>
+      <div class="playback-mute-control state-disabled" title="Mute / Unmute (m)"><span class="material-icons">volume_up</span></div>
+      <div class="playback-volume-control state-disabled" title="Volume (+ = Up, - = Down)">00</div>
     </div>
-    <div class="playback-timer-control state-disabled" title="Toggle Autoplay (shift + a)">
-      <span class="playback-timer-position"></span><br><span class="playback-timer-duration"></span>
-    </div>
-    <div class="playback-player-type-control state-disabled <?php echo (is_list_player() ? 'list-player' : 'gallery-player'); ?>" title="<?php echo $player_type_title; ?>">
-      <span class="material-icons-sharp"><?php echo (is_list_player() ? 'vertical_split' : 'grid_view'); ?></span>
-    </div>
-    <div class="playback-prev-control state-disabled" title="Previous track / seek (arrow left)"><span class="material-icons">skip_previous</span></div>
-    <div class="playback-play-pause-control state-disabled" title="Play / Pause (space)"><span class="material-icons">play_circle_filled</span></div>
-    <div class="playback-next-control state-disabled" title="Next track (arrow right)"><span class="material-icons">skip_next</span></div>
-    <div class="playback-repeat-control state-disabled" title="Repeat off (r)" data-repeat-mode="0"><span class="material-icons">repeat</span></div>
-    <div class="playback-shuffle-control state-disabled" title="<?php echo esc_attr(get_shuffle_title()); ?>"><span class="material-icons">shuffle</span></div>
-    <div class="playback-mute-control state-disabled" title="Mute / Unmute (m)"><span class="material-icons">volume_up</span></div>
-    <div class="playback-volume-control state-disabled" title="Volume (+ = Up, - = Down)">00</div>
   </div>
   <?php
 }

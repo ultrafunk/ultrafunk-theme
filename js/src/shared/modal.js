@@ -5,8 +5,8 @@
 //
 
 
-import * as debugLogger from './debuglogger.js';
-import { settings }     from './session-data.js';
+import { newDebugLogger } from './debuglogger.js';
+import { settings }       from './session-data.js';
 
 import {
   config,
@@ -18,7 +18,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('modal');
+const debug = newDebugLogger('modal');
 
 const m = {
   onEntryClicked:   null,

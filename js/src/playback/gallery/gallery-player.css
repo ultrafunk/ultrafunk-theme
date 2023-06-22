@@ -24,8 +24,14 @@
   clear: both;
 }
 
-.gallery-1-col gallery-track:first-child {
-  margin-top: 0;
+body.gallery-player .site-branding {
+  min-width: 340px;
+}
+
+body.search .site-branding,
+body.channel-soundcloud .site-branding,
+body.single.track .site-branding {
+  min-width: 300px;
 }
 
 .gallery-2-col .site-header-container,
@@ -59,6 +65,7 @@
   grid-column-gap: 60px;
 }
 
+.gallery-1-col gallery-track:first-child,
 .gallery-2-col gallery-track,
 .gallery-3-col gallery-track {
   margin-top: 0;
@@ -281,6 +288,26 @@
   .gallery-1-col #site-content {
     max-width: 100%;
   }
+
+  body.gallery-player .site-branding {
+    min-width: 300px;
+  }
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 1100px
+***************************************************************************************************/
+
+@media screen and (max-width: 1100px) {
+
+  body.gallery-player .site-branding,
+  body.search .site-branding,
+  body.channel-soundcloud .site-branding,
+  body.single.track .site-branding {
+    min-width: unset;
+  }
+
 }
 
 

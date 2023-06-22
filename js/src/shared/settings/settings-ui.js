@@ -5,10 +5,10 @@
 //
 
 
-import * as debugLogger from '../debuglogger.js';
-import { showSnackbar } from '../snackbar.js';
-import { showModal }    from '../modal.js';
-import { addListener }  from '../utils.js';
+import { newDebugLogger } from '../debuglogger.js';
+import { showSnackbar }   from '../snackbar.js';
+import { showModal }      from '../modal.js';
+import { addListener }    from '../utils.js';
 
 import {
   settings as storedSettings
@@ -36,7 +36,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('settings-ui');
+const debug = newDebugLogger('settings-ui');
 
 const m = {
   settings:  null,

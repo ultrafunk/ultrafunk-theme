@@ -5,7 +5,7 @@
 //
 
 
-import { getCssPropString } from "./utils.js";
+import { getCssPropString } from './utils.js';
 
 
 /*************************************************************************************************/

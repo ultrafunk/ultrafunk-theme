@@ -5,15 +5,15 @@
 //
 
 
-import * as debugLogger from '../shared/debuglogger.js';
-import { showModal }    from '../shared/modal.js';
-import { showSnackbar } from '../shared/snackbar.js';
+import { newDebugLogger } from '../shared/debuglogger.js';
+import { showModal }      from '../shared/modal.js';
+import { showSnackbar }   from '../shared/snackbar.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('share-modal');
+const debug = newDebugLogger('share-modal');
 
 
 // ************************************************************************************************

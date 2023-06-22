@@ -5,7 +5,6 @@
 //
 
 
-import * as debugLogger       from '../shared/debuglogger.js';
 import * as eventLogger       from './eventlogger.js';
 import * as galleryPlayback   from './gallery/gallery-playback.js';
 import * as listPlayback      from './list/list-playback.js';
@@ -17,6 +16,11 @@ import { ElementClick }       from '../shared/element-click.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { initScreenWakeLock } from './screen-wakelock.js';
 import { TRACK_TYPE }         from './mediaplayers.js';
+
+import {
+  newDebugLogger,
+  measureStartupExecutionTime,
+} from '../shared/debuglogger.js';
 
 import {
   SINGLE_TRACK_PLAY,
@@ -40,7 +44,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug    = debugLogger.newInstance('playback-interaction');
+const debug    = newDebugLogger('playback-interaction');
 const eventLog = new eventLogger.Interaction(10);
 
 const m = {
@@ -58,7 +62,7 @@ const m = {
 
 document.addEventListener('DOMContentLoaded', () =>
 {
-  debugLogger.measureStartupExecutionTime();
+  measureStartupExecutionTime();
 
   debug.log('DOMContentLoaded');
 

@@ -5,7 +5,7 @@
 //
 
 
-import * as debugLogger       from '../../shared/debuglogger.js';
+import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { KEY }                from '../../shared/storage.js';
 import { TRACK_TYPE }         from '../mediaplayers.js';
 import { replaceClass }       from '../../shared/utils.js';
@@ -32,7 +32,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('gallery-events');
+const debug = newDebugLogger('gallery-events');
 
 const m = {
   snackbarId:      0,

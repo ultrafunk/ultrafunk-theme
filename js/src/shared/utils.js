@@ -5,10 +5,10 @@
 //
 
 
-import * as debugLogger from './debuglogger.js';
-import { settings }     from './session-data.js';
-import { PREF_PLAYER }  from './settings/settings.js';
-import { showSnackbar } from './snackbar.js';
+import { newDebugLogger } from './debuglogger.js';
+import { settings }       from './session-data.js';
+import { PREF_PLAYER }    from './settings/settings.js';
+import { showSnackbar }   from './snackbar.js';
 
 import {
   IS_PROD_BUILD,
@@ -24,7 +24,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('utils');
+const debug = newDebugLogger('utils');
 
 const SITE_URL_LIST = `${THEME_ENV.siteUrl}/list`;
 
@@ -46,7 +46,7 @@ const siteMaxWidthMobile = window.matchMedia(`(max-width: ${getCssPropString('--
 
 
 // ************************************************************************************************
-// Misc. shared utility functions
+// Misc. shared DOM utility functions
 // ************************************************************************************************
 
 export function addListener(selectors, type, listener)
@@ -110,22 +110,6 @@ export function replaceClass(element, removeClass, addClass)
 {
   element.classList.remove(removeClass);
   element.classList.add(addClass);
-}
-
-export function getTimeString(seconds, includeHours = false)
-{
-  if (Number.isInteger(seconds))
-  {
-    const timeString = new Date(seconds * 1000).toISOString();
-
-    return ((seconds > 3600) || includeHours)
-      ? timeString.slice(11, 19)
-      : timeString.slice(14, 19);
-  }
-  else
-  {
-    return includeHours ? '00:00:00' : '00:00';
-  }
 }
 
 
@@ -233,80 +217,28 @@ export function getPrefPlayerUrl(destUrl)
   return destUrl;
 }
 
+export function getTimeString(seconds, includeHours = false)
+{
+  if (Number.isInteger(seconds))
+  {
+    const timeString = new Date(seconds * 1000).toISOString();
+
+    return ((seconds > 3600) || includeHours)
+      ? timeString.slice(11, 19)
+      : timeString.slice(14, 19);
+  }
+  else
+  {
+    return includeHours ? '00:00:00' : '00:00';
+  }
+}
+
 export function getThumbnailData(metaData)
 {
   if (metaData.track_source_type === TRACK_TYPE.YOUTUBE)
     return getYouTubeImgUrl(metaData.track_source_data);
 
   return { src: THEME_ENV.defaultSCThumbnail, class: 'type-soundcloud', uid: '' };
-}
-
-
-// ************************************************************************************************
-// JavaScript async fetch() wrapper with timeout and better result data + details
-// ************************************************************************************************
-
-export const HTTP_RESPONSE = {
-  OK: 200,
-};
-
-export const FETCH_ERROR = {
-  UNKNOWN: 0,
-  NETWORK: 1,
-  TIMEOUT: 2,
-};
-
-export async function fetchRest({
-  path     = '/wp-json/wp/v2/',
-  endpoint = null,
-  id       = null,
-  query    = null,
-  timeoutSeconds = 10,
-} = {}
-)
-{
-  let restRequest = path;
-
-  if ((endpoint !== null) && (id !== null))
-    restRequest += `${endpoint}/${parseInt(id)}`;
-  else if (endpoint !== null)
-    restRequest += endpoint;
-
-  if (query !== null)
-    restRequest += `?${query}`;
-
-  debug.log(`fetchRest(): "${restRequest}" - timeoutSeconds: ${timeoutSeconds}`);
-
-  const controller = new AbortController();
-  setTimeout(() => controller.abort(), (timeoutSeconds * 1000));
-
-  return fetch(restRequest, { signal: controller.signal })
-  .then(async (response) =>
-  {
-    if (!response.ok)
-    {
-      debug.warn(response);
-      return { status: { code: response.status, details: await response.json() }};
-    }
-
-    return { status: { code: response.status }, data: await response.json() };
-  })
-  .catch(exception =>
-  {
-    debug.error(exception);
-    return { status: { code: 0, errorType: getFetchErrorType(exception), errorMessage: exception.message }};
-  });
-}
-
-function getFetchErrorType(error)
-{
-  if (error instanceof TypeError)
-    return FETCH_ERROR.NETWORK;
-
-  if (error instanceof DOMException)
-    return FETCH_ERROR.TIMEOUT;
-
-  return FETCH_ERROR.UNKNOWN;
 }
 
 

@@ -5,13 +5,13 @@
 //
 
 
-import * as debugLogger from '../shared/debuglogger.js';
+import { newDebugLogger } from '../shared/debuglogger.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('eventlogger');
+const debug = newDebugLogger('eventlogger');
 
 export const SOURCE = {
 // Default source
@@ -128,12 +128,31 @@ class EventLog
     if (this.#matchCount === matchCount)
     {
       debug.log(`MATCH for: ${event}`);
-      debug.logEventLog(this.#log, SOURCE, EVENT);
+      this.logEventMatch();
 
       return true;
     }
 
     return false;
+  }
+
+  logEventMatch()
+  {
+    const entries = [];
+
+    for (let i = 0; i < this.#log.length; i++)
+    {
+      const data = {
+        eventSource: debug.getKeyForValue(SOURCE, this.#log[i].eventSource),
+        eventType:   debug.getKeyForValue(EVENT,  this.#log[i].eventType),
+        uId:         this.#log[i].uId,
+        timeStamp:   this.#log[i].timeStamp,
+      };
+
+      entries.push(data);
+    }
+
+    debug.log(entries);
   }
 }
 

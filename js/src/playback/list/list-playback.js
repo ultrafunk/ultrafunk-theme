@@ -5,13 +5,13 @@
 //
 
 
-import * as debugLogger       from '../../shared/debuglogger.js';
 import * as eventLogger       from '../eventlogger.js';
 import * as playbackControls  from '../playback-controls.js';
 import * as listControls      from './list-controls.js';
 import * as mediaPlayers      from '../mediaplayers.js';
 import * as playbackEvents    from '../playback-events.js';
 import * as utils             from '../../shared/utils.js';
+import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { KEY }                from '../../shared/storage.js';
 import { STATE }              from '../element-wrappers.js';
 import { showModal }          from '../../shared/modal.js';
@@ -33,7 +33,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug    = debugLogger.newInstance('list-playback');
+const debug    = newDebugLogger('list-playback');
 const eventLog = new eventLogger.Playback(10);
 
 const m = {

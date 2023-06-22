@@ -5,14 +5,14 @@
 //
 
 
-import * as debugLogger from '../../shared/debuglogger.js';
-import { settings }     from '../../shared/session-data.js';
+import { newDebugLogger } from '../../shared/debuglogger.js';
+import { settings }       from '../../shared/session-data.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('crossfade');
+const debug = newDebugLogger('crossfade');
 
 export const VOLUME = {
   MIN:   0,

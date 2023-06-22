@@ -5,15 +5,15 @@
 //
 
 
-import * as debugLogger from '../shared/debuglogger.js';
-import { VOLUME }       from './gallery/crossfade.js';
-import { THEME_ENV }    from '../config.js';
+import { newDebugLogger } from '../shared/debuglogger.js';
+import { VOLUME }         from './gallery/crossfade.js';
+import { THEME_ENV }      from '../config.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('mediaplayers');
+const debug = newDebugLogger('mediaplayers');
 
 export const TRACK_TYPE = {
   NONE:       0,

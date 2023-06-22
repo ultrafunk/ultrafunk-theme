@@ -5,15 +5,15 @@
 //
 
 
-import * as debugLogger from '../shared/debuglogger.js';
-import { showSnackbar } from '../shared/snackbar.js';
-import { settings }     from '../shared/session-data.js';
+import { newDebugLogger } from '../shared/debuglogger.js';
+import { showSnackbar }   from '../shared/snackbar.js';
+import { settings }       from '../shared/session-data.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('screen-wakelock');
+const debug = newDebugLogger('screen-wakelock');
 const m     = { wakeLock: null };
 
 

@@ -5,13 +5,13 @@
 //
 
 
-import * as debugLogger          from '../../shared/debuglogger.js';
 import * as eventLogger          from '../eventlogger.js';
 import * as embeddedPlayers      from './embedded-players.js';
 import * as playbackEvents       from '../playback-events.js';
 import * as galleryEvents        from './gallery-events.js';
 import * as playbackControls     from '../playback-controls.js';
 import * as crossfadeControls    from './crossfade-controls.js';
+import { newDebugLogger }        from '../../shared/debuglogger.js';
 import { playbackTimer }         from './gallery-playback-timer.js';
 import { galleryPlayers }        from './gallery-players.js';
 import { CROSSFADE_TYPE }        from './crossfade.js';
@@ -22,7 +22,7 @@ import { singleTrackFetchReady } from './single-track-fetch.js';
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('gallery-playback');
+const debug = newDebugLogger('gallery-playback');
 
 const m = {
   eventLog: null,

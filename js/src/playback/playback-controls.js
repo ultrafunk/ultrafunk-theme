@@ -5,7 +5,7 @@
 //
 
 
-import * as debugLogger        from '../shared/debuglogger.js';
+import { newDebugLogger }      from '../shared/debuglogger.js';
 import { settings }            from '../shared/session-data.js';
 import { EVENT, addListener }  from './playback-events.js';
 import { addSettingsObserver } from '../shared/storage.js';
@@ -29,7 +29,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('playback-controls');
+const debug = newDebugLogger('playback-controls');
 const m     = { players: {} };
 const ctrl  = {};
 

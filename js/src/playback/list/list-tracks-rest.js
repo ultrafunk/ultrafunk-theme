@@ -5,12 +5,12 @@
 //
 
 
-import * as debugLogger from '../../shared/debuglogger.js';
+import { newDebugLogger } from '../../shared/debuglogger.js';
 
 import {
   HTTP_RESPONSE,
   fetchRest,
-} from '../../shared/utils.js';
+} from '../../shared/fetch-rest.js';
 
 import {
   response as responseData
@@ -26,7 +26,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('list-tracks-rest');
+const debug = newDebugLogger('list-tracks-rest');
 
 const m = {
   artistsCache:  new Map(),
@@ -60,7 +60,7 @@ export async function loadTracks(termType, termId)
 
     document.getElementById('tracklist-load-more').insertAdjacentHTML('beforebegin', tracksHtml);
 
-    debug.log(`Fetching: ${artistIds.size} artists (cached: ${m.artistsCache.size}) - Fetching: ${channelIds.size} channels (cached: ${m.channelsCache.size})`);
+    debug.log(`Fetching: ${artistIds.size} artists (${m.artistsCache.size} cached) - Fetching: ${channelIds.size} channels (${m.channelsCache.size} cached)`);
 
     let artistsPromise  = null;
     let channelsPromise = null;

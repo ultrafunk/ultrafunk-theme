@@ -5,7 +5,7 @@
 //
 
 
-import * as debugLogger       from '../shared/debuglogger.js';
+import { newDebugLogger }     from '../shared/debuglogger.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { KEY, setCookie }     from '../shared/storage.js';
 import { showUpNextModal }    from './list/up-next-modal.js';
@@ -21,7 +21,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('shared-gallery-list');
+const debug = newDebugLogger('shared-gallery-list');
 
 export const PLAYER_TYPE = {
   NONE:    0,

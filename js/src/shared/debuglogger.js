@@ -1,5 +1,5 @@
 //
-// Debug logging helper classes
+// Debug logging helper classes & functions
 //
 // https://ultrafunk.com
 //
@@ -15,7 +15,7 @@ import {
 // DebugLog parent and child classes
 // ************************************************************************************************
 
-export function newInstance(moduleName)
+export function newDebugLogger(moduleName)
 {
   return (IS_DEBUG ? new DevBuild(moduleName) : new ProdBuild(moduleName));
 }
@@ -40,25 +40,6 @@ class DevBuild extends DebugLog
     console.log(`${this.moduleName}:`, data);
   }
 
-  logEventLog(eventLog, eventSource, eventType)
-  {
-    const entries = [];
-
-    for (let i = 0; i < eventLog.length; i++)
-    {
-      const data = {
-        eventSource: this.getKeyForValue(eventSource, eventLog[i].eventSource),
-        eventType:   this.getKeyForValue(eventType, eventLog[i].eventType),
-        uId:         eventLog[i].uId,
-        timeStamp:   eventLog[i].timeStamp,
-      };
-
-      entries.push(data);
-    }
-
-    this.log(entries);
-  }
-
   getKeyForValue(object, value)
   {
     return Object.keys(object).find(key => (object[key] === value));
@@ -67,8 +48,7 @@ class DevBuild extends DebugLog
 
 class ProdBuild extends DebugLog
 {
-  log()            {}
-  logEventLog()    {}
+  log() {}
   getKeyForValue() {}
 }
 

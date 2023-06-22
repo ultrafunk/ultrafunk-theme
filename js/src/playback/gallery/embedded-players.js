@@ -5,10 +5,10 @@
 //
 
 
-import * as debugLogger    from '../../shared/debuglogger.js';
 import * as eventLogger    from '../eventlogger.js';
 import * as mediaPlayers   from '../mediaplayers.js';
 import * as playbackEvents from '../playback-events.js';
+import { newDebugLogger }  from '../../shared/debuglogger.js';
 import { settings }        from '../../shared/session-data.js';
 import { playbackTimer }   from './gallery-playback-timer.js';
 
@@ -16,7 +16,7 @@ import { playbackTimer }   from './gallery-playback-timer.js';
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('embedded-players');
+const debug = newDebugLogger('embedded-players');
 export const eventLog = new eventLogger.Playback(10);
 
 const m = {

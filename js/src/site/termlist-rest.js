@@ -5,14 +5,14 @@
 //
 
 
-import { KEY }          from '../shared/storage.js';
-import { showSnackbar } from '../shared/snackbar.js';
+import { KEY }            from '../shared/storage.js';
+import { showSnackbar }   from '../shared/snackbar.js';
+import { stripAttribute } from '../shared/utils.js';
 
 import {
   HTTP_RESPONSE,
   fetchRest,
-  stripAttribute,
-} from '../shared/utils.js';
+} from '../shared/fetch-rest.js';
 
 import {
   getTermlistHtml,

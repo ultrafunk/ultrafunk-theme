@@ -5,12 +5,12 @@
 //
 
 
-import { THEME_ENV } from "../config.js";
+import { THEME_ENV } from '../config.js';
 
 import {
   getPrefPlayerUrl,
   getThumbnailData,
-} from "../shared/utils.js";
+} from '../shared/utils.js';
 
 
 // ************************************************************************************************

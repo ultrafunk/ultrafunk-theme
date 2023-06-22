@@ -5,11 +5,12 @@
 //
 
 
-import * as debugLogger      from '../../shared/debuglogger.js';
+import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { KEY }               from '../../shared/storage.js';
 import { TRACK_TYPE }        from '../mediaplayers.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../shared-gallery-list.js';
+import { getThumbnailData }  from '../../shared/utils.js';
 
 import {
   response,
@@ -19,14 +20,13 @@ import {
 import {
   HTTP_RESPONSE,
   fetchRest,
-  getThumbnailData,
-} from '../../shared/utils.js';
+} from '../../shared/fetch-rest.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('single-track-fetch');
+const debug = newDebugLogger('single-track-fetch');
 
 const m = {
   cueOrPlayTrackById: null,

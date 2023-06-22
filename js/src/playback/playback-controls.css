@@ -58,57 +58,46 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
 
 /**************************************************************************************************
 * Playback controls
-* - Details:      Artist + Title
 * - Thumbnail:    Track image
+* - Details:      Artist + Title
 * - Timer:        Track position and duration
+* - Shuffle:      Shuffle All, Artist or Channel
 * - Previous:     Prev track + seek to start
 * - Play / Pause: Playback state toggle (autoplay and DJ-mode)
 * - Next:         Next track
 * - Repeat:       Repeat Off, All or One
-* - Shuffle:      Shuffle All, Artist or Channel
+* - Player Type:  Gallery or List toggle
 * - Mute:         Master mute
 * - Volume:       Master volume level
-* - Player:       Gallery or List toggle
 ***************************************************************************************************/
 
 #playback-controls {
   line-height: 0;
-  float: right;
   display: flex;
-  align-items: center;
   height: 54px;
   margin-right: 2px;
   min-width: 0;
+  width: 100%;
 }
 
-.playback-details-control {
-  display: inline-block;
-  font-size: 15px;
-  line-height: 18px;
-  font-weight: 400;
-  text-align: right;
-  margin-right: 10px;
-  padding: 5px 10px;
-  color: var(--primary-icon-color);
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  cursor: pointer;
+#playback-controls .details-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  margin: 0 15px;
 }
 
-.playback-details-control .playback-details-artist {
-  font-weight: 700;
-}
-
-.playback-details-control:hover {
-  opacity: var(--control-hover-opacity);
+#playback-controls .buttons-container {
+  display: flex;
+  align-items: center;
 }
 
 .playback-thumbnail-control {
-  width: 46px;
-  min-width: 46px;
-  height: 46px;
-  margin-right: 18px;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
   display: inline-block;
   cursor: pointer;
   overflow: hidden;
@@ -125,15 +114,15 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
 }
 
 .playback-thumbnail-control img {
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   object-fit: cover;
   image-rendering: -webkit-optimize-contrast;
 }
 
 .playback-thumbnail-control.type-youtube img {
-  height: 62px;
-  margin-top: -8px;
+  height: 54px;
+  margin-top: -7px;
 }
 
 .playback-thumbnail-control .thumbnail-overlay,
@@ -144,8 +133,8 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
 .playback-thumbnail-control.state-loading .thumbnail-overlay {
   display: block;
   position: absolute;
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   background: rgba(0, 0, 0, 0.6);
   border-radius: var(--button-border-radius);
 }
@@ -155,11 +144,11 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   border: 4px solid rgba(128, 128, 128, 0.5);
   border-top: 4px solid #fff;
   border-radius: 50%;
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   animation: rotate-spinner 1.25s linear infinite;
-  margin-left: 6px;
-  margin-top: 6px;
+  margin-left: 5px;
+  margin-top: 5px;
 }
 
 @keyframes rotate-spinner {
@@ -168,13 +157,34 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   100% { transform: rotate(360deg); }
 }
 
+.playback-details-control {
+  display: inline-block;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 400;
+  padding: 5px 12px 5px 16px;
+  color: var(--primary-icon-color);
+  max-width: 500px;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.playback-details-control .playback-details-artist {
+  font-weight: 700;
+}
+
+.playback-details-control:hover {
+  opacity: var(--control-hover-opacity);
+}
+
 .playback-timer-control {
   display: inline-block;
   font-size: 15px;
-  line-height: 18px;
+  line-height: 20px;
   font-weight: 400;
   text-align: right;
-  margin-right: 10px;
   color: var(--primary-icon-color);
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -197,19 +207,17 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
 }
 
 .playback-player-type-control.gallery-player .material-icons-sharp {
-  font-size: 34px;
-  width: 34px;
-  height: 34px;
-  padding: 3px;
-  margin: 0 6px;
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
 }
 
 .playback-player-type-control.list-player .material-icons-sharp {
-  font-size: 42px;
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  margin: 0 5px;
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+  padding: 2px;
   transform: scaleX(-1);
 }
 
@@ -403,6 +411,19 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
 
 
 /**************************************************************************************************
+* Responsive: max-width: 1500px
+***************************************************************************************************/
+
+@media screen and (max-width: 1500px) {
+
+  .playback-details-control {
+    max-width: 300px;
+  }
+
+}
+
+
+/**************************************************************************************************
 * Responsive: max-width: 1350px
 ***************************************************************************************************/
 
@@ -425,8 +446,17 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     margin-right: -12px;
   }
 
+  #playback-controls .details-container {
+    justify-content: right;
+    margin: 0;
+  }
+
   .playback-details-control {
-    margin-right: 0px;
+    text-align: left;
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 10px;
+    line-height: 18px;
   }
 
   .playback-thumbnail-control,
@@ -449,6 +479,7 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
 
   #playback-controls {
     min-width: auto;
+    width: unset;
   }
 
   .playback-details-control {
@@ -481,46 +512,19 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     height: 40px;
   }
 
+  .playback-thumbnail-control.show-on-mobile {
+    display: inline-block;
+    margin-right: 15px;
+  }
+
   .playback-details-control {
     font-size: 13px;
-    line-height: 18px;
     display: inline-block;
     padding-right: 0;
     padding-left: 0;
     margin-right: 0;
     text-align: left;
     width: 100%;
-  }
-
-  .playback-thumbnail-control.show-on-mobile {
-    width: 40px;
-    min-width: 40px;
-    height: 40px;
-    margin-right: 15px;
-    display: inline-block;
-    order: -1;
-  }
-
-  .playback-thumbnail-control img {
-    width: 40px;
-    height: 40px;
-  }
-
-  .playback-thumbnail-control.type-youtube img {
-    height: 54px;
-    margin-top: -7px;
-  }
-
-  .playback-thumbnail-control.state-loading .thumbnail-overlay {
-    width: 40px;
-    height: 40px;
-  }
-
-  .playback-thumbnail-control.state-loading .spinner {
-    width: 22px;
-    height: 22px;
-    margin-left: 5px;
-    margin-top: 5px;
   }
 
   .playback-timer-control {

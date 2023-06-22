@@ -5,7 +5,7 @@
 //
 
 
-import * as debugLogger    from './debuglogger.js';
+import { newDebugLogger }  from './debuglogger.js';
 import { defaultSettings } from './settings/settings.js';
 
 import {
@@ -17,7 +17,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('session-data');
+const debug = newDebugLogger('session-data');
 
 export let response = {};
 export let settings = {};

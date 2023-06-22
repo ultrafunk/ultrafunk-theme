@@ -5,7 +5,7 @@
 //
 
 
-import * as debugLogger       from '../../shared/debuglogger.js';
+import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { crossfadeClosure }   from './crossfade.js';
 import { settings }           from '../../shared/session-data.js';
 import { EVENT, addListener } from '../playback-events.js';
@@ -14,7 +14,7 @@ import { EVENT, addListener } from '../playback-events.js';
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('gallery-players');
+const debug = newDebugLogger('gallery-players');
 
 
 // ************************************************************************************************

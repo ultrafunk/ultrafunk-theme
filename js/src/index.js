@@ -5,13 +5,17 @@
 //
 
 
-import * as debugLogger   from './shared/debuglogger.js';
 import * as utils         from './shared/utils.js';
 import * as interaction   from './site/interaction.js';
 import { initTermlist }   from './site/termlist.js';
 import { initSettingsUi } from './shared/settings/settings-ui.js';
 import { navMenu }        from './site/nav-menu.js';
 import { navSearch }      from './site/nav-search.js';
+
+import {
+  newDebugLogger,
+  logStartupExecutionTime,
+} from './shared/debuglogger.js';
 
 import {
   showSnackbar,
@@ -34,7 +38,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('index');
+const debug = newDebugLogger('index');
 const m     = { keyboardShortcuts: null };
 
 const elements = {
@@ -58,8 +62,7 @@ document.addEventListener('DOMContentLoaded', () =>
   initSettingsUi();
   setSiteContentSearchFocus();
   setPreviousPageTitle();
-
-  debugLogger.logStartupExecutionTime();
+  logStartupExecutionTime();
 });
 
 function initIndex()

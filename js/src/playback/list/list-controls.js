@@ -5,9 +5,9 @@
 //
 
 
-import * as debugLogger       from '../../shared/debuglogger.js';
 import * as upNextModal       from './up-next-modal.js';
 import * as playbackEvents    from '../playback-events.js';
+import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { ElementClick }       from '../../shared/element-click.js';
 import { STATE }              from '../element-wrappers.js';
 import { TRACK_TYPE }         from '../mediaplayers.js';
@@ -24,7 +24,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('list-controls');
+const debug = newDebugLogger('list-controls');
 
 const m = {
   tracklist:         null,

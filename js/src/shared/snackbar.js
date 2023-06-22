@@ -5,14 +5,14 @@
 //
 
 
-import * as debugLogger        from './debuglogger.js';
+import { newDebugLogger }      from './debuglogger.js';
 import { MATCH, matchesMedia } from './utils.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('snackbar');
+const debug = newDebugLogger('snackbar');
 
 const m = {
   snackbarId:    0,

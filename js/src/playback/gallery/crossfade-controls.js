@@ -5,8 +5,8 @@
 //
 
 
-import * as debugLogger    from '../../shared/debuglogger.js';
 import * as playbackEvents from '../playback-events.js';
+import { newDebugLogger }  from '../../shared/debuglogger.js';
 import { isPlaying }       from '../playback-controls.js';
 import { presetList }      from '../../shared/settings/settings.js';
 import { replaceClass }    from '../../shared/utils.js';
@@ -21,7 +21,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug = debugLogger.newInstance('crossfade-controls');
+const debug = newDebugLogger('crossfade-controls');
 const m     = { players: {} };
 const ctrl  = {};
 

@@ -6,7 +6,7 @@
 //
 
 
-import * as debugLogger   from './debuglogger.js';
+import { newDebugLogger } from './debuglogger.js';
 import { settingsSchema } from  './settings/settings.js';
 
 import {
@@ -17,7 +17,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug     = debugLogger.newInstance('storage');
+const debug     = newDebugLogger('storage');
 const observers = {};
 
 export const KEY = {
