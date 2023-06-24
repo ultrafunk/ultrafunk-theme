@@ -80,7 +80,7 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   width: 100%;
 }
 
-#playback-controls .details-container {
+#playback-controls .current-track-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,7 +89,7 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   margin: 0 15px;
 }
 
-#playback-controls .buttons-container {
+#playback-controls .playback-controls-container {
   display: flex;
   align-items: center;
 }
@@ -446,7 +446,7 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     margin-right: -12px;
   }
 
-  #playback-controls .details-container {
+  #playback-controls .current-track-container {
     justify-content: right;
     margin: 0;
   }

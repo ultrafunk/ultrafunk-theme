@@ -179,7 +179,7 @@ function playbackEventErrorTryNext(playbackEvent)
   }
   else
   {
-    if (isSingleTrackFetch())
+    if (isSingleTrackFetch() && (playbackEvent.data.trackType === TRACK_TYPE.YOUTUBE))
     {
       // ToDo: Make below behaviour consistent throughout instead of: playSingleTrack(true) or
       //                                                              playSingleTrack(isPlaying()) ?

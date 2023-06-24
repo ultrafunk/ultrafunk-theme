@@ -106,7 +106,7 @@ function linkClick(event)
   }
 }
 
-function sharePlayClick(element)
+export function sharePlayClick(element)
 {
   const trackArtist = utils.stripAttribute(element, 'data-track-artist');
   const trackTitle  = utils.stripAttribute(element, 'data-track-title');
@@ -123,7 +123,7 @@ function sharePlayClick(element)
   trackThumbnailClick(modalId, `${trackArtist} - ${trackTitle}`);
 }
 
-function detailsClick(element)
+export function detailsClick(element)
 {
   const trackArtist   = utils.stripAttribute(element, 'data-track-artist');
   const trackTitle    = utils.stripAttribute(element, 'data-track-title');

@@ -162,9 +162,11 @@ function head() : void
   }
   else
   {
+    /*
     ?>
     <script src="https://beamanalytics.b-cdn.net/beam.min.js" data-token="14f07ad3-faa9-41f0-b3fc-e95c8742a8f4" async></script>
     <?php
+    */
   }
 }
 
@@ -289,7 +291,7 @@ function header_playback_controls() : void
 
   ?>
   <div id="playback-controls">
-    <div class="details-container">
+    <div class="current-track-container">
       <div class="playback-thumbnail-control state-disabled" title="<?php echo (is_list_player() ? 'Show player' : 'Double click / tap: Toggle Fullscreen (f)'); ?>">
         <div class="thumbnail-overlay"><div class="spinner"></div></div>
         <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/playback_thumbnail_placeholder.png" alt="">
@@ -301,7 +303,7 @@ function header_playback_controls() : void
         <span class="playback-timer-position"></span><br><span class="playback-timer-duration"></span>
       </div>
     </div>
-    <div class="buttons-container">
+    <div class="playback-controls-container">
       <div class="playback-shuffle-control state-disabled" title="<?php echo esc_attr(get_shuffle_title()); ?>"><span class="material-icons">shuffle</span></div>
       <div class="playback-prev-control state-disabled" title="Previous track / seek (arrow left)"><span class="material-icons">skip_previous</span></div>
       <div class="playback-play-pause-control state-disabled" title="Play / Pause (space)"><span class="material-icons">play_circle_filled</span></div>

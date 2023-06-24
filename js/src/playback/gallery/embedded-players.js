@@ -90,20 +90,7 @@ function getAllPlayers()
       const embeddedPlayer = SC.Widget(iframe.id);
       player = new mediaPlayers.SoundCloud(element.id, iframe.id, embeddedPlayer, iframe.src);
 
-      // Set thumbnail and duration as early as possible
-      embeddedPlayer.bind(SC.Widget.Events.READY, () =>
-      {
-        player.setThumbnail(element);
-
-        embeddedPlayer.getDuration(durationMilliseconds =>
-        {
-          player.setDuration(Math.round(durationMilliseconds / 1000))
-          element.setAttribute('data-track-duration', player.getDuration());
-        });
-
-        onSoundCloudPlayerEventReady(player, iframe.id);
-      });
-
+      embeddedPlayer.bind(SC.Widget.Events.READY,  () => onSoundCloudPlayerEventReady(iframe.id, element, player, embeddedPlayer));
       embeddedPlayer.bind(SC.Widget.Events.PLAY,   onSoundCloudPlayerEventPlay);
       embeddedPlayer.bind(SC.Widget.Events.PAUSE,  onSoundCloudPlayerEventPause);
       embeddedPlayer.bind(SC.Widget.Events.FINISH, onSoundCloudPlayerEventFinish);
@@ -177,6 +164,7 @@ function getPlayerErrorData(player, mediaUrl)
     currentTrack: m.players.trackFromUid(player.getUid()),
     numTracks:    m.players.getNumTracks(),
     trackId:      player.getTrackId(),
+    trackType:    player.getTrackType(),
     mediaTitle:   `${artist} - ${title}`,
     mediaUrl:     mediaUrl,
   };
@@ -342,10 +330,18 @@ function initSoundCloudAPI()
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, getLoadingPercent());
 }
 
-function onSoundCloudPlayerEventReady(player, iframeId)
+function onSoundCloudPlayerEventReady(iframeId, element, player, embeddedPlayer)
 {
-  debug.log(`onSCPlayerEventReady(): ${iframeId} => ${player.getUid()} => ${player.getArtist()} - ${player.getTitle()}`);
-  updatePlayersReady();
+  debug.log(`onSoundCloudPlayerEventReady(): ${iframeId} => ${player.getUid()} => ${player.getArtist()} - ${player.getTitle()}`);
+
+  player.setThumbnail(element);
+
+  embeddedPlayer.getDuration(durationMilliseconds =>
+  {
+    player.setDuration(Math.round(durationMilliseconds / 1000));
+    element.setAttribute('data-track-duration', player.getDuration());
+    updatePlayersReady();
+  });
 }
 
 function onSoundCloudPlayerEventPlay(event)
@@ -426,7 +422,7 @@ function onSoundCloudPlayerEventError()
   this.getCurrentSound(soundObject =>
   {
     const player = m.players.playerFromUid(soundObject.id);
-    debug.log(`onSoundCloudPlayerEvent: ERROR for track: ${m.players.trackFromUid(soundObject.id)}. ${player.getArtist()} - ${player.getTitle()} - [${player.getUid()} / ${player.getIframeId()}]`);
+    debug.warn(`onSoundCloudPlayerEventError() - MEDIA_UNAVAILABLE: ${player.getIframeId()} => ${soundObject.id} => ${player.getArtist()} - "${player.getTitle()}"`);
     player.setIsPlayable(false);
   });
 }

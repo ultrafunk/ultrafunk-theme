@@ -37,7 +37,7 @@ class MediaPlayer
   duration       = 0;
   artist         = null;
   title          = null;
-  thumbnailSrc   = null;
+  thumbnailSrc   = THEME_ENV.defaultTrackThumbnail;
   thumbnailClass = 'type-default';
 
   constructor(trackType, trackId, iframeId, embeddedPlayer)

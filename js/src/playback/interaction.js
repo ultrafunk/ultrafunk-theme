@@ -18,6 +18,11 @@ import { initScreenWakeLock } from './screen-wakelock.js';
 import { TRACK_TYPE }         from './mediaplayers.js';
 
 import {
+  sharePlayClick,
+  detailsClick,
+} from '../site/interaction.js';
+
+import {
   newDebugLogger,
   measureStartupExecutionTime,
 } from '../shared/debuglogger.js';
@@ -192,6 +197,16 @@ function documentEventKeyDown(event)
         case 'F':
           event.preventDefault();
           shared.fullscreenElement.toggle(document.getElementById(m.player.getStatus().iframeId));
+          break;
+
+        case 'i':
+          event.preventDefault();
+          detailsClick(shared.getCurrentTrackElement(m.player.getStatus().trackId));
+          break;
+
+        case 'I':
+          event.preventDefault();
+          sharePlayClick(shared.getCurrentTrackElement(m.player.getStatus().trackId));
           break;
 
         case 'm':

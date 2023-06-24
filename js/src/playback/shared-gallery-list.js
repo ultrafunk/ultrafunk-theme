@@ -59,6 +59,13 @@ export function noPlayback()
 export function isGalleryPlayer() { return isPlayer.gallery; }
 export function isListPlayer()    { return isPlayer.list;    }
 
+export function getCurrentTrackElement(trackId)
+{
+  return isListPlayer()
+    ? document.querySelector(`[data-track-id="${trackId}"]`)
+    : document.getElementById(trackId);
+}
+
 export function shuffleClickNavTo(event = null)
 {
   event?.preventDefault();
