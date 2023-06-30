@@ -34,7 +34,6 @@ PHP version 8.1 or greater
 [WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) (WordPress Plugin)  
 [WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) (WordPress Plugin)  
 
-$~$
 ## **Desktop screenshots**  
 ![Desktop 1](https://ultrafunk.com/wp-content/uploads/screenshots/desktop_1-45_10.png)  
 ![Desktop 2](https://ultrafunk.com/wp-content/uploads/screenshots/desktop_1-45_11.png)  
@@ -42,7 +41,6 @@ $~$
 ![Desktop 4](https://ultrafunk.com/wp-content/uploads/screenshots/desktop_1-45_13.png)  
 ![Desktop 5](https://ultrafunk.com/wp-content/uploads/screenshots/desktop_1-45_14.png)  
 
-$~$
 ## **Mobile screenshots**  
 ![Mobile 1](https://ultrafunk.com/wp-content/uploads/screenshots/mobile_1-45_01.png)  
 ![Mobile 2](https://ultrafunk.com/wp-content/uploads/screenshots/mobile_1-45_02.png)  
