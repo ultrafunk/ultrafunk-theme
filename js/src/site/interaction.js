@@ -170,7 +170,8 @@ export function detailsClick(element)
     'track-details',
     (clickedId) =>
   {
-    utils.navToUrl(modalEntries.find(item => (item.clickId === clickedId)).link);
+    const destUrl = modalEntries.find(item => (item.clickId === clickedId)).link;
+    utils.navToUrl(utils.getPrefPlayerUrl(destUrl));
   });
 
   trackThumbnailClick(modalId, `${trackArtist} - ${trackTitle}`);
