@@ -17,8 +17,8 @@ namespace Ultrafunk\Theme\Templates\Settings;
     <?php the_content(); ?>
     <div id="settings-container"></div>
     <div id="settings-save-reset">
-      <div class="settings-save">Save Settings</div>
-      <div class="settings-reset">Reset Settings</div>
+      <div class="settings-save" title="Save all settings"><span class="material-icons">save</span>Save</div>
+      <div class="settings-reset" title="Reset all settings"><span class="material-icons">restart_alt</span>Reset</div>
     </div>
   </div>
 </article>

@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.45.20
+Version:           1.45.21
 Requires at least: 6.0
 Tested up to:      6.2.2
 Requires PHP:      8.1
@@ -43,6 +43,7 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --site-theme-font-color: #efefef;
   --site-theme-icon-color: #fff;
 
+  --button-text-color: #fff;
   --button-border-radius: 6px;
   --button-default-transition: background 100ms 0s ease-in;
   --button-active-transition: background 0s;
@@ -68,10 +69,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --control-highlight-color: rgba(0, 0, 0, 0.2);
   --control-disabled-opacity: 0.25;
   --control-disabled-background-rgba: rgba(127, 127, 127, 0.26);
-
-  --button-text-color: #fff;
-  --button-background-color: #707070;
-  --button-background-hover-rgba: rgba(0, 0, 0, 0.75);
 
   --form-search-field-background: #eee;
   --form-search-field-background-focus: #fff;
@@ -110,10 +107,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --control-highlight-color: rgba(255, 255, 255, 0.2);
   --control-disabled-opacity: 0.20;
   --control-disabled-background-rgba: rgba(127, 127, 127, 0.26);
-
-  --button-text-color: #fff;
-  --button-background-color: #666;
-  --button-background-hover-rgba: rgba(127, 127, 127, 0.33);
 
   --form-search-field-background: #333;
   --form-search-field-background-focus: #222;
@@ -157,10 +150,6 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --control-highlight-color: rgba(255, 255, 255, 0.2);
   --control-disabled-opacity: 0.20;
   --control-disabled-background-rgba: rgba(127, 127, 127, 0.26);
-
-  --button-text-color: #fff;
-  --button-background-color: #555;
-  --button-background-hover-rgba: rgba(127, 127, 127, 0.33);
 
   --form-search-field-background: #222;
   --form-search-field-background-focus: #000;

@@ -367,7 +367,7 @@ function onYouTubePlayerStateChange(event)
   if (event.data !== YT.PlayerState.PLAYING) // eslint-disable-line no-undef
     playbackControls.setPauseState();
 
-  switch(event.data)
+  switch (event.data)
   {
     // eslint-disable-next-line no-undef
     case YT.PlayerState.UNSTARTED:

@@ -314,7 +314,7 @@ function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
   debug.log(`embeddedEventHandler() - event: ${debug.getKeyForValue(playbackEvents.EVENT, embeddedEvent)}`);
   if (embeddedEventData !== null) debug.log(embeddedEventData);
 
-  switch(embeddedEvent)
+  switch (embeddedEvent)
   {
     case playbackEvents.EVENT.MEDIA_ENDED:
       playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED, getStatus());

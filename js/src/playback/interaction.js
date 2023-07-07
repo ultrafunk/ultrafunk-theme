@@ -141,7 +141,7 @@ function documentEventKeyDown(event)
       (event.altKey  === false))
   {
     // Events that need event.repeat goes here
-    switch(event.key)
+    switch (event.key)
     {
       case '+':
       case '-':
@@ -159,7 +159,7 @@ function documentEventKeyDown(event)
 
     if (event.repeat === false)
     {
-      switch(event.code)
+      switch (event.code)
       {
         case 'Backquote':
           event.preventDefault();
@@ -244,7 +244,7 @@ function documentEventMediaKeyDown(event)
 {
   if (m.isPlaybackReady && m.keyboardShortcuts.allow()) // && (event.repeat  === false)) does not function as expected on Firefox
   {
-    switch(event.key)
+    switch (event.key)
     {
       case 'MediaPlayPause':
         if (playbackEvents.hasPlaybackStarted === false)

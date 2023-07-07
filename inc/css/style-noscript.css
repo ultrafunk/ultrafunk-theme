@@ -19,6 +19,7 @@
   --site-theme-font-color: #efefef;
   --site-theme-icon-color: #fff;
 
+  --button-text-color: #fff;
   --button-border-radius: 6px;
   --dialog-border-radius: 10px;
 
@@ -34,10 +35,6 @@
   --control-highlight-color: rgba(0, 0, 0, 0.2);
   --control-disabled-opacity: 0.25;
   --control-disabled-background-rgba: rgba(127, 127, 127, 0.26);
-
-  --button-text-color: #fff;
-  --button-background-color: #707070;
-  --button-background-hover-rgba: rgba(0, 0, 0, 0.75);
 
   --form-search-field-background: #eee;
   --form-search-field-background-focus: #fff;
