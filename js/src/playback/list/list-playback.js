@@ -323,7 +323,10 @@ function initYouTubeAPI()
         onReady:       onYouTubePlayerReady,
         onStateChange: onYouTubePlayerStateChange,
         onError:       onYouTubePlayerError,
-      }
+      },
+      playerVars: {
+        'disablekb': 1,
+      },
     });
 
     m.player = new mediaPlayers.Playlist(embeddedPlayer);

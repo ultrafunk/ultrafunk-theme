@@ -125,7 +125,7 @@ function initListeners()
   utils.addListener('.playback-shuffle-control span', 'click', shared.shuffleClickNavTo);
   document.addEventListener('keydown', documentEventKeyDown);
   document.addEventListener('keydown', documentEventMediaKeyDown);
-  window.addEventListener('blur', windowEventBlur);
+  window.addEventListener('blur', () => windowEventBlur(250));
 }
 
 
@@ -360,12 +360,8 @@ function playbackEventMediaTimeRemaining(playbackEvent)
 // Window and document event handlers
 // ************************************************************************************************
 
-function windowEventBlur()
+function windowEventBlur(blurIframeDelayMilliseconds)
 {
-  // ToDo: This is only for gallery players for now...?
-  if (shared.isListPlayer())
-    return;
-
   // setTimeout(0) = Yield
   setTimeout(() =>
   {
@@ -379,7 +375,8 @@ function windowEventBlur()
         // Needed to get Firefox to behave like Chrome
         if (document.activeElement instanceof HTMLIFrameElement)
           document.activeElement.blur();
-      }, 250);
+      },
+      blurIframeDelayMilliseconds);
     }
   }, 0);
 }

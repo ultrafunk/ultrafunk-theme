@@ -118,6 +118,9 @@ function getYouTubePlayer(playerId, element, isSingleTrackPlayer = false)
       onStateChange: (event) => onYouTubePlayerStateChange(event, playerId),
       onError:       (event) => onYouTubePlayerError(event, playerId),
     },
+    playerVars: {
+      'disablekb': 1,
+    },
     ...isSingleTrackPlayer && { videoId: videoId },
   });
 
