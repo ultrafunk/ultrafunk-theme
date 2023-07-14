@@ -125,7 +125,21 @@ function initListeners()
   utils.addListener('.playback-shuffle-control span', 'click', shared.shuffleClickNavTo);
   document.addEventListener('keydown', documentEventKeyDown);
   document.addEventListener('keydown', documentEventMediaKeyDown);
-  window.addEventListener('blur', () => windowEventBlur(250));
+
+  // Ensures that blur event is triggered on first iframe click / focus
+  window.focus();
+
+  // If an iframe is clicked / focused, set focus back to parent document to handle all input events etc.
+  window.addEventListener('blur', () =>
+  {
+    // setTimeout(250) = Yield, needed for Firefox to update document.activeElement
+    setTimeout(() =>
+    {
+      if (document.activeElement instanceof HTMLIFrameElement) {
+        window.focus();
+      }
+    }, 250);
+  });
 }
 
 
@@ -353,32 +367,6 @@ function playbackEventMediaTimeRemaining(playbackEvent)
 {
   if (settings.playback.autoExitFsOnWarning && (playbackEvent.data.timeRemainingSeconds <= settings.playback.timeRemainingSeconds))
     shared.fullscreenElement.exit();
-}
-
-
-// ************************************************************************************************
-// Window and document event handlers
-// ************************************************************************************************
-
-function windowEventBlur(blurIframeDelayMilliseconds)
-{
-  // setTimeout(0) = Yield
-  setTimeout(() =>
-  {
-    // document (page) iframe was focused
-    if (document.activeElement instanceof HTMLIFrameElement)
-    {
-      setTimeout(() =>
-      {
-        document.activeElement.blur();
-
-        // Needed to get Firefox to behave like Chrome
-        if (document.activeElement instanceof HTMLIFrameElement)
-          document.activeElement.blur();
-      },
-      blurIframeDelayMilliseconds);
-    }
-  }, 0);
 }
 
 

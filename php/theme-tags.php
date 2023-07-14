@@ -396,8 +396,8 @@ function get_uf_pagination(object $params) : string
   if (is_list_player('search'))
   {
     return ($params->max_pages <= 1)
-      ? ' (' . $params->found_items . ' hits)'
-      : ' (' . $params->found_items . ' hits - page ' . $params->current_page . ' of ' . $params->max_pages . ')';
+      ? ' (' . $params->found_items . ' matches)'
+      : ' (' . $params->found_items . ' matches - page ' . $params->current_page . ' of ' . $params->max_pages . ')';
   }
   else
   {
@@ -407,15 +407,15 @@ function get_uf_pagination(object $params) : string
   }
 }
 
-function get_wp_search_hits() : string
+function get_wp_search_matches() : string
 {
   global $wp_query;
 
   if (isset($wp_query) && ($wp_query->found_posts > 1))
   {
     return ($wp_query->max_num_pages <= 1)
-      ? ' (' . $wp_query->found_posts . ' hits)'
-      : ' (' . $wp_query->found_posts . ' hits - page ' . get_wp_pagination('', ' of ', ')');
+      ? ' (' . $wp_query->found_posts . ' matches)'
+      : ' (' . $wp_query->found_posts . ' matches - page ' . get_wp_pagination('', ' of ', ')');
   }
 
   return '';
@@ -483,7 +483,7 @@ function get_nav_bar_title() : string
   {
     $prefix     = '<b>Search: </b>';
     $title      = get_search_string();
-    $pagination = esc_html(get_wp_search_hits());
+    $pagination = esc_html(get_wp_search_matches());
   }
   else if (is_tax())
   {

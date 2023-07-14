@@ -276,7 +276,7 @@ async function showRestResults(searchString)
     m.resultsCache.set(searchString, restResponse);
     setResultsHtml(restResponse);
 
-    debug.log(`showRestResults(): '${searchString}' (${restResponse.data.length} hits) - Cached Results: ${m.resultsCache.size}`);
+    debug.log(`showRestResults(): '${searchString}' (${restResponse.data.length} matches) - Cached Results: ${m.resultsCache.size}`);
   }
   else
   {
