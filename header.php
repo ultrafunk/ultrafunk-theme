@@ -41,7 +41,7 @@ use \Ultrafunk\Theme\Tags as ultrafunk;
           wp_nav_menu([
             'theme_location' => 'primary-sections',
             'item_spacing'   => 'discard',
-            'link_before'    => '<span class="menu-item-text">',
+            'link_before'    => '<span class="menu-item-text text-nowrap-ellipsis">',
             'link_after'     => '</span><span class="menu-item-icon"></span>',
           ]);
           wp_nav_menu([

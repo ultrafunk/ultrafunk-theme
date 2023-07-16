@@ -288,6 +288,7 @@ function header_playback_controls() : void
 {
   $player_type_title    = is_list_player() ? 'List Player - Click / Tap for Gallery player (p)'   : 'Gallery Player - Click / Tap for List player (p)';
   $player_details_title = is_list_player() ? "Show current track / Queued tracks (backquote '|')" : "Show current track (backquote '|')";
+  $player_shuffle_title = is_shuffle()     ? get_shuffle_title('Reshuffle: ')                     : get_shuffle_title();
 
   ?>
   <div id="playback-controls">
@@ -304,7 +305,7 @@ function header_playback_controls() : void
       </div>
     </div>
     <div class="playback-controls-container">
-      <div class="playback-shuffle-control state-disabled" title="<?php echo esc_attr(get_shuffle_title()); ?>"><span class="material-icons">shuffle</span></div>
+      <div class="playback-shuffle-control state-disabled" title="<?php echo esc_attr($player_shuffle_title); ?>"><span class="material-icons">shuffle</span></div>
       <div class="playback-prev-control state-disabled" title="Previous track / seek (arrow left)"><span class="material-icons">skip_previous</span></div>
       <div class="playback-play-pause-control state-disabled" title="Play / Pause (space)"><span class="material-icons">play_circle_filled</span></div>
       <div class="playback-next-control state-disabled" title="Next track (arrow right)"><span class="material-icons">skip_next</span></div>

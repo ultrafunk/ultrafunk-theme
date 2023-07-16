@@ -168,8 +168,13 @@ function filterTermsList(event)
     m.termlistEntries.forEach(element => (element.className = 'termlist-entry'));
   }
 
-  const currentFilterInput = (filterString.length >= 3) ? `"${filterString}" - ` : '';
-  m.navTitleFoundItems.forEach(element => (element.textContent = ` ( ${currentFilterInput}${foundCount} found )`));
+  const matchString = ((foundCount > 1) || (foundCount === 0)) ? 'matches' : 'match';
+
+  const foundItemsString = (filterString.length >= 3)
+    ? ` ( ${foundCount} ${matchString} <b>${utils.escHtml(filterString)}</b> )`
+    : ` ( ${foundCount} found )`;
+
+  m.navTitleFoundItems.forEach(element => (element.innerHTML = foundItemsString));
 
   // Cancel previous timeout if already running to prevent multiple setTimeout()s
   clearTimeout(m.transitionTimeoutId);

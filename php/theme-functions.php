@@ -105,19 +105,19 @@ function get_filter_result_by(?object $request_params) : string
 //
 // Get shuffle title from current context
 //
-function get_shuffle_title() : string
+function get_shuffle_title(string $prefix = 'Shuffle: ') : string
 {
   if (is_list_player() && !is_list_player('date') && !is_list_player('search'))
-    return ('Shuffle: ' . get_request_params()->title_parts['title']);
+    return ($prefix . get_request_params()->title_parts['title']);
 
   $title = '';
 
   if (is_shuffle(PLAYER_TYPE::GALLERY))
-    $title = 'Shuffle: ' . get_title();
+    $title = $prefix . get_title();
   else
-    $title = single_term_title('Shuffle: ', false);
+    $title = single_term_title($prefix, false);
 
-  return (!empty($title) ? $title : 'Shuffle: All Tracks');
+  return (!empty($title) ? $title : ($prefix . 'All Tracks'));
 }
 
 //

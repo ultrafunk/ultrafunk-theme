@@ -112,7 +112,7 @@ function wp_setup_nav_menu_item(object $menu_item) : object
 add_filter('wp_setup_nav_menu_item', '\Ultrafunk\Theme\Filters\wp_setup_nav_menu_item');
 
 //
-// Set data-attribute for shuffle menu item
+// Set props for shuffle menu item
 //
 function nav_menu_link_attributes(array $attributes, object $menu_item) : array
 {
@@ -120,8 +120,18 @@ function nav_menu_link_attributes(array $attributes, object $menu_item) : array
   {
     if ($menu_item->ID === THEME_ENV['menu_item_shuffle_id'])
     {
-      $attributes['href']  = '#';
-      $attributes['title'] = esc_attr(get_shuffle_title());
+      $attributes['href'] = '#';
+
+      if (is_shuffle())
+      {
+        $attributes['title'] = esc_attr(get_shuffle_title('Reshuffle: '));
+        $menu_item->title    = 'Reshuffle: <span class="normal-text">' . esc_html(get_shuffle_title('')) . '</span>';
+      }
+      else
+      {
+        $attributes['title'] = esc_attr(get_shuffle_title());
+        $menu_item->title    = 'Shuffle: <span class="normal-text">' . esc_html(get_shuffle_title('')) . '</span>';
+      }
     }
   }
 
