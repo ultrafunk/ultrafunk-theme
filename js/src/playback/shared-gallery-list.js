@@ -59,13 +59,6 @@ export function noPlayback()
 export function isGalleryPlayer() { return isPlayer.gallery; }
 export function isListPlayer()    { return isPlayer.list;    }
 
-export function getCurrentTrackElement(trackId)
-{
-  return isListPlayer()
-    ? document.querySelector(`[data-track-id="${trackId}"]`)
-    : document.getElementById(trackId);
-}
-
 export function shuffleClickNavTo(event = null)
 {
   event?.preventDefault();
@@ -107,9 +100,9 @@ export function updateVolumeMuteSettings(currentVolume, isMuted)
 //
 // ************************************************************************************************
 
-export function playerScrollTo(trackId = 0)
+export function playerScrollTo(elementId = 0)
 {
-  isListPlayer() ? listPlayerScrollTo(trackId) : galleryPlayerScrollTo(trackId);
+  isListPlayer() ? listPlayerScrollTo(elementId) : galleryPlayerScrollTo(elementId);
 }
 
 function scrollToYPos(element, destYPos)
@@ -122,13 +115,13 @@ function scrollToYPos(element, destYPos)
   });
 }
 
-function listPlayerScrollTo(trackId = 0)
+function listPlayerScrollTo(elementId = 0)
 {
-  if (trackId === 0)
+  if (elementId === 0)
   {
     let scrollDestPos = 0;
 
-    if ((window.pageYOffset === 0) || (Math.round(window.pageYOffset) <= 1))
+    if ((window.scrollY === 0) || (Math.round(window.scrollY) <= 1))
       scrollDestPos = getCssPropValue('--site-header-height') - getCssPropValue('--site-header-height-down');
 
     scrollToYPos(window, scrollDestPos);
@@ -136,24 +129,19 @@ function listPlayerScrollTo(trackId = 0)
   else
   {
     if (settings.list.showUpNextModal)
-    {
       showUpNextModal();
-    }
     else
-    {
-      const trackElement = document.getElementById('tracklist').querySelector(`[data-track-id="${trackId}"]`);
-      trackElement.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
-    }
+      document.getElementById(elementId)?.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
   }
 }
 
-function galleryPlayerScrollTo(trackId)
+function galleryPlayerScrollTo(elementId)
 {
   if (settings.gallery.autoScroll)
   {
     // Actual functional 'offsetTop' calculation: https://stackoverflow.com/a/52477551
-    const offsetTop    = Math.round(window.scrollY + document.getElementById(trackId).getBoundingClientRect().top);
-    const scrollTop    = Math.round(window.pageYOffset); // Don't want float results that can cause jitter
+    const offsetTop    = Math.round(window.scrollY + document.getElementById(elementId).getBoundingClientRect().top);
+    const scrollTop    = Math.round(window.scrollY); // Don't want float results that can cause jitter
     let   headerHeight = getScrollHeaderHeight(offsetTop > scrollTop);
 
     // If we get obscured by the sticky header menu, recalculate headerHeight to account for that

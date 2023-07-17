@@ -177,7 +177,7 @@ function documentEventKeyDown(event)
       {
         case 'Backquote':
           event.preventDefault();
-          shared.playerScrollTo(m.player.getStatus().trackId);
+          shared.playerScrollTo(m.player.getStatus().elementId);
           break;
       }
 
@@ -215,12 +215,12 @@ function documentEventKeyDown(event)
 
         case 'i':
           event.preventDefault();
-          detailsClick(shared.getCurrentTrackElement(m.player.getStatus().trackId));
+          detailsClick(document.getElementById(m.player.getStatus().elementId));
           break;
 
         case 'I':
           event.preventDefault();
-          sharePlayClick(shared.getCurrentTrackElement(m.player.getStatus().trackId));
+          sharePlayClick(document.getElementById(m.player.getStatus().elementId));
           break;
 
         case 'm':
@@ -376,7 +376,7 @@ function playbackEventMediaTimeRemaining(playbackEvent)
 
 function playbackDetailsClick()
 {
-  shared.playerScrollTo(m.player.getStatus().trackId);
+  shared.playerScrollTo(m.player.getStatus().elementId);
 }
 
 function playbackThumbnailClick()

@@ -322,7 +322,7 @@ const scroll = (() =>
 
   function scrollEvent()
   {
-    const currentScrollPos = window.pageYOffset;
+    const currentScrollPos = window.scrollY;
 
     if (currentScrollPos === 0)
     {

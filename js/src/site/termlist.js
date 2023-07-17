@@ -64,7 +64,7 @@ function saveState()
   {
     const termlistState = {
       pageUrl:     window.location.href,
-      scrollPos:   Math.round(window.pageYOffset),
+      scrollPos:   Math.round(window.scrollY),
       openTermIds: [],
     };
 

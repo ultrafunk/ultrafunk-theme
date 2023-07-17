@@ -133,8 +133,12 @@ function resumeAutoplay(playbackEvent)
 
   if (autoplayData !== null)
   {
-    const iframeId = document.getElementById(autoplayData.trackId)?.querySelector('iframe').id;
-    playbackEvent.callback.resumeAutoplay(autoplayData, iframeId);
+    const iframeId = document.getElementById(autoplayData.trackId)?.querySelector('iframe').id ?? null;
+
+    if ((iframeId === null) && (autoplayData.trackId !== null))
+      showSnackbar('Unable to cue track (not found)', 5);
+    else
+      playbackEvent.callback.resumeAutoplay(autoplayData, iframeId);
   }
 }
 

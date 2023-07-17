@@ -295,6 +295,7 @@ export function getStatus()
       position:     Math.ceil(m.player.embedded.getCurrentTime()),
       numTracks:    1,
       trackId:      allTracksList[currentIndex].getAttribute('data-track-id'),
+      elementId:    allTracksList[currentIndex].id,
       iframeId:     'youtube-player',
     };
   }
@@ -433,9 +434,9 @@ function onYouTubeStatePlaying()
 
     setTimeout(() =>
     {
-      if (settings.playback.autoplay            &&
-          playbackControls.isPlaying()          &&
-          (Math.round(window.pageYOffset) <= 1) &&
+      if (settings.playback.autoplay        &&
+          playbackControls.isPlaying()      &&
+          (Math.round(window.scrollY) <= 1) &&
           utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
       {
         playerScrollTo(0);

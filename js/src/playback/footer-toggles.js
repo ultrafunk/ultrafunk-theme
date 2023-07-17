@@ -116,9 +116,9 @@ class PlayerTypeToggle extends ElementToggle
     return {
       pageNum: Math.ceil(trackOffset / tracksPerPageTo),
       trackData: {
-        autoplay: trackData?.isPlaying,
-        trackId:  trackData?.trackId,
-        position: trackData?.position,
+        autoplay: trackData.isPlaying ?? false,
+        trackId:  trackData.trackId   ?? null,
+        position: trackData.position  ?? 0,
       }
     };
   }

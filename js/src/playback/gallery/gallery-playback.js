@@ -214,7 +214,7 @@ function skipToTrack(trackNum, playMedia = true)
 
 function resumeAutoplay(autoplayData, iframeId = null)
 {
-  debug.log(`resumeAutoplay(): ${autoplayData.autoplay}${(iframeId !== null) ? (' - ' + iframeId) : '' }`);
+  debug.log(`resumeAutoplay(): ${autoplayData.autoplay} - iframeId: ${iframeId}`);
 
   if (iframeId !== null)
   {
@@ -264,6 +264,7 @@ export function getStatus()
     position:     0,
     numTracks:    m.players.getNumTracks(),
     trackId:      m.players.current.getTrackId(),
+    elementId:    m.players.current.getTrackId(),
     iframeId:     m.players.current.getIframeId(),
   };
 }
