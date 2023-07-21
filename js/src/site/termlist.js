@@ -79,6 +79,20 @@ function saveState()
   }
 }
 
+//
+// ToDo: This should not be necessary!
+//
+function isWebKit()
+{
+  const hasChromeUA     = (null !== navigator.userAgent.match(/Chrome\/\d{1,4}\.\d{1,4}\.\d{1,4}\.\d{1,4}/i));
+  const hasWebKitUA     = (null !== navigator.userAgent.match(/AppleWebKit\/\d{1,4}\.\d{1,4}/i));
+  const isWebKitBrowser = ((hasWebKitUA === true) && (hasChromeUA === false));
+
+  debug.log(`isWebKit(): ${isWebKitBrowser} - userAgent: ${navigator.userAgent}`);
+
+  return isWebKitBrowser;
+}
+
 function restoreState()
 {
   termlistRest.readCache();
@@ -96,7 +110,14 @@ function restoreState()
         document.getElementById(item).querySelector('div.termlist-header').click();
       });
 
-      window.scroll({ top: termlistState.scrollPos, left: 0, behavior: 'auto' });
+      window.addEventListener('load', () =>
+      {
+        // ToDo: This should not be necessary!
+        if(isWebKit())
+          setTimeout(() => window.scroll({ top: termlistState.scrollPos, left: 0, behavior: 'instant' }), 100);
+        else
+          window.scroll({ top: termlistState.scrollPos, left: 0, behavior: 'instant' });
+      });
     }
     else
     {
