@@ -5,9 +5,9 @@
 //
 
 
-import { newDebugLogger } from '../shared/debuglogger.js';
-import { showModal }      from '../shared/modal.js';
-import { showSnackbar }   from '../shared/snackbar.js';
+import { newDebugLogger }      from '../shared/debuglogger.js';
+import { showModal }           from '../shared/modal.js';
+import { copyTextToClipboard } from '../shared/clipboard.js';
 
 
 /*************************************************************************************************/
@@ -111,62 +111,3 @@ const shareModalClosure = (() =>
 });
 
 export const shareModal = shareModalClosure();
-
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
-
-export function copyTextToClipboard(clipboardText, contentDescription = 'Content')
-{
-  if (navigator.clipboard)
-  {
-    navigator.clipboard.writeText(clipboardText).then(() =>
-    {
-      showSnackbar(`${contentDescription} copied to clipboard`, 3);
-    },
-    (reason) =>
-    {
-      onClipboardWriteError(reason, clipboardText, contentDescription);
-    });
-  }
-  else
-  {
-    // Handle navigator.clipboard not properly supported on WebKit / Safari yet...
-    if (copyTextToClipboardExecCommand(clipboardText))
-      showSnackbar(`${contentDescription} copied to clipboard`, 3);
-    else
-      onClipboardWriteError(`document.execCommand('copy') for "${clipboardText}" failed!`, clipboardText, contentDescription);
-  }
-}
-
-function copyTextToClipboardExecCommand(clipboardText)
-{
-  const element = document.createElement('textarea');
-
-  document.body.appendChild(element);
-  element.textContent = clipboardText;
-  element.select();
-  const isCopied = document.execCommand('copy');
-  document.body.removeChild(element);
-
-  return isCopied;
-}
-
-function onClipboardWriteError(logError, clipboardText, contentDescription)
-{
-  debug.error(`copyTextToClipboard() error: ${logError}`);
-
-  const modalBody = /*html*/ `
-    <style>
-      .modal-dialog-body p.modal-clipboard-content {
-        padding: 10px 15px;
-        border-radius: var(--dialog-border-radius);
-        background-color: var(--list-row-odd-color);
-      }
-    </style>
-    <p class="modal-clipboard-error">Failed to write ${contentDescription} to the clipboard, please copy the text below:</p>
-    <p class="modal-clipboard-content">${clipboardText}</p>`;
-
-  showModal('Copy to Clipboard error!', modalBody);
-}

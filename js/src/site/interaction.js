@@ -5,19 +5,16 @@
 //
 
 
-import * as utils            from '../shared/utils.js';
-import { newDebugLogger }    from '../shared/debuglogger.js';
-import { ElementToggle }     from '../shared/element-toggle.js';
-import { ElementClick }      from '../shared/element-click.js';
-import { settings }          from '../shared/session-data.js';
-import { showModal }         from '../shared/modal.js';
-import { KEY, setValue }     from '../shared/storage.js';
-import { getModalTrackHtml } from '../shared/modal-templates.js';
-
-import {
-  shareModal,
-  copyTextToClipboard,
-} from './share-modal.js';
+import * as utils              from '../shared/utils.js';
+import { newDebugLogger }      from '../shared/debuglogger.js';
+import { ElementToggle }       from '../shared/element-toggle.js';
+import { ElementClick }        from '../shared/element-click.js';
+import { settings }            from '../shared/session-data.js';
+import { showModal }           from '../shared/modal.js';
+import { KEY, setValue }       from '../shared/storage.js';
+import { getModalTrackHtml }   from '../shared/modal-templates.js';
+import { shareModal }          from './share-modal.js';
+import { copyTextToClipboard } from '../shared/clipboard.js';
 
 
 /*************************************************************************************************/

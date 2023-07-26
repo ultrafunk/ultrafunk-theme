@@ -359,13 +359,17 @@ function playbackEventPlaybackReady()
 
 function playbackEventMediaEnded()
 {
-  if (settings.playback.autoExitFullscreen)
+  const isGalleryPlayerMultipleTracks = (shared.isGalleryPlayer() && (m.player.getStatus().numTracks > 1));
+
+  if (settings.playback.autoExitFullscreen || isGalleryPlayerMultipleTracks)
     shared.fullscreenElement.exit();
 }
 
 function playbackEventMediaTimeRemaining(playbackEvent)
 {
-  if (settings.playback.autoExitFsOnWarning && (playbackEvent.data.timeRemainingSeconds <= settings.playback.timeRemainingSeconds))
+  const isTimeRemainingBelowThreshold = (playbackEvent.data.timeRemainingSeconds <= settings.playback.timeRemainingSeconds);
+
+  if (settings.playback.autoExitFsOnWarning && isTimeRemainingBelowThreshold)
     shared.fullscreenElement.exit();
 }
 
