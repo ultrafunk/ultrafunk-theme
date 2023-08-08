@@ -40,16 +40,25 @@ export function getSingleChoiceListHtml(singleChoiceList, clickItemsCount = 0)
 
   singleChoiceList.forEach((entry, index) =>
   {
-    const entryClass   = entry.class ? `modal-${entry.class}`                                       : 'modal-icon-text';
-    const entryTitle   = entry.title ? entry.title                                                  : '';
-    const entryIcon    = entry.icon  ? `<span class="material-icons">${entry.icon}</span>`          : '';
-    const entryContent = entry.icon  ? `<span class="text-nowrap-ellipsis">${entry.content}</span>` : entry.content;
-    entry.uid          = `modal-item-${index + 1}`;
+    const entryClass      = entry.class      ? `modal-${entry.class}`                                       : 'modal-icon-text';
+    const entryTitle      = entry.title      ? entry.title                                                  : '';
+    const entryIcon       = entry.icon       ? `<span class="material-icons">${entry.icon}</span>`          : '';
+    const entryContent    = entry.icon       ? `<span class="text-nowrap-ellipsis">${entry.content}</span>` : entry.content;
+    const entryLinkTarget = entry.linkTarget ? `target="${entry.linkTarget}"`                               : '';
+    entry.uid             = `modal-item-${index + 1}`;
 
-    if (entry.clickId)
+    if (entry.link)
+    {
+      html += `<a id="${entry.uid}" href="${entry.link}" ${entryLinkTarget} class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${entryIcon}${entryContent}</a>`;
+    }
+    else if (entry.clickId)
+    {
       html += `<div id="${entry.uid}" data-click-id="${entry.clickId}" class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
+    }
     else
+    {
       html += `<div class="${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
+    }
   });
 
   return html;

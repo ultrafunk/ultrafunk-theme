@@ -139,11 +139,10 @@ export function detailsClick(element)
   artists.forEach(item =>
   {
     modalEntries.push({
-      clickId: `entry-${modalEntries.length}`,
       class:   `icon-text ${item.classList[0] ?? ''}`,
       title:   'Go to Artist',
       content: item.innerText,
-      link:    item.href,
+      link:    utils.getPrefPlayerUrl(item.href),
       icon:    'link',
     });
   });
@@ -153,25 +152,16 @@ export function detailsClick(element)
   channels.forEach(item =>
   {
     modalEntries.push({
-      clickId: `entry-${modalEntries.length}`,
       title:   'Go to Channel',
       content: item.innerText,
-      link:    item.href,
+      link:    utils.getPrefPlayerUrl(item.href),
       icon:    'link'
     });
   });
 
-  const modalId = showModal(
-    `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? utils.getTimeString(trackDuration) : 'duration N/A')}</span>`,
-    modalEntries,
-    'track-details',
-    (clickedId) =>
-  {
-    const destUrl = modalEntries.find(item => (item.clickId === clickedId)).link;
-    utils.navToUrl(utils.getPrefPlayerUrl(destUrl));
-  });
+  const modalTitle = `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? utils.getTimeString(trackDuration) : 'duration N/A')}</span>`;
 
-  trackThumbnailClick(modalId, `${trackArtist} - ${trackTitle}`);
+  trackThumbnailClick(showModal(modalTitle, modalEntries, 'track-details'), `${trackArtist} - ${trackTitle}`);
 }
 
 function trackThumbnailClick(modalId, artistTitle)

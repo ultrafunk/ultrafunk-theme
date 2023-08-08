@@ -14,6 +14,7 @@
   line-height: 20px;
   padding-top: 8px;
   padding-bottom: 8px;
+  cursor: move;
 }
 
 .modal-tracklist-entry:last-child {
@@ -33,6 +34,11 @@
   opacity: 0;
   color: #fff;
   background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-tracklist-entry.cued-track,
+.modal-tracklist-entry.playing-track {
+  cursor: pointer;
 }
 
 .modal-tracklist-entry.playing-track .modal-track-thumbnail::before {

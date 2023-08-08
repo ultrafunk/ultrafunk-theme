@@ -152,20 +152,21 @@ function setSingleChoiceList(singleChoiceList, modalType = null)
     singleChoiceList.forEach(item => (item.clickId && m.clickItemsCount++));
 
   elements.body.innerHTML = getSingleChoiceListHtml(singleChoiceList, m.clickItemsCount);
-
-  singleChoiceList.forEach(entry =>
-  {
-    if (entry.clickId)
-      elements.body.querySelector(`#${entry.uid}`).addEventListener('click', singleChoiceListClick);
-  });
+  elements.body.addEventListener('click', singleChoiceListClick);
 }
 
 function singleChoiceListClick(event)
 {
-  if (m.onClickClose(event) === true)
+  const clickedEntryElement = event.target.closest('.modal-click-item');
+
+  if (clickedEntryElement && (m.onClickClose(event) === true))
   {
+    const entryClickId = clickedEntryElement?.getAttribute('data-click-id');
+
     resetState();
-    m.onEntryClicked(this.getAttribute('data-click-id'), event);
+
+    if (entryClickId)
+      m.onEntryClicked(entryClickId, event);
   }
 }
 

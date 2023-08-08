@@ -5,15 +5,8 @@
 //
 
 
-import { newDebugLogger }      from '../shared/debuglogger.js';
 import { showModal }           from '../shared/modal.js';
 import { copyTextToClipboard } from '../shared/clipboard.js';
-
-
-/*************************************************************************************************/
-
-
-const debug = newDebugLogger('share-modal');
 
 
 // ************************************************************************************************
@@ -43,70 +36,35 @@ const shareModalClosure = (() =>
       icon           = 'link',
     } = args);
 
-    return showModal(title, getSingleChoiceList(), 'share', singleChoiceListClick);
+    return showModal(title, getSingleChoiceList(), 'share', () => copyTextToClipboard(url, urlType));
   }
 
   function getSingleChoiceList()
   {
+    const mailtoLink = `mailto:?subject=${encodeURIComponent(`Ultrafunk ${urlType}: ${bodyText}`)}&body=${encodeURI(url)}%0d%0a`;
+
+    const searchString = filterBodyText
+      ? encodeURIComponent(bodyText.replace(filterBodyTextRegEx, ' '))
+      : encodeURIComponent(bodyText);
+
+    const youTubeLink = (sourceUid !== null)
+      ? `https://music.youtube.com/watch?v=${sourceUid}`
+      : `https://music.youtube.com/search?q=${searchString}`;
+
     const singleChoiceList = [
-      { clickId: 'copyToClipboardId', icon: 'content_copy', content: '<b>Copy Link</b> to Clipboard'   },
-      { clickId: 'shareOnEmailId',    icon: 'share',        content: '<b>Share</b> on Email'           },
-      { clickId: 'searchOnGoogleId',  icon: 'search',       content: '<b>Search</b> on Google'         },
-      { clickId: 'amazonMusicId',     icon: icon,           content: `<b>${verb}</b> on Amazon Music`  },
-      { clickId: 'appleMusicId',      icon: icon,           content: `<b>${verb}</b> on Apple Music`   },
-      { clickId: 'spotifyId',         icon: icon,           content: `<b>${verb}</b> on Spotify`       },
-      { clickId: 'youTubeMusicId',    icon: icon,           content: `<b>${verb}</b> on YouTube Music` },
+      { icon: 'content_copy', content: '<b>Copy Link</b> to Clipboard',   clickId: 'copyToClipboardId' },
+      { icon: 'share',        content: '<b>Share</b> on Email',           link: mailtoLink             },
+      { icon: 'search',       content: '<b>Search</b> on Google',         link: `https://www.google.com/search?q=${searchString}`,        linkTarget: '_blank' },
+      { icon: icon,           content: `<b>${verb}</b> on Amazon Music`,  link: `https://music.amazon.com/search/${searchString}`,        linkTarget: '_blank' },
+      { icon: icon,           content: `<b>${verb}</b> on Apple Music`,   link: `https://music.apple.com/ca/search?term=${searchString}`, linkTarget: '_blank' },
+      { icon: icon,           content: `<b>${verb}</b> on Spotify`,       link: `https://open.spotify.com/search/${searchString}`,        linkTarget: '_blank' },
+      { icon: icon,           content: `<b>${verb}</b> on YouTube Music`, link: youTubeLink,                                              linkTarget: '_blank' },
     ];
 
     if (bodyHtml !== null)
       singleChoiceList.unshift({ class: 'track-share-entry', content: bodyHtml });
 
     return singleChoiceList;
-  }
-
-  function singleChoiceListClick(clickedId)
-  {
-    debug.log(`singleChoiceListClick(): ${clickedId} - title: "${title}" - bodyText: "${bodyText}" - filterBodyText: ${filterBodyText} - url: ${url} - urlType: ${urlType} - sourceUid: ${sourceUid} - verb: ${verb}`);
-
-    const searchString = filterBodyText
-                           ? encodeURIComponent(bodyText.replace(filterBodyTextRegEx, ' '))
-                           : encodeURIComponent(bodyText);
-
-    switch (clickedId)
-    {
-      case 'copyToClipboardId':
-        copyTextToClipboard(url, urlType);
-        break;
-
-      case 'shareOnEmailId':
-        window.location.href = `mailto:?subject=${encodeURIComponent(`Ultrafunk ${urlType}: ${bodyText}`)}&body=${encodeURI(url)}%0d%0a`;
-        break;
-
-      case 'searchOnGoogleId':
-        window.open(`https://www.google.com/search?q=${searchString}`, "_blank");
-        break;
-
-      case 'amazonMusicId':
-        window.open(`https://music.amazon.com/search/${searchString}`, "_blank");
-        break;
-
-      case 'appleMusicId':
-        window.open(`https://music.apple.com/ca/search?term=${searchString}`, "_blank");
-        break;
-
-      case 'spotifyId':
-        window.open(`https://open.spotify.com/search/${searchString}`, "_blank");
-        break;
-
-      case 'youTubeMusicId':
-        {
-          if (sourceUid !== null)
-            window.open(`https://music.youtube.com/watch?v=${sourceUid}`, "_blank");
-          else
-            window.open(`https://music.youtube.com/search?q=${searchString}`, "_blank");
-        }
-        break;
-    }
   }
 });
 

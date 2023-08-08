@@ -26,7 +26,7 @@ export function copyTextToClipboard(clipboardText, contentDescription = 'Content
   {
     navigator.clipboard.writeText(clipboardText).then(() =>
     {
-      debug.log(`copyTextToClipboard() success for: ${clipboardText}`);
+      debug.log(`copyTextToClipboard() success for: ${clipboardText} - type: ${contentDescription}`);
       showSnackbar(`${contentDescription} copied to clipboard`, 3);
     },
     (reason) =>
@@ -39,7 +39,7 @@ export function copyTextToClipboard(clipboardText, contentDescription = 'Content
     // Handle navigator.clipboard not properly supported on WebKit / Safari yet...
     if (copyTextToClipboardExecCommand(clipboardText))
     {
-      debug.log(`copyTextToClipboardExecCommand() success for: ${clipboardText}`);
+      debug.log(`copyTextToClipboardExecCommand() success for: ${clipboardText} - type: ${contentDescription}`);
       showSnackbar(`${contentDescription} copied to clipboard`, 3);
     }
     else
