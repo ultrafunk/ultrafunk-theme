@@ -149,7 +149,7 @@ function resetState()
 function setSingleChoiceList(singleChoiceList, modalType = null)
 {
   if (modalType === 'track-details')
-    singleChoiceList.forEach(item => (item.clickId && m.clickItemsCount++));
+    singleChoiceList.forEach(item => (item.link && m.clickItemsCount++));
 
   elements.body.innerHTML = getSingleChoiceListHtml(singleChoiceList, m.clickItemsCount);
   elements.body.addEventListener('click', singleChoiceListClick);
