@@ -66,8 +66,8 @@ export function getTrackEntryHtml(track, density = 'default')
       data-track-thumbnail-url="${trackThumbnailUrl}"
       data-track-source-uid ="${thumbnailData.uid}"
       >
-      <div class="track-artists-links" data-track-artist-ids="${track.artists.toString()}"></div>
-      <div class="track-channels-links" data-track-channel-ids="${track.channels.toString()}"></div>
+      <div class="track-artists-links" data-track-artist-ids="${track.artists.toString()}">${track.artists_links  ?? ''}</div>
+      <div class="track-channels-links" data-track-channel-ids="${track.channels.toString()}">${track.channels_links ?? ''}</div>
       <div class="track-details">
         <div class="thumbnail" ${isYouTubeTrack ? 'title="Play Track"' : 'title="SoundCloud Track"'}>
           <div class="thumbnail-overlay"><div class="spinner"></div></div>

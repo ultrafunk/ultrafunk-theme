@@ -182,9 +182,11 @@ function disablePageScrolling(disableScrolling)
 {
   const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
-  document.documentElement.style.overflowY                  = disableScrolling ? 'hidden'              : '';
-  document.documentElement.style.paddingRight               = disableScrolling ? `${scrollbarWidth}px` : '';
-  document.getElementById('site-header').style.paddingRight = disableScrolling ? `${scrollbarWidth}px` : '';
+  document.documentElement.style.overflowY                            = disableScrolling ? 'hidden'              : '';
+  document.documentElement.style.paddingRight                         = disableScrolling ? `${scrollbarWidth}px` : '';
+  document.getElementById('site-header').style.paddingRight           = disableScrolling ? `${scrollbarWidth}px` : '';
+  document.getElementById('site-search-container').style.paddingRight = disableScrolling ? `${scrollbarWidth}px` : '';
+  document.getElementById('track-search-results').style.paddingRight  = disableScrolling ? `${scrollbarWidth}px` : '';
 
   if (disableScrolling && ('ontouchstart' in window))
   {

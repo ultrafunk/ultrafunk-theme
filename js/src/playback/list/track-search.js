@@ -11,10 +11,10 @@ import { settings }               from '../../shared/session-data.js';
 import { navSearch }              from '../../site/nav-search.js';
 import { ElementClick }           from '../../shared/element-click.js';
 import { TRACK_TYPE }             from '../mediaplayers.js';
-import { showModal }              from '../../shared/modal.js';
 import { showSnackbar }           from '../../shared/snackbar.js';
 import { getTrackEntryHtml }      from './list-track-templates.js';
 import { getCurrentTrackElement } from './list-controls.js';
+import { detailsClick }           from '../../site/interaction.js';
 
 import {
   HTTP_RESPONSE,
@@ -26,6 +26,12 @@ import {
   escHtml,
 } from '../../shared/utils.js';
 
+import {
+  getModalId,
+  isShowingModal,
+  showModal,
+} from '../../shared/modal.js';
+
 
 /*************************************************************************************************/
 
@@ -33,14 +39,15 @@ import {
 const debug = newDebugLogger('track-search');
 
 const m = {
-  setCurrentTrack:    null,
-  debounceKeyup:      null,
-  uiElements:         null,
-  searchField:        null,
-  trackSearchResults: null,
-  resultsTracklist:   null,
-  resultsCache:       new Map(),
-  prevSearchString:   '',
+  setCurrentTrack:     null,
+  debounceKeyup:       null,
+  uiElements:          null,
+  searchField:         null,
+  trackSearchResults:  null,
+  resultsTracklist:    null,
+  resultsCache:        new Map(),
+  prevSearchString:    '',
+  trackDetailsModalId: -1,
 };
 
 const minSearchStringLength = 3;
@@ -104,73 +111,20 @@ export function setTrackSearchResultsVisible(isSearchVisible)
   }
 }
 
-export function isTrackSearchResultsVisible()
-{
-  return (m.trackSearchResults?.style.display === 'block');
-}
-
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
-
 function onClickCloseSearch(event)
 {
   if ((m.searchField.contains(event.target)       === false) &&
       (m.resultsTracklist.contains(event.target)  === false) &&
-      (event.target.closest('.nav-search-toggle') === null))
+      (event.target.closest('.nav-search-toggle') === null)  &&
+      (isShowingModal(m.trackDetailsModalId)      === false))
   {
     navSearch.hide();
   }
 }
 
-class uiElements extends ElementClick
+export function isTrackSearchResultsVisible()
 {
-  elementClicked()
-  {
-    if (this.clicked('div.thumbnail'))
-      return playTrack(this.closest('div.track-entry'));
-
-    if (this.clicked('div.play-next-button'))
-      return playNext(this.closest('div.track-entry'));
-  }
-}
-
-function playTrack(element)
-{
-  if (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.SOUNDCLOUD)
-  {
-    showSnackbar('Cannot play / cue SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', notPlayableTrack));
-  }
-  else
-  {
-    const insertedTrack = insertResultTrack(element);
-    m.setCurrentTrack(insertedTrack.id, true, false);
-    setTrackLinks(insertedTrack);
-    navSearch.hide();
-  }
-}
-
-function playNext(element)
-{
-  const insertedTrack = insertResultTrack(element);
-  showSnackbar('Track will play next', 3);
-  setTrackLinks(insertedTrack);
-  navSearch.hide();
-}
-
-function insertResultTrack(element)
-{
-  const insertElement = element.cloneNode(true);
-
-  insertElement.id = `track-${Date.now()}`;
-  insertElement.classList.replace('compact-density', 'default-density');
-  insertElement.classList.add('adding');
-  insertElement.addEventListener('animationend', () => insertElement.classList.remove('adding'));
-
-  getCurrentTrackElement()?.insertAdjacentElement('afterend', insertElement);
-
-  return insertElement;
+  return (m.trackSearchResults?.style.display === 'block');
 }
 
 function debounceKeyup(callback, delayMilliseconds)
@@ -196,6 +150,75 @@ function debounceKeyup(callback, delayMilliseconds)
       callback(searchString);
     }
   };
+}
+
+
+// ************************************************************************************************
+// Handle UI events
+// ************************************************************************************************
+
+class uiElements extends ElementClick
+{
+  elementClicked()
+  {
+    if (this.clicked('div.thumbnail'))
+      return playTrack(this.closest('div.track-entry'));
+
+    if (this.clicked('div.artist-title'))
+      return onTouchShowTrackDetails(this.event, this.closest('div.track-entry'));
+
+    if (this.clicked('div.play-next-button'))
+      return playNext(this.closest('div.track-entry'));
+
+    if (this.clicked('div.details-button'))
+      return showTrackDetails(this.closest('div.track-entry'));
+  }
+}
+
+function playTrack(element)
+{
+  if (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.SOUNDCLOUD)
+  {
+    showSnackbar('Cannot play / cue SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', notPlayableTrack));
+  }
+  else
+  {
+    m.setCurrentTrack(insertResultTrack(element).id, true, false);
+    navSearch.hide();
+  }
+}
+
+function onTouchShowTrackDetails(event, element)
+{
+  if ((event.pointerType === 'touch') && (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE))
+    showTrackDetails(element);
+}
+
+function playNext(element)
+{
+  insertResultTrack(element);
+  showSnackbar('Track will play next', 3);
+  navSearch.hide();
+}
+
+function showTrackDetails(element)
+{
+  detailsClick(element);
+  m.trackDetailsModalId = getModalId();
+}
+
+function insertResultTrack(element)
+{
+  const insertElement = element.cloneNode(true);
+
+  insertElement.id = `track-${Date.now()}`;
+  insertElement.classList.replace('compact-density', 'default-density');
+  insertElement.classList.add('adding');
+  insertElement.addEventListener('animationend', () => insertElement.classList.remove('adding'));
+
+  getCurrentTrackElement()?.insertAdjacentElement('afterend', insertElement);
+
+  return insertElement;
 }
 
 
@@ -266,7 +289,7 @@ async function showRestResults(searchString)
 
   const restResponse = await fetchRest({
     endpoint: 'tracks',
-    query:    `${searchParams}_fields=id,link,artists,channels,meta`,
+    query:    `${searchParams}_fields=id,link,artists,channels,meta,artists_links,channels_links`,
   });
 
   const fetchStop = performance.now();
@@ -305,21 +328,6 @@ function setResultsHtml(restResponse)
   });
 
   m.resultsTracklist.innerHTML = tracksHtml;
-}
-
-async function setTrackLinks(element)
-{
-  const restResponse = await fetchRest({
-    endpoint: 'tracks',
-    id:       element.getAttribute('data-track-id').slice(6),
-    query:    'links_path=list&_fields=artists_links,channels_links',
-  });
-
-  if (restResponse.status.code === HTTP_RESPONSE.OK)
-  {
-    element.querySelector('div.track-artists-links').innerHTML  = restResponse.data.artists_links;
-    element.querySelector('div.track-channels-links').innerHTML = restResponse.data.channels_links;
-  }
 }
 
 function getNoMatchesMessage(searchString)
