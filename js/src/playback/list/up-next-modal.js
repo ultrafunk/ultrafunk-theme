@@ -7,15 +7,14 @@
 
 import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { IS_PROD_BUILD }     from '../../config.js';
-import { autoplay }          from '../footer-toggles.js';
+import { autoplay }          from '../../site/footer-toggles.js';
 import { settings }          from '../../shared/session-data.js';
-import { isPlaying }         from '../playback-controls.js';
-import { TRACK_TYPE }        from '../mediaplayers.js';
+import { isPlaying }         from '../common/playback-controls.js';
+import { TRACK_TYPE }        from '../common/mediaplayers.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
-import { shuffleClickNavTo } from '../shared-gallery-list.js';
+import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
 
 import {
-  addListener,
   escAttribute,
   getTimeString,
 } from '../../shared/utils.js';
@@ -29,7 +28,7 @@ import {
 import {
   showModal,
   isShowingModal,
-  getModalId,
+  getModalRootElement,
   getModalEntry,
   updateModalTitle,
   updateModalBody,
@@ -44,7 +43,6 @@ const debug = newDebugLogger('up-next-modal');
 const m = {
   setCurrentTrack: null,
   modalDialogId:   null,
-  upNextModalId:   0,
   dragStartY:      0,
   dragEntryId:     null,
 };
@@ -90,26 +88,13 @@ export function showUpNextModal()
 
   if (modalEntries.length > 2)
   {
-    m.modalDialogId = showModal(getTitle(isPlaying()), modalEntries, 'tracklist', (clickedId) =>
-    {
-      const nextTrackId = modalEntries.find(item => (item.clickId === clickedId)).clickId;
-
-      if ((nextTrackId === getCurrentTrackElement().id) && isPlaying())
-        getCurrentTrackElement().scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
-      else
-        m.setCurrentTrack(nextTrackId, true, false);
-    },
-    (event) =>
-    {
-      if (event.target.closest('#modal-item-1'))
-        return true;
-      else if (event.target.classList.contains('modal-track-thumbnail'))
-        return true;
-
-      return false;
+    m.modalDialogId = showModal({
+      modalTitle: getTitle(isPlaying()),
+      modalBody:  modalEntries,
+      modalType:  'tracklist',
+      onClickEntryCallback: (clickedId) => onTrackClick(modalEntries, clickedId),
+      onClickCloseCallback: (event)     => shouldCloseModal(event),
     });
-
-    m.upNextModalId = getModalId();
 
     addTitleListener();
     addDragDropListeners();
@@ -120,11 +105,31 @@ export function showUpNextModal()
   }
 }
 
+function onTrackClick(modalEntries, clickedId)
+{
+  const nextTrackId = modalEntries.find(item => (item.clickId === clickedId)).clickId;
+
+  if ((nextTrackId === getCurrentTrackElement().id) && isPlaying())
+    getCurrentTrackElement().scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
+  else
+    m.setCurrentTrack(nextTrackId, true, false);
+}
+
+function shouldCloseModal(event)
+{
+  if (event.target.closest('#modal-item-1'))
+    return true;
+  else if (event.target.classList.contains('modal-track-thumbnail'))
+    return true;
+
+  return false;
+}
+
 export function updateUpNextModal(isPlayingTrack)
 {
-  if (isShowingModal(m.upNextModalId))
+  if (isShowingModal(m.modalDialogId))
   {
-    updateModalTitle(m.upNextModalId, getTitle(isPlayingTrack));
+    updateModalTitle(m.modalDialogId, getTitle(isPlayingTrack));
     addTitleListener();
 
     const modalEntry = getModalEntry(1);
@@ -137,7 +142,7 @@ export function updateUpNextModal(isPlayingTrack)
     }
     else
     {
-      updateModalBody(m.upNextModalId, getEntries(isPlayingTrack));
+      updateModalBody(m.modalDialogId, getEntries(isPlayingTrack));
       addDragDropListeners();
     }
   }
@@ -183,7 +188,7 @@ function getEntries(isPlayingTrack)
 
 function addTitleListener()
 {
-  addListener(`#${m.modalDialogId} .modal-dialog-title span`, 'click', (event) =>
+  getModalRootElement().querySelector('.modal-dialog-title span').addEventListener('click', (event) =>
   {
     autoplay.toggle();
     event.target.closest('span').innerHTML = `Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b>`;

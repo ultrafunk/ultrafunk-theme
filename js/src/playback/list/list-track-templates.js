@@ -5,7 +5,7 @@
 //
 
 
-import { TRACK_TYPE } from '../mediaplayers.js';
+import { TRACK_TYPE } from '../common/mediaplayers.js';
 
 import {
   IS_PROD_BUILD,
@@ -87,7 +87,7 @@ export function getTrackEntryHtml(track, density = 'default')
         </div>
         <div class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></div>
       </div>
-      <div class="track-duration text-nowrap-ellipsis">${(isYouTubeTrack ? getTimeString(trackDuration) : 'N / A')}</div>
+      <div class="track-duration text-nowrap-ellipsis" title="Track duration">${(isYouTubeTrack ? getTimeString(trackDuration) : 'N / A')}</div>
     </div>`;
 }
 

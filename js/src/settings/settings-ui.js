@@ -5,14 +5,14 @@
 //
 
 
-import { newDebugLogger } from '../debuglogger.js';
-import { showSnackbar }   from '../snackbar.js';
-import { showModal }      from '../modal.js';
-import { addListener }    from '../utils.js';
+import { newDebugLogger } from '../shared/debuglogger.js';
+import { showSnackbar }   from '../shared/snackbar.js';
+import { showModal }      from '../shared/modal.js';
+import { addListener }    from '../shared/utils.js';
 
 import {
   settings as storedSettings
-} from '../session-data.js';
+} from '../shared/session-data.js';
 
 import {
   KEY,
@@ -22,7 +22,7 @@ import {
   readJson,
   writeJson,
   cleanupOldData,
-} from '../storage.js';
+} from '../shared/storage.js';
 
 import {
   TYPE_INTEGER,
@@ -323,13 +323,13 @@ function showSettingDetailsModal(sectionName ,schemaEntry)
   let valueStrings = '';
   schemaEntry.valueStrings.forEach(entry => (valueStrings += `${entry}, `));
 
-  showModal(
-    `${sectionName} setting details`,
-    `<p><b>Description</b><br>${schemaEntry.description}</p>
-     <p><b>Values</b><br>${valueStrings.slice(0, (valueStrings.length - 2))}</p>
-     <p><b>Current Value</b><br>${schemaEntry.valueStrings[schemaEntry.current]}</p>
-     <p><b>Default Value</b><br>${schemaEntry.valueStrings[getValueStringsIndex(schemaEntry, schemaEntry.default)]}</p>`,
-  );
+  showModal({
+    modalTitle: `${sectionName} setting details`,
+    modalBody:  `<p><b>Description</b><br>${schemaEntry.description}</p>
+                 <p><b>Values</b><br>${valueStrings.slice(0, (valueStrings.length - 2))}</p>
+                 <p><b>Current Value</b><br>${schemaEntry.valueStrings[schemaEntry.current]}</p>
+                 <p><b>Default Value</b><br>${schemaEntry.valueStrings[getValueStringsIndex(schemaEntry, schemaEntry.default)]}</p>`,
+  });
 }
 
 function clearValueChanged()

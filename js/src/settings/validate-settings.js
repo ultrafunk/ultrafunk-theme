@@ -5,7 +5,7 @@
 //
 
 
-import { newDebugLogger } from '../debuglogger.js';
+import { newDebugLogger } from '../shared/debuglogger.js';
 
 import {
   TYPE_INTEGER,

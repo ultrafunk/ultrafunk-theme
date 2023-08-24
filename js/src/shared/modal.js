@@ -9,7 +9,6 @@ import { newDebugLogger } from './debuglogger.js';
 import { settings }       from './session-data.js';
 
 import {
-  config,
   getTemplateHtml,
   getSingleChoiceListHtml,
 } from './modal-templates.js';
@@ -21,13 +20,14 @@ import {
 const debug = newDebugLogger('modal');
 
 const m = {
-  onEntryClicked:   null,
-  onClickClose:     null,
-  modalId:          0,
-  clickItemsCount:  0,
-  isOverflowY:      false,
-  ignoreTouchMove:  false,
-  isTouchDraggable: false,
+  onClickClose:        null,
+  onClickEntry:        null,
+  onCloseFocusElement: null,
+  modalId:             0,
+  clickItemsCount:     0,
+  isOverflowY:         false,
+  ignoreTouchMove:     false,
+  isTouchDraggable:    false,
 };
 
 const elements = {
@@ -41,20 +41,25 @@ const elements = {
 //
 // ************************************************************************************************
 
-export function showModal(
+export function showModal({
   modalTitle = 'Modal Title',
   modalBody  = 'Modal Body',
   modalType  = null,
-  onEntryClickedCallback = () => {},
-  onClickCloseCallback = () => true
+  onClickCloseCallback = () => true,
+  onClickEntryCallback = () => {},
+  onCloseFocusElement  = null,
+} = {}
 )
 {
+  debug.log(`showModal() - modalId: ${m.modalId + 1} - modalType: ${(modalType !== null) ? modalType : 'default'} - modalTitle: ${modalTitle}`);
+
   initElements();
   resetState();
 
-  m.onEntryClicked  = onEntryClickedCallback;
-  m.onClickClose    = onClickCloseCallback;
-  m.clickItemsCount = 0;
+  m.onClickClose        = onClickCloseCallback;
+  m.onClickEntry        = onClickEntryCallback;
+  m.onCloseFocusElement = onCloseFocusElement;
+  m.clickItemsCount     = 0;
 
   if (Array.isArray(modalBody) && (modalBody.length > 0))
     setSingleChoiceList(modalBody, modalType);
@@ -63,7 +68,7 @@ export function showModal(
 
   elements.container.classList = `modal-type-${(modalType !== null) ? modalType : 'default'}`;
   elements.container.classList.add((m.clickItemsCount > 10) ? 'modal-click-items-2-columns' : 'modal-click-items-1-column');
-  elements.container.querySelector(`.${config.id}-title`).innerHTML = modalTitle;
+  elements.container.querySelector('.modal-dialog-title').innerHTML = modalTitle;
 
   elements.overlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
   elements.overlay.classList.add('show');
@@ -72,11 +77,7 @@ export function showModal(
 
   disablePageScrolling(true);
 
-  m.modalId++;
-
-  debug.log(`showModal() - modalId: ${m.modalId} - modalType: ${(modalType !== null) ? modalType : 'default'} - modalTitle: ${modalTitle}`);
-
-  return `${config.id}-container`;
+  return ++m.modalId;
 }
 
 export function isShowingModal(showingModalId = -1)
@@ -86,9 +87,9 @@ export function isShowingModal(showingModalId = -1)
           (elements.overlay.classList.contains('show')));
 }
 
-export function getModalId()
+export function getModalRootElement()
 {
-  return m.modalId;
+  return elements.container;
 }
 
 export function getModalEntry(entryNum)
@@ -99,7 +100,7 @@ export function getModalEntry(entryNum)
 export function updateModalTitle(updateModalId, updateTitle)
 {
   if (updateModalId === m.modalId)
-    elements.container.querySelector(`.${config.id}-title`).innerHTML = updateTitle;
+    elements.container.querySelector('.modal-dialog-title').innerHTML = updateTitle;
 }
 
 export function updateModalBody(updateModalId, updateSingleChoiceList)
@@ -119,9 +120,9 @@ function initElements()
   {
     document.body.insertAdjacentHTML('beforeend', getTemplateHtml());
 
-    elements.overlay   = document.getElementById(`${config.id}-overlay`);
-    elements.container = document.getElementById(`${config.id}-container`);
-    elements.body      = elements.overlay.querySelector(`.${config.id}-body`);
+    elements.overlay   = document.getElementById('modal-dialog-overlay');
+    elements.container = document.getElementById('modal-dialog-container');
+    elements.body      = elements.container.querySelector('.modal-dialog-body');
 
     elements.overlay.addEventListener('click', (event) =>
     {
@@ -129,8 +130,8 @@ function initElements()
         resetState();
     });
 
-    elements.overlay.querySelector(`.${config.id}-close-icon`).addEventListener('click', resetState);
-    elements.overlay.querySelector(`.${config.id}-close-button`).addEventListener('click', resetState);
+    elements.container.querySelector('.modal-dialog-close-icon').addEventListener('click', resetState);
+    elements.container.querySelector('.modal-dialog-close-button').addEventListener('click', resetState);
   }
 }
 
@@ -143,6 +144,7 @@ function resetState()
     elements.overlay.removeEventListener('keydown', keyDown);
     elements.overlay.className = '';
     disablePageScrolling(false);
+    m.onCloseFocusElement?.focus();
   }
 }
 
@@ -166,7 +168,7 @@ function singleChoiceListClick(event)
     resetState();
 
     if (entryClickId)
-      m.onEntryClicked(entryClickId, event);
+      m.onClickEntry(entryClickId, event);
   }
 }
 

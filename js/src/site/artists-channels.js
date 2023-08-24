@@ -1,26 +1,26 @@
 //
-// Termlist UI module
+// Artists & Channels UI module
 //
 // https://ultrafunk.com
 //
 
 
-import * as termlistRest      from './termlist-rest.js';
+import * as termlistRest      from './artists-channels-rest.js';
 import * as utils             from '../shared/utils.js';
 import { newDebugLogger }     from '../shared/debuglogger.js';
 import { THEME_ENV }          from '../config.js';
 import { ElementClick }       from '../shared/element-click.js';
-import { shareModal }         from './share-modal.js';
-import { TRACK_TYPE }         from '../playback/mediaplayers.js';
+import { shareModal }         from '../shared/share-modal.js';
+import { TRACK_TYPE }         from '../playback/common/mediaplayers.js';
 import { KEY, setCookie }     from '../shared/storage.js';
-import { PREF_PLAYER }        from '../shared/settings/settings.js';
+import { PREF_PLAYER }        from '../settings/settings.js';
 import { response, settings } from '../shared/session-data.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = newDebugLogger('termlist');
+const debug = newDebugLogger('artists-channels');
 
 const m = {
   listContainer:       null,
@@ -39,16 +39,16 @@ const denyKeyboardShortcutsEvent  = new Event('denyKeyboardShortcuts');
 // Init module
 // ************************************************************************************************
 
-export function initTermlist()
+export function initArtistsChannels()
 {
   if (document.getElementById('termlist-container') !== null)
   {
-    debug.log('initTermlist()');
+    debug.log('init()');
 
     m.listContainer = document.getElementById('termlist-container');
     m.uiElements    = new UiElements('#termlist-container');
 
-    initTermlistFilter();
+    initArtistsChannelsFilter();
     restoreState();
   }
 }
@@ -115,7 +115,7 @@ function restoreState()
 // Realtime filtering of termlist items
 // ************************************************************************************************
 
-function initTermlistFilter()
+function initArtistsChannelsFilter()
 {
   if (m.listContainer.getAttribute('data-term-type') === 'artists')
   {
@@ -212,7 +212,7 @@ class UiElements extends ElementClick
       return playTrackClick(this.event, this.element);
 
     if (this.clicked('a'))
-      return linkClicked(this.event, this.element);
+      return linkClick(this.event, this.element);
   }
 }
 
@@ -271,7 +271,7 @@ function playTrackClick(event, element)
   }
 }
 
-function linkClicked(event, element)
+function linkClick(event, element)
 {
   saveState();
 

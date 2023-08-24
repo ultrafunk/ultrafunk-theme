@@ -7,9 +7,9 @@
 
 import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { KEY }               from '../../shared/storage.js';
-import { TRACK_TYPE }        from '../mediaplayers.js';
+import { TRACK_TYPE }        from '../common/mediaplayers.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
-import { shuffleClickNavTo } from '../shared-gallery-list.js';
+import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
 import { getThumbnailData }  from '../../shared/utils.js';
 
 import {
@@ -131,7 +131,7 @@ function fetchTracks(playPrevNext)
 
     return fetchRest({
       endpoint: 'tracks',
-      query:    `before=${queryTracksDateTime}&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`,
+      query:    `before=${queryTracksDateTime}&per_page=3&separator=true&_fields=id,date,link,meta,artists_links,channels_links`,
     });
   }
   else
@@ -140,7 +140,7 @@ function fetchTracks(playPrevNext)
 
     return fetchRest({
       endpoint: 'tracks',
-      query:    `after=${queryTracksDateTime}&order=asc&per_page=3&_fields=id,date,link,meta,artists_links,channels_links`,
+      query:    `after=${queryTracksDateTime}&order=asc&per_page=3&separator=true&_fields=id,date,link,meta,artists_links,channels_links`,
     });
   }
 }

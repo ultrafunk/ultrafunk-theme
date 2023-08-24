@@ -299,7 +299,7 @@ body.autoplay-off .playback-play-pause-control:hover {
 
 .playback-play-pause-control.state-playing,
 .playback-play-pause-control.state-paused {
-  background-image: url(../../../inc/img/play_pause_bg_filler.png);
+  background-image: url(../../../../inc/img/play_pause_bg_filler.png);
   background-repeat: no-repeat;
   background-position: center;
 }

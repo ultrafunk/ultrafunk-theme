@@ -86,7 +86,7 @@ function onClipboardWriteError(logError, clipboardText, contentDescription)
 {
   debug.error(`copyTextToClipboard() error: ${logError}`);
 
-  const modalBody = /*html*/ `
+  const modalBodyHtml = /*html*/ `
     <style>
       .modal-dialog-body p.modal-clipboard-content {
         padding: 10px 15px;
@@ -97,7 +97,7 @@ function onClipboardWriteError(logError, clipboardText, contentDescription)
     <p class="modal-clipboard-error">Failed to write ${contentDescription} to the clipboard, please copy the text below:</p>
     <p class="modal-clipboard-content">${clipboardText}</p>`;
 
-  showModal('Copy to Clipboard error!', modalBody);
+  showModal({ modalTitle: 'Copy to Clipboard error!', modalBody: modalBodyHtml });
 }
 
 /*

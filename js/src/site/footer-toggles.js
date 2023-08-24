@@ -18,7 +18,7 @@ import {
 import {
   PLAYER_TYPE,
   isListPlayer,
-} from './shared-gallery-list.js';
+} from '../playback/common/shared-gallery-list.js';
 
 import {
   KEY,

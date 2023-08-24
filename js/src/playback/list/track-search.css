@@ -69,8 +69,7 @@
 
 @media all and (pointer: fine) {
 
-  #track-search-results .track-action-buttons .remove-button,
-  #track-search-results .track-action-buttons .share-play-button {
+  #track-search-results .track-action-buttons .remove-button {
     display: none;
   }
 

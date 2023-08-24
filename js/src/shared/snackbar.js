@@ -21,14 +21,12 @@ const m = {
   showTimeoutId: -1,
 };
 
-const config = { id: 'snackbar' };
-
 const template = /*html*/ `
-  <div id="${config.id}">
-    <div class="${config.id}-container">
-      <div class="${config.id}-message"></div>
-      <div class="${config.id}-action-text"></div>
-      <div class="${config.id}-close-icon"><span class="material-icons" title="Dismiss">close</span></div>
+  <div id="snackbar">
+    <div class="snackbar-container">
+      <div class="snackbar-message"></div>
+      <div class="snackbar-action-text"></div>
+      <div class="snackbar-close-icon"><span class="material-icons" title="Dismiss">close</span></div>
     </div>
   </div>
 `;
@@ -58,8 +56,8 @@ export function showSnackbar(
   initElements();
   resetState(false);
 
-  elements.snackbar.querySelector(`.${config.id}-message`).innerHTML = message;
-  elements.snackbar.querySelector(`.${config.id}-container`).style = `background-color: ${backgroundColor};`;
+  elements.snackbar.querySelector('.snackbar-message').innerHTML = message;
+  elements.snackbar.querySelector('.snackbar-container').style = `background-color: ${backgroundColor};`;
   elements.snackbar.classList.add('show');
   elements.actionText.style.display = 'none';
   m.afterClose = (afterCloseCallback !== null) ? afterCloseCallback : () => {};
@@ -113,9 +111,9 @@ function initElements()
   {
     document.body.insertAdjacentHTML('beforeend', template);
 
-    elements.snackbar   = document.getElementById(config.id);
-    elements.actionText = elements.snackbar.querySelector(`.${config.id}-action-text`);
-    elements.closeIcon  = elements.snackbar.querySelector(`.${config.id}-close-icon`);
+    elements.snackbar   = document.getElementById('snackbar');
+    elements.actionText = elements.snackbar.querySelector('.snackbar-action-text');
+    elements.closeIcon  = elements.snackbar.querySelector('.snackbar-close-icon');
 
     elements.snackbar.addEventListener('animationend', () =>
     {

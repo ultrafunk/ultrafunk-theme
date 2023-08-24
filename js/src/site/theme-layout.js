@@ -1,32 +1,26 @@
 //
-// Ultrafunk site interaction
+// Ultrafunk site theme and layout module
 //
 // https://ultrafunk.com
 //
 
 
-import * as utils              from '../shared/utils.js';
-import { newDebugLogger }      from '../shared/debuglogger.js';
-import { ElementToggle }       from '../shared/element-toggle.js';
-import { ElementClick }        from '../shared/element-click.js';
-import { settings }            from '../shared/session-data.js';
-import { showModal }           from '../shared/modal.js';
-import { KEY, setValue }       from '../shared/storage.js';
-import { getModalTrackHtml }   from '../shared/modal-templates.js';
-import { shareModal }          from './share-modal.js';
-import { copyTextToClipboard } from '../shared/clipboard.js';
+import { newDebugLogger }   from '../shared/debuglogger.js';
+import { ElementToggle }    from '../shared/element-toggle.js';
+import { KEY, setValue }    from '../shared/storage.js';
+import { getCssPropString } from '../shared/utils.js';
+
+import {
+  settings,
+  readSettings,
+} from '../shared/session-data.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = newDebugLogger('site-interaction');
+const debug = newDebugLogger('theme-layout');
 const htmlClassList = document.documentElement.classList;
-
-const m = {
-  metaUiElements: null,
-  listUiElements: null,
-};
 
 export let siteTheme     = {};
 export let galleryLayout = {};
@@ -40,134 +34,15 @@ export function init()
 {
   debug.log('init()');
 
-  m.metaUiElements = new MetaUiElements('div.track-meta', true);
-  m.listUiElements = new ListUiElements('#tracklist');
-  siteTheme        = new SiteThemeToggle('footer-site-theme-toggle');
-  galleryLayout    = new GalleryLayoutToggle('footer-gallery-layout-toggle');
+  siteTheme     = new SiteThemeToggle('footer-site-theme-toggle');
+  galleryLayout = new GalleryLayoutToggle('footer-gallery-layout-toggle');
 
-  window.addEventListener('load', () =>
+  document.addEventListener('settingsUpdated', () =>
   {
-    utils.addListener('.widget ul.uf_channel',     'click', linkClick);
-    utils.addListener('.widget ul.uf_artist',      'click', linkClick);
-    utils.addListener('.widget.widget_archive ul', 'click', linkClick);
+    readSettings();
+    siteTheme.setCurrent();
+    galleryLayout.setCurrent();
   });
-}
-
-export function settingsUpdated()
-{
-  siteTheme.setCurrent();
-  galleryLayout.setCurrent();
-}
-
-
-// ************************************************************************************************
-// UI elements event handling
-// ************************************************************************************************
-
-class MetaUiElements extends ElementClick
-{
-  elementClicked()
-  {
-    if (this.clicked('div.track-share-control'))
-      return sharePlayClick(this.closest('single-track, gallery-track'));
-
-    if (this.clicked('div.track-details-control'))
-      return detailsClick(this.closest('single-track, gallery-track'));
-
-    if (this.clicked('span.track-artists-links'))
-      return linkClick(this.event);
-
-    if (this.clicked('span.track-channels-links'))
-      return linkClick(this.event);
-  }
-}
-
-class ListUiElements extends ElementClick
-{
-  elementClicked()
-  {
-    if (this.clicked('div.share-play-button'))
-      return sharePlayClick(this.closest('div.track-entry'));
-
-    if (this.clicked('div.details-button'))
-      return detailsClick(this.closest('div.track-entry'));
-  }
-}
-
-function linkClick(event)
-{
-  if (event.target.matches('a'))
-  {
-    event?.preventDefault();
-    utils.navToUrl(utils.getPrefPlayerUrl(event.target.href));
-  }
-}
-
-export function sharePlayClick(element)
-{
-  const trackArtist = utils.stripAttribute(element, 'data-track-artist');
-  const trackTitle  = utils.stripAttribute(element, 'data-track-title');
-
-  const modalId = shareModal.show({
-    bodyText:       `${trackArtist} - ${trackTitle}`,
-    filterBodyText: true,
-    bodyHtml:       getModalTrackHtml(element, trackArtist, trackTitle),
-    url:            utils.stripAttribute(element, 'data-track-url'),
-    urlType:        'Track link',
-    sourceUid:      utils.stripAttribute(element, 'data-track-source-uid'),
-  });
-
-  trackThumbnailClick(modalId, `${trackArtist} - ${trackTitle}`);
-}
-
-export function detailsClick(element)
-{
-  const trackArtist   = utils.stripAttribute(element, 'data-track-artist');
-  const trackTitle    = utils.stripAttribute(element, 'data-track-title');
-  const trackDuration = parseInt(element.getAttribute('data-track-duration'));
-  const artists       = element.querySelector('.track-artists-links').querySelectorAll('a');
-  const channels      = element.querySelector('.track-channels-links').querySelectorAll('a');
-  const modalEntries  = [];
-
-  modalEntries.push({
-    class:   'track-details-entry',
-    content: getModalTrackHtml(element, trackArtist, trackTitle),
-  });
-
-  modalEntries.push({ class: 'header-entry', content: 'Artists' });
-
-  artists.forEach(item =>
-  {
-    modalEntries.push({
-      class:   `icon-text ${item.classList[0] ?? ''}`,
-      title:   'Go to Artist',
-      content: item.innerText,
-      link:    utils.getPrefPlayerUrl(item.href),
-      icon:    'link',
-    });
-  });
-
-  modalEntries.push({ class: 'header-entry', content: 'Channels' });
-
-  channels.forEach(item =>
-  {
-    modalEntries.push({
-      title:   'Go to Channel',
-      content: item.innerText,
-      link:    utils.getPrefPlayerUrl(item.href),
-      icon:    'link'
-    });
-  });
-
-  const modalTitle = `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? utils.getTimeString(trackDuration) : 'duration N/A')}</span>`;
-
-  trackThumbnailClick(showModal(modalTitle, modalEntries, 'track-details'), `${trackArtist} - ${trackTitle}`);
-}
-
-function trackThumbnailClick(modalId, artistTitle)
-{
-  document.getElementById(modalId).querySelector('.modal-track .modal-track-thumbnail').title = 'Click / tap to Copy Artist & Title';
-  document.getElementById(modalId)?.querySelector('img')?.addEventListener('click', () => copyTextToClipboard(artistTitle, 'Artist &amp Title'));
 }
 
 
@@ -270,7 +145,7 @@ class GalleryLayoutToggle extends ElementToggle
   {
     super(elementId, false);
 
-    this.minWidth = `(max-width: ${utils.getCssPropString('--gallery-layout-min-width')})`;
+    this.minWidth = `(max-width: ${getCssPropString('--gallery-layout-min-width')})`;
 
     this.layouts = {
       oneColumn:   { id: '1-column', text: '1 column',     class: 'gallery-1-col' },

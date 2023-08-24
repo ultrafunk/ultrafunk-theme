@@ -6,11 +6,11 @@
 
 
 import * as upNextModal       from './up-next-modal.js';
-import * as playbackEvents    from '../playback-events.js';
+import * as playbackEvents    from '../common/playback-events.js';
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { ElementClick }       from '../../shared/element-click.js';
-import { STATE }              from '../element-wrappers.js';
-import { TRACK_TYPE }         from '../mediaplayers.js';
+import { STATE }              from '../common/element-wrappers.js';
+import { TRACK_TYPE }         from '../common/mediaplayers.js';
 import { loadTracks }         from './list-tracks-rest.js';
 import { showSnackbar }       from '../../shared/snackbar.js';
 import { response, settings } from '../../shared/session-data.js';
@@ -19,6 +19,11 @@ import {
   replaceClass,
   stripAttribute,
 } from '../../shared/utils.js';
+
+import {
+  showTrackDetails,
+  showTrackSharePlay,
+} from '../common/track-modals.js';
 
 
 /*************************************************************************************************/
@@ -167,6 +172,12 @@ class UiElements extends ElementClick
 
     if (this.clicked('div.play-next-button'))
       return playNextClick(this.closest('div.track-entry'));
+
+    if (this.clicked('div.share-play-button'))
+      return showTrackSharePlay(this.closest('div.track-entry'));
+
+    if (this.clicked('div.details-button'))
+      return showTrackDetails(this.closest('div.track-entry'));
 
     if (this.clicked('span.arrow-up-button'))
       return arrowUpDownClick(this.closest('div.tracklist-page-separator'), true);

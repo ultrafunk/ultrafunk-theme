@@ -5,13 +5,7 @@
 //
 
 
-import { TRACK_TYPE } from '../playback/mediaplayers.js';
-
-
-/*************************************************************************************************/
-
-
-export const config = { id: 'modal-dialog' };
+import { TRACK_TYPE } from '../playback/common/mediaplayers.js';
 
 
 // ************************************************************************************************
@@ -21,14 +15,14 @@ export const config = { id: 'modal-dialog' };
 export function getTemplateHtml()
 {
   return /*html*/ `
-    <div id="${config.id}-overlay" tabindex="-1">
-      <div id="${config.id}-container">
-        <div class="${config.id}-header">
-          <div class="${config.id}-title"></div>
-          <div class="${config.id}-close-icon"><span class="material-icons" title="Dismiss (esc)">close</span></div>
+    <div id="modal-dialog-overlay" tabindex="-1">
+      <div id="modal-dialog-container">
+        <div class="modal-dialog-header">
+          <div class="modal-dialog-title"></div>
+          <div class="modal-dialog-close-icon"><span class="material-icons" title="Dismiss (esc)">close</span></div>
         </div>
-        <div class="${config.id}-body"></div>
-        <div class="${config.id}-footer"><div class="modal-dialog-close-button" title="Dismiss (esc)">Close</div></div>
+        <div class="modal-dialog-body"></div>
+        <div class="modal-dialog-footer"><div class="modal-dialog-close-button" title="Dismiss (esc)">Close</div></div>
       </div>
     </div>`;
 }

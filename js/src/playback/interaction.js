@@ -5,22 +5,22 @@
 //
 
 
-import * as eventLogger       from './eventlogger.js';
+import * as eventLogger       from './common/eventlogger.js';
 import * as galleryPlayback   from './gallery/gallery-playback.js';
 import * as listPlayback      from './list/list-playback.js';
-import * as playbackEvents    from './playback-events.js';
+import * as playbackEvents    from './common/playback-events.js';
 import * as utils             from '../shared/utils.js';
-import * as footerToggles     from './footer-toggles.js';
-import * as shared            from './shared-gallery-list.js';
+import * as footerToggles     from '../site/footer-toggles.js';
+import * as shared            from './common/shared-gallery-list.js';
 import { ElementClick }       from '../shared/element-click.js';
 import { showSnackbar }       from '../shared/snackbar.js';
-import { initScreenWakeLock } from './screen-wakelock.js';
-import { TRACK_TYPE }         from './mediaplayers.js';
+import { initScreenWakeLock } from './common/screen-wakelock.js';
+import { TRACK_TYPE }         from './common/mediaplayers.js';
 
 import {
-  sharePlayClick,
-  detailsClick,
-} from '../site/interaction.js';
+  showTrackSharePlay,
+  showTrackDetails,
+} from './common/track-modals.js';
 
 import {
   newDebugLogger,
@@ -37,7 +37,7 @@ import {
 import {
   setPlaybackControlsCss,
   toggleRepeat,
-} from './playback-controls.js';
+} from './common/playback-controls.js';
 
 import {
   response,
@@ -215,12 +215,12 @@ function documentEventKeyDown(event)
 
         case 'i':
           event.preventDefault();
-          detailsClick(document.getElementById(m.player.getStatus().elementId));
+          showTrackDetails(document.getElementById(m.player.getStatus().elementId));
           break;
 
         case 'I':
           event.preventDefault();
-          sharePlayClick(document.getElementById(m.player.getStatus().elementId));
+          showTrackSharePlay(document.getElementById(m.player.getStatus().elementId));
           break;
 
         case 'm':

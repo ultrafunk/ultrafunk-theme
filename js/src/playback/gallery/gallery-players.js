@@ -8,7 +8,7 @@
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { crossfadeClosure }   from './crossfade.js';
 import { settings }           from '../../shared/session-data.js';
-import { EVENT, addListener } from '../playback-events.js';
+import { EVENT, addListener } from '../common/playback-events.js';
 
 
 /*************************************************************************************************/

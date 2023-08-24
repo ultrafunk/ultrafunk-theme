@@ -114,7 +114,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
           </div>
           <div class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></div>
         </div>
-        <div class="track-duration text-nowrap-ellipsis"><?php echo ($is_youtube_track ? $this->getTimeString($track_duration) : 'N / A'); ?></div>
+        <div class="track-duration text-nowrap-ellipsis" title="Track duration"><?php echo ($is_youtube_track ? $this->getTimeString($track_duration) : 'N / A'); ?></div>
       </div>
       <?php
     }

@@ -5,9 +5,9 @@
 //
 
 
-import { newDebugLogger } from '../shared/debuglogger.js';
-import { showSnackbar }   from '../shared/snackbar.js';
-import { settings }       from '../shared/session-data.js';
+import { newDebugLogger } from '../../shared/debuglogger.js';
+import { showSnackbar }   from '../../shared/snackbar.js';
+import { settings }       from '../../shared/session-data.js';
 
 
 /*************************************************************************************************/

@@ -5,12 +5,12 @@
 //
 
 
-import * as utils         from './shared/utils.js';
-import * as interaction   from './site/interaction.js';
-import { initTermlist }   from './site/termlist.js';
-import { initSettingsUi } from './shared/settings/settings-ui.js';
-import { navMenu }        from './site/nav-menu.js';
-import { navSearch }      from './site/nav-search.js';
+import * as utils              from './shared/utils.js';
+import * as themeLayout        from './site/theme-layout.js';
+import { initSettingsUi }      from './settings/settings-ui.js';
+import { navMenu }             from './site/nav-menu.js';
+import { navSearch }           from './site/nav-search.js';
+import { initArtistsChannels } from './site/artists-channels.js';
 
 import {
   newDebugLogger,
@@ -26,12 +26,11 @@ import {
   noPlayback,
   isGalleryPlayer,
   isListPlayer,
-} from './playback/shared-gallery-list.js';
+} from './playback/common/shared-gallery-list.js';
 
 import {
   response,
   settings,
-  readSettings,
 } from './shared/session-data.js';
 
 
@@ -58,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () =>
   debug.log('DOMContentLoaded');
 
   initIndex();
-  initTermlist();
+  initArtistsChannels();
   initSettingsUi();
   setSiteContentSearchFocus();
   setPreviousPageTitle();
@@ -75,7 +74,7 @@ function initIndex()
   elements.siteContent       = document.getElementById('site-content');
   elements.siteContentSearch = document.querySelector('#site-content form input.search-field');
 
-  interaction.init();
+  themeLayout.init();
   navSearch.init();
   navMenu.init();
 
@@ -84,6 +83,8 @@ function initIndex()
 
   document.addEventListener('fullscreenElement', (event) => (elements.fullscreenTarget = event.fullscreenTarget));
   document.addEventListener('keydown', documentEventKeyDown);
+
+  window.addEventListener('load', () => utils.addListener('aside.widget-area', 'click', utils.linkClickUsePrefPlayer));
 }
 
 window.addEventListener('load', () =>
@@ -104,12 +105,6 @@ window.addEventListener('load', () =>
       }, 2000);
     }
   }
-});
-
-document.addEventListener('settingsUpdated', () =>
-{
-  readSettings();
-  interaction.settingsUpdated();
 });
 
 
@@ -147,7 +142,7 @@ function documentEventKeyDown(event)
       case 'L':
         if (searchNotFocused() && notSettingsPage())
         {
-          interaction.galleryLayout.toggle(event);
+          themeLayout.galleryLayout.toggle(event);
           resize.trigger();
         }
         break;
@@ -173,7 +168,7 @@ function documentEventKeyDown(event)
       case 'T':
         if (searchNotFocused() && notSettingsPage())
         {
-          interaction.siteTheme.toggle(event);
+          themeLayout.siteTheme.toggle(event);
         }
         break;
 

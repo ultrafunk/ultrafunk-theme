@@ -5,14 +5,14 @@
 //
 
 
-import { PlaybackTimer }            from '../playback-timer.js';
-import { EVENT, addListener }       from '../playback-events.js';
-import { updateVolumeMuteSettings } from '../shared-gallery-list.js';
+import { PlaybackTimer }            from '../common/playback-timer.js';
+import { EVENT, addListener }       from '../common/playback-events.js';
+import { updateVolumeMuteSettings } from '../common/shared-gallery-list.js';
 
 import {
   isPlaying,
   updateTimerAndProgress
-} from '../playback-controls.js';
+} from '../common/playback-controls.js';
 
 
 /*************************************************************************************************/

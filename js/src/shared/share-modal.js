@@ -5,8 +5,8 @@
 //
 
 
-import { showModal }           from '../shared/modal.js';
-import { copyTextToClipboard } from '../shared/clipboard.js';
+import { showModal }           from './modal.js';
+import { copyTextToClipboard } from './clipboard.js';
 
 
 // ************************************************************************************************
@@ -16,7 +16,7 @@ import { copyTextToClipboard } from '../shared/clipboard.js';
 const shareModalClosure = (() =>
 {
   const filterBodyTextRegEx = /\s{1,}[\u002D\u00B7\u2013]\s{1,}/i;
-  let title, bodyText, filterBodyText, bodyHtml, url, urlType, sourceUid, verb, icon;
+  let title, bodyText, filterBodyText, bodyHtml, url, urlType, sourceUid, verb, icon, onCloseFocusElement;
 
   return {
     show,
@@ -34,9 +34,16 @@ const shareModalClosure = (() =>
       sourceUid      = null,
       verb           = 'Play',
       icon           = 'link',
+      onCloseFocusElement = null,
     } = args);
 
-    return showModal(title, getSingleChoiceList(), 'share', () => copyTextToClipboard(url, urlType));
+    return showModal({
+      modalTitle: title,
+      modalBody:  getSingleChoiceList(),
+      modalType:  'share',
+      onClickEntryCallback: () => copyTextToClipboard(url, urlType),
+      onCloseFocusElement: onCloseFocusElement,
+    });
   }
 
   function getSingleChoiceList()

@@ -7,7 +7,7 @@
 
 import { newDebugLogger } from './debuglogger.js';
 import { settings }       from './session-data.js';
-import { PREF_PLAYER }    from './settings/settings.js';
+import { PREF_PLAYER }    from '../settings/settings.js';
 import { showSnackbar }   from './snackbar.js';
 
 import {
@@ -18,7 +18,7 @@ import {
 import {
   TRACK_TYPE,
   getYouTubeImgUrl,
-} from '../playback/mediaplayers.js';
+} from '../playback/common/mediaplayers.js';
 
 
 /*************************************************************************************************/
@@ -215,6 +215,15 @@ export function getPrefPlayerUrl(destUrl)
   }
 
   return destUrl;
+}
+
+export function linkClickUsePrefPlayer(event)
+{
+  if (event.target.matches('a'))
+  {
+    event.preventDefault();
+    navToUrl(getPrefPlayerUrl(event.target.href));
+  }
 }
 
 export function getTimeString(seconds, includeHours = false)

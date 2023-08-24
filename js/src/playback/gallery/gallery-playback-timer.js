@@ -5,11 +5,11 @@
 //
 
 
-import { PlaybackTimer }            from '../playback-timer.js';
+import { PlaybackTimer }            from '../common/playback-timer.js';
 import { settings }                 from '../../shared/session-data.js';
 import { CROSSFADE_TYPE }           from './crossfade.js';
-import { updateTimerAndProgress }   from '../playback-controls.js';
-import { updateVolumeMuteSettings } from '../shared-gallery-list.js';
+import { updateTimerAndProgress }   from '../common/playback-controls.js';
+import { updateVolumeMuteSettings } from '../common/shared-gallery-list.js';
 
 
 /*************************************************************************************************/

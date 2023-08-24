@@ -1,5 +1,5 @@
 //
-// Termlist REST data fetch and caching
+// Artists & Channels REST data fetch and caching
 //
 // https://ultrafunk.com
 //
@@ -18,7 +18,7 @@ import {
   getTermlistHtml,
   getTermLinksHtml,
   getTopArtistsLinksHtml,
-} from './termlist-templates.js';
+} from './artists-channels-templates.js';
 
 
 /*************************************************************************************************/

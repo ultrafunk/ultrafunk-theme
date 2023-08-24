@@ -5,15 +5,15 @@
 //
 
 
-import * as eventLogger       from '../eventlogger.js';
-import * as playbackControls  from '../playback-controls.js';
+import * as eventLogger       from '../common/eventlogger.js';
+import * as playbackControls  from '../common/playback-controls.js';
 import * as listControls      from './list-controls.js';
-import * as mediaPlayers      from '../mediaplayers.js';
-import * as playbackEvents    from '../playback-events.js';
+import * as mediaPlayers      from '../common/mediaplayers.js';
+import * as playbackEvents    from '../common/playback-events.js';
 import * as utils             from '../../shared/utils.js';
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { KEY }                from '../../shared/storage.js';
-import { STATE }              from '../element-wrappers.js';
+import { STATE }              from '../common/element-wrappers.js';
 import { showModal }          from '../../shared/modal.js';
 import { playbackTimer }      from './list-playback-timer.js';
 import { response, settings } from '../../shared/session-data.js';
@@ -22,7 +22,7 @@ import { initTrackSearch }    from './track-search.js';
 import {
   playerScrollTo,
   autoplayNavTo,
-} from '../shared-gallery-list.js';
+} from '../common/shared-gallery-list.js';
 
 import {
   showSnackbar,
@@ -65,7 +65,7 @@ export function init()
   if (cueInitialTrack() !== null)
     initYouTubeAPI();
   else
-    showSnackbar('No playable YouTube tracks!', 0, 'help', () => showModal('No playable tracks', noPlayableTracksError));
+    showSnackbar('No playable YouTube tracks!', 0, 'help', () => showModal({ modalTitle: 'No playable tracks', modalBody: noPlayableTracksError }));
 }
 
 
@@ -90,7 +90,7 @@ function cueInitialTrack()
         if (listControls.getTrackType(trackElement) === mediaPlayers.TRACK_TYPE.YOUTUBE)
           m.currentTrackId = trackElement.id;
         else
-          showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', noPlayableTracksError));
+          showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: noPlayableTracksError }));
       }
       else
       {
@@ -119,7 +119,7 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
 
   if ((nextTrackType === mediaPlayers.TRACK_TYPE.SOUNDCLOUD) && isPointerClick)
   {
-    showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', noPlayableTracksError));
+    showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: noPlayableTracksError }));
     return;
   }
 

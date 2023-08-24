@@ -1,5 +1,5 @@
 //
-// Termlist template functions
+// Artists & Channels template functions
 //
 // https://ultrafunk.com
 //

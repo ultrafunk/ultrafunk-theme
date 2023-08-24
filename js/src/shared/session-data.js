@@ -6,7 +6,7 @@
 
 
 import { newDebugLogger }  from './debuglogger.js';
-import { defaultSettings } from './settings/settings.js';
+import { defaultSettings } from '../settings/settings.js';
 
 import {
   KEY,

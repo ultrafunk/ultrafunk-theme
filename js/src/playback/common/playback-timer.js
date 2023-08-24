@@ -5,7 +5,7 @@
 //
 
 
-import { settings } from '../shared/session-data.js';
+import { settings } from '../../shared/session-data.js';
 import { EVENT, dispatch } from './playback-events.js';
 import { timeRemainingWarningBlink } from './playback-controls.js';
 

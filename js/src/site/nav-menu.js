@@ -7,13 +7,13 @@
 
 import * as utils             from '../shared/utils.js';
 import { settings }           from '../shared/session-data.js';
-import { playerType }         from '../playback/footer-toggles.js';
+import { playerType }         from './footer-toggles.js';
 import { isSingleTrackFetch } from '../playback/gallery/single-track-fetch.js';
 
 import {
   noPlayback,
   shuffleClickNavTo,
-} from '../playback/shared-gallery-list.js';
+} from '../playback/common/shared-gallery-list.js';
 
 
 // ************************************************************************************************

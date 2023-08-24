@@ -5,12 +5,12 @@
 //
 
 
-import * as eventLogger          from '../eventlogger.js';
+import * as eventLogger          from '../common/eventlogger.js';
 import * as embeddedPlayers      from './embedded-players.js';
-import * as playbackEvents       from '../playback-events.js';
+import * as playbackEvents       from '../common/playback-events.js';
 import * as galleryEvents        from './gallery-events.js';
-import * as playbackControls     from '../playback-controls.js';
-import * as crossfadeControls    from './crossfade-controls.js';
+import * as playbackControls     from '../common/playback-controls.js';
+import * as galleryControls      from './gallery-controls.js';
 import { newDebugLogger }        from '../../shared/debuglogger.js';
 import { playbackTimer }         from './gallery-playback-timer.js';
 import { galleryPlayers }        from './gallery-players.js';
@@ -51,7 +51,7 @@ export function init()
   m.players.init(playTrack);
 
   playbackControls.init(m.players, seekClick);
-  crossfadeControls.init(m.players, crossfadeToClick);
+  galleryControls.init(m.players, crossfadeToClick);
   playbackTimer.init(m.players, crossfadeInit);
   embeddedPlayers.init(m.players, playbackState, embeddedEventHandler);
 }

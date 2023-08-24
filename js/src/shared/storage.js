@@ -7,11 +7,11 @@
 
 
 import { newDebugLogger } from './debuglogger.js';
-import { settingsSchema } from  './settings/settings.js';
+import { settingsSchema } from  '../settings/settings.js';
 
 import {
   validateSettings as validateSettingsDeep
-} from './settings/validate-settings.js';
+} from '../settings/validate-settings.js';
 
 
 /*************************************************************************************************/

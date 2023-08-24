@@ -5,7 +5,7 @@
 //
 
 
-import { newDebugLogger }        from '../shared/debuglogger.js';
+import { newDebugLogger }        from '../../shared/debuglogger.js';
 import { updateProgressPercent } from './playback-controls.js';
 
 

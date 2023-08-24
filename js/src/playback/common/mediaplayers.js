@@ -5,9 +5,9 @@
 //
 
 
-import { newDebugLogger } from '../shared/debuglogger.js';
-import { VOLUME }         from './gallery/crossfade.js';
-import { THEME_ENV }      from '../config.js';
+import { newDebugLogger } from '../../shared/debuglogger.js';
+import { VOLUME }         from '../gallery/crossfade.js';
+import { THEME_ENV }      from '../../config.js';
 
 
 /*************************************************************************************************/

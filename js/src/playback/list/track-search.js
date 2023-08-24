@@ -1,5 +1,5 @@
 //
-// List Player realtime track search module
+// List-player realtime track search module
 //
 // https://ultrafunk.com
 //
@@ -10,11 +10,15 @@ import { THEME_ENV }              from '../../config.js';
 import { settings }               from '../../shared/session-data.js';
 import { navSearch }              from '../../site/nav-search.js';
 import { ElementClick }           from '../../shared/element-click.js';
-import { TRACK_TYPE }             from '../mediaplayers.js';
+import { TRACK_TYPE }             from '../common/mediaplayers.js';
 import { showSnackbar }           from '../../shared/snackbar.js';
 import { getTrackEntryHtml }      from './list-track-templates.js';
 import { getCurrentTrackElement } from './list-controls.js';
-import { detailsClick }           from '../../site/interaction.js';
+
+import {
+  showTrackDetails,
+  showTrackSharePlay,
+} from '../common/track-modals.js';
 
 import {
   HTTP_RESPONSE,
@@ -27,9 +31,8 @@ import {
 } from '../../shared/utils.js';
 
 import {
-  getModalId,
-  isShowingModal,
   showModal,
+  isShowingModal,
 } from '../../shared/modal.js';
 
 
@@ -39,15 +42,15 @@ import {
 const debug = newDebugLogger('track-search');
 
 const m = {
-  setCurrentTrack:     null,
-  debounceKeyup:       null,
-  uiElements:          null,
-  searchField:         null,
-  trackSearchResults:  null,
-  resultsTracklist:    null,
-  resultsCache:        new Map(),
-  prevSearchString:    '',
-  trackDetailsModalId: -1,
+  setCurrentTrack:    null,
+  debounceKeyup:      null,
+  uiElements:         null,
+  searchField:        null,
+  trackSearchResults: null,
+  resultsTracklist:   null,
+  resultsCache:       new Map(),
+  prevSearchString:   '',
+  modalId:            -1,
 };
 
 const minSearchStringLength = 3;
@@ -116,7 +119,7 @@ function onClickCloseSearch(event)
   if ((m.searchField.contains(event.target)       === false) &&
       (m.resultsTracklist.contains(event.target)  === false) &&
       (event.target.closest('.nav-search-toggle') === null)  &&
-      (isShowingModal(m.trackDetailsModalId)      === false))
+      (isShowingModal(m.modalId)                  === false))
   {
     navSearch.hide();
   }
@@ -162,24 +165,27 @@ class uiElements extends ElementClick
   elementClicked()
   {
     if (this.clicked('div.thumbnail'))
-      return playTrack(this.closest('div.track-entry'));
+      return playTrackClick(this.closest('div.track-entry'));
 
     if (this.clicked('div.artist-title'))
-      return onTouchShowTrackDetails(this.event, this.closest('div.track-entry'));
+      return showTrackDetailsTouch(this.event, this.closest('div.track-entry'));
 
     if (this.clicked('div.play-next-button'))
-      return playNext(this.closest('div.track-entry'));
+      return playNextClick(this.closest('div.track-entry'));
+
+    if (this.clicked('div.share-play-button'))
+      return m.modalId = showTrackSharePlay(this.closest('div.track-entry'), m.searchField);
 
     if (this.clicked('div.details-button'))
-      return showTrackDetails(this.closest('div.track-entry'));
+      return m.modalId = showTrackDetails(this.closest('div.track-entry'), m.searchField);
   }
 }
 
-function playTrack(element)
+function playTrackClick(element)
 {
   if (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.SOUNDCLOUD)
   {
-    showSnackbar('Cannot play / cue SoundCloud track', 5, 'help', () => showModal('Cannot play SoundCloud track', notPlayableTrack));
+    showSnackbar('Cannot play / cue SoundCloud track', 5, 'help', () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: notPlayableTrack }));
   }
   else
   {
@@ -188,23 +194,17 @@ function playTrack(element)
   }
 }
 
-function onTouchShowTrackDetails(event, element)
+function showTrackDetailsTouch(event, element)
 {
   if ((event.pointerType === 'touch') && (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE))
-    showTrackDetails(element);
+    m.modalId = showTrackDetails(element, m.searchField);
 }
 
-function playNext(element)
+function playNextClick(element)
 {
   insertResultTrack(element);
   showSnackbar('Track will play next', 3);
   navSearch.hide();
-}
-
-function showTrackDetails(element)
-{
-  detailsClick(element);
-  m.trackDetailsModalId = getModalId();
 }
 
 function insertResultTrack(element)

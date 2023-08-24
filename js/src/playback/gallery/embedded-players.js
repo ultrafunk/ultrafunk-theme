@@ -5,9 +5,9 @@
 //
 
 
-import * as eventLogger    from '../eventlogger.js';
-import * as mediaPlayers   from '../mediaplayers.js';
-import * as playbackEvents from '../playback-events.js';
+import * as eventLogger    from '../common/eventlogger.js';
+import * as mediaPlayers   from '../common/mediaplayers.js';
+import * as playbackEvents from '../common/playback-events.js';
 import { newDebugLogger }  from '../../shared/debuglogger.js';
 import { settings }        from '../../shared/session-data.js';
 import { playbackTimer }   from './gallery-playback-timer.js';

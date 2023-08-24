@@ -1,28 +1,38 @@
 //
-// Crossfade UI controls
+// Gallery-player controls module
 //
 // https://ultrafunk.com
 //
 
 
-import * as playbackEvents from '../playback-events.js';
+import * as playbackEvents from '../common/playback-events.js';
 import { newDebugLogger }  from '../../shared/debuglogger.js';
-import { isPlaying }       from '../playback-controls.js';
-import { presetList }      from '../../shared/settings/settings.js';
-import { replaceClass }    from '../../shared/utils.js';
+import { ElementClick }    from '../../shared/element-click.js';
+import { isPlaying }       from '../common/playback-controls.js';
+import { presetList }      from '../../settings/settings.js';
 import { settings }        from '../../shared/session-data.js';
 
 import {
   STATE,
-  ElementsWrapper
-} from '../element-wrappers.js';
+  ElementsWrapper,
+} from '../common/element-wrappers.js';
+
+import {
+  linkClickUsePrefPlayer,
+  replaceClass,
+} from '../../shared/utils.js';
+
+import {
+  showTrackSharePlay,
+  showTrackDetails,
+} from '../common/track-modals.js';
 
 
 /*************************************************************************************************/
 
 
-const debug = newDebugLogger('crossfade-controls');
-const m     = { players: {} };
+const debug = newDebugLogger('gallery-controls');
+const m     = { uiElements: null, players: {} };
 const ctrl  = {};
 
 const config = {
@@ -33,14 +43,15 @@ const config = {
 
 
 // ************************************************************************************************
-// Init and make ready all controls
+//
 // ************************************************************************************************
 
 export function init(mediaPlayers, crossfadeClickCallback)
 {
   debug.log('init()');
 
-  m.players = mediaPlayers;
+  m.players    = mediaPlayers;
+  m.uiElements = new UiElements('div.track-meta', true);
 
   ctrl.crossfadePreset = ElementsWrapper(config.crossfadePresetSelector);
   ctrl.crossfadeTo     = ElementsWrapper(config.crossfadeToSelector);
@@ -54,7 +65,7 @@ export function init(mediaPlayers, crossfadeClickCallback)
   playbackEvents.addListener(playbackEvents.EVENT.PLAYBACK_READY, playbackReady);
 }
 
-export function playbackReady()
+function playbackReady()
 {
   debug.log('playbackReady()');
 
@@ -70,6 +81,29 @@ export function playbackReady()
 
     playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING, updateCrossfadeToState);
     playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PAUSED,  updateCrossfadeToState);
+  }
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+class UiElements extends ElementClick
+{
+  elementClicked()
+  {
+    if (this.clicked('div.track-share-control'))
+      return showTrackSharePlay(this.closest('single-track, gallery-track'));
+
+    if (this.clicked('div.track-details-control'))
+      return showTrackDetails(this.closest('single-track, gallery-track'));
+
+    if (this.clicked('span.track-artists-links'))
+      return linkClickUsePrefPlayer(this.event);
+
+    if (this.clicked('span.track-channels-links'))
+      return linkClickUsePrefPlayer(this.event);
   }
 }
 

@@ -5,14 +5,14 @@
 //
 
 
-import { newDebugLogger }      from '../shared/debuglogger.js';
-import { settings }            from '../shared/session-data.js';
+import { newDebugLogger }      from '../../shared/debuglogger.js';
+import { settings }            from '../../shared/session-data.js';
 import { EVENT, addListener }  from './playback-events.js';
-import { addSettingsObserver } from '../shared/storage.js';
+import { addSettingsObserver } from '../../shared/storage.js';
 
 import {
   playerType as playerTypeToggle
-} from './footer-toggles.js';
+} from '../../site/footer-toggles.js';
 
 import {
   STATE,
@@ -23,7 +23,7 @@ import {
   MATCH,
   matchesMedia,
   getTimeString,
-} from '../shared/utils.js';
+} from '../../shared/utils.js';
 
 
 /*************************************************************************************************/
