@@ -212,7 +212,7 @@ class UiElements extends ElementClick
       return playTrackClick(this.event, this.element);
 
     if (this.clicked('a'))
-      return linkClick(this.event, this.element);
+      return permalinkClick(this.event, this.element);
   }
 }
 
@@ -271,15 +271,12 @@ function playTrackClick(event, element)
   }
 }
 
-function linkClick(event, element)
+function permalinkClick(event, element)
 {
   saveState();
 
   if (element.closest('div.permalink') !== null)
-  {
-    event?.preventDefault();
-    utils.navToUrl(utils.getPrefPlayerUrl(element.href));
-  }
+    utils.linkClickUsePrefPlayer(event);
 }
 
 function termlistHeaderClick(event)

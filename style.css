@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.46.0
+Version:           1.46.1
 Requires at least: 6.0
 Tested up to:      6.3
 Requires PHP:      8.1
@@ -172,12 +172,8 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
 
 
 /**************************************************************************************************
-* html + body
+* Body
 ***************************************************************************************************/
-
-html {
-  overflow-y: scroll;
-}
 
 body {
   color: var(--primary-font-color);
@@ -189,6 +185,11 @@ body {
   margin: 0;
   padding: 0;
   transition: background 250ms ease-in-out, color 125ms ease;
+}
+
+body.scrolling-disabled {
+  padding-right: var(--scrollbar-width) !important;
+  overflow: hidden !important;
 }
 
 
@@ -206,6 +207,10 @@ body {
   transform: translateZ(0);
   background: var(--header-gradient-no-blur);
   box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+body.scrolling-disabled #site-header {
+  padding-right: var(--scrollbar-width);
 }
 
 .site-theme-black #site-header {
@@ -236,10 +241,14 @@ body.page {
   height: 40px;
   margin: 0 auto;
   z-index: 1100;
-  display: none; /* flex; */
+  display: none;
   align-items: center;
   justify-content: center;
   pointer-events: none;
+}
+
+body.scrolling-disabled #site-search-container {
+  padding-right: var(--scrollbar-width) !important;
   box-sizing: border-box;
 }
 

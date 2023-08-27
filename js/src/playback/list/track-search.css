@@ -29,6 +29,10 @@
   top: 60px;
   z-index: 2000;
   display: none;
+}
+
+body.scrolling-disabled #track-search-results {
+  padding-right: var(--scrollbar-width);
   box-sizing: border-box;
 }
 

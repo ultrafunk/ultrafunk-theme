@@ -182,18 +182,21 @@ function keyDown(event)
 
 function disablePageScrolling(disableScrolling)
 {
-  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-
-  document.documentElement.style.overflowY                            = disableScrolling ? 'hidden'              : '';
-  document.documentElement.style.paddingRight                         = disableScrolling ? `${scrollbarWidth}px` : '';
-  document.getElementById('site-header').style.paddingRight           = disableScrolling ? `${scrollbarWidth}px` : '';
-  document.getElementById('site-search-container').style.paddingRight = disableScrolling ? `${scrollbarWidth}px` : '';
-  document.getElementById('track-search-results').style.paddingRight  = disableScrolling ? `${scrollbarWidth}px` : '';
-
-  if (disableScrolling && ('ontouchstart' in window))
+  if (disableScrolling)
   {
-    document.body.addEventListener('touchstart', touchStart);
-    document.body.addEventListener('touchmove',  touchMove, { passive: false });
+    document.body.style.setProperty('--scrollbar-width', `${window.innerWidth - document.documentElement.clientWidth}px`);
+    document.body.classList.add('scrolling-disabled');
+
+    if ('ontouchstart' in window)
+    {
+      document.body.addEventListener('touchstart', touchStart);
+      document.body.addEventListener('touchmove',  touchMove, { passive: false });
+    }
+  }
+  else
+  {
+    document.body.style.removeProperty('--scrollbar-width');
+    document.body.classList.remove('scrolling-disabled');
   }
 }
 
