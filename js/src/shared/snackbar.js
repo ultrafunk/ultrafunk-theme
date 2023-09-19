@@ -42,27 +42,27 @@ const elements = {
 //
 // ************************************************************************************************
 
-export function showSnackbar(
-  message,
-  timeout = 5,
+export function showSnackbar({
+  message = 'Snackbar Message',
+  duration = 5,
   actionText = null,
-  actionClickCallback = null,
-  afterCloseCallback = null,
-  backgroundColor = 'var(--snackbar-background-color)',
-)
+  actionClickCallback = () => {},
+  afterCloseCallback  = () => {},
+  backgroundColorCssVal = 'var(--snackbar-background-color)',
+} = {})
 {
-  debug.log(`showSnackbar(): ${message} (${timeout} sec.)`);
+  debug.log(`showSnackbar(): ${message} (${duration} sec.)`);
 
   initElements();
   resetState(false);
 
   elements.snackbar.querySelector('.snackbar-message').innerHTML = message;
-  elements.snackbar.querySelector('.snackbar-container').style = `background-color: ${backgroundColor};`;
+  elements.snackbar.querySelector('.snackbar-container').style = `background-color: ${backgroundColorCssVal};`;
   elements.snackbar.classList.add('show');
   elements.actionText.style.display = 'none';
-  m.afterClose = (afterCloseCallback !== null) ? afterCloseCallback : () => {};
+  m.afterClose = afterCloseCallback;
 
-  if ((actionText !== null) && (actionClickCallback !== null))
+  if (actionText !== null)
   {
     m.actionClick = actionClickCallback;
     elements.actionText.style.display = 'block';
@@ -78,8 +78,8 @@ export function showSnackbar(
       elements.closeIcon.style.paddingLeft = '20px';
   }
 
-  if (timeout !== 0)
-    m.showTimeoutId = setTimeout(() => elements.snackbar.classList.add('hide'), (timeout * 1000));
+  if (duration !== 0)
+    m.showTimeoutId = setTimeout(() => elements.snackbar.classList.add('hide'), (duration * 1000));
 
   return ++m.snackbarId;
 }

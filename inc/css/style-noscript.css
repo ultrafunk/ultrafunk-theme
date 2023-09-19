@@ -6,6 +6,8 @@
 */
 
 :root {
+  --scrollbar-width: 0px;
+
   --site-header-height: 0px;
   --site-header-height-no-playback: 0px;
 
@@ -21,6 +23,9 @@
 
   --button-text-color: #fff;
   --button-border-radius: 6px;
+  --button-default-transition: background 100ms 0s ease-in;
+  --button-active-transition: background 0s;
+
   --dialog-border-radius: 10px;
 
   --body-background-color: #fff;

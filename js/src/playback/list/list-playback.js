@@ -63,9 +63,18 @@ export function init()
   initTrackSearch(setCurrentTrack);
 
   if (cueInitialTrack() !== null)
+  {
     initYouTubeAPI();
+  }
   else
-    showSnackbar('No playable YouTube tracks!', 0, 'help', () => showModal({ modalTitle: 'No playable tracks', modalBody: noPlayableTracksError }));
+  {
+    showSnackbar({
+      message: 'No playable YouTube tracks!',
+      duration: 0,
+      actionText: 'help',
+      actionClickCallback: () => showModal({ modalTitle: 'No playable tracks', modalBody: noPlayableTracksError }),
+    });
+  }
 }
 
 
@@ -88,13 +97,22 @@ function cueInitialTrack()
       if (trackElement !== null)
       {
         if (listControls.getTrackType(trackElement) === mediaPlayers.TRACK_TYPE.YOUTUBE)
+        {
           m.currentTrackId = trackElement.id;
+        }
         else
-          showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: noPlayableTracksError }));
+        {
+          showSnackbar({
+            message: 'Cannot play SoundCloud track',
+            duration: 5,
+            actionText: 'help',
+            actionClickCallback: () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: noPlayableTracksError }),
+          });
+        }
       }
       else
       {
-        showSnackbar('Unable to cue track (not found)', 5);
+        showSnackbar({ message: 'Unable to cue track (not found)', duration: 5 });
       }
     }
 
@@ -119,7 +137,13 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
 
   if ((nextTrackType === mediaPlayers.TRACK_TYPE.SOUNDCLOUD) && isPointerClick)
   {
-    showSnackbar('Cannot play SoundCloud track', 5, 'help', () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: noPlayableTracksError }));
+    showSnackbar({
+      message: 'Cannot play SoundCloud track',
+      duration: 5,
+      actionText: 'help',
+      actionClickCallback: () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: noPlayableTracksError }),
+    });
+
     return;
   }
 
@@ -413,7 +437,13 @@ function onYouTubeStateUnstarted()
   if (eventLog.ytAutoplayBlocked(m.currentTrackId, 3000))
   {
     listControls.setCurrentTrackState(STATE.PAUSED);
-    m.currentSnackbarId = showSnackbar('Autoplay blocked, Play to continue', 0, 'play', () => m.player.play(onYouTubePlayerError));
+
+    m.currentSnackbarId = showSnackbar({
+      message: 'Autoplay blocked, Play to continue',
+      duration: 0,
+      actionText: 'play',
+      actionClickCallback: () => m.player.play(onYouTubePlayerError),
+    });
   }
 
   if (m.playerReady === false)
@@ -456,6 +486,13 @@ function onYouTubePlayerError(event)
   {
     listControls.setTrackMessage('Error!');
     eventLog.add(eventLogger.SOURCE.YOUTUBE, eventLogger.EVENT.PLAYER_ERROR, m.currentTrackId);
-    showSnackbar('Unable to play track, skipping to next', 5, 'Stop', stopSkipToNextTrack, skipToNextTrack);
+
+    showSnackbar({
+      message: 'Unable to play track, skipping to next',
+      duration: 5,
+      actionText: 'Stop',
+      actionClickCallback: stopSkipToNextTrack,
+      afterCloseCallback:  skipToNextTrack,
+    });
   }
 }

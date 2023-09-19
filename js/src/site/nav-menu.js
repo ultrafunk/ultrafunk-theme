@@ -66,7 +66,7 @@ const navMenuClosure = (() =>
 
       siteHeader.classList.remove('hide-nav-menu');
       navMenuOuter.style.display = 'flex';
-      navMenuOverlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
+      navMenuOverlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.overlayOpacity / 100)) / 10})`;
       navMenuOverlay.classList.add('show');
 
       if (utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))
@@ -112,7 +112,7 @@ const navMenuClosure = (() =>
 
   function setNavMenuProps(overflowY = '', textContent = 'menu', height = '')
   {
-    document.documentElement.style.overflowY = overflowY;
+    document.body.style.overflowY = overflowY;
     siteHeader.querySelectorAll('.nav-menu-toggle span')?.forEach(element => element.textContent = textContent);
     siteHeader.style.height = height;
     navMenuInner.style = '';

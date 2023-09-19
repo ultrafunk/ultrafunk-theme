@@ -34,8 +34,7 @@ export async function fetchRest({
   id       = null,
   query    = null,
   timeoutSeconds = 10,
-} = {}
-)
+} = {})
 {
   let restRequest = path;
 
@@ -58,7 +57,7 @@ export async function fetchRest({
     if (!response.ok)
     {
       debug.warn(response);
-      return { status: { code: response.status, details: await response.json() }};
+      return { status: { code: response.status, details: await response.json() }, data: [] };
     }
 
     return { status: { code: response.status }, data: await response.json() };
@@ -66,7 +65,7 @@ export async function fetchRest({
   .catch(exception =>
   {
     debug.error(exception);
-    return { status: { code: 0, errorType: getFetchErrorType(exception), errorMessage: exception.message }};
+    return { status: { code: 0, errorType: getFetchErrorType(exception), errorMessage: exception.message }, data: [] };
   });
 }
 

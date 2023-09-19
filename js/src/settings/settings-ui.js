@@ -137,9 +137,19 @@ function readSettingsError()
     readSettings(true);
 
     if (m.settings !== null)
-      showSnackbar('All settings have been cleared', 5, 'Reload', () => (window.location.href = '/settings/'), () => (window.location.href = '/settings/'));
+    {
+      showSnackbar({
+        message: 'All settings have been cleared',
+        duration: 5,
+        actionText: 'Reload',
+        actionClickCallback: () => (window.location.href = '/settings/'),
+        afterCloseCallback:  () => (window.location.href = '/settings/'),
+      });
+    }
     else
-      showSnackbar('Sorry, unable to clear all settings', 5);
+    {
+      showSnackbar({ message: 'Sorry, unable to clear all settings', duration: 5 });
+    }
   });
 }
 
@@ -302,6 +312,7 @@ function settingClicked(event)
     if (event.type === 'contextmenu')
     {
       // showSettingDetailsModal() for Touch and Hold input on Chromium and Firefox browsers
+      // (event.mozInputSource === 5) is MOZ_SOURCE_TOUCH
       if ((event.pointerType === 'touch') || (event.mozInputSource === 5))
       {
         event.preventDefault();
@@ -344,7 +355,7 @@ function settingsSaveClick()
 {
   writeSettings();
   clearValueChanged();
-  showSnackbar('All settings saved', 3);
+  showSnackbar({ message: 'All settings saved', duration: 3 });
 }
 
 function settingsResetClick()
@@ -356,5 +367,12 @@ function settingsResetClick()
   });
 
   clearValueChanged();
-  showSnackbar('All settings reset', 4, 'Undo', () => location.reload(), () => writeSettings());
+
+  showSnackbar({
+    message: 'All settings reset',
+    duration: 4,
+    actionText: 'Undo',
+    actionClickCallback: () => location.reload(),
+    afterCloseCallback:  () => writeSettings(),
+  });
 }

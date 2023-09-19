@@ -15,7 +15,6 @@ function ultrafunk_theme_setup() : void
   add_theme_support('html5', ['search-form', 'script', 'style']);
   add_theme_support('title-tag');
   add_theme_support('custom-logo');
-  add_theme_support('automatic-feed-links');
 
   // Needed to disable: REQUIRED This theme text domain does not match the theme's slug.
   __('', 'ultrafunk');

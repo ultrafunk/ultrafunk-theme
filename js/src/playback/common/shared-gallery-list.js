@@ -229,7 +229,7 @@ const fullscreenElementClosure = (() =>
     if (element.requestFullscreen)
       element.requestFullscreen();
     else
-      showSnackbar('Unable to enter fullscreen mode!', 3);
+      showSnackbar({ message: 'Unable to enter fullscreen mode!', duration: 3 });
   }
 
   function exit()

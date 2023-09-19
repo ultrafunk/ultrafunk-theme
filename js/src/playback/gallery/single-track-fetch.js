@@ -98,20 +98,39 @@ export async function playSingleTrack(playPrevNext, playTrack = false)
       }
       else
       {
-        showSnackbar('SoundCloud track, skipping to next', 5, 'Play', () =>
-        {
-          sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: true, trackId: null, position: 0 }));
-          window.location.href = currentTrack.link;
-        },
-        () => playSingleTrack(playPrevNext, playTrack));
+        showSnackbar({
+          message: 'SoundCloud track, skipping to next',
+          duration: 5,
+          actionText: 'Play',
+          actionClickCallback: () =>
+          {
+            sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: true, trackId: null, position: 0 }));
+            window.location.href = currentTrack.link;
+          },
+          afterCloseCallback: () => playSingleTrack(playPrevNext, playTrack),
+        });
       }
     }
     else
     {
       if (restResponse.status.code !== HTTP_RESPONSE.OK)
-        showSnackbar('Failed to fetch track data!', 30, 'Retry', () => playSingleTrack(playPrevNext, playTrack));
+      {
+        showSnackbar({
+          message: 'Failed to fetch track data!',
+          duration: 30,
+          actionText: 'Retry',
+          actionClickCallback: () => playSingleTrack(playPrevNext, playTrack),
+        });
+      }
       else if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length === 1))
-        showSnackbar('No more tracks to play...', 5, 'Shuffle', () => shuffleClickNavTo());
+      {
+        showSnackbar({
+          message: 'No more tracks to play...',
+          duration: 5,
+          actionText: 'Shuffle',
+          actionClickCallback: () => shuffleClickNavTo(),
+        });
+      }
     }
   }
 

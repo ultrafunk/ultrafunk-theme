@@ -27,7 +27,7 @@ export function copyTextToClipboard(clipboardText, contentDescription = 'Content
     navigator.clipboard.writeText(clipboardText).then(() =>
     {
       debug.log(`copyTextToClipboard() success for: ${clipboardText} - type: ${contentDescription}`);
-      showSnackbar(`${contentDescription} copied to clipboard`, 3);
+      showSnackbar({ message: `${contentDescription} copied to clipboard`, duration: 3 });
     },
     (reason) =>
     {
@@ -40,7 +40,7 @@ export function copyTextToClipboard(clipboardText, contentDescription = 'Content
     if (copyTextToClipboardExecCommand(clipboardText))
     {
       debug.log(`copyTextToClipboardExecCommand() success for: ${clipboardText} - type: ${contentDescription}`);
-      showSnackbar(`${contentDescription} copied to clipboard`, 3);
+      showSnackbar({ message: `${contentDescription} copied to clipboard`, duration: 3 });
     }
     else
     {

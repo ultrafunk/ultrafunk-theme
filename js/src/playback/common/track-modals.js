@@ -87,7 +87,7 @@ export function showTrackDetails(element, onCloseFocusElement = null)
 
   const modalId = showModal({
     modalTitle: modalTitle,
-    modalBody:  modalEntries,
+    modalList:  modalEntries,
     modalType:  'track-details',
     onCloseFocusElement: onCloseFocusElement,
   });

@@ -66,14 +66,26 @@ async function enableWakeLock()
       if (await requestWakeLock() !== true)
       {
         debug.log('enableWakeLock(): Screen Wake Lock request failed');
-        showSnackbar('Keep Screen On failed', 5, 'Disable', () => (settings.mobile.keepScreenOn = false));
+
+        showSnackbar({
+          message: 'Keep Screen On failed',
+          duration: 5,
+          actionText: 'Disable',
+          actionClickCallback: () => (settings.mobile.keepScreenOn = false),
+        });
       }
     }
   }
   else
   {
     debug.log('enableWakeLock(): Screen Wake Lock is not supported');
-    showSnackbar('Keep Screen On is not supported', 5, 'Disable', () => (settings.mobile.keepScreenOn = false));
+
+    showSnackbar({
+      message: 'Keep Screen On is not supported',
+      duration: 5,
+      actionText: 'Disable',
+      actionClickCallback: () => (settings.mobile.keepScreenOn = false),
+    });
   }
 }
 

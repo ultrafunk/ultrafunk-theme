@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 32, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 33, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -78,7 +78,7 @@ export const settingsSchema = {
     keyboardShortcuts:   { description: 'Keyboard Shortcuts',                    type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
     theme:               { description: 'Theme',                                 type: STRING,  values: ['light', 'dark', 'black', 'auto'],   default: 'auto', valueStrings: ['Light', 'Dark', 'Black', 'Auto / System'] },
     smoothScrolling:     { description: 'Use Smooth Scrolling (where possible)', type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
-    modalOverlayOpacity: { description: 'Modal overlay opacity',                 type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
+    overlayOpacity:      { description: 'Overlay opacity',                       type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
   },
   internal: {
     showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
@@ -131,7 +131,7 @@ export const defaultSettings = {
     keyboardShortcuts:   settingsSchema.site.keyboardShortcuts.default,
     theme:               settingsSchema.site.theme.default,
     smoothScrolling:     settingsSchema.site.smoothScrolling.default,
-    modalOverlayOpacity: settingsSchema.site.modalOverlayOpacity.default,
+    overlayOpacity:      settingsSchema.site.overlayOpacity.default,
   },
   internal: {
     showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,

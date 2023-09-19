@@ -185,7 +185,12 @@ function playTrackClick(element)
 {
   if (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.SOUNDCLOUD)
   {
-    showSnackbar('Cannot play / cue SoundCloud track', 5, 'help', () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: notPlayableTrack }));
+    showSnackbar({
+      message: 'Cannot play / cue SoundCloud track',
+      duration: 5,
+      actionText: 'help',
+      actionClickCallback: () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: notPlayableTrack }),
+    });
   }
   else
   {
@@ -196,14 +201,18 @@ function playTrackClick(element)
 
 function showTrackDetailsTouch(event, element)
 {
-  if ((event.pointerType === 'touch') && (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE))
-    m.modalId = showTrackDetails(element, m.searchField);
+  // (event.mozInputSource === 5) is MOZ_SOURCE_TOUCH
+  if ((event.pointerType === 'touch') || (event.mozInputSource === 5))
+  {
+    if (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE)
+      m.modalId = showTrackDetails(element, m.searchField);
+  }
 }
 
 function playNextClick(element)
 {
   insertResultTrack(element);
-  showSnackbar('Track will play next', 3);
+  showSnackbar({ message: 'Track will play next', duration: 3 });
   navSearch.hide();
 }
 

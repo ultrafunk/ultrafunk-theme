@@ -227,7 +227,7 @@ function documentEventKeyDown(event)
         case 'M':
           event.preventDefault();
           m.player.toggleMute();
-          showSnackbar(settings.playback.masterMute ? '<b>Muted</b> (<b>m</b> to Unmute)' : '<b>Unmuted</b> (<b>m</b> to Mute)', 3);
+          showSnackbar({ message: (settings.playback.masterMute ? '<b>Muted</b> (<b>m</b> to Unmute)' : '<b>Unmuted</b> (<b>m</b> to Mute)'), duration: 3 });
           break;
 
         case 'p':
@@ -237,7 +237,7 @@ function documentEventKeyDown(event)
 
         case 'r':
         case 'R':
-          showSnackbar(`${toggleRepeat().title} (<b>r</b> to change)`, 3);
+          showSnackbar({ message: `${toggleRepeat().title} (<b>r</b> to change)`, duration: 3 });
           break;
 
         case 'x':
@@ -320,7 +320,7 @@ function playPrevNextTrack(event, playPrevNext, prevNextPage)
       if (isSingleTrackLoading() === false)
         playSingleTrack(playPrevNext, m.player.getStatus().isPlaying);
       else
-        showSnackbar('Loading track, please wait...', 3);
+        showSnackbar({ message: 'Loading track, please wait...', duration: 3 });
     }
     else
     {

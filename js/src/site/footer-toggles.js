@@ -135,9 +135,12 @@ class AutoplayToggle extends ElementToggle
   {
     settings.playback.autoplay = (settings.playback.autoplay === true) ? false : true;
 
-    showSnackbar(settings.playback.autoplay
-      ? 'Autoplay enabled (<b>Shift</b> + <b>A</b> to Disable)'
-      : 'Autoplay disabled (<b>Shift</b> + <b>A</b> to Enable)', 5);
+    showSnackbar({
+      duration: 5,
+      message: settings.playback.autoplay
+                 ? 'Autoplay enabled (<b>Shift</b> + <b>A</b> to Disable)'
+                 : 'Autoplay disabled (<b>Shift</b> + <b>A</b> to Enable)',
+    });
   }
 
   update()
@@ -160,9 +163,12 @@ class CrossfadeToggle extends ElementToggle
   {
     settings.gallery.autoCrossfade = (settings.gallery.autoCrossfade === true) ? false : true;
 
-    showSnackbar(settings.gallery.autoCrossfade
-      ? 'Auto Crossfade enabled (<b>x</b> to Disable)'
-      : 'Auto Crossfade disabled (<b>x</b> to Enable)', 5);
+    showSnackbar({
+      duration: 5,
+      message: settings.gallery.autoCrossfade
+                 ? 'Auto Crossfade enabled (<b>x</b> to Disable)'
+                 : 'Auto Crossfade disabled (<b>x</b> to Enable)',
+    });
   }
 
   update()

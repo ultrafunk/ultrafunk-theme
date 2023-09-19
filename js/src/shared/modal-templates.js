@@ -27,12 +27,12 @@ export function getTemplateHtml()
     </div>`;
 }
 
-export function getSingleChoiceListHtml(singleChoiceList, clickItemsCount = 0)
+export function getModalListHtml(modalList, modalItemsCount = 0)
 {
   let html = '';
-  const entryColumnsClass = (clickItemsCount >= 10) ? 'modal-2-columns' : '';
+  const entryColumnsClass = (modalItemsCount >= 10) ? 'modal-2-columns' : '';
 
-  singleChoiceList.forEach((entry, index) =>
+  modalList.forEach((entry, index) =>
   {
     const entryClass      = entry.class      ? `modal-${entry.class}`                                       : 'modal-icon-text';
     const entryTitle      = entry.title      ? entry.title                                                  : '';

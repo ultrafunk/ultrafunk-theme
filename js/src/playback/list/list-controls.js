@@ -216,11 +216,11 @@ function playNextClick(trackElement)
     else
       addTrack(nextTrackElement, m.trackElement, 'afterend');
 
-    showSnackbar('Track will play next', 3);
+    showSnackbar({ message: 'Track will play next', duration: 3 });
   }
   else
   {
-    showSnackbar('Unable to cue track', 3);
+    showSnackbar({message: 'Unable to cue track', duration: 3 });
   }
 }
 
@@ -241,11 +241,16 @@ function removeClick(trackElement, allowUndo = true, animationEndCallback = () =
 
     if (allowUndo)
     {
-      showSnackbar('Track removed', 4, 'undo', () =>
-      {
-        addTrack(undoRemoveElement,
-                ((undoPrevElement === null) ? m.tracklist  : undoPrevElement),
-                ((undoPrevElement === null) ? 'afterbegin' : 'afterend'));
+      showSnackbar({
+        message: 'Track removed',
+        duration: 4,
+        actionText: 'undo',
+        actionClickCallback: () =>
+        {
+          addTrack(undoRemoveElement,
+                  ((undoPrevElement === null) ? m.tracklist  : undoPrevElement),
+                  ((undoPrevElement === null) ? 'afterbegin' : 'afterend'));
+        },
       });
     }
   }
@@ -318,7 +323,12 @@ export async function loadMoreTracks()
     }
     else
     {
-      showSnackbar('Load more tracks failed!', 30, 'Retry', () => loadMoreTracks());
+      showSnackbar({
+        message: 'Load more tracks failed!',
+        duration: 30,
+        actionText: 'Retry',
+        actionClickCallback: () => loadMoreTracks(),
+      });
     }
   }
 

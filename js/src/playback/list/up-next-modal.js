@@ -31,7 +31,7 @@ import {
   getModalRootElement,
   getModalEntry,
   updateModalTitle,
-  updateModalBody,
+  updateModalList,
 } from '../../shared/modal.js';
 
 
@@ -84,15 +84,15 @@ export function showUpNextModal()
   // Only load this dependency IF we actually need it...
   loadDragDropTouch();
 
-  const modalEntries = getEntries(isPlaying());
+  const tracklist = getTracklist(isPlaying());
 
-  if (modalEntries.length > 2)
+  if (tracklist.length > 2)
   {
     m.modalDialogId = showModal({
       modalTitle: getTitle(isPlaying()),
-      modalBody:  modalEntries,
+      modalList:  tracklist,
       modalType:  'tracklist',
-      onClickEntryCallback: (clickedId) => onTrackClick(modalEntries, clickedId),
+      onClickEntryCallback: (clickedId) => onTrackClick(tracklist, clickedId),
       onClickCloseCallback: (event)     => shouldCloseModal(event),
     });
 
@@ -101,13 +101,18 @@ export function showUpNextModal()
   }
   else
   {
-    showSnackbar('No more tracks to play...', 5, 'Shuffle', () => shuffleClickNavTo());
+    showSnackbar({
+      message: 'No more tracks to play...',
+      duration: 5,
+      actionText: 'Shuffle',
+      actionClickCallback: () => shuffleClickNavTo(),
+    });
   }
 }
 
-function onTrackClick(modalEntries, clickedId)
+function onTrackClick(tracklist, clickedId)
 {
-  const nextTrackId = modalEntries.find(item => (item.clickId === clickedId)).clickId;
+  const nextTrackId = tracklist.find(item => (item.clickId === clickedId)).clickId;
 
   if ((nextTrackId === getCurrentTrackElement().id) && isPlaying())
     getCurrentTrackElement().scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
@@ -142,7 +147,7 @@ export function updateUpNextModal(isPlayingTrack)
     }
     else
     {
-      updateModalBody(m.modalDialogId, getEntries(isPlayingTrack));
+      updateModalList(m.modalDialogId, getTracklist(isPlayingTrack));
       addDragDropListeners();
     }
   }
@@ -155,19 +160,19 @@ function getTitle(isPlayingTrack)
             Autoplay is <b>${settings.playback.autoplay ? 'On' : 'Off'}</b></span>`;
 }
 
-function getEntries(isPlayingTrack)
+function getTracklist(isPlayingTrack)
 {
-  const modalEntries = [];
-  let trackElement   = getCurrentTrackElement();
+  const tracklist  = [];
+  let trackElement = getCurrentTrackElement();
 
-  modalEntries.push({
+  tracklist.push({
     clickId: trackElement.id,
     class:   `tracklist-entry ${isPlayingTrack ? 'playing-track' : 'cued-track'}`,
     title:   `${isPlayingTrack ? 'Go To Track' : 'Play Track'}`,
     content: getUpNextTrackHtml(trackElement, 'data-track-artist', 'data-track-title'),
   });
 
-  modalEntries.push({ class: 'header-entry', content: 'Up Next <span class="light-text">(drag to reorder)</span>' });
+  tracklist.push({ class: 'header-entry', content: 'Up Next <span class="light-text">(drag to reorder)</span>' });
 
   for (let i = 0; i < 10; i++)
   {
@@ -176,14 +181,14 @@ function getEntries(isPlayingTrack)
     if (trackElement === null)
       break;
 
-    modalEntries.push({
+    tracklist.push({
       clickId: trackElement.id,
       class:   'tracklist-entry',
       content: getUpNextTrackHtml(trackElement, 'data-track-artist', 'data-track-title', true),
     });
   }
 
-  return modalEntries;
+  return tracklist;
 }
 
 function addTitleListener()

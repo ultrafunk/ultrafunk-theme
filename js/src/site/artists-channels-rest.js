@@ -50,7 +50,12 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
     }
     else
     {
-      showSnackbar('Failed to fetch track data!', 30, 'retry', () => loadTermlist(termlistContainer, termlistEntry, termlistBody));
+      showSnackbar({
+        message: 'Failed to fetch track data!',
+        duration: 30,
+        actionText: 'retry',
+        actionClickCallback: () => loadTermlist(termlistContainer, termlistEntry, termlistBody),
+      });
     }
 
     if (!isAllChannels && (termData !== null))

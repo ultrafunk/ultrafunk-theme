@@ -136,7 +136,7 @@ function resumeAutoplay(playbackEvent)
     const iframeId = document.getElementById(autoplayData.trackId)?.querySelector('iframe').id ?? null;
 
     if ((iframeId === null) && (autoplayData.trackId !== null))
-      showSnackbar('Unable to cue track (not found)', 5);
+      showSnackbar({ message: 'Unable to cue track (not found)', duration: 5 });
     else
       playbackEvent.callback.resumeAutoplay(autoplayData, iframeId);
   }
@@ -145,19 +145,37 @@ function resumeAutoplay(playbackEvent)
 function autoplayBlocked(playbackEvent)
 {
   debug.log(playbackEvent);
-  m.snackbarId = showSnackbar('Autoplay blocked, Play to continue', 0, 'play', () => playbackEvent.callback.togglePlayPause());
+
+  m.snackbarId = showSnackbar({
+    message: 'Autoplay blocked, Play to continue',
+    duration: 0,
+    actionText: 'play',
+    actionClickCallback: () => playbackEvent.callback.togglePlayPause(),
+  });
 }
 
 function playbackBlocked(playbackEvent)
 {
   debug.log(playbackEvent);
-  showSnackbar('Unable to play track, skipping to next', 5, 'Stop', () => {}, () => playbackEventErrorTryNext(playbackEvent));
+
+  showSnackbar({
+    message: 'Unable to play track, skipping to next',
+    duration: 5,
+    actionText: 'Stop',
+    afterCloseCallback: () => playbackEventErrorTryNext(playbackEvent),
+  });
 }
 
 function mediaUnavailable(playbackEvent)
 {
   debug.log(playbackEvent);
-  showSnackbar('Unable to play track, skipping to next', 5, 'Stop', () => {}, () => playbackEventErrorTryNext(playbackEvent));
+
+  showSnackbar({
+    message: 'Unable to play track, skipping to next',
+    duration: 5,
+    actionText: 'Stop',
+    afterCloseCallback: () => playbackEventErrorTryNext(playbackEvent),
+  });
 }
 
 

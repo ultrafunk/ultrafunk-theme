@@ -39,14 +39,14 @@ const shareModalClosure = (() =>
 
     return showModal({
       modalTitle: title,
-      modalBody:  getSingleChoiceList(),
+      modalList:  getModalList(),
       modalType:  'share',
       onClickEntryCallback: () => copyTextToClipboard(url, urlType),
       onCloseFocusElement: onCloseFocusElement,
     });
   }
 
-  function getSingleChoiceList()
+  function getModalList()
   {
     const mailtoLink = `mailto:?subject=${encodeURIComponent(`Ultrafunk ${urlType}: ${bodyText}`)}&body=${encodeURI(url)}%0d%0a`;
 
@@ -58,7 +58,7 @@ const shareModalClosure = (() =>
       ? `https://music.youtube.com/watch?v=${sourceUid}`
       : `https://music.youtube.com/search?q=${searchString}`;
 
-    const singleChoiceList = [
+    const modalList = [
       { icon: 'content_copy', content: '<b>Copy Link</b> to Clipboard',   clickId: 'copyToClipboardId' },
       { icon: 'share',        content: '<b>Share</b> on Email',           link: mailtoLink             },
       { icon: 'search',       content: '<b>Search</b> on Google',         link: `https://www.google.com/search?q=${searchString}`,        linkTarget: '_blank' },
@@ -69,9 +69,9 @@ const shareModalClosure = (() =>
     ];
 
     if (bodyHtml !== null)
-      singleChoiceList.unshift({ class: 'track-share-entry', content: bodyHtml });
+      modalList.unshift({ class: 'track-share-entry', content: bodyHtml });
 
-    return singleChoiceList;
+    return modalList;
   }
 });
 

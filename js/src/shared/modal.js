@@ -10,7 +10,7 @@ import { settings }       from './session-data.js';
 
 import {
   getTemplateHtml,
-  getSingleChoiceListHtml,
+  getModalListHtml,
 } from './modal-templates.js';
 
 
@@ -42,16 +42,18 @@ const elements = {
 // ************************************************************************************************
 
 export function showModal({
+  modalType  = 'default',
   modalTitle = 'Modal Title',
-  modalBody  = 'Modal Body',
-  modalType  = null,
+  modalBody  = null,
+  modalList  = [],
   onClickCloseCallback = () => true,
   onClickEntryCallback = () => {},
   onCloseFocusElement  = null,
-} = {}
-)
+} = {})
 {
-  debug.log(`showModal() - modalId: ${m.modalId + 1} - modalType: ${(modalType !== null) ? modalType : 'default'} - modalTitle: ${modalTitle}`);
+  const isModalList = ((modalList.length > 0) && (modalBody === null));
+
+  debug.log(`showModal() - modalId: ${m.modalId + 1} - modalType: ${modalType} (${isModalList ? 'list' : 'body'}) - modalTitle: ${modalTitle}`);
 
   initElements();
   resetState();
@@ -61,16 +63,16 @@ export function showModal({
   m.onCloseFocusElement = onCloseFocusElement;
   m.clickItemsCount     = 0;
 
-  if (Array.isArray(modalBody) && (modalBody.length > 0))
-    setSingleChoiceList(modalBody, modalType);
+  if (isModalList)
+    setModalList(modalList, modalType);
   else
     elements.body.innerHTML = modalBody;
 
-  elements.container.classList = `modal-type-${(modalType !== null) ? modalType : 'default'}`;
+  elements.container.classList = `modal-type-${modalType}`;
   elements.container.classList.add((m.clickItemsCount > 10) ? 'modal-click-items-2-columns' : 'modal-click-items-1-column');
   elements.container.querySelector('.modal-dialog-title').innerHTML = modalTitle;
 
-  elements.overlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.modalOverlayOpacity / 100)) / 10})`;
+  elements.overlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.overlayOpacity / 100)) / 10})`;
   elements.overlay.classList.add('show');
   elements.overlay.addEventListener('keydown', keyDown);
   elements.overlay.focus();
@@ -103,10 +105,10 @@ export function updateModalTitle(updateModalId, updateTitle)
     elements.container.querySelector('.modal-dialog-title').innerHTML = updateTitle;
 }
 
-export function updateModalBody(updateModalId, updateSingleChoiceList)
+export function updateModalList(updateModalId, modalList)
 {
   if (updateModalId === m.modalId)
-    setSingleChoiceList(updateSingleChoiceList);
+    setModalList(modalList);
 }
 
 
@@ -148,16 +150,16 @@ function resetState()
   }
 }
 
-function setSingleChoiceList(singleChoiceList, modalType = null)
+function setModalList(modalList, modalType = 'default')
 {
   if (modalType === 'track-details')
-    singleChoiceList.forEach(item => (item.link && m.clickItemsCount++));
+    modalList.forEach(item => (item.link && m.clickItemsCount++));
 
-  elements.body.innerHTML = getSingleChoiceListHtml(singleChoiceList, m.clickItemsCount);
-  elements.body.addEventListener('click', singleChoiceListClick);
+  elements.body.innerHTML = getModalListHtml(modalList, m.clickItemsCount);
+  elements.body.addEventListener('click', modalListClick);
 }
 
-function singleChoiceListClick(event)
+function modalListClick(event)
 {
   const clickedEntryElement = event.target.closest('.modal-click-item');
 

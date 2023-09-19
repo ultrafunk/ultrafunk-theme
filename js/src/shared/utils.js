@@ -184,7 +184,13 @@ export function navToUrl(destUrl)
   else if (destUrl !== null)
   {
     debug.error(`navToUrl() - Invalid destUrl: ${destUrl}`);
-    showSnackbar('Error navigating to URL!', 0, 'Reload', () => location.reload());
+
+    showSnackbar({
+      message: 'Error navigating to URL!',
+      duration: 0,
+      actionText: 'Reload',
+      actionClickCallback: () => location.reload(),
+    });
   }
 }
 

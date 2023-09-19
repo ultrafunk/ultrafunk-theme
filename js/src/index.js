@@ -93,13 +93,19 @@ window.addEventListener('load', () =>
   {
     if (isGalleryPlayer() || isListPlayer())
     {
-      const message = 'Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres. <a class="snackbar-message-link" href="/about/">More Details</a>';
+      const siteDescription = 'Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres. <a class="snackbar-message-link" href="/about/">More Details</a>';
 
       setTimeout(() =>
       {
         if (isShowingSnackbar() === false)
         {
-          showSnackbar(message, 6, null, null, () => { settings.internal.showSiteInfoOnLoad = false; }, 'rgb(75, 10, 10)');
+          showSnackbar({
+            message: siteDescription,
+            duration: 6,
+            afterCloseCallback: () => { settings.internal.showSiteInfoOnLoad = false; },
+            backgroundColorCssVal: 'rgb(75, 10, 10)',
+          });
+
           utils.addListener('.snackbar-message-link', 'click', () => { settings.internal.showSiteInfoOnLoad = false; });
         }
       }, 2000);
