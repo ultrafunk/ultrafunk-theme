@@ -282,8 +282,8 @@ async function showSearchResults(searchString)
 
   const searchStop = performance.now();
 
-  // ToDo: Over 200 ms., log REST search performance for production, this will be removed in the future...
-  if ((searchStop - searchStart) > 200)
+  // ToDo: Over 250 ms., log REST search performance for production, this will be removed in the future...
+  if ((searchStop - searchStart) > 250)
   {
     const searchType = settings.list.queryAllTrackArtists ? 'Artist - Title + Artists' : 'Artist - Title';
     console.log(`%cSearch ${searchType}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${THEME_ENV.siteUrl}`, logCss);

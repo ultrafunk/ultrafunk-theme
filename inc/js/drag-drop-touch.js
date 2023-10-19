@@ -422,9 +422,10 @@ let DragDropTouch;
         };
         // gets an element's closest draggable ancestor
         // <img> and <a> elements are draggable by default
+        // REQUIRES 'draggable' attribute (ultrafunk.com specific change)
         DragDropTouch.prototype._closestDraggable = function (e) {
             for (; e; e = e.parentElement) {
-                if (/*e.hasAttribute('draggable') &&*/ e.draggable) {
+                if (e.hasAttribute('draggable') && e.draggable) {
                     return e;
                 }
             }

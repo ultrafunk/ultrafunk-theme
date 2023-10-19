@@ -40,8 +40,8 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
 
   fetchTracks(termType, termId, (isAllChannels ? 10 : 50), async (termData) =>
   {
-    let header  = isAllChannels ? 'Latest Tracks' : 'All Tracks';
-    let element = termlistBody.querySelector('.body-left');
+    const header  = isAllChannels ? 'Latest Tracks' : 'All Tracks';
+    const element = termlistBody.querySelector('.body-left');
 
     if (termData !== null)
     {
@@ -59,37 +59,43 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
     }
 
     if (!isAllChannels && (termData !== null))
-    {
-      fetchArtistMeta(termData, termId, 50, (metaType, metadata) =>
-      {
-        header  = (metaType === 'artists') ? 'Related Artists' : 'In Channels';
-        element = (metaType === 'artists')
-                    ? termlistBody.querySelector('.artists')
-                    : termlistBody.querySelector('.channels');
-
-        if (metadata !== null)
-          element.innerHTML = getTermLinksHtml(header, metadata);
-        else
-          element.innerHTML = `<b>${header}</b><br>None found`;
-      });
-    }
+      setArtistsMeta(termData, termId, termlistBody);
     else if (termData !== null)
-    {
-      if (('topArtists' in m.termCache[termId]) === false)
-      {
-        const restResponse = await fetchRest({
-          endpoint: 'top-artists',
-          query:    `channel_id=${termId}`,
-          path:     '/wp-json/ultrafunk/v1/',
-        });
-
-        if (restResponse.status.code === HTTP_RESPONSE.OK)
-          m.termCache[termId]['topArtists'] = restResponse.data;
-      }
-
-      termlistBody.querySelector('.top-artists').innerHTML = getTopArtistsLinksHtml('Top Artists (tracks)', m.termCache[termId]['topArtists'], termSlug);
-    }
+      setTopArtists(termId, termlistBody, termSlug);
   });
+}
+
+function setArtistsMeta(termData, termId, termlistBody)
+{
+  fetchArtistMeta(termData, termId, 50, (metaType, metadata) =>
+  {
+    const header  = (metaType === 'artists') ? 'Related Artists' : 'In Channels';
+    const element = (metaType === 'artists')
+                      ? termlistBody.querySelector('.artists')
+                      : termlistBody.querySelector('.channels');
+
+    if (metadata !== null)
+      element.innerHTML = getTermLinksHtml(header, metadata);
+    else
+      element.innerHTML = `<b>${header}</b><br>None found`;
+  });
+}
+
+async function setTopArtists(termId, termlistBody, termSlug)
+{
+  if (('topArtists' in m.termCache[termId]) === false)
+  {
+    const restResponse = await fetchRest({
+      endpoint: 'top-artists',
+      query:    `channel_id=${termId}`,
+      path:     '/wp-json/ultrafunk/v1/',
+    });
+
+    if (restResponse.status.code === HTTP_RESPONSE.OK)
+      m.termCache[termId]['topArtists'] = restResponse.data;
+  }
+
+  termlistBody.querySelector('.top-artists').innerHTML = getTopArtistsLinksHtml('Top Artists (tracks)', m.termCache[termId]['topArtists'], termSlug);
 }
 
 
@@ -143,6 +149,7 @@ function fetchArtistMeta(termData, termId, maxItems, callback)
   }
 }
 
+// eslint-disable-next-line max-params
 async function fetchMeta(
   termType,
   termId,
