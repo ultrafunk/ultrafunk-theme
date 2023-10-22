@@ -120,15 +120,16 @@ let DragDropTouch;
             });
             // listen to touch events
             if (navigator.maxTouchPoints) {
-                let d = document,
+                // Only handle drag & drop events for modal dialogs  (ultrafunk.com specific change)
+                let el = document.getElementById('modal-dialog-container'),
                     ts = this._touchstart.bind(this),
                     tm = this._touchmove.bind(this),
                     te = this._touchend.bind(this),
                     opt = supportsPassive ? { passive: false, capture: false } : false;
-                d.addEventListener('touchstart', ts, opt);
-                d.addEventListener('touchmove', tm, opt);
-                d.addEventListener('touchend', te);
-                d.addEventListener('touchcancel', te);
+                el.addEventListener('touchstart', ts, opt);
+                el.addEventListener('touchmove', tm, opt);
+                el.addEventListener('touchend', te);
+                el.addEventListener('touchcancel', te);
             }
         }
         /**

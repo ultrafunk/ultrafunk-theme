@@ -6,13 +6,17 @@
 
 
 import { newDebugLogger }    from '../../shared/debuglogger.js';
-import { IS_PROD_BUILD }     from '../../config.js';
 import { autoplay }          from '../../site/footer-toggles.js';
 import { settings }          from '../../shared/session-data.js';
 import { isPlaying }         from '../common/playback-controls.js';
 import { TRACK_TYPE }        from '../common/mediaplayers.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
+
+import {
+  IS_PROD_BUILD,
+  VERSION,
+} from '../../config.js';
 
 import {
   escAttribute,
@@ -67,8 +71,8 @@ function loadDragDropTouch()
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
     tag.src   = IS_PROD_BUILD
-                  ? 'https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js'
-                  : 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js';
+                  ? `https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=${VERSION}`
+                  : `https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=${VERSION}`;
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
@@ -81,9 +85,6 @@ function loadDragDropTouch()
 
 export function showUpNextModal()
 {
-  // Only load this dependency IF we actually need it...
-  loadDragDropTouch();
-
   const tracklist = getTracklist(isPlaying());
 
   if (tracklist.length > 2)
@@ -98,6 +99,9 @@ export function showUpNextModal()
 
     addTitleListener();
     addDragDropListeners();
+
+    // Only loads this dependency if we actually need it...
+    loadDragDropTouch();
   }
   else
   {
