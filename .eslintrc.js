@@ -14,6 +14,8 @@ module.exports = {
     "no-shadow": ["error"],
     "no-duplicate-imports": ["error"],
     "max-params": ["warn", 4],
+    "no-constant-condition": ["error"],
+    "no-constant-binary-expression": ["error"]
   },
   "env": {
     "browser": true,

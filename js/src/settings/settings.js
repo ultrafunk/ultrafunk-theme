@@ -37,12 +37,13 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 33, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 34, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
     masterVolume:         { description: 'Master Volume',                   type: INTEGER, values: masterVolumeValues,   default: 100,   valueStrings: masterVolumeValueStrings },
     masterMute:           { description: 'Master Mute',                     type: BOOLEAN, values: [true, false],        default: false, valueStrings: ['ON', 'OFF'] },
+    pauseOnPlayerChange:  { description: 'Pause others on player change',   type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
     autoplay:             { description: 'Autoplay next track',             type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
     autoExitFullscreen:   { description: 'Exit Fullscreen on next track',   type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
     timeRemainingWarning: { description: 'Track Time Remaining Warning',    type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -96,6 +97,7 @@ export const defaultSettings = {
     keyboardShortcuts:    settingsSchema.playback.keyboardShortcuts.default,
     masterVolume:         settingsSchema.playback.masterVolume.default,
     masterMute:           settingsSchema.playback.masterMute.default,
+    pauseOnPlayerChange:  settingsSchema.playback.pauseOnPlayerChange.default,
     autoplay:             settingsSchema.playback.autoplay.default,
     autoExitFullscreen:   settingsSchema.playback.autoExitFullscreen.default,
     timeRemainingWarning: settingsSchema.playback.timeRemainingWarning.default,

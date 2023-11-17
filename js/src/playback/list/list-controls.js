@@ -375,7 +375,7 @@ export function setCurrentTrackState(newState)
       else
         replaceClass(m.trackElement, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
 
-      upNextModal.updateUpNextModal((newState.ID === STATE.PLAYING.ID) ? true : false);
+      upNextModal.updateUpNextModal(newState.ID === STATE.PLAYING.ID);
     }
   }
 }

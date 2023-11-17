@@ -16,8 +16,8 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 
 # Dependencies  
 **Required:**  
-PHP version 8.1 or greater  
-[WordPress](https://wordpress.org/download/) version 6.0 or greater  
+PHP version 8.2 or greater  
+[WordPress](https://wordpress.org/download/) version 6.4 or greater  
 [Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.46.X or greater  
 [ESBuild](https://github.com/evanw/esbuild/) (JavaScript / CSS bundler and minifier)  
 [Google Material Icons font](https://google.github.io/material-design-icons/#icon-font-for-the-web)  

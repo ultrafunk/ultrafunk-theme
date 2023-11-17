@@ -301,7 +301,7 @@ function clearTimer(trackData)
 export function isPlaying()
 {
   // ToDo: This might not be the best place to save / check playback state...?
-  return ((ctrl.playPause.state.ID === STATE.PLAYING.ID) ? true : false);
+  return (ctrl.playPause.state.ID === STATE.PLAYING.ID);
 }
 
 function setLoadState()
@@ -318,21 +318,25 @@ function setMediaEndState()
 
 export function setPlayState()
 {
-  ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
-  ctrl.progressBar.setState(STATE.PLAYING);
-  ctrl.playPause.setState(STATE.PLAYING);
-  ctrl.playPause.icon.textContent = 'pause_circle_filled';
-  ctrl.prevTrack.setState(STATE.ENABLED);
+  if (ctrl.playPause.setState(STATE.PLAYING))
+  {
+    ctrl.playPause.icon.textContent = 'pause_circle_filled';
+    ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
+    ctrl.progressBar.setState(STATE.PLAYING);
+    ctrl.prevTrack.setState(STATE.ENABLED);
 
-  setDetails(m.players.getTrackData());
+    setDetails(m.players.getTrackData());
+  }
 }
 
 export function setPauseState()
 {
-  ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
-  ctrl.progressBar.setState(STATE.PAUSED);
-  ctrl.playPause.setState(STATE.PAUSED);
-  ctrl.playPause.icon.textContent = 'play_circle_filled';
+  if (ctrl.playPause.setState(STATE.PAUSED))
+  {
+    ctrl.playPause.icon.textContent = 'play_circle_filled';
+    ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
+    ctrl.progressBar.setState(STATE.PAUSED);
+  }
 }
 
 export function timeRemainingWarningBlink(toggleBlink)

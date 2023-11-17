@@ -28,7 +28,7 @@ export class PlaybackTimer
   {
     document.addEventListener('visibilitychange', () =>
     {
-      this.isVisible = (document.visibilityState === 'visible') ? true : false;
+      this.isVisible = (document.visibilityState === 'visible');
     });
   }
 

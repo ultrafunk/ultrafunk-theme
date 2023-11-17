@@ -58,6 +58,7 @@ const m = {
   siteNavUiElements:  null,
   trackNavUiElements: null,
   keyboardShortcuts:  null,
+  broadcastChannel:   null,
 };
 
 
@@ -105,6 +106,7 @@ function initCommon()
 
   shared.fullscreenElement.init();
   m.keyboardShortcuts = utils.keyboardShortcuts(settings.playback.keyboardShortcuts);
+  m.broadcastChannel  = new BroadcastChannel('playbackStatus');
 
   initListeners();
   initScreenWakeLock();
@@ -113,6 +115,7 @@ function initCommon()
 function initPlaybackEvents()
 {
   playbackEvents.addListener(playbackEvents.EVENT.PLAYBACK_READY,       playbackEventPlaybackReady);
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING,        () => m.broadcastChannel.postMessage(playbackEvents.EVENT.MEDIA_PLAYING));
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_TRACK,      playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,          playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_TIME_REMAINING, playbackEventMediaTimeRemaining);
@@ -140,6 +143,17 @@ function initListeners()
       }
     }, 250);
   });
+
+  m.broadcastChannel.onmessage = (event) =>
+  {
+    debug.log(`broadcastChannel('playbackStatus') message: ${event.data}`);
+
+    if ((event.data === playbackEvents.EVENT.MEDIA_PLAYING) && settings.playback.pauseOnPlayerChange)
+    {
+      if (m.player.getStatus().isPlaying)
+        m.player.togglePlayPause();
+    }
+  };
 }
 
 
