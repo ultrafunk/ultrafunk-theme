@@ -30,6 +30,7 @@ import {
   TYPE_STRING,
   settingsSchema,
   defaultSettings,
+  settingsDescriptions,
 } from './settings.js';
 
 
@@ -39,14 +40,14 @@ import {
 const debug = newDebugLogger('settings-ui');
 
 const m = {
-  settings:  null,
-  container: null,
+  settings:     null,
+  container:    null,
+  updatedEvent: new Event('settingsUpdated'),
 };
 
 const config = {
   containerId:  'settings-container',
   saveResetId:  'settings-save-reset',
-  updatedEvent: new Event('settingsUpdated'),
 };
 
 const settingsSections = [
@@ -108,10 +109,6 @@ export function initSettingsUi()
         readSettingsError();
       }
     }
-    else
-    {
-      debug.error(`Unable to getElementById() for '#${config.containerId}'`);
-    }
   }
 }
 
@@ -171,7 +168,7 @@ function writeSettings()
   setCookie(KEY.UF_LIST_PER_PAGE,    m.settings.list.tracksPerPage,       (YEAR_IN_SECONDS * 5));
   setCookie(KEY.UF_PREFERRED_PLAYER, m.settings.playback.preferredPlayer, (YEAR_IN_SECONDS * 5));
 
-  document.dispatchEvent(config.updatedEvent);
+  document.dispatchEvent(m.updatedEvent);
 }
 
 
@@ -305,9 +302,9 @@ function settingClicked(event)
 
   if (clickedSetting !== null)
   {
-    const settingsId  = clickedSetting.id.split(':')[0];
-    const settingsKey = clickedSetting.id.split(':')[1];
-    const index       = settingsSections.findIndex(entry => (entry.id === settingsId));
+    const settingsId   = clickedSetting.id.split(':')[0];
+    const settingsKey  = clickedSetting.id.split(':')[1];
+    const sectionIndex = settingsSections.findIndex(entry => (entry.id === settingsId));
 
     if (event.type === 'contextmenu')
     {
@@ -316,27 +313,33 @@ function settingClicked(event)
       if ((event.pointerType === 'touch') || (event.mozInputSource === 5))
       {
         event.preventDefault();
-        showSettingDetailsModal(settingsSections[index].name, settingsSections[index].schema[settingsKey]);
+        showSettingDetailsModal(settingsId, settingsKey, sectionIndex);
       }
     }
     else
     {
       if (event.shiftKey === true)
-        showSettingDetailsModal(settingsSections[index].name, settingsSections[index].schema[settingsKey]);
+        showSettingDetailsModal(settingsId, settingsKey, sectionIndex);
       else
-        updateRowData(clickedSetting, settingsSections[index].id, settingsKey, settingsSections[index].schema[settingsKey]);
+        updateRowData(clickedSetting, settingsSections[sectionIndex].id, settingsKey, settingsSections[sectionIndex].schema[settingsKey]);
     }
   }
 }
 
-function showSettingDetailsModal(sectionName ,schemaEntry)
+function showSettingDetailsModal(settingsId, settingsKey, sectionIndex)
 {
-  let valueStrings = '';
+  const schemaEntry = settingsSections[sectionIndex].schema[settingsKey];
+  let description   = schemaEntry.description;
+  let valueStrings  = '';
+
+  if ((settingsDescriptions[settingsId] !== undefined) && (settingsDescriptions[settingsId][settingsKey] !== undefined))
+    description = `<span class="normal-text">${description}: </span>${settingsDescriptions[settingsId][settingsKey]}`;
+
   schemaEntry.valueStrings.forEach(entry => (valueStrings += `${entry}, `));
 
   showModal({
-    modalTitle: `${sectionName} setting details`,
-    modalBody:  `<p><b>Description</b><br>${schemaEntry.description}</p>
+    modalTitle: `${settingsSections[sectionIndex].name} setting details`,
+    modalBody:  `<p><b>Description</b><br>${description}</p>
                  <p><b>Values</b><br>${valueStrings.slice(0, (valueStrings.length - 2))}</p>
                  <p><b>Current Value</b><br>${schemaEntry.valueStrings[schemaEntry.current]}</p>
                  <p><b>Default Value</b><br>${schemaEntry.valueStrings[getValueStringsIndex(schemaEntry, schemaEntry.default)]}</p>`,

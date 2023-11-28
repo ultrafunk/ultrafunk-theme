@@ -144,6 +144,12 @@ export const defaultSettings = {
   },
 };
 
+export const settingsDescriptions = {
+  playback: {
+    pauseOnPlayerChange: "Pause all ultrafunk.com playback in other browser tabs and windows when starting track playback in a new player.",
+  },
+};
+
 
 // ************************************************************************************************
 // Presets
