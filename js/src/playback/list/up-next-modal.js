@@ -9,7 +9,6 @@ import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { autoplay }          from '../../site/footer-toggles.js';
 import { settings }          from '../../shared/session-data.js';
 import { isPlaying }         from '../common/playback-controls.js';
-import { TRACK_TYPE }        from '../common/mediaplayers.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
 
@@ -21,6 +20,7 @@ import {
 import {
   escAttribute,
   getTimeString,
+  getTrackTypeData,
 } from '../../shared/utils.js';
 
 import {
@@ -270,12 +270,15 @@ function dragDrop(event)
 
 function getUpNextTrackHtml(element, trackArtistAttr, trackTitleAttr, isDraggable = false)
 {
-  const trackTypeClass = (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE) ? 'type-youtube' : 'type-soundcloud';
+  const trackTypeData = getTrackTypeData(
+    parseInt(element.getAttribute('data-track-type')),
+    encodeURI(element.getAttribute('data-track-thumbnail-url'))
+  );
 
   return /*html*/ `
     <div class="modal-track ${isDraggable ? 'modal-draggable-entry' : ''}" ${isDraggable ? 'draggable="true"' : ''}>
-      <div class="modal-track-thumbnail modal-ignore-touchmove ${trackTypeClass}" ${isDraggable ? 'title="Click to Play Track"' : ''}>
-        <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">
+      <div class="modal-track-thumbnail modal-ignore-touchmove ${trackTypeData.isYouTubeTrack ? 'type-youtube' : 'type-soundcloud'}" ${isDraggable ? 'title="Click to Play Track"' : ''}>
+        <img src="${trackTypeData.thumbnailUrl}">
       </div>
       <div class="modal-track-artist-title text-nowrap-ellipsis" ${isDraggable ? 'title="Drag to Move Track"' : ''}>
         <span><b>${escAttribute(element, trackArtistAttr)}</b></span><br>

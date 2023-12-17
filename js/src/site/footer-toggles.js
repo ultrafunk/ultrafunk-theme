@@ -108,7 +108,7 @@ class PlayerTypeToggle extends ElementToggle
     const currentPage       = (pageIndex !== -1)
                                 ? parseInt(urlParts[pageIndex + 1])
                                 : 1;
-    const trackData         = this.getPlayerStatus();
+    const trackData         = this.getPlayerStatus(true);
     const tracksPerPageFrom = isListPlayer() ? response.listPerPage    : response.galleryPerPage;
     const tracksPerPageTo   = isListPlayer() ? response.galleryPerPage : response.listPerPage;
     const trackOffset       = trackData.currentTrack + ((currentPage - 1) * tracksPerPageFrom);

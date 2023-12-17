@@ -39,6 +39,8 @@ const STATE = {
   FADING: 2,
 };
 
+const stoppedIntervalId = -1;
+
 const config = {
   intervalEqPow:   33, // Milliseconds between each crossfade update event
   intervalLinear: 100,
@@ -53,7 +55,7 @@ export const crossfadeClosure = ((galleryPlayers) =>
 {
   const players       = galleryPlayers;
   let fadeState       = STATE.NONE;
-  let intervalId      = -1;
+  let intervalId      = stoppedIntervalId;
   let fadeOutPlayer   = null;
   let fadeInPlayer    = null;
   let fadeLength      = 0;
@@ -72,7 +74,7 @@ export const crossfadeClosure = ((galleryPlayers) =>
 
   function init(crossfadeType, crossfadePreset, fadeInUid = null)
   {
-    if ((fadeState === STATE.NONE) && (set(fadeInUid) === true))
+    if ((fadeState === STATE.NONE) && (setFadeOutInPlayers(fadeInUid) === true))
     {
       debug.log(`init() - type: ${debug.getKeyForValue(TYPE, crossfadeType)} - fadeInUid: ${fadeInUid} - preset: ${crossfadePreset.length} sec ${debug.getKeyForValue(CURVE, crossfadePreset.curve)} (Name: ${crossfadePreset.name})`);
 
@@ -83,18 +85,10 @@ export const crossfadeClosure = ((galleryPlayers) =>
 
       fadeInPlayer.setVolume(0);
 
-      if (fadeInUid === null)
-        players.nextTrack(true);
-      else
-        players.jumpToTrack(players.trackFromUid(fadeInUid), true, false);
-
-      return {
-        fadeOutPlayer: players.indexMap.get(fadeOutPlayer.getUid()),
-        fadeInPlayer:  players.indexMap.get(fadeInPlayer.getUid())
-      };
+      return true;
     }
 
-    return null;
+    return false;
   }
 
   function start()
@@ -108,7 +102,7 @@ export const crossfadeClosure = ((galleryPlayers) =>
         const updateInterval = (fadePreset.curve === CURVE.EQUAL_POWER) ? config.intervalEqPow : config.intervalLinear;
         fadeStartTime        = ((positionMilliseconds + updateInterval) / 1000);
         const timeRemaining  = fadeOutPlayer.getDuration() - fadeStartTime;
-        const fadeRemaining  = timeRemaining - (updateInterval / 1000);
+        const fadeRemaining  = timeRemaining - (updateInterval / 100);
 
         if (fadeType === TYPE.AUTO)
           fadeLength = fadeRemaining;
@@ -128,10 +122,10 @@ export const crossfadeClosure = ((galleryPlayers) =>
 
     if (fadeState !== STATE.NONE)
     {
-      if (intervalId !== -1)
+      if (intervalId !== stoppedIntervalId)
       {
         clearInterval(intervalId);
-        intervalId = -1;
+        intervalId = stoppedIntervalId;
       }
 
       if (fadeOutPlayer !== null)
@@ -145,11 +139,15 @@ export const crossfadeClosure = ((galleryPlayers) =>
           fadeOutPlayer.setVolume(settings.playback.masterVolume); // ToDo: fadeStartVolume is 0 because of setTimeout()
           fadeOutPlayer = null;
         },
-        200);
+        250);
       }
 
       if (fadeInPlayer !== null)
+      {
+        // If crossfade is stopped before completion, set fade-in player volume to its crossfade completion value
+        fadeInPlayer.setVolume(fadeStartVolume);
         fadeInPlayer = null;
+      }
 
       fadeState       = STATE.NONE;
       fadeLength      = 0;
@@ -166,10 +164,10 @@ export const crossfadeClosure = ((galleryPlayers) =>
       fadeOutPlayer.mute(setMute);
   }
 
-  function set(fadeInUid)
+  function setFadeOutInPlayers(fadeInUid)
   {
     fadeOutPlayer = players.current;
-    fadeInPlayer  = (fadeInUid === null) ? players.next : players.playerFromUid(fadeInUid);
+    fadeInPlayer  = (fadeInUid === null) ? players.next : players.playerFromIframeId(fadeInUid);
 
     if (fadeOutPlayer.isPlayable() && fadeInPlayer.isPlayable())
       return true;
@@ -184,6 +182,10 @@ export const crossfadeClosure = ((galleryPlayers) =>
   {
     fadeOutPlayer.getPosition((positionMilliseconds) =>
     {
+      // SoundCloud getPosition() is async so the interval timer can be stopped before this is called, if so, just bail out...
+      if (intervalId === stoppedIntervalId)
+        return;
+
       // Clamp negative position values
       const position     = ((positionMilliseconds / 1000) - fadeStartTime);
       const fadePosition = (position >= 0) ? position : 0;
@@ -213,6 +215,10 @@ export const crossfadeClosure = ((galleryPlayers) =>
   {
     fadeOutPlayer.getPosition((positionMilliseconds) =>
     {
+      // SoundCloud getPosition() is async so the interval timer can be stopped before this is called, if so, just bail out...
+      if (intervalId === stoppedIntervalId)
+        return;
+
       const fadePosition  = ((positionMilliseconds / 1000) - fadeStartTime);
       const fadeInVolume  = Math.round(fadeStartVolume * (fadePosition / fadeLength));
       const fadeOutVolume = fadeStartVolume - fadeInVolume;

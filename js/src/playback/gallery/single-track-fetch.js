@@ -35,7 +35,7 @@ const m = {
   isTrackLoading:     false,
 };
 
-export const SINGLE_TRACK_PLAY = {
+export const SINGLE_TRACK = {
   PREV: 1,
   NEXT: 2,
 };
@@ -69,47 +69,16 @@ export function singleTrackFetchReady(cueOrPlayTrackByIdCallback)
   }
 }
 
-export async function playSingleTrack(playPrevNext, playTrack = false)
+export async function cueOrPlaySingleTrack(prevNextTrack, playTrack = false)
 {
   if (isSingleTrackFetch())
   {
     m.isTrackLoading   = true;
-    const restResponse = await fetchTracks(playPrevNext);
+    const restResponse = await fetchTracks(prevNextTrack);
 
     if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length > 1))
     {
-      if (playPrevNext === SINGLE_TRACK_PLAY.PREV)
-      {
-        restResponse.data.reverse();
-
-        if (restResponse.data.length === 2)
-          restResponse.data.unshift(null);
-      }
-
-      m.prevTrackDateTime = (restResponse.data.length === 3) ? restResponse.data[2].date : '';
-      m.nextTrackDateTime = (restResponse.data[0] !== null)  ? restResponse.data[0].date : '';
-      const currentTrack  = restResponse.data[1];
-
-      debug.log(`playSingleTrack() - playPrevNext: ${debug.getKeyForValue(SINGLE_TRACK_PLAY, playPrevNext)} - playTrack: ${playTrack} - trackType: ${debug.getKeyForValue(TRACK_TYPE, currentTrack.meta.track_source_type)} => ${getTrackTitle(currentTrack.meta)}`);
-
-      if (currentTrack.meta.track_source_type === TRACK_TYPE.YOUTUBE)
-      {
-        updatePlayerAndPage(restResponse.data, playTrack, true);
-      }
-      else
-      {
-        showSnackbar({
-          message: 'SoundCloud track, skipping to next',
-          duration: 5,
-          actionText: 'Play',
-          actionClickCallback: () =>
-          {
-            sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: true, trackId: null, position: 0 }));
-            window.location.href = currentTrack.link;
-          },
-          afterCloseCallback: () => playSingleTrack(playPrevNext, playTrack),
-        });
-      }
+      cueOrPlayFetchedTrack(prevNextTrack, playTrack, restResponse);
     }
     else
     {
@@ -119,7 +88,7 @@ export async function playSingleTrack(playPrevNext, playTrack = false)
           message: 'Failed to fetch track data!',
           duration: 30,
           actionText: 'Retry',
-          actionClickCallback: () => playSingleTrack(playPrevNext, playTrack),
+          actionClickCallback: () => cueOrPlaySingleTrack(prevNextTrack, playTrack),
         });
       }
       else if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length === 1))
@@ -137,14 +106,50 @@ export async function playSingleTrack(playPrevNext, playTrack = false)
   m.isTrackLoading = false;
 }
 
+function cueOrPlayFetchedTrack(prevNextTrack, playTrack, restResponse)
+{
+  if (prevNextTrack === SINGLE_TRACK.PREV)
+  {
+    restResponse.data.reverse();
+
+    if (restResponse.data.length === 2)
+      restResponse.data.unshift(null);
+  }
+
+  m.prevTrackDateTime = (restResponse.data.length === 3) ? restResponse.data[2].date : '';
+  m.nextTrackDateTime = (restResponse.data[0] !== null)  ? restResponse.data[0].date : '';
+  const currentTrack  = restResponse.data[1];
+
+  debug.log(`cueOrPlayFetchedTrack() - prevNextTrack: ${debug.getKeyForValue(SINGLE_TRACK, prevNextTrack)} - playTrack: ${playTrack} - trackType: ${debug.getKeyForValue(TRACK_TYPE, currentTrack.meta.track_source_type)} => ${getTrackTitle(currentTrack.meta)}`);
+
+  if (currentTrack.meta.track_source_type === TRACK_TYPE.YOUTUBE)
+  {
+    updatePlayerAndPage(restResponse.data, playTrack, true);
+  }
+  else
+  {
+    showSnackbar({
+      message: 'SoundCloud track, skipping to next',
+      duration: 5,
+      actionText: 'Play',
+      actionClickCallback: () =>
+      {
+        sessionStorage.setItem(KEY.UF_AUTOPLAY, JSON.stringify({ autoplay: true, trackId: null, position: 0 }));
+        window.location.href = currentTrack.link;
+      },
+      afterCloseCallback: () => cueOrPlaySingleTrack(prevNextTrack, playTrack),
+    });
+  }
+}
+
 
 // ************************************************************************************************
 // Support functions
 // ************************************************************************************************
 
-function fetchTracks(playPrevNext)
+function fetchTracks(prevNextTrack)
 {
-  if (playPrevNext === SINGLE_TRACK_PLAY.NEXT)
+  if (prevNextTrack === SINGLE_TRACK.NEXT)
   {
     const queryTracksDateTime = (m.nextTrackDateTime !== '') ? m.nextTrackDateTime : '3000-01-01T00:00:01'; // Before the year 3000 should be enough for a while...
 

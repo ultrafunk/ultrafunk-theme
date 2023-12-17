@@ -186,7 +186,6 @@ function disablePageScrolling(disableScrolling)
 {
   if (disableScrolling)
   {
-    document.body.style.setProperty('--scrollbar-width', `${window.innerWidth - document.documentElement.clientWidth}px`);
     document.body.classList.add('scrolling-disabled');
 
     if ('ontouchstart' in window)
@@ -197,7 +196,6 @@ function disablePageScrolling(disableScrolling)
   }
   else
   {
-    document.body.style.removeProperty('--scrollbar-width');
     document.body.classList.remove('scrolling-disabled');
   }
 }

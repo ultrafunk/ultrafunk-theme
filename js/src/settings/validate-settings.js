@@ -36,7 +36,11 @@ export function validateSettings(settings, schema)
   {
     for (const key in settingsObject)
     {
-      if (settingsObject && schemaObject && (typeof settingsObject[key] === 'object') && (typeof schemaObject[key] === 'object'))
+      if (settingsObject                            &&
+          schemaObject                              &&
+          (typeof settingsObject[key] === 'object') &&
+          (settingsObject[key]        !== null)     &&
+          (typeof schemaObject[key]   === 'object'))
       {
         validateRecursive(settingsObject[key], schemaObject[key]);
       }

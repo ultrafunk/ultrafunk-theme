@@ -47,12 +47,11 @@ class GalleryPlaybackTimer extends PlaybackTimer
         if ((this.#players.getCurrentTrack() + 1) <= this.#players.getNumTracks())
         {
           this.#crossfadeInit(CROSSFADE_TYPE.AUTO,
-            {
-              name:   'Auto Crossfade',
-              length: settings.gallery.autoCrossfadeLength,
-              curve:  settings.gallery.autoCrossfadeCurve
-            }
-          );
+          {
+            name:   'Auto Crossfade',
+            length: settings.gallery.autoCrossfadeLength,
+            curve:  settings.gallery.autoCrossfadeCurve
+          });
         }
       }
     }

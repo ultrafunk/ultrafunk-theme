@@ -91,10 +91,10 @@ function getAllPlayers()
       player = new mediaPlayers.SoundCloud(element.id, iframe.id, embeddedPlayer, iframe.src);
 
       embeddedPlayer.bind(SC.Widget.Events.READY,  () => onSoundCloudPlayerEventReady(iframe.id, element, player, embeddedPlayer));
-      embeddedPlayer.bind(SC.Widget.Events.PLAY,   onSoundCloudPlayerEventPlay);
-      embeddedPlayer.bind(SC.Widget.Events.PAUSE,  onSoundCloudPlayerEventPause);
-      embeddedPlayer.bind(SC.Widget.Events.FINISH, onSoundCloudPlayerEventFinish);
-      embeddedPlayer.bind(SC.Widget.Events.ERROR,  onSoundCloudPlayerEventError);
+      embeddedPlayer.bind(SC.Widget.Events.PLAY,   () => onSoundCloudPlayerEventPlay(iframe.id));
+      embeddedPlayer.bind(SC.Widget.Events.PAUSE,  () => onSoundCloudPlayerEventPause(iframe.id));
+      embeddedPlayer.bind(SC.Widget.Events.FINISH, () => onSoundCloudPlayerEventFinish(iframe.id));
+      embeddedPlayer.bind(SC.Widget.Events.ERROR,  () => onSoundCloudPlayerEventError(iframe.id));
       /* eslint-enable */
     }
 
@@ -114,9 +114,10 @@ function getYouTubePlayer(playerId, element, isSingleTrackPlayer = false)
   {
     events:
     {
-      onReady:       (event) => onYouTubePlayerReady(event, playerId),
-      onStateChange: (event) => onYouTubePlayerStateChange(event, playerId),
-      onError:       (event) => onYouTubePlayerError(event, playerId),
+      onReady:           (event) => onYouTubePlayerReady(event, playerId),
+      onStateChange:     (event) => onYouTubePlayerStateChange(event, playerId),
+      onError:           (event) => onYouTubePlayerError(event, playerId),
+      onAutoplayBlocked: ()      => m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED),
     },
     playerVars: {
       'disablekb': 1,
@@ -151,10 +152,10 @@ export function onPlayerError(player, mediaUrl)
                         : eventLogger.SOURCE.SOUNDCLOUD;
 
   // Stop the current track if it is not the one we are going to next
-  if (m.players.isCurrent(player.getUid()) === false)
+  if (m.players.isCurrent(player.getIframeId()) === false)
     m.players.stop();
 
-  eventLog.add(eventSource, eventLogger.EVENT.PLAYER_ERROR, player.getUid());
+  eventLog.add(eventSource, eventLogger.EVENT.PLAYER_ERROR, player.getIframeId());
   m.embeddedEvent(playbackEvents.EVENT.MEDIA_UNAVAILABLE, getPlayerErrorData(player, mediaUrl));
 }
 
@@ -164,7 +165,7 @@ function getPlayerErrorData(player, mediaUrl)
   const title  = player.getTitle()  || 'N/A';
 
   return {
-    currentTrack: m.players.trackFromUid(player.getUid()),
+    currentTrack: m.players.trackNumFromIframeId(player.getIframeId()),
     numTracks:    m.players.getNumTracks(),
     trackId:      player.getTrackId(),
     trackType:    player.getTrackType(),
@@ -202,19 +203,19 @@ function initYouTubeAPI()
 
 function onYouTubePlayerReady(event, iframeId)
 {
-  const player = m.players.playerFromUid(iframeId);
+  const player = m.players.playerFromIframeId(iframeId);
 
   // YT.PlayerState.UNSTARTED (-1) here means the video is not available or playable anymore,
   // so we set playbable to false for later use...
   // ToDo: This is _NOT_ documented or official behaviour, so it could change at any time!
   if (event.target.getPlayerState() === -1)
   {
-    debug.warn(`onYouTubePlayerReady() - MEDIA_UNAVAILABLE: ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - "${player.getTitle()}"`);
+    debug.warn(`onYouTubePlayerReady() - MEDIA_UNAVAILABLE: ${iframeId} => ${player.getSourceUid()} => ${player.getArtist()} - "${player.getTitle()}"`);
     player.setIsPlayable(false);
   }
   else
   {
-    debug.log(`onYouTubePlayerReady(): ${iframeId} => ${event.target.getVideoData().video_id} => ${player.getArtist()} - ${player.getTitle()}`);
+    debug.log(`onYouTubePlayerReady(): ${iframeId} => ${player.getSourceUid()} => ${player.getArtist()} - ${player.getTitle()}`);
   }
 
   updatePlayersReady();
@@ -239,19 +240,16 @@ function onYouTubePlayerStateChange(event, iframeId)
 
 function onYouTubeStateUnstarted(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: UNSTARTED (uID: ${iframeId})`);
-
-  if (eventLog.ytAutoplayBlocked(iframeId, 3000) || eventLog.ytSingleTrackAutoplayBlocked(iframeId, 3000))
-    m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
+  debug.log(`onYouTubePlayerStateChange: UNSTARTED (iframeId: ${iframeId})`);
 }
 
 function onYouTubeStateBuffering(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: BUFFERING (uID: ${iframeId})`);
+  debug.log(`onYouTubePlayerStateChange: BUFFERING (iframeId: ${iframeId})`);
 
   if (m.players.crossfade.isFading() === false)
   {
-    const player = m.players.playerFromUid(iframeId);
+    const player = m.players.playerFromIframeId(iframeId);
     player.mute(settings.playback.masterMute);
     player.setVolume(settings.playback.masterVolume);
     playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
@@ -260,7 +258,7 @@ function onYouTubeStateBuffering(iframeId)
 
 function onYouTubeStatePlaying(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: PLAYING   (uID: ${iframeId})`);
+  debug.log(`onYouTubePlayerStateChange: PLAYING   (iframeId: ${iframeId})`);
 
   // Call order is important on play events for state handling: Always sync first!
   m.playbackState.sync(iframeId, m.playbackState.STATE.PLAY);
@@ -269,7 +267,7 @@ function onYouTubeStatePlaying(iframeId)
 
 function onYouTubeStatePaused(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: PAUSED    (uID: ${iframeId})`);
+  debug.log(`onYouTubePlayerStateChange: PAUSED    (iframeId: ${iframeId})`);
 
   if (m.players.isCurrent(iframeId))
   {
@@ -284,12 +282,12 @@ function onYouTubeStatePaused(iframeId)
 
 function onYouTubeStateCued(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: CUED      (uID: ${iframeId})`);
+  debug.log(`onYouTubePlayerStateChange: CUED      (iframeId: ${iframeId})`);
 }
 
 function onYouTubeStateEnded(iframeId)
 {
-  debug.log(`onYouTubePlayerStateChange: ENDED     (uID: ${iframeId})`);
+  debug.log(`onYouTubePlayerStateChange: ENDED     (iframeId: ${iframeId})`);
 
   if (m.players.isCurrent(iframeId))
   {
@@ -304,7 +302,7 @@ function onYouTubeStateEnded(iframeId)
 
 function onYouTubePlayerError(event, iframeId)
 {
-  const player = m.players.playerFromUid(iframeId);
+  const player = m.players.playerFromIframeId(iframeId);
 
   // Handle single track fetched cueOrPlaySingleTrackById() errors for unplayable tracks (= 150)
   if ((event.data === 150) && (player instanceof mediaPlayers.SingleTrack) && player.isCued())
@@ -335,7 +333,7 @@ function initSoundCloudAPI()
 
 function onSoundCloudPlayerEventReady(iframeId, element, player, embeddedPlayer)
 {
-  debug.log(`onSoundCloudPlayerEventReady(): ${iframeId} => ${player.getUid()} => ${player.getArtist()} - ${player.getTitle()}`);
+  debug.log(`onSoundCloudPlayerEventReady(): ${iframeId} => ${player.getSourceUid()} => ${player.getArtist()} - ${player.getTitle()}`);
 
   player.setThumbnail(element);
 
@@ -347,21 +345,21 @@ function onSoundCloudPlayerEventReady(iframeId, element, player, embeddedPlayer)
   });
 }
 
-function onSoundCloudPlayerEventPlay(event)
+function onSoundCloudPlayerEventPlay(iframeId)
 {
-  debug.log(`onSoundCloudPlayerEvent: PLAY   (uID: ${event.soundId})`);
-  eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PLAYING, event.soundId);
+  debug.log(`onSoundCloudPlayerEvent: PLAY   (iframeId: ${iframeId})`);
+  eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PLAYING, iframeId);
 
-  if (m.players.crossfade.isFading() && m.players.isCurrent(event.soundId))
+  if (m.players.crossfade.isFading() && m.players.isCurrent(iframeId))
   {
     // Call order is important on play events for state handling: Always sync first!
-    if (eventLog.scPlayDoubleTrigger(event.soundId, (config.maxPlaybackStartDelay * 1000)))
-      m.playbackState.sync(event.soundId, m.playbackState.STATE.PLAY);
+    if (eventLog.scPlayDoubleTrigger(iframeId, (config.maxPlaybackStartDelay * 1000)))
+      m.playbackState.sync(iframeId, m.playbackState.STATE.PLAY);
   }
   else
   {
     // Call order is important on play events for state handling: Always sync first!
-    m.playbackState.sync(event.soundId, m.playbackState.STATE.PLAY);
+    m.playbackState.sync(iframeId, m.playbackState.STATE.PLAY);
     m.players.current.mute(settings.playback.masterMute);
     m.players.current.setVolume(settings.playback.masterVolume);
   }
@@ -369,31 +367,31 @@ function onSoundCloudPlayerEventPlay(event)
   playbackTimer.start();
 }
 
-function onSoundCloudPlayerEventPause(event)
+function onSoundCloudPlayerEventPause(iframeId)
 {
-  debug.log(`onSoundCloudPlayerEvent: PAUSE  (uID: ${event.soundId})`);
-  eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PAUSED, event.soundId);
+  debug.log(`onSoundCloudPlayerEvent: PAUSE  (iframeId: ${iframeId})`);
+  eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PAUSED, iframeId);
 
-  if (eventLog.scAutoplayBlocked(event.soundId, 3000))
+  if (eventLog.scAutoplayBlocked(iframeId, 3000))
   {
     playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
   }
-  else if (eventLog.scWidgetPlayBlocked(event.soundId, 30000))
+  else if (eventLog.scWidgetPlayBlocked(iframeId, 30000))
   {
     playbackTimer.stop();
-    m.embeddedEvent(playbackEvents.EVENT.PLAYBACK_BLOCKED, { currentTrack: m.players.trackFromUid(event.soundId), numTracks: m.players.getNumTracks() });
+    m.embeddedEvent(playbackEvents.EVENT.PLAYBACK_BLOCKED, { currentTrack: m.players.trackNumFromIframeId(iframeId), numTracks: m.players.getNumTracks() });
   }
   else
   {
     // Only sync state if we get pause events on the same (current) player
-    if (m.players.isCurrent(event.soundId))
+    if (m.players.isCurrent(iframeId))
     {
       m.players.current.getPosition(positionMilliseconds =>
       {
         if (positionMilliseconds > 0)
         {
-          m.playbackState.sync(event.soundId, m.playbackState.STATE.PAUSE);
+          m.playbackState.sync(iframeId, m.playbackState.STATE.PAUSE);
           playbackTimer.stop();
         }
       });
@@ -405,11 +403,11 @@ function onSoundCloudPlayerEventPause(event)
   }
 }
 
-function onSoundCloudPlayerEventFinish(event)
+function onSoundCloudPlayerEventFinish(iframeId)
 {
-  debug.log(`onSoundCloudPlayerEvent: FINISH (uID: ${event.soundId})`);
+  debug.log(`onSoundCloudPlayerEvent: FINISH (iframeId: ${iframeId})`);
 
-  if (m.players.isCurrent(event.soundId))
+  if (m.players.isCurrent(iframeId))
   {
     playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
@@ -420,12 +418,10 @@ function onSoundCloudPlayerEventFinish(event)
   }
 }
 
-function onSoundCloudPlayerEventError()
+function onSoundCloudPlayerEventError(iframeId)
 {
-  this.getCurrentSound(soundObject =>
-  {
-    const player = m.players.playerFromUid(soundObject.id);
-    debug.warn(`onSoundCloudPlayerEventError() - MEDIA_UNAVAILABLE: ${player.getIframeId()} => ${soundObject.id} => ${player.getArtist()} - "${player.getTitle()}"`);
-    player.setIsPlayable(false);
-  });
+  const player = m.players.playerFromIframeId(iframeId);
+
+  debug.warn(`onSoundCloudPlayerEventError() - MEDIA_UNAVAILABLE: ${player.getIframeId()} => ${player.getSourceUid()} => ${player.getArtist()} - "${player.getTitle()}"`);
+  player.setIsPlayable(false);
 }

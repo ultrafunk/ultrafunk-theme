@@ -160,14 +160,6 @@ function head() : void
     </script>
     <?php
   }
-  else
-  {
-    /*
-    ?>
-    <script src="https://beamanalytics.b-cdn.net/beam.min.js" data-token="14f07ad3-faa9-41f0-b3fc-e95c8742a8f4" async></script>
-    <?php
-    */
-  }
 }
 
 function body_attributes() : void

@@ -28,10 +28,10 @@ import {
 } from '../shared/debuglogger.js';
 
 import {
-  SINGLE_TRACK_PLAY,
+  SINGLE_TRACK,
   isSingleTrackFetch,
   isSingleTrackLoading,
-  playSingleTrack,
+  cueOrPlaySingleTrack,
 } from './gallery/single-track-fetch.js';
 
 import {
@@ -119,8 +119,8 @@ function initPlaybackEvents()
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_TRACK,      playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,          playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_TIME_REMAINING, playbackEventMediaTimeRemaining);
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PREV_TRACK,     () => playPrevNextTrack(null, SINGLE_TRACK_PLAY.PREV, response.prevPage));
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_NEXT_TRACK,     () => playPrevNextTrack(null, SINGLE_TRACK_PLAY.NEXT, response.nextPage));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PREV_TRACK,     () => cueOrPlayPrevNextTrack(null, SINGLE_TRACK.PREV, response.prevPage));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_NEXT_TRACK,     () => cueOrPlayPrevNextTrack(null, SINGLE_TRACK.NEXT, response.nextPage));
 }
 
 function initListeners()
@@ -144,16 +144,13 @@ function initListeners()
     }, 250);
   });
 
-  m.broadcastChannel.onmessage = (event) =>
+  m.broadcastChannel.addEventListener('message', (event) =>
   {
     debug.log(`broadcastChannel('playbackStatus') message: ${event.data}`);
 
     if ((event.data === playbackEvents.EVENT.MEDIA_PLAYING) && settings.playback.pauseOnPlayerChange)
-    {
-      if (m.player.getStatus().isPlaying)
-        m.player.togglePlayPause();
-    }
-  };
+      m.player.pause();
+  });
 }
 
 
@@ -308,7 +305,7 @@ function onKeyArrowLeft(event)
   event.preventDefault();
 
   if (event.shiftKey === true)
-    playPrevNextTrack(null, SINGLE_TRACK_PLAY.PREV, response.prevPage);
+    cueOrPlayPrevNextTrack(null, SINGLE_TRACK.PREV, response.prevPage);
   else
     m.player.prevTrack();
 }
@@ -318,12 +315,12 @@ function onKeyArrowRight(event)
   event.preventDefault();
 
   if (event.shiftKey === true)
-    playPrevNextTrack(null, SINGLE_TRACK_PLAY.NEXT, response.nextPage);
+    cueOrPlayPrevNextTrack(null, SINGLE_TRACK.NEXT, response.nextPage);
   else
     m.player.nextTrack();
 }
 
-function playPrevNextTrack(event, playPrevNext, prevNextPage)
+function cueOrPlayPrevNextTrack(event, prevNextTrack, prevNextPage)
 {
   event?.preventDefault();
 
@@ -332,7 +329,7 @@ function playPrevNextTrack(event, playPrevNext, prevNextPage)
     if (m.player.getStatus().trackType === TRACK_TYPE.YOUTUBE)
     {
       if (isSingleTrackLoading() === false)
-        playSingleTrack(playPrevNext, m.player.getStatus().isPlaying);
+        cueOrPlaySingleTrack(prevNextTrack, m.player.getStatus().isPlaying);
       else
         showSnackbar({ message: 'Loading track, please wait...', duration: 3 });
     }
@@ -422,10 +419,10 @@ class siteNavUiElements extends ElementClick
   elementClicked()
   {
     if (this.clicked('a.navbar-prev-link'))
-      return playPrevNextTrack(this.event, SINGLE_TRACK_PLAY.PREV, response.prevPage);
+      return cueOrPlayPrevNextTrack(this.event, SINGLE_TRACK.PREV, response.prevPage);
 
     if (this.clicked('a.navbar-next-link'))
-      return playPrevNextTrack(this.event, SINGLE_TRACK_PLAY.NEXT, response.nextPage);
+      return cueOrPlayPrevNextTrack(this.event, SINGLE_TRACK.NEXT, response.nextPage);
   }
 }
 
@@ -434,10 +431,10 @@ class trackNavUiElements extends ElementClick
   elementClicked()
   {
     if (this.clicked('div.nav-previous a'))
-      return playPrevNextTrack(this.event, SINGLE_TRACK_PLAY.PREV, response.prevPage);
+      return cueOrPlayPrevNextTrack(this.event, SINGLE_TRACK.PREV, response.prevPage);
 
     if (this.clicked('div.nav-next a'))
-      return playPrevNextTrack(this.event, SINGLE_TRACK_PLAY.NEXT, response.nextPage);
+      return cueOrPlayPrevNextTrack(this.event, SINGLE_TRACK.NEXT, response.nextPage);
   }
 }
 

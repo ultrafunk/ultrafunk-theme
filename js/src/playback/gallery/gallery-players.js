@@ -23,7 +23,6 @@ const debug = newDebugLogger('gallery-players');
 
 export const galleryPlayers = (() =>
 {
-  let playTrack      = null;
   let crossfade      = null;
   const mediaPlayers = [];
   const indexMap     = new Map();
@@ -31,33 +30,31 @@ export const galleryPlayers = (() =>
 
   return {
     indexMap,
-    get crossfade()                 { return crossfade;                       },
-    get current()                   { return mediaPlayers[playerIndex];       },
-    get next()                      { return mediaPlayers[playerIndex + 1];   },
-    getPlayerIndex()                { return playerIndex;                     },
-    setPlayerIndex(nextPlayerIndex) { playerIndex = nextPlayerIndex;          },
-    getTrackType()                  { return this.current.getTrackType();     },
-    getNumTracks()                  { return mediaPlayers.length;             },
-    getCurrentTrack()               { return playerIndex + 1;                 },
-    playerFromUid(uId)              { return mediaPlayers[indexMap.get(uId)]; },
-    trackFromUid(uId)               { return (indexMap.get(uId) + 1);         },
-    isCurrent(uId)                  { return (uId === this.current.getUid()); },
+    get crossfade()                 { return crossfade;                            },
+    get current()                   { return mediaPlayers[playerIndex];            },
+    get next()                      { return mediaPlayers[playerIndex + 1];        },
+    getPlayerIndex()                { return playerIndex;                          },
+    setPlayerIndex(nextPlayerIndex) { playerIndex = nextPlayerIndex;               },
+    getTrackType()                  { return this.current.getTrackType();          },
+    getNumTracks()                  { return mediaPlayers.length;                  },
+    getCurrentTrack()               { return playerIndex + 1;                      },
+    playerFromIframeId(iframeId)    { return mediaPlayers[indexMap.get(iframeId)]; },
+    trackNumFromIframeId(iframeId)  { return (indexMap.get(iframeId) + 1);         },
+    isCurrent(iframeId)             { return (iframeId === this.current.getIframeId()); },
     init,
     add,
-    uIdFromIframeId,
     stop,
     mute,
     getTrackData,
     prevTrack,
     nextTrack,
-    jumpToTrack,
+    gotoTrackNum,
   };
 
-  function init(playTrackCallback)
+  function init()
   {
     debug.log('init()');
 
-    playTrack = playTrackCallback;
     crossfade = crossfadeClosure(this);
 
     addListener(EVENT.MEDIA_PLAYING, () => crossfade.start());
@@ -69,12 +66,7 @@ export const galleryPlayers = (() =>
     debug.log(player);
 
     mediaPlayers.push(player);
-    indexMap.set(player.getUid(), mediaPlayers.length - 1);
-  }
-
-  function uIdFromIframeId(iframeId)
-  {
-    return mediaPlayers.find(player => (player.getIframeId() === iframeId)).getUid();
+    indexMap.set(player.getIframeId(), mediaPlayers.length - 1);
   }
 
   function stop()
@@ -101,37 +93,32 @@ export const galleryPlayers = (() =>
     };
   }
 
-  function prevTrack(playMedia)
+  function prevTrack()
   {
     if (playerIndex > 0)
     {
       playerIndex--;
-      playTrack(playMedia);
       return true;
     }
 
     return false;
   }
 
-  function nextTrack(playMedia)
+  function nextTrack()
   {
     playerIndex++;
 
     if (playerIndex < this.getNumTracks())
-    {
-      playTrack(playMedia);
       return true;
-    }
 
     return false;
   }
 
-  function jumpToTrack(track, playMedia, scrollToMedia = true)
+  function gotoTrackNum(trackNum)
   {
-    if ((track > 0) && (track <= this.getNumTracks()))
+    if ((trackNum > 0) && (trackNum <= this.getNumTracks()))
     {
-      playerIndex = track - 1;
-      playTrack(playMedia, scrollToMedia);
+      playerIndex = trackNum - 1;
       return true;
     }
 

@@ -48,7 +48,7 @@ export function init()
   galleryEvents.init();
 
   m.players = galleryPlayers();
-  m.players.init(playTrack);
+  m.players.init();
 
   playbackControls.init(m.players, seekClick);
   galleryControls.init(m.players, crossfadeToClick);
@@ -61,18 +61,21 @@ export function init()
 // Playback controls click handlers + state
 // ************************************************************************************************
 
+export function play()
+{
+  playbackControls.setPlayState();
+  m.players.current.play(embeddedPlayers.onPlayerError);
+}
+
+export function pause()
+{
+  playbackControls.setPauseState();
+  m.players.current.pause();
+}
+
 export function togglePlayPause()
 {
-  if (playbackControls.isPlaying())
-  {
-    playbackControls.setPauseState();
-    m.players.current.pause();
-  }
-  else
-  {
-    playbackControls.setPlayState();
-    m.players.current.play(embeddedPlayers.onPlayerError);
-  }
+  playbackControls.isPlaying() ? pause() : play();
 }
 
 export function prevTrack()
@@ -93,8 +96,8 @@ export function prevTrack()
         if (m.players.getCurrentTrack() > 1)
           m.players.stop();
 
-        if (m.players.prevTrack(playbackControls.isPlaying()))
-          playbackControls.updateTrackData();
+        if (m.players.prevTrack())
+          playTrack(playbackControls.isPlaying());
         else
           playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PREV_TRACK);
       }
@@ -121,8 +124,8 @@ export function nextTrack(isMediaEnded = false)
     }
     else
     {
-      if (m.players.nextTrack(playbackControls.isPlaying()))
-        playbackControls.updateTrackData();
+      if (m.players.nextTrack())
+        playTrack(playbackControls.isPlaying());
     }
   }
   else if ((isLastTrack === true) && (isMediaEnded === false))
@@ -151,7 +154,7 @@ function repeatPlayback(isMediaEnded, isLastTrack)
     if (repeatMode === playbackControls.REPEAT.ONE)
     {
       m.players.current.seekTo(0);
-      m.players.current.play();
+      play();
       return true;
     }
     else if (isLastTrack && (repeatMode === playbackControls.REPEAT.ALL))
@@ -182,21 +185,29 @@ export function toggleMute()
   m.players.mute();
 }
 
-function cueTrack(iframeId, scrollToMedia = true)
+//
+// Supports only YouTube players
+//
+function cueOrPlayTrack(iframeId, autoplayData, scrollToMedia = true)
 {
-  debug.log(`cueTrack(): ${iframeId}`);
+  debug.log(`cueOrPlayTrack(): ${iframeId}`);
 
   m.players.setPlayerIndex(m.players.indexMap.get(iframeId));
   playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_TRACK, { scrollToMedia: scrollToMedia, trackId: m.players.current.getTrackId() });
+
+  if (autoplayData.autoplay)
+    m.players.current.playTrackById(autoplayData.position);
+  else
+    m.players.current.cueTrackById(autoplayData.position);
+
   playbackControls.updateTrackData();
 }
 
 function playTrack(playMedia, scrollToMedia = true)
 {
   playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_TRACK, { scrollToMedia: scrollToMedia, trackId: m.players.current.getTrackId() });
-
-  if (playMedia)
-    m.players.current.play(embeddedPlayers.onPlayerError);
+  if (playMedia) play();
+  playbackControls.updateTrackData();
 }
 
 function skipToTrack(trackNum, playMedia = true)
@@ -207,8 +218,8 @@ function skipToTrack(trackNum, playMedia = true)
   {
     m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
 
-    if (m.players.jumpToTrack(trackNum, playMedia))
-      playbackControls.updateTrackData();
+    if (m.players.gotoTrackNum(trackNum))
+      playTrack(playMedia);
   }
 }
 
@@ -218,25 +229,22 @@ function resumeAutoplay(autoplayData, iframeId = null)
 
   if (iframeId !== null)
   {
-    if (autoplayData.autoplay)
-      skipToTrack(m.players.trackFromUid(iframeId), true);
-    else
-      cueTrack(iframeId);
+    cueOrPlayTrack(iframeId, autoplayData);
   }
   else if (autoplayData.autoplay)
   {
     m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
-    togglePlayPause();
+    play();
   }
 }
 
 function cueOrPlaySingleTrackById(trackData, thumbnailData, playMedia = false)
 {
   debug.log(`cueOrPlaySingleTrackById() - playMedia: ${playMedia}`);
-  m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.CUE_PLAY_SINGLE_TRACK);
 
   m.players.current.setIsCued(false);
   m.players.current.setIsPlayable(true);
+  m.players.current.setSourceUid(thumbnailData.uid);
   m.players.current.setArtistTitle(trackData.track_artist, trackData.track_title);
   m.players.current.setDuration(parseInt(trackData.track_duration));
   m.players.current.setThumbnail(thumbnailData);
@@ -245,19 +253,14 @@ function cueOrPlaySingleTrackById(trackData, thumbnailData, playMedia = false)
   playbackControls.updateTrackData();
 
   if (playMedia)
-  {
-    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
-    m.players.current.playTrackById(thumbnailData.uid);
-  }
+    m.players.current.playTrackById();
   else
-  {
-    m.players.current.cueTrackById(thumbnailData.uid);
-  }
+    m.players.current.cueTrackById();
 }
 
-export function getStatus()
+export function getStatus(getCurrentPosition = false)
 {
-  return {
+  const status = {
     isPlaying:    playbackControls.isPlaying(),
     currentTrack: m.players.getCurrentTrack(),
     trackType:    m.players.current.getTrackType(),
@@ -267,6 +270,17 @@ export function getStatus()
     elementId:    m.players.current.getTrackId(),
     iframeId:     m.players.current.getIframeId(),
   };
+
+  if (getCurrentPosition)
+  {
+    m.players.current.getPosition((positionMilliseconds) =>
+    {
+      status.position = Math.round(positionMilliseconds / 1000);
+      return status;
+    });
+  }
+
+  return status;
 }
 
 
@@ -279,8 +293,8 @@ function crossfadeToClick(fadeInUid, crossfadePreset)
   if ((m.players.isCurrent(fadeInUid) === false) && (m.players.current.getDuration() > 0))
   {
     debug.log(`crossfadeToClick():
-      fadeOut: ${m.players.current.getArtist()} - "${m.players.current.getTitle()}" (${m.players.current.getUid()})
-      fadeIn.: ${m.players.playerFromUid(fadeInUid).getArtist()} - "${m.players.playerFromUid(fadeInUid).getTitle()}" (${fadeInUid})`);
+      fadeOut: ${m.players.current.getArtist()} - "${m.players.current.getTitle()}" (${m.players.current.getIframeId()})
+      fadeIn.: ${m.players.playerFromIframeId(fadeInUid).getArtist()} - "${m.players.playerFromIframeId(fadeInUid).getTitle()}" (${fadeInUid})`);
 
     if ((settings.playback.masterMute === false) && (settings.playback.autoplay === false))
     {
@@ -299,10 +313,19 @@ function crossfadeInit(crossfadeType, crossfadePreset, crossfadeInUid = null)
 {
   m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.CROSSFADE_START);
 
-  const playersIndex = m.players.crossfade.init(crossfadeType, crossfadePreset, crossfadeInUid);
-
-  if (playersIndex !== null)
-    playbackControls.updateTrackData();
+  if (m.players.crossfade.init(crossfadeType, crossfadePreset, crossfadeInUid))
+  {
+    if (crossfadeInUid === null)
+    {
+      if (m.players.nextTrack())
+        playTrack(true);
+    }
+    else
+    {
+      if (m.players.gotoTrackNum(m.players.trackNumFromIframeId(crossfadeInUid)))
+        playTrack(true, false);
+    }
+  }
 }
 
 
@@ -330,7 +353,7 @@ function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
       break;
 
     case playbackEvents.EVENT.AUTOPLAY_BLOCKED:
-      playbackEvents.dispatch(playbackEvents.EVENT.AUTOPLAY_BLOCKED, null, { 'togglePlayPause': togglePlayPause });
+      playbackEvents.dispatch(playbackEvents.EVENT.AUTOPLAY_BLOCKED, null, { 'play': play });
       break;
 
     case playbackEvents.EVENT.PLAYBACK_BLOCKED:

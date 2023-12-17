@@ -137,7 +137,7 @@ function crossfadeToClick(event)
       const index  = parseInt(element.querySelector(config.crossfadePresetSelector).getAttribute(config.crossfadePresetData));
 
       replaceClass(element.querySelector(`div${config.crossfadeToSelector}`), STATE.ENABLED.CLASS, STATE.DISABLED.CLASS);
-      ctrl.crossfadeTo.clickCallback(m.players.uIdFromIframeId(iframe.id), presetList.crossfade[index]);
+      ctrl.crossfadeTo.clickCallback(iframe.id, presetList.crossfade[index]);
     }
   }
 }

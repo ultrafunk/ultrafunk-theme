@@ -10,6 +10,7 @@ import { THEME_ENV } from '../config.js';
 import {
   getPrefPlayerUrl,
   getThumbnailData,
+  getTrackTypeData,
 } from '../shared/utils.js';
 
 
@@ -35,7 +36,7 @@ export function getTermlistHtml(header, termSlug, termData)
         data-track-id="track-${track.id}"
         data-track-source-uid="${thumbnailData.uid}" title="Play Track"
         >
-        <img src="${thumbnailData.src}">
+        <img src="${getTrackTypeData(track.meta.track_source_type, thumbnailData.src).thumbnailUrl}">
       </div>
       <div class="artist-title text-nowrap-ellipsis">
         <a href="${track.link}" title="Go to track"><span><b>${track.meta.track_artist}</b></span><br><span>${track.meta.track_title}</span></a>

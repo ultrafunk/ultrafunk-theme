@@ -5,7 +5,6 @@
 //
 
 
-import * as eventLogger       from '../common/eventlogger.js';
 import * as playbackControls  from '../common/playback-controls.js';
 import * as listControls      from './list-controls.js';
 import * as mediaPlayers      from '../common/mediaplayers.js';
@@ -33,8 +32,7 @@ import {
 /*************************************************************************************************/
 
 
-const debug    = newDebugLogger('list-playback');
-const eventLog = new eventLogger.Playback(10);
+const debug = newDebugLogger('list-playback');
 
 const m = {
   player:            null,
@@ -162,7 +160,7 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
   }
 }
 
-function cueOrPlayCurrentTrack(playTrack)
+function cueOrPlayCurrentTrack(playTrack, positionSeconds = 0)
 {
   const sourceUid = listControls.updateTrackDetails();
 
@@ -170,13 +168,13 @@ function cueOrPlayCurrentTrack(playTrack)
 
   if (playTrack)
   {
-    m.player.playTrackById(sourceUid);
+    m.player.playTrackById(sourceUid, positionSeconds);
     listControls.setCurrentTrackState(STATE.PLAYING);
     playbackControls.updateTrackData();
   }
   else
   {
-    m.player.cueTrackById(sourceUid);
+    m.player.cueTrackById(sourceUid, positionSeconds);
     listControls.setCurrentTrackState(STATE.PAUSED);
   }
 }
@@ -186,19 +184,22 @@ function cueOrPlayCurrentTrack(playTrack)
 //
 // ************************************************************************************************
 
+export function play()
+{
+  m.player.play(onYouTubePlayerError);
+}
+
+export function pause()
+{
+  m.player.embedded.pauseVideo();
+}
+
 export function togglePlayPause()
 {
   if (m.currentTrackId === null)
-  {
     setCurrentTrack(listControls.queryTrack('div.track-entry.current').id);
-  }
   else
-  {
-    if (playbackControls.isPlaying())
-      m.player.embedded.pauseVideo();
-    else
-      m.player.play(onYouTubePlayerError);
-  }
+    playbackControls.isPlaying() ? pause() : play();
 }
 
 export function setVolume()
@@ -250,7 +251,7 @@ async function advanceToNextTrack(autoplay = false, isPlaybackError = false)
   const repeatMode  = isPlaybackError ? playbackControls.REPEAT.OFF : playbackControls.getRepeatMode();
   const nextTrackId = listControls.getNextPlayableId();
 
-  debug.log(`advanceToNextTrack() autoplay: ${autoplay} - isPlaybackError: ${isPlaybackError} - nextTrackId: ${nextTrackId} - repeatMode: ${debug.getKeyForValue(playbackControls.REPEAT, repeatMode)}`);
+  debug.log(`advanceToNextTrack() - autoplay: ${autoplay} - isPlaybackError: ${isPlaybackError} - nextTrackId: ${nextTrackId} - repeatMode: ${debug.getKeyForValue(playbackControls.REPEAT, repeatMode)}`);
 
   if (autoplay && (repeatMode === playbackControls.REPEAT.ONE))
   {
@@ -287,12 +288,6 @@ async function advanceToNextTrack(autoplay = false, isPlaybackError = false)
 
 function skipToNextTrack()
 {
-  if ((playbackControls.isPlaying() === false) && (m.autoplayData !== null))
-  {
-    eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
-    eventLog.add(eventLogger.SOURCE.YOUTUBE, -1, listControls.getNextPlayableId());
-  }
-
   if (playbackControls.isPlaying() === false)
     advanceToNextTrack(true, true);
 }
@@ -303,23 +298,33 @@ function stopSkipToNextTrack()
   listControls.setCurrentTrackState(STATE.PAUSED);
 }
 
-export function getStatus()
+export function getStatus(getCurrentTrackNum = false)
 {
-  const currentTrack = listControls.queryTrack('div.track-entry.current');
+  let currentTrackElement = null;
 
-  if (currentTrack !== null)
+  (m.currentTrackId !== null)
+    ? currentTrackElement = listControls.queryTrackId(m.currentTrackId)
+    : currentTrackElement = listControls.queryTrack('div.track-entry.current');
+
+  if (currentTrackElement !== null)
   {
-    const allTracksList = listControls.queryTrackAll('div.track-entry');
-    const currentIndex  = Array.prototype.indexOf.call(allTracksList, currentTrack);
+    let currentTrackIndex = 0;
+
+    if (getCurrentTrackNum)
+    {
+      const allTracksList = listControls.queryTrackAll('div.track-entry');
+      currentTrackIndex = Array.prototype.indexOf.call(allTracksList, currentTrackElement);
+      debug.log(`getStatus() - currentTrackNum: ${currentTrackIndex + 1} - trackId: ${currentTrackElement.getAttribute('data-track-id')}`);
+    }
 
     return {
       isPlaying:    playbackControls.isPlaying(),
-      currentTrack: (currentIndex + 1),
+      currentTrack: (currentTrackIndex + 1),
       trackType:    mediaPlayers.TRACK_TYPE.YOUTUBE,
       position:     Math.ceil(m.player.embedded.getCurrentTime()),
       numTracks:    1,
-      trackId:      allTracksList[currentIndex].getAttribute('data-track-id'),
-      elementId:    allTracksList[currentIndex].id,
+      trackId:      currentTrackElement.getAttribute('data-track-id'),
+      elementId:    currentTrackElement.id,
       iframeId:     'youtube-player',
     };
   }
@@ -345,9 +350,10 @@ function initYouTubeAPI()
     {
       events:
       {
-        onReady:       onYouTubePlayerReady,
-        onStateChange: onYouTubePlayerStateChange,
-        onError:       onYouTubePlayerError,
+        onReady:           onYouTubePlayerReady,
+        onStateChange:     onYouTubePlayerStateChange,
+        onError:           onYouTubePlayerError,
+        onAutoplayBlocked: onYouTubePlayerAutoplayBlocked,
       },
       playerVars: {
         'disablekb': 1,
@@ -372,9 +378,6 @@ function onYouTubePlayerReady()
 {
   debug.log('onYouTubePlayerReady()');
 
-  if (m.autoplayData?.autoplay === true)
-    eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
-
   playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 66 });
   playbackTimer.ready(m.player);
@@ -383,13 +386,12 @@ function onYouTubePlayerReady()
   toggleMute(false);
   m.player.setVolume(settings.playback.masterVolume);
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: false });
-  cueOrPlayCurrentTrack(m.autoplayData?.autoplay === true);
+  cueOrPlayCurrentTrack((m.autoplayData?.autoplay === true), m.autoplayData?.position ?? 0);
 }
 
 function onYouTubePlayerStateChange(event)
 {
   debug.log(`onYouTubePlayerStateChange(): ${event.data} - trackId: ${m.currentTrackId}`);
-  eventLog.add(eventLogger.SOURCE.YOUTUBE, event.data, m.currentTrackId);
 
   // Set playback controls state to YouTube state so we have a single source of truth = playbackControls.isPlaying()
   if (event.data !== YT.PlayerState.PLAYING) // eslint-disable-line no-undef
@@ -399,7 +401,11 @@ function onYouTubePlayerStateChange(event)
   {
     // eslint-disable-next-line no-undef
     case YT.PlayerState.UNSTARTED:
-      onYouTubeStateUnstarted();
+      if (m.playerReady === false)
+      {
+        m.playerReady = true;
+        playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 0 });
+      }
       break;
 
     // eslint-disable-next-line no-undef
@@ -432,27 +438,6 @@ function onYouTubePlayerStateChange(event)
 //
 // ************************************************************************************************
 
-function onYouTubeStateUnstarted()
-{
-  if (eventLog.ytAutoplayBlocked(m.currentTrackId, 3000))
-  {
-    listControls.setCurrentTrackState(STATE.PAUSED);
-
-    m.currentSnackbarId = showSnackbar({
-      message: 'Autoplay blocked, Play to continue',
-      duration: 0,
-      actionText: 'play',
-      actionClickCallback: () => m.player.play(onYouTubePlayerError),
-    });
-  }
-
-  if (m.playerReady === false)
-  {
-    m.playerReady = true;
-    playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 0 });
-  }
-}
-
 function onYouTubeStatePlaying()
 {
   dismissSnackbar(m.currentSnackbarId);
@@ -476,6 +461,18 @@ function onYouTubeStatePlaying()
   }
 }
 
+function onYouTubePlayerAutoplayBlocked()
+{
+  listControls.setCurrentTrackState(STATE.PAUSED);
+
+  m.currentSnackbarId = showSnackbar({
+    message: 'Autoplay blocked, Play to continue',
+    duration: 0,
+    actionText: 'play',
+    actionClickCallback: () => m.player.play(onYouTubePlayerError),
+  });
+}
+
 function onYouTubePlayerError(event)
 {
   debug.log(`onYouTubePlayerError(): playerError: ${event.data} - currentTrackId: ${m.currentTrackId} - isTrackCued: ${m.player.isTrackCued()}`);
@@ -485,7 +482,6 @@ function onYouTubePlayerError(event)
   if (m.player.isTrackCued() === false)
   {
     listControls.setTrackMessage('Error!');
-    eventLog.add(eventLogger.SOURCE.YOUTUBE, eventLogger.EVENT.PLAYER_ERROR, m.currentTrackId);
 
     showSnackbar({
       message: 'Unable to play track, skipping to next',

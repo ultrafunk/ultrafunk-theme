@@ -32,6 +32,7 @@ class MediaPlayer
   #trackId        = null;
   #iframeId       = null;
   #embeddedPlayer = null;
+  #sourceUid      = null;
   #isPlayable     = true;
 
   duration       = 0;
@@ -51,11 +52,12 @@ class MediaPlayer
     this.thumbnail.decoding = 'async';
   }
 
-  getTrackType() { return this.#trackType;      }
-  getTrackId()   { return this.#trackId;        }
-  getIframeId()  { return this.#iframeId;       }
-  getUid()       { return this.#iframeId;       }
-  get embedded() { return this.#embeddedPlayer; }
+  getTrackType()    { return this.#trackType;      }
+  getTrackId()      { return this.#trackId;        }
+  getIframeId()     { return this.#iframeId;       }
+  get embedded()    { return this.#embeddedPlayer; }
+  getSourceUid()    { return this.#sourceUid;      }
+  setSourceUid(uid) { this.#sourceUid = uid;       }
 
   isPlayable()              { return this.#isPlayable;       }
   setIsPlayable(isPlayable) { this.#isPlayable = isPlayable; }
@@ -99,11 +101,22 @@ export class YouTube extends MediaPlayer
   constructor(trackId, iframeId, embeddedPlayer, videoId)
   {
     super(TRACK_TYPE.YOUTUBE, trackId, iframeId, embeddedPlayer);
-    super.setThumbnail(getYouTubeImgUrl(videoId));
+    this.setThumbnail(getYouTubeImgUrl(videoId));
+    this.setSourceUid(videoId);
   }
 
   pause() { this.embedded.pauseVideo(); }
   stop()  { this.embedded.stopVideo();  }
+
+  cueTrackById(positionSeconds = 0)
+  {
+    this.embedded.cueVideoById(this.getSourceUid(), positionSeconds);
+  }
+
+  playTrackById(positionSeconds = 0)
+  {
+    this.embedded.loadVideoById(this.getSourceUid(), positionSeconds);
+  }
 
   play(onErrorCallback)
   {
@@ -143,11 +156,10 @@ export class SingleTrack extends YouTube
 
   isCued()          { return this.#isCued;   }
   setIsCued(isCued) { this.#isCued = isCued; }
-  playTrackById(id) { this.embedded.loadVideoById(id); }
 
-  cueTrackById(id)
+  cueTrackById()
   {
-    this.embedded.cueVideoById(id);
+    super.cueTrackById();
     this.#isCued = true;
   }
 }
@@ -159,17 +171,16 @@ export class SingleTrack extends YouTube
 
 export class SoundCloud extends MediaPlayer
 {
-  #soundId = null;
   #volume  = VOLUME.MAX;
   #isMuted = false;
 
   constructor(trackId, iframeId, embeddedPlayer, iframeSrc)
   {
     super(TRACK_TYPE.SOUNDCLOUD, trackId, iframeId, embeddedPlayer);
-    this.#soundId = this.#getSoundId(iframeSrc);
+    this.setSourceUid(this.#getSourceUid(iframeSrc));
   }
 
-  #getSoundId(iframeSrc)
+  #getSourceUid(iframeSrc)
   {
     if (iframeSrc)
     {
@@ -189,7 +200,7 @@ export class SoundCloud extends MediaPlayer
       }
     }
 
-    debug.error(`MediaPlayer.SoundCloud.getSoundId() failed for: ${this.getIframeId()}`);
+    debug.error(`MediaPlayer.SoundCloud.getSourceUid() failed for: ${this.getIframeId()}`);
 
     return null;
   }
@@ -203,9 +214,7 @@ export class SoundCloud extends MediaPlayer
     });
   }
 
-  // Override parent getUid() because SoundCloud provides its own UID
-  getUid() { return this.#soundId;  }
-  pause()  { this.embedded.pause(); }
+  pause() { this.embedded.pause(); }
 
   play(onErrorCallback)
   {
@@ -299,15 +308,15 @@ export class Playlist extends MediaPlayer
     this.#isTrackCued = false;
   }
 
-  cueTrackById(sourceUid)
+  cueTrackById(sourceUid, positionSeconds = 0)
   {
-    this.embedded.cueVideoById(sourceUid);
+    this.embedded.cueVideoById(sourceUid, positionSeconds);
     this.#isTrackCued = true;
   }
 
-  playTrackById(sourceUid)
+  playTrackById(sourceUid, positionSeconds = 0)
   {
-    this.embedded.loadVideoById(sourceUid);
+    this.embedded.loadVideoById(sourceUid, positionSeconds);
     this.#isTrackCued = false;
   }
 

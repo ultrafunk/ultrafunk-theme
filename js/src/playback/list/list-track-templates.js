@@ -5,17 +5,13 @@
 //
 
 
-import { TRACK_TYPE } from '../common/mediaplayers.js';
-
-import {
-  IS_PROD_BUILD,
-  THEME_ENV,
-} from '../../config.js';
+import { THEME_ENV } from '../../config.js';
 
 import {
   getTimeString,
   getListPlayerUrl,
   getThumbnailData,
+  getTrackTypeData,
   escHtml,
 } from '../../shared/utils.js';
 
@@ -38,20 +34,18 @@ export function getPageSeparatorHtml(responseData, loadingPage)
 
 export function getTrackEntryHtml(track, density = 'default')
 {
-  const isYouTubeTrack      = (track.meta.track_source_type === TRACK_TYPE.YOUTUBE);
-  const thumbnailData       = getThumbnailData(track.meta);
-  const trackArtist         = escHtml(track.meta.track_artist);
-  const trackTitle          = escHtml(track.meta.track_title);
-  const trackDuration       = parseInt(track.meta.track_duration);
-  const isAudioVideoClass   = track.channels.includes(THEME_ENV.channelVideosId) ? 'is-video' : 'is-audio';
-  const youTubeThumbnailUrl = IS_PROD_BUILD  ? thumbnailData.src   : THEME_ENV.defaultYTThumbnail;
-  const trackThumbnailUrl   = isYouTubeTrack ? youTubeThumbnailUrl : THEME_ENV.defaultSCThumbnail;
+  const thumbnailData     = getThumbnailData(track.meta);
+  const trackTypeData     = getTrackTypeData(track.meta.track_source_type, thumbnailData.src);
+  const trackArtist       = escHtml(track.meta.track_artist);
+  const trackTitle        = escHtml(track.meta.track_title);
+  const trackDuration     = parseInt(track.meta.track_duration);
+  const isAudioVideoClass = track.channels.includes(THEME_ENV.channelVideosId) ? 'is-video' : 'is-audio';
 
-  const trackArtistTitle = isYouTubeTrack
+  const trackArtistTitle = trackTypeData.isYouTubeTrack
                              ? `<span><b>${trackArtist}</b></span><br><span>${trackTitle}</span>`
                              : `<a href="${track.link}"><span><b>${trackArtist}</b></span><br><span>${trackTitle}</span></a>`;
 
-  const trackPlayNext = isYouTubeTrack
+  const trackPlayNext = trackTypeData.isYouTubeTrack
                           ? `<div class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></div>`
                           : '';
 
@@ -63,17 +57,17 @@ export function getTrackEntryHtml(track, density = 'default')
       data-track-title="${trackTitle}"
       data-track-duration="${trackDuration}"
       data-track-url="${track.link}"
-      data-track-thumbnail-url="${trackThumbnailUrl}"
+      data-track-thumbnail-url="${trackTypeData.thumbnailUrl}"
       data-track-source-uid ="${thumbnailData.uid}"
       >
       <div class="track-artists-links" data-track-artist-ids="${track.artists.toString()}">${track.artists_links  ?? ''}</div>
       <div class="track-channels-links" data-track-channel-ids="${track.channels.toString()}">${track.channels_links ?? ''}</div>
       <div class="track-details">
-        <div class="thumbnail" ${isYouTubeTrack ? 'title="Play Track"' : 'title="SoundCloud Track"'}>
+        <div class="thumbnail" ${trackTypeData.isYouTubeTrack ? 'title="Play Track"' : 'title="SoundCloud Track"'}>
           <div class="thumbnail-overlay"><div class="spinner"></div></div>
-          <img src="${trackThumbnailUrl}" alt="">
+          <img src="${trackTypeData.thumbnailUrl}" alt="">
         </div>
-        <div class="artist-title text-nowrap-ellipsis" ${(isYouTubeTrack === false) ? 'title="Link: Play SoundCloud track"' : ''}>
+        <div class="artist-title text-nowrap-ellipsis" ${(trackTypeData.isYouTubeTrack === false) ? 'title="Link: Play SoundCloud track"' : ''}>
           ${trackArtistTitle}
         </div>
       </div>
@@ -87,7 +81,7 @@ export function getTrackEntryHtml(track, density = 'default')
         </div>
         <div class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></div>
       </div>
-      <div class="track-duration text-nowrap-ellipsis" title="Track duration">${(isYouTubeTrack ? getTimeString(trackDuration) : 'N / A')}</div>
+      <div class="track-duration text-nowrap-ellipsis" title="Track duration">${(trackTypeData.isYouTubeTrack ? getTimeString(trackDuration) : 'N / A')}</div>
     </div>`;
 }
 

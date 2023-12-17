@@ -1,0 +1,41 @@
+/*
+* DJ Player parent template styles
+*
+* https://ultrafunk.com
+*
+*/
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+#players-container {
+  width: 100%;
+  height: 100vh;
+}
+
+#player-left-container {
+  float: left;
+  width: 50%;
+  height: 100%;
+}
+
+#player-right-container {
+  float: right;
+  width: 50%;
+  height: 100%;
+}
+
+#player-left,
+#player-right {
+  box-sizing: border-box;
+  border: solid 10px #660000;
+  width: 100%;
+  height: 100%;
+}
+
+#player-left.is-playing,
+#player-right.is-playing {
+  border-color: #00bb00;
+}

@@ -15,7 +15,7 @@ const debug = newDebugLogger('eventlogger');
 
 export const SOURCE = {
 // Default source
-  UNKNOWN: 1000,
+  UNKNOWN: -10000,
 // interaction.js event sources
   KEYBOARD: 100,
   MOUSE:    110,
@@ -27,7 +27,7 @@ export const SOURCE = {
 
 export const EVENT = {
 // Default event
-  UNKNOWN:         -2000,
+  UNKNOWN:         -10000,
 // interaction.js event types
   KEY_ARROW_LEFT:  180,
   KEY_ARROW_RIGHT: 181,
@@ -43,14 +43,13 @@ export const EVENT = {
   RESUME_AUTOPLAY: 50,
   PLAYER_ERROR:    60,
   CROSSFADE_START: 70,
-  CUE_PLAY_SINGLE_TRACK: 80,
 };
 
 const entry = {
   eventSource: SOURCE.UNKNOWN,
   eventType:   EVENT.UNKNOWN,
   uId:         null,
-  timeStamp:   0,
+  timestamp:   0,
 };
 
 
@@ -70,14 +69,14 @@ class EventLog
     this.#maxEntries = maxEntries;
   }
 
-  add(eventSource, eventType, uId = null, timeStamp = Date.now())
+  add(eventSource, eventType, uId = null, timestamp = Date.now())
   {
     const logEntry = Object.create(entry);
 
     logEntry.eventSource = eventSource;
     logEntry.eventType   = eventType;
     logEntry.uId         = uId;
-    logEntry.timeStamp   = timeStamp;
+    logEntry.timestamp   = timestamp;
 
     // Simple and inefficient, but good enough...
     if (this.#log.length < this.#maxEntries)
@@ -91,15 +90,8 @@ class EventLog
     }
   }
 
-  clear()
-  {
-    this.#log = [];
-  }
-
-  getLastPos()
-  {
-    return this.#lastPos;
-  }
+  clear()      { this.#log = [];       }
+  getLastPos() { return this.#lastPos; }
 
   initMatch()
   {
@@ -119,7 +111,7 @@ class EventLog
 
   matchesDelta(elements, delta)
   {
-    if ((this.#log[this.#lastPos].timeStamp - this.#log[this.#lastPos - elements].timeStamp) <= delta)
+    if ((this.#log[this.#lastPos].timestamp - this.#log[this.#lastPos - elements].timestamp) <= delta)
       this.#matchCount++;
   }
 
@@ -146,7 +138,7 @@ class EventLog
         eventSource: debug.getKeyForValue(SOURCE, this.#log[i].eventSource),
         eventType:   debug.getKeyForValue(EVENT,  this.#log[i].eventType),
         uId:         this.#log[i].uId,
-        timeStamp:   this.#log[i].timeStamp,
+        timestamp:   this.#log[i].timestamp,
       };
 
       entries.push(data);
@@ -185,38 +177,6 @@ export class Interaction extends EventLog
 
 export class Playback extends EventLog
 {
-  ytAutoplayBlocked(uId, deltaTime)
-  {
-    this.initMatch();
-
-    if (this.getLastPos() >= 3)
-    {
-      this.matchesEvent(3, SOURCE.ULTRAFUNK, EVENT.RESUME_AUTOPLAY, null);
-      this.matchesEvent(2, SOURCE.YOUTUBE,   EVENT.STATE_UNSTARTED, uId);
-      this.matchesEvent(1, SOURCE.YOUTUBE,   EVENT.STATE_BUFFERING, uId);
-      this.matchesEvent(0, SOURCE.YOUTUBE,   EVENT.STATE_UNSTARTED, uId);
-      this.matchesDelta(3, deltaTime);
-    }
-
-    return this.isPatternMatch(5, 'YouTube Autoplay Blocked');
-  }
-
-  ytSingleTrackAutoplayBlocked(uId, deltaTime)
-  {
-    this.initMatch();
-
-    if (this.getLastPos() >= 3)
-    {
-      this.matchesEvent(3, SOURCE.ULTRAFUNK, EVENT.CUE_PLAY_SINGLE_TRACK, null);
-      this.matchesEvent(2, SOURCE.ULTRAFUNK, EVENT.RESUME_AUTOPLAY,       null);
-      this.matchesEvent(1, SOURCE.YOUTUBE,   EVENT.STATE_BUFFERING,       uId);
-      this.matchesEvent(0, SOURCE.YOUTUBE,   EVENT.STATE_UNSTARTED,       uId);
-      this.matchesDelta(3, deltaTime);
-    }
-
-    return this.isPatternMatch(5, 'YouTube Single Track Autoplay Blocked');
-  }
-
   scAutoplayBlocked(uId, deltaTime)
   {
     this.initMatch();

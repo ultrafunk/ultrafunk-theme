@@ -256,6 +256,15 @@ export function getThumbnailData(metaData)
   return { src: THEME_ENV.defaultSCThumbnail, class: 'type-soundcloud', uid: '' };
 }
 
+export function getTrackTypeData(trackType, thumbnailUrl)
+{
+  const isYouTubeTrack      = (trackType === TRACK_TYPE.YOUTUBE);
+  const youTubeThumbnailUrl = IS_PROD_BUILD  ? thumbnailUrl        : THEME_ENV.defaultYTThumbnail;
+  const trackThumbnailUrl   = isYouTubeTrack ? youTubeThumbnailUrl : THEME_ENV.defaultSCThumbnail;
+
+  return { isYouTubeTrack: isYouTubeTrack, thumbnailUrl: trackThumbnailUrl };
+}
+
 
 // ************************************************************************************************
 // Allow / Deny keyboard shortcuts event handling closure

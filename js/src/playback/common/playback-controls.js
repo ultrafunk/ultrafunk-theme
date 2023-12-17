@@ -222,18 +222,18 @@ export function updateTrackData()
 {
   const trackData = m.players.getTrackData();
 
-  clearTimer(trackData);
-  setDetails(trackData);
+  clearTrackTimer(trackData);
+  setTrackDetails(trackData);
 }
 
-function setDetails(trackData)
+function setTrackDetails(trackData)
 {
   if (ctrl.details.state.ID === STATE.HIDDEN.ID)
   {
     ctrl.details.setState(STATE.ENABLED);
     ctrl.thumbnail.setState(STATE.ENABLED);
     ctrl.timer.setState(STATE.ENABLED);
-    clearTimer(trackData);
+    clearTrackTimer(trackData);
   }
 
   ctrl.details.artist.textContent = trackData.artist || ''; // Artist will contain the post title if all else fails
@@ -282,7 +282,7 @@ function setTimer(positionSeconds, durationSeconds)
   }
 }
 
-function clearTimer(trackData)
+function clearTrackTimer(trackData)
 {
   ctrl.timer.position.textContent = settings.playback.autoplay
     ? (trackData.duration > 3600) ? '00:00:00' : '00:00'
@@ -316,6 +316,16 @@ function setMediaEndState()
   setTimer(0, m.players.getTrackData().duration);
 }
 
+function setIsIframePlaying(isIframePlaying)
+{
+  if (window.frameElement !== null)
+  {
+    isIframePlaying
+      ? window.frameElement.classList.add('is-playing')
+      : window.frameElement.classList.remove('is-playing');
+  }
+}
+
 export function setPlayState()
 {
   ctrl.thumbnail.removeClass(STATE.LOADING.CLASS);
@@ -324,7 +334,8 @@ export function setPlayState()
   ctrl.playPause.icon.textContent = 'pause_circle_filled';
   ctrl.prevTrack.setState(STATE.ENABLED);
 
-  setDetails(m.players.getTrackData());
+  setIsIframePlaying(true);
+  setTrackDetails(m.players.getTrackData());
 }
 
 export function setPauseState()
@@ -333,6 +344,8 @@ export function setPauseState()
   ctrl.progressBar.setState(STATE.PAUSED);
   ctrl.playPause.setState(STATE.PAUSED);
   ctrl.playPause.icon.textContent = 'play_circle_filled';
+
+  setIsIframePlaying(false);
 }
 
 export function timeRemainingWarningBlink(toggleBlink)

@@ -13,9 +13,9 @@ import { response, settings } from '../../shared/session-data.js';
 import { EVENT, addListener } from '../common/playback-events.js';
 
 import {
-  SINGLE_TRACK_PLAY,
+  SINGLE_TRACK,
   isSingleTrackFetch,
-  playSingleTrack,
+  cueOrPlaySingleTrack,
 } from './single-track-fetch.js';
 
 import {
@@ -118,7 +118,7 @@ function continueAutoplay(playbackEvent)
   debug.log(playbackEvent);
 
   if (isSingleTrackFetch() && (playbackEvent.data.trackType === TRACK_TYPE.YOUTUBE))
-    playSingleTrack(SINGLE_TRACK_PLAY.NEXT, true);
+    cueOrPlaySingleTrack(SINGLE_TRACK.NEXT, true);
   else
     autoplayNavTo(response.nextPage, true);
 }
@@ -150,7 +150,7 @@ function autoplayBlocked(playbackEvent)
     message: 'Autoplay blocked, Play to continue',
     duration: 0,
     actionText: 'play',
-    actionClickCallback: () => playbackEvent.callback.togglePlayPause(),
+    actionClickCallback: () => playbackEvent.callback.play(),
   });
 }
 
@@ -203,10 +203,10 @@ function playbackEventErrorTryNext(playbackEvent)
   {
     if (isSingleTrackFetch() && (playbackEvent.data.trackType === TRACK_TYPE.YOUTUBE))
     {
-      // ToDo: Make below behaviour consistent throughout instead of: playSingleTrack(true) or
-      //                                                              playSingleTrack(isPlaying()) ?
+      // ToDo: Make below behaviour consistent throughout instead of: cueOrPlaySingleTrack(true) or
+      //                                                              cueOrPlaySingleTrack(isPlaying()) ?
       // Meaning settings.playback.autoplay must be TRUE for autoplay triggering on next track played...?
-      playSingleTrack(SINGLE_TRACK_PLAY.NEXT, settings.playback.autoplay);
+      cueOrPlaySingleTrack(SINGLE_TRACK.NEXT, settings.playback.autoplay);
     }
     else if (response.nextPage !== null)
     {

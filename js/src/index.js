@@ -295,6 +295,10 @@ const resize = (() =>
       headerHeight = utils.getCssPropValue('--site-header-height');
 
     siteHeaderYOffset = Math.round((headerHeight > 150) ? (headerHeight / 2) : (headerHeight / 3));
+
+    // Setting the CSS variable --scrollbar-width only on resize events prevent document
+    // reflow / repaint delays when modals are shown (body.scrolling-disabled)
+    document.documentElement.style.setProperty('--scrollbar-width', `${window.innerWidth - document.documentElement.clientWidth}px`);
   }
 })();
 

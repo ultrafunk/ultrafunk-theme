@@ -8,7 +8,7 @@
 namespace Ultrafunk\Theme\Templates;
 
 
-use const Ultrafunk\Theme\Config\THEME_ENV;
+use const Ultrafunk\Theme\Config\IS_PROD_BUILD;
 
 use function Ultrafunk\Plugin\Shared\get_term_links;
 
@@ -55,15 +55,17 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
   {
     foreach($this->query_result as $track)
     {
-      $track_artist     = esc_html($track->track_artist);
-      $track_title      = esc_html($track->track_title);
-      $track_duration   = intval($track->track_duration);
-      $track_url        = esc_url("$this->home_url/track/$track->post_name/");
-      $track_data       = \Ultrafunk\Theme\Functions\get_track_data($track);
-      $is_youtube_track = ($track_data['track_type'] === \Ultrafunk\Plugin\Shared\TRACK_TYPE::YOUTUBE);
-      $artists          = get_object_term_cache($track->ID, 'uf_artist');
-      $channels         = get_object_term_cache($track->ID, 'uf_channel');
-      $is_video_class   = $this->is_video($channels) ? ' is-video' : ' is-audio';
+      $track_artist        = esc_html($track->track_artist);
+      $track_title         = esc_html($track->track_title);
+      $track_duration      = intval($track->track_duration);
+      $track_url           = esc_url("$this->home_url/track/$track->post_name/");
+      $track_data          = \Ultrafunk\Theme\Functions\get_track_data($track);
+      $is_youtube_track    = ($track_data['track_type'] === \Ultrafunk\Plugin\Shared\TRACK_TYPE::YOUTUBE);
+      $artists             = get_object_term_cache($track->ID, 'uf_artist');
+      $channels            = get_object_term_cache($track->ID, 'uf_channel');
+      $is_video_class      = $this->is_video($channels) ? ' is-video' : ' is-audio';
+      $yt_thumbnail_url    = IS_PROD_BUILD     ? $track_data['thumnail_src'] : \Ultrafunk\Theme\Config\THEME_ENV['default_yt_thumbnail'];
+      $track_thumbnail_url = $is_youtube_track ? $yt_thumbnail_url           : \Ultrafunk\Theme\Config\THEME_ENV['default_sc_thumbnail'];
 
       ?>
       <div id="track-<?php echo uniqid(); ?>" class="track-entry default-density <?php echo $track_data['css_class'] . $is_video_class; ?>"
@@ -73,7 +75,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         data-track-title="<?php echo $track_title; ?>"
         data-track-duration="<?php echo $track_duration; ?>"
         data-track-url="<?php echo $track_url; ?>"
-        data-track-thumbnail-url="<?php echo $track_data['thumnail_src']; ?>"
+        data-track-thumbnail-url="<?php echo $track_thumbnail_url; ?>"
         <?php if ($is_youtube_track) { ?>
           data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
         <?php } ?>
@@ -82,17 +84,8 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         <div class="track-channels-links"><?php echo get_term_links($channels, '/list/channel/'); ?></div>
         <div class="track-details">
           <div class="thumbnail" <?php echo ($is_youtube_track ? 'title="Play Track"' : 'title="SoundCloud Track"'); ?>>
-            <?php if (\Ultrafunk\Theme\Config\IS_PROD_BUILD) { ?>
-              <div class="thumbnail-overlay"><div class="spinner"></div></div>
-              <img src="<?php echo $track_data['thumnail_src']; ?>" alt="">
-            <?php } else { ?>
-              <div class="thumbnail-overlay"><div class="spinner"></div></div>
-              <?php if ($is_youtube_track) { ?>
-                <img src="<?php echo THEME_ENV['default_yt_thumbnail']; ?>" alt="">
-              <?php } else { ?>
-                <img src="<?php echo THEME_ENV['default_sc_thumbnail']; ?>" alt="">
-              <?php } ?>
-            <?php } ?>
+            <div class="thumbnail-overlay"><div class="spinner"></div></div>
+            <img src="<?php echo $track_thumbnail_url; ?>" alt="">
           </div>
           <?php if ($is_youtube_track) { ?>
             <div class="artist-title text-nowrap-ellipsis"><span><b><?php echo $track_artist; ?></b></span><br><span><?php echo $track_title; ?></span></div>
