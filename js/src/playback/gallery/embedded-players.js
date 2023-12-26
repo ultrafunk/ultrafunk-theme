@@ -83,12 +83,14 @@ function getAllPlayers()
         player = getYouTubePlayer('youtube-player', element, true);
       else
         player = getYouTubePlayer(iframe.id, element, false);
+
+      player.setDuration(parseInt(element.getAttribute('data-track-duration')));
     }
     else if (trackType === mediaPlayers.TRACK_TYPE.SOUNDCLOUD)
     {
       /* eslint-disable */
       const embeddedPlayer = SC.Widget(iframe.id);
-      player = new mediaPlayers.SoundCloud(element.id, iframe.id, embeddedPlayer, iframe.src);
+      player = new mediaPlayers.SoundCloud(element.id, iframe.id, embeddedPlayer);
 
       embeddedPlayer.bind(SC.Widget.Events.READY,  () => onSoundCloudPlayerEventReady(iframe.id, element, player, embeddedPlayer));
       embeddedPlayer.bind(SC.Widget.Events.PLAY,   () => onSoundCloudPlayerEventPlay(iframe.id));
@@ -125,16 +127,7 @@ function getYouTubePlayer(playerId, element, isSingleTrackPlayer = false)
     ...isSingleTrackPlayer && { videoId: videoId },
   });
 
-  let player = null;
-
-  if (isSingleTrackPlayer)
-    player = new mediaPlayers.SingleTrack(element.id, playerId, embeddedPlayer, videoId);
-  else
-    player = new mediaPlayers.YouTube(element.id, playerId, embeddedPlayer, videoId);
-
-  player.setDuration(parseInt(element.getAttribute('data-track-duration')));
-
-  return player;
+  return new mediaPlayers.YouTube(element.id, playerId, embeddedPlayer, videoId);
 }
 
 
@@ -304,16 +297,15 @@ function onYouTubePlayerError(event, iframeId)
 {
   const player = m.players.playerFromIframeId(iframeId);
 
-  // Handle single track fetched cueOrPlaySingleTrackById() errors for unplayable tracks (= 150)
-  if ((event.data === 150) && (player instanceof mediaPlayers.SingleTrack) && player.isCued())
+  debug.log(`onYouTubePlayerError(${(event.data !== null) ? event.data : 'null'}) - iframeId: ${iframeId} - isCued: ${player.isCued()} - isPlayable: ${player.isPlayable()}`);
+
+  if ((event.data !== null) && player.isCued())
   {
-    debug.log(`onYouTubePlayerError(150) - SingleTrack.isCued(): true`);
     player.setIsCued(false);
     player.setIsPlayable(false);
   }
   else if ((event.data !== null) && player.isPlayable())
   {
-    debug.log('onYouTubePlayerError: ' + event.data);
     player.setIsPlayable(false);
     onPlayerError(player, event.target.getVideoUrl());
   }
@@ -333,7 +325,7 @@ function initSoundCloudAPI()
 
 function onSoundCloudPlayerEventReady(iframeId, element, player, embeddedPlayer)
 {
-  debug.log(`onSoundCloudPlayerEventReady(): ${iframeId} => ${player.getSourceUid()} => ${player.getArtist()} - ${player.getTitle()}`);
+  debug.log(`onSoundCloudPlayerEventReady(): ${iframeId} => ${player.getArtist()} - ${player.getTitle()}`);
 
   player.setThumbnail(element);
 
@@ -422,6 +414,6 @@ function onSoundCloudPlayerEventError(iframeId)
 {
   const player = m.players.playerFromIframeId(iframeId);
 
-  debug.warn(`onSoundCloudPlayerEventError() - MEDIA_UNAVAILABLE: ${player.getIframeId()} => ${player.getSourceUid()} => ${player.getArtist()} - "${player.getTitle()}"`);
+  debug.warn(`onSoundCloudPlayerEventError() - MEDIA_UNAVAILABLE: ${player.getIframeId()} => ${player.getArtist()} - "${player.getTitle()}"`);
   player.setIsPlayable(false);
 }

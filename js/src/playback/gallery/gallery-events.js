@@ -140,6 +140,10 @@ function resumeAutoplay(playbackEvent)
     else
       playbackEvent.callback.resumeAutoplay(autoplayData, iframeId);
   }
+  else
+  {
+    playbackEvent.callback.resumeAutoplay();
+  }
 }
 
 function autoplayBlocked(playbackEvent)

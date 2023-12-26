@@ -127,11 +127,11 @@ function cueInitialTrack()
 //
 // ************************************************************************************************
 
-function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = false)
+function setCurrentTrack(nextTrackId, playTrack = true, isPointerClick = false)
 {
   const nextTrackType = listControls.getTrackType(listControls.queryTrackId(nextTrackId));
 
-  debug.log(`setCurrentTrack() - nextTrackType: ${debug.getKeyForValue(mediaPlayers.TRACK_TYPE, nextTrackType)} - nextTrackId: ${nextTrackId} - playNextTrack: ${playNextTrack} - isPointerClick: ${isPointerClick}`);
+  debug.log(`setCurrentTrack() - nextTrackType: ${debug.getKeyForValue(mediaPlayers.TRACK_TYPE, nextTrackType)} - nextTrackId: ${nextTrackId} - playTrack: ${playTrack} - isPointerClick: ${isPointerClick}`);
 
   if ((nextTrackType === mediaPlayers.TRACK_TYPE.SOUNDCLOUD) && isPointerClick)
   {
@@ -156,7 +156,7 @@ function setCurrentTrack(nextTrackId, playNextTrack = true, isPointerClick = fal
 
     m.currentTrackId = nextTrackId;
     playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_CUE_TRACK, { trackId: nextTrackId, isPointerClick: isPointerClick });
-    cueOrPlayCurrentTrack(playNextTrack);
+    cueOrPlayCurrentTrack(playTrack);
   }
 }
 
@@ -164,19 +164,25 @@ function cueOrPlayCurrentTrack(playTrack, positionSeconds = 0)
 {
   const sourceUid = listControls.updateTrackDetails();
 
+  debug.log(`cueOrPlayCurrentTrack(): trackId: ${m.currentTrackId} (${sourceUid}) - playTrack: ${playTrack} - position: ${positionSeconds}`);
+
   m.player.resetState();
 
   if (playTrack)
   {
     m.player.playTrackById(sourceUid, positionSeconds);
     listControls.setCurrentTrackState(STATE.PLAYING);
-    playbackControls.updateTrackData();
   }
   else
   {
     m.player.cueTrackById(sourceUid, positionSeconds);
     listControls.setCurrentTrackState(STATE.PAUSED);
+
+    if (positionSeconds !== 0)
+      playbackControls.updateTimerAndProgress((positionSeconds * 1000), positionSeconds, m.player.getDuration());
   }
+
+  playbackControls.updateTrackData(positionSeconds);
 }
 
 
@@ -226,11 +232,10 @@ export function prevTrack()
   if ((prevTrackId !== null) && (position <= 5))
   {
     setCurrentTrack(prevTrackId, playbackControls.isPlaying());
-    playbackControls.updateTrackData();
   }
   else if (position !== 0)
   {
-    m.player.embedded.seekTo(0);
+    m.player.seekTo(0);
     playbackControls.updateTimerAndProgress(0, 0, m.player.getDuration());
   }
 }
@@ -240,10 +245,7 @@ export function nextTrack()
   const nextTrackId = listControls.getNextPlayableId();
 
   if (nextTrackId !== null)
-  {
     setCurrentTrack(nextTrackId, playbackControls.isPlaying());
-    playbackControls.updateTrackData();
-  }
 }
 
 async function advanceToNextTrack(autoplay = false, isPlaybackError = false)
@@ -255,7 +257,7 @@ async function advanceToNextTrack(autoplay = false, isPlaybackError = false)
 
   if (autoplay && (repeatMode === playbackControls.REPEAT.ONE))
   {
-    m.player.embedded.seekTo(0);
+    m.player.seekTo(0);
     m.player.play(onYouTubePlayerError);
   }
   else if (autoplay && (nextTrackId === null) && (repeatMode === playbackControls.REPEAT.ALL))
@@ -363,7 +365,7 @@ function initYouTubeAPI()
     m.player = new mediaPlayers.Playlist(embeddedPlayer);
     debug.log(m.player);
 
-    playbackControls.init(m.player, (positionSeconds) => m.player.embedded.seekTo(positionSeconds));
+    playbackControls.init((positionSeconds) => m.player.getTrackData(positionSeconds), (positionSeconds) => m.player.seekTo(positionSeconds));
     playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 33 });
   };
 
@@ -386,12 +388,13 @@ function onYouTubePlayerReady()
   toggleMute(false);
   m.player.setVolume(settings.playback.masterVolume);
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: false });
-  cueOrPlayCurrentTrack((m.autoplayData?.autoplay === true), m.autoplayData?.position ?? 0);
+  cueOrPlayCurrentTrack((m.autoplayData?.autoplay === true), (m.autoplayData?.position ?? 0));
 }
 
 function onYouTubePlayerStateChange(event)
 {
-  debug.log(`onYouTubePlayerStateChange(): ${event.data} - trackId: ${m.currentTrackId}`);
+  // eslint-disable-next-line no-undef
+  debug.log(`onYouTubePlayerStateChange: ${debug.getKeyForValue(YT.PlayerState, event.data)} (trackId: ${m.currentTrackId})`);
 
   // Set playback controls state to YouTube state so we have a single source of truth = playbackControls.isPlaying()
   if (event.data !== YT.PlayerState.PLAYING) // eslint-disable-line no-undef
@@ -404,7 +407,11 @@ function onYouTubePlayerStateChange(event)
       if (m.playerReady === false)
       {
         m.playerReady = true;
-        playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 0 });
+
+        if ((m.autoplayData?.position ?? 0) === 0)
+          playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 0 });
+
+        m.autoplayData = null;
       }
       break;
 
@@ -445,7 +452,6 @@ function onYouTubeStatePlaying()
   if (m.firstStatePlaying)
   {
     m.firstStatePlaying = false;
-    m.autoplayData      = null;
 
     setTimeout(() =>
     {
@@ -475,11 +481,11 @@ function onYouTubePlayerAutoplayBlocked()
 
 function onYouTubePlayerError(event)
 {
-  debug.log(`onYouTubePlayerError(): playerError: ${event.data} - currentTrackId: ${m.currentTrackId} - isTrackCued: ${m.player.isTrackCued()}`);
+  debug.log(`onYouTubePlayerError(${event.data}) - trackId: ${m.currentTrackId} - isCued: ${m.player.isCued()}`);
 
   m.player.setPlayerError(event.data);
 
-  if (m.player.isTrackCued() === false)
+  if (m.player.isCued() === false)
   {
     listControls.setTrackMessage('Error!');
 

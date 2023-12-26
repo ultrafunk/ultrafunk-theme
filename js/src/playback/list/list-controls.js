@@ -332,7 +332,7 @@ export async function loadMoreTracks()
     }
   }
 
-  if (response.currentPage >= response.maxPages)
+  if ((response.currentPage >= response.maxPages) && (tracksLoaded === true))
     m.tracklistLoadMore.style.display = 'none';
 
   return tracksLoaded;

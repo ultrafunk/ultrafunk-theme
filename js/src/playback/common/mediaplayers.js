@@ -5,7 +5,7 @@
 //
 
 
-import { newDebugLogger } from '../../shared/debuglogger.js';
+//import { newDebugLogger } from '../../shared/debuglogger.js';
 import { VOLUME }         from '../gallery/crossfade.js';
 import { THEME_ENV }      from '../../config.js';
 
@@ -13,7 +13,7 @@ import { THEME_ENV }      from '../../config.js';
 /*************************************************************************************************/
 
 
-const debug = newDebugLogger('mediaplayers');
+//const debug = newDebugLogger('mediaplayers');
 
 export const TRACK_TYPE = {
   NONE:       0,
@@ -34,6 +34,7 @@ class MediaPlayer
   #embeddedPlayer = null;
   #sourceUid      = null;
   #isPlayable     = true;
+  #isCued         = false;
 
   duration       = 0;
   artist         = null;
@@ -61,6 +62,9 @@ class MediaPlayer
 
   isPlayable()              { return this.#isPlayable;       }
   setIsPlayable(isPlayable) { this.#isPlayable = isPlayable; }
+
+  isCued()          { return this.#isCued;   }
+  setIsCued(isCued) { this.#isCued = isCued; }
 
   getDuration()         { return this.duration;     }
   setDuration(duration) { this.duration = duration; }
@@ -111,6 +115,7 @@ export class YouTube extends MediaPlayer
   cueTrackById(positionSeconds = 0)
   {
     this.embedded.cueVideoById(this.getSourceUid(), positionSeconds);
+    this.setIsCued(true);
   }
 
   playTrackById(positionSeconds = 0)
@@ -150,20 +155,6 @@ export class YouTube extends MediaPlayer
   }
 }
 
-export class SingleTrack extends YouTube
-{
-  #isCued = false;
-
-  isCued()          { return this.#isCued;   }
-  setIsCued(isCued) { this.#isCued = isCued; }
-
-  cueTrackById()
-  {
-    super.cueTrackById();
-    this.#isCued = true;
-  }
-}
-
 
 // ************************************************************************************************
 // SoundCloud child class
@@ -174,35 +165,9 @@ export class SoundCloud extends MediaPlayer
   #volume  = VOLUME.MAX;
   #isMuted = false;
 
-  constructor(trackId, iframeId, embeddedPlayer, iframeSrc)
+  constructor(trackId, iframeId, embeddedPlayer)
   {
     super(TRACK_TYPE.SOUNDCLOUD, trackId, iframeId, embeddedPlayer);
-    this.setSourceUid(this.#getSourceUid(iframeSrc));
-  }
-
-  #getSourceUid(iframeSrc)
-  {
-    if (iframeSrc)
-    {
-      const iframeSrcParts = new URL(decodeURIComponent(iframeSrc));
-      const trackUrl       = iframeSrcParts.searchParams.get('url');
-
-      if (trackUrl !== null)
-      {
-        const trackUrlParts = trackUrl.split('/');
-        const tracksString  = 'tracks'.toUpperCase();
-
-        for (let i = 0; i < trackUrlParts.length; i++)
-        {
-          if (trackUrlParts[i].toUpperCase() === tracksString)
-            return parseInt(trackUrlParts[i + 1]);
-        }
-      }
-    }
-
-    debug.error(`MediaPlayer.SoundCloud.getSourceUid() failed for: ${this.getIframeId()}`);
-
-    return null;
   }
 
   setThumbnail(trackThumbnailUrlElement)
@@ -292,37 +257,35 @@ export class SoundCloud extends MediaPlayer
 export class Playlist extends MediaPlayer
 {
   #playerError = -1;
-  #isTrackCued = false;
 
   constructor(embeddedPlayer)
   {
     super(TRACK_TYPE.YOUTUBE, null, null, embeddedPlayer);
   }
 
-  isTrackCued()         { return this.#isTrackCued;  }
   setPlayerError(error) { this.#playerError = error; }
 
   resetState()
   {
     this.#playerError = -1;
-    this.#isTrackCued = false;
+    this.setIsCued(false);
   }
 
   cueTrackById(sourceUid, positionSeconds = 0)
   {
     this.embedded.cueVideoById(sourceUid, positionSeconds);
-    this.#isTrackCued = true;
+    this.setIsCued(true);
   }
 
   playTrackById(sourceUid, positionSeconds = 0)
   {
     this.embedded.loadVideoById(sourceUid, positionSeconds);
-    this.#isTrackCued = false;
+    this.setIsCued(false);
   }
 
   play(onErrorCallback)
   {
-    this.#isTrackCued = false;
+    this.setIsCued(false);
 
     if (this.#playerError !== -1)
     {
@@ -340,13 +303,14 @@ export class Playlist extends MediaPlayer
     super.setThumbnail(getYouTubeImgUrl(videoId));
   }
 
-  getTrackData()
+  getTrackData(positionSeconds = 0)
   {
     return {
       currentTrack: 1,
       numTracks:    1,
       artist:       this.getArtist(),
       title:        this.getTitle(),
+      position:     positionSeconds,
       duration:     this.getDuration(),
       thumbnail:    { src: this.getThumbnailSrc(), class: this.getThumbnailClass() },
     };

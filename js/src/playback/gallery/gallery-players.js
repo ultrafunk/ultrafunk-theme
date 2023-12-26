@@ -33,11 +33,10 @@ export const galleryPlayers = (() =>
     get crossfade()                 { return crossfade;                            },
     get current()                   { return mediaPlayers[playerIndex];            },
     get next()                      { return mediaPlayers[playerIndex + 1];        },
-    getPlayerIndex()                { return playerIndex;                          },
     setPlayerIndex(nextPlayerIndex) { playerIndex = nextPlayerIndex;               },
     getTrackType()                  { return this.current.getTrackType();          },
     getNumTracks()                  { return mediaPlayers.length;                  },
-    getCurrentTrack()               { return playerIndex + 1;                      },
+    getCurrentTrackNum()            { return playerIndex + 1;                      },
     playerFromIframeId(iframeId)    { return mediaPlayers[indexMap.get(iframeId)]; },
     trackNumFromIframeId(iframeId)  { return (indexMap.get(iframeId) + 1);         },
     isCurrent(iframeId)             { return (iframeId === this.current.getIframeId()); },
@@ -81,13 +80,14 @@ export const galleryPlayers = (() =>
     crossfade.mute(settings.playback.masterMute);
   }
 
-  function getTrackData()
+  function getTrackData(positionSeconds = 0)
   {
     return {
-      currentTrack: this.getCurrentTrack(),
+      currentTrack: this.getCurrentTrackNum(),
       numTracks:    this.getNumTracks(),
       artist:       this.current.getArtist(),
       title:        this.current.getTitle(),
+      position:     positionSeconds,
       duration:     this.current.getDuration(),
       thumbnail:    { src: this.current.getThumbnailSrc(), class: this.current.getThumbnailClass() },
     };

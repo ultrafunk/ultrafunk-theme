@@ -29,9 +29,10 @@ import {
 /*************************************************************************************************/
 
 
-const debug = newDebugLogger('playback-controls');
-const m     = { players: {} };
-const ctrl  = {};
+const debug      = newDebugLogger('playback-controls');
+const isInIframe = (window.frameElement !== null);
+const m          = { getTrackData: null };
+const ctrl       = {};
 
 
 // ************************************************************************************************
@@ -64,11 +65,11 @@ export function setPlaybackControlsCss()
 // Init and make ready all controls
 // ************************************************************************************************
 
-export function init(mediaPlayers, seekClickCallback)
+export function init(getTrackData, seekClickCallback)
 {
   debug.log('init()');
 
-  m.players = mediaPlayers;
+  m.getTrackData = getTrackData;
   const playbackControls = document.getElementById('playback-controls');
 
   ctrl.progressSeek = ElementWrapper('.progress-seek-control', document.getElementById('progress-controls'));
@@ -107,8 +108,6 @@ export function init(mediaPlayers, seekClickCallback)
 
 export function ready(prevClickCallback, playPauseClickCallback, nextClickCallback, muteClickCallback)
 {
-  debug.log('ready()');
-
   ctrl.progressSeek.setState(STATE.ENABLED);
   ctrl.progressSeek.addListener('click', progressSeekClick);
   ctrl.progressBar.setState(STATE.ENABLED);
@@ -218,9 +217,11 @@ function progressSeekClick(event)
 // Details (Artist + Title) and track timer
 // ************************************************************************************************
 
-export function updateTrackData()
+export function updateTrackData(initialPositionSeconds = 0)
 {
-  const trackData = m.players.getTrackData();
+  if (initialPositionSeconds !== 0) debug.log(`updateTrackData() - initialPositionSeconds: ${initialPositionSeconds}`);
+
+  const trackData = m.getTrackData(initialPositionSeconds);
 
   clearTrackTimer(trackData);
   setTrackDetails(trackData);
@@ -241,7 +242,7 @@ function setTrackDetails(trackData)
 
   setThumbnail(trackData.thumbnail);
   setTimerDisplayHoursMinutes(trackData.duration);
-  setTimer((isPlaying() ? ctrl.timer.positionSeconds : 0), trackData.duration);
+  setTimer((isPlaying() ? ctrl.timer.positionSeconds : trackData.position), trackData.duration);
 }
 
 function setThumbnail(thumbnail)
@@ -284,13 +285,16 @@ function setTimer(positionSeconds, durationSeconds)
 
 function clearTrackTimer(trackData)
 {
-  ctrl.timer.position.textContent = settings.playback.autoplay
-    ? (trackData.duration > 3600) ? '00:00:00' : '00:00'
-    : getTimeString(trackData.duration, (trackData.duration > 3600));
+  if (trackData.position === 0)
+  {
+    ctrl.timer.position.textContent = settings.playback.autoplay
+      ? (trackData.duration > 3600) ? '00:00:00' : '00:00'
+      : getTimeString(trackData.duration, (trackData.duration > 3600));
 
-  ctrl.timer.duration.textContent = (trackData.duration > 3600) ? '00:00:00' : '00:00';
-  ctrl.timer.positionSeconds = -1;
-  ctrl.timer.durationSeconds = -1;
+    ctrl.timer.duration.textContent = (trackData.duration > 3600) ? '00:00:00' : '00:00';
+    ctrl.timer.positionSeconds = -1;
+    ctrl.timer.durationSeconds = -1;
+  }
 }
 
 
@@ -313,12 +317,12 @@ function setLoadState()
 function setMediaEndState()
 {
   updateProgressBar(0);
-  setTimer(0, m.players.getTrackData().duration);
+  setTimer(0, m.getTrackData().duration);
 }
 
 function setIsIframePlaying(isIframePlaying)
 {
-  if (window.frameElement !== null)
+  if (isInIframe)
   {
     isIframePlaying
       ? window.frameElement.classList.add('is-playing')
@@ -335,7 +339,7 @@ export function setPlayState()
   ctrl.prevTrack.setState(STATE.ENABLED);
 
   setIsIframePlaying(true);
-  setTrackDetails(m.players.getTrackData());
+  setTrackDetails(m.getTrackData());
 }
 
 export function setPauseState()

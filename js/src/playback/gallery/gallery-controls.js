@@ -67,8 +67,6 @@ export function init(mediaPlayers, crossfadeClickCallback)
 
 function playbackReady()
 {
-  debug.log('playbackReady()');
-
   if ((ctrl.crossfadePreset.length > 1) && (ctrl.crossfadeTo.length > 1))
   {
     ctrl.crossfadePreset.forEach(element =>

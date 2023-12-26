@@ -51,7 +51,7 @@ export function showSnackbar({
   backgroundColorCssVal = 'var(--snackbar-background-color)',
 } = {})
 {
-  debug.log(`showSnackbar(): ${message} (${duration} sec.)`);
+  debug.log(`showSnackbar(): ${message} (${(duration !== 0) ? `Duration: ${duration} sec.` : 'Duration: infinite'})`);
 
   initElements();
   resetState(false);

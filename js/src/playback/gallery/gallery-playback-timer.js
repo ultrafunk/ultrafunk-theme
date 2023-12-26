@@ -44,7 +44,7 @@ class GalleryPlaybackTimer extends PlaybackTimer
     {
       if ((durationSeconds - positionSeconds) === (settings.gallery.autoCrossfadeLength + this.config.maxBufferingDelay))
       {
-        if ((this.#players.getCurrentTrack() + 1) <= this.#players.getNumTracks())
+        if ((this.#players.getCurrentTrackNum() + 1) <= this.#players.getNumTracks())
         {
           this.#crossfadeInit(CROSSFADE_TYPE.AUTO,
           {
