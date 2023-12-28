@@ -292,7 +292,7 @@ async function showSearchResults(searchString)
 
 async function showRestResults(searchString)
 {
-  const searchTypeId = settings.list.queryAllTrackArtists ? THEME_ENV.searchArtistTitleArtistsId : THEME_ENV.searchArtistTitleId;
+  const searchTypeId = getSearchTypeId();
   const searchParams = `search=${encodeURIComponent(searchString)}&orderby=relevance&wpessid=${searchTypeId}&`;
   const fetchStart   = performance.now();
 
@@ -324,6 +324,18 @@ async function showRestResults(searchString)
   }
 
   return (fetchStop - fetchStart);
+}
+
+function getSearchTypeId()
+{
+  if (settings.list.queryAllTrackArtists && settings.list.queryAllTrackChannels)
+    return THEME_ENV.searchArtistTitleArtistsChannelsId;
+  else if (settings.list.queryAllTrackArtists)
+    return THEME_ENV.searchArtistTitleArtistsId;
+  else if (settings.list.queryAllTrackChannels)
+    return THEME_ENV.searchArtistTitleChannelsId;
+
+  return THEME_ENV.searchArtistTitleId;
 }
 
 function setResultsHtml(restResponse)

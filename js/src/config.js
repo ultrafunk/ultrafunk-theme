@@ -15,14 +15,16 @@ export const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-export const VERSION = '1.46.10';
+export const VERSION = '1.46.11';
 
 export const THEME_ENV = {
-  'siteUrl':                    IS_PROD_BUILD ? 'https://ultrafunk.com' : 'https://wordpress.ultrafunk.com',
-  'channelVideosId':            IS_PROD_BUILD ?  899 :  875,
-  'searchArtistTitleId':        IS_PROD_BUILD ? 4751 : 4122,
-  'searchArtistTitleArtistsId': IS_PROD_BUILD ? 4764 : 4134,
-  'defaultTrackThumbnail':      '/wp-content/themes/ultrafunk/inc/img/photo_filled_grey.png',
-  'defaultYTThumbnail':         '/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png',
-  'defaultSCThumbnail':         '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png',
+  'siteUrl':                            IS_PROD_BUILD ? 'https://ultrafunk.com' : 'https://wordpress.ultrafunk.com',
+  'channelVideosId':                    IS_PROD_BUILD ?  899 :  875,
+  'searchArtistTitleId':                IS_PROD_BUILD ? 4751 : 4122,
+  'searchArtistTitleArtistsId':         IS_PROD_BUILD ? 4764 : 4134,
+  'searchArtistTitleChannelsId':        IS_PROD_BUILD ? 5127 : 4185,
+  'searchArtistTitleArtistsChannelsId': IS_PROD_BUILD ? 5128 : 4186,
+  'defaultTrackThumbnail':              '/wp-content/themes/ultrafunk/inc/img/photo_filled_grey.png',
+  'defaultYTThumbnail':                 '/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png',
+  'defaultSCThumbnail':                 '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png',
 };
