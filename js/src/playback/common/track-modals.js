@@ -7,6 +7,9 @@
 import { getModalTrackHtml }   from '../../shared/modal-templates.js';
 import { shareModal }          from '../../shared/share-modal.js';
 import { copyTextToClipboard } from '../../shared/clipboard.js';
+import { navSearch }           from '../../site/nav-search.js';
+import { showSearchResults }   from '../list/track-search.js';
+import { isListPlayer }        from './shared-gallery-list.js';
 
 import {
   showModal,
@@ -63,11 +66,13 @@ export function showTrackDetails(element, onCloseFocusElement = null)
   artists.forEach(item =>
   {
     modalEntries.push({
-      class:   `icon-text ${item.classList[0] ?? ''}`,
-      title:   'Go to Artist',
-      content: item.innerText,
-      link:    getPrefPlayerUrl(item.href),
-      icon:    'link',
+      class:     `hover-icon-text ${item.classList[0] ?? ''}`,
+      title:     'Go to Artist',
+      content:   item.innerText,
+      link:      getPrefPlayerUrl(item.href),
+      icon:      'link',
+      hoverIcon: 'search',
+      clickId:   element.id,
     });
   });
 
@@ -76,10 +81,13 @@ export function showTrackDetails(element, onCloseFocusElement = null)
   channels.forEach(item =>
   {
     modalEntries.push({
-      title:   'Go to Channel',
-      content: item.innerText,
-      link:    getPrefPlayerUrl(item.href),
-      icon:    'link'
+      class:     `hover-icon-text`,
+      title:     'Go to Channel',
+      content:   item.innerText,
+      link:      getPrefPlayerUrl(item.href),
+      icon:      'link',
+      hoverIcon: 'search',
+      clickId:   element.id,
     });
   });
 
@@ -90,6 +98,18 @@ export function showTrackDetails(element, onCloseFocusElement = null)
     modalList:  modalEntries,
     modalType:  'track-details',
     onCloseFocusElement: onCloseFocusElement,
+    onClickEntryCallback: (entryClickId, event) =>
+    {
+      if (event.target.closest('div.modal-item-icons'))
+      {
+        event.preventDefault();
+        const searchString = event.target.closest('a')?.querySelector('span.text-nowrap-ellipsis').textContent;
+        navSearch.show(searchString);
+
+        if (isListPlayer())
+          showSearchResults(searchString.toLowerCase());
+      }
+    },
   });
 
   setTrackThumbnailClick(`${trackArtist} - ${trackTitle}`);

@@ -34,24 +34,27 @@ export function getModalListHtml(modalList, modalItemsCount = 0)
 
   modalList.forEach((entry, index) =>
   {
-    const entryClass      = entry.class      ? `modal-${entry.class}`                                       : 'modal-icon-text';
-    const entryTitle      = entry.title      ? entry.title                                                  : '';
-    const entryIcon       = entry.icon       ? `<span class="material-icons">${entry.icon}</span>`          : '';
-    const entryContent    = entry.icon       ? `<span class="text-nowrap-ellipsis">${entry.content}</span>` : entry.content;
-    const entryLinkTarget = entry.linkTarget ? `target="${entry.linkTarget}"`                               : '';
+    const entryClass      = entry.class      ? `modal-${entry.class}`                                              : 'modal-icon-text';
+    const entryTitle      = entry.title      ? entry.title                                                         : '';
+    const entryIcon       = entry.icon       ? `<span class="material-icons default-icon">${entry.icon}</span>`    : '';
+    const entryHoverIcon  = entry.hoverIcon  ? `<span class="material-icons hover-icon">${entry.hoverIcon}</span>` : '';
+    const modalItemIcons  = entry.hoverIcon  ? `<div class="modal-item-icons">${entryIcon}${entryHoverIcon}</div>` : entryIcon;
+    const entryContent    = entry.icon       ? `<span class="text-nowrap-ellipsis">${entry.content}</span>`        : entry.content;
+    const entryLinkTarget = entry.linkTarget ? `target="${entry.linkTarget}"`                                      : '';
     entry.uid             = `modal-item-${index + 1}`;
 
     if (entry.link)
     {
-      html += `<a id="${entry.uid}" href="${entry.link}" ${entryLinkTarget} class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${entryIcon}${entryContent}</a>`;
+      const clickId = entry?.clickId ? `data-click-id="${entry.clickId}"` : '';
+      html += `<a id="${entry.uid}" ${clickId} href="${entry.link}" ${entryLinkTarget} class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${modalItemIcons}${entryContent}</a>`;
     }
     else if (entry.clickId)
     {
-      html += `<div id="${entry.uid}" data-click-id="${entry.clickId}" class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
+      html += `<div id="${entry.uid}" data-click-id="${entry.clickId}" class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${modalItemIcons}${entryContent}</div>`;
     }
     else
     {
-      html += `<div class="${entryClass}" title="${entryTitle}">${entryIcon}${entryContent}</div>`;
+      html += `<div class="${entryClass}" title="${entryTitle}">${modalItemIcons}${entryContent}</div>`;
     }
   });
 

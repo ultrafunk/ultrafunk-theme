@@ -57,42 +57,21 @@ function user_layout_class() : void
 
 function pre_wp_head() : void
 {
+  if (IS_PROD_BUILD)
+  {
+    // esbuild site-theme-layout.js --minify --bundle --format=esm
+    ?>
+    <script>var l=document.documentElement.classList,e=localStorage.getItem("uf_site_theme"),t="site-theme-light";e!==null&&(e==="light"?t="site-theme-light":e==="dark"?t="site-theme-dark":e==="black"&&(t="site-theme-black"));l.add(t);if(l.contains("gallery-layout")){let a=localStorage.getItem("uf_gallery_layout"),i="gallery-3-col";a!==null&&(a==="1-column"?i="gallery-1-col":a==="2-column"&&(i="gallery-2-col")),window.innerWidth>1100?l.add(i):l.add("gallery-1-col")}</script>
+    <?php
+  }
+  else
+  {
+    ?>
+    <script src="<?php echo esc_url(get_template_directory_uri()) . '/inc/js/site-theme-layout.js?ver=' . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
+    <?php
+  }
+
   ?>
-  <script>
-    const UF_SiteTheme      = localStorage.getItem('uf_site_theme');
-    let   UF_SiteThemeClass = 'site-theme-light';
-
-    if (UF_SiteTheme !== null)
-    {
-      if (UF_SiteTheme === 'light')
-        UF_SiteThemeClass = 'site-theme-light';
-      else if (UF_SiteTheme === 'dark')
-        UF_SiteThemeClass = 'site-theme-dark'
-      else if (UF_SiteTheme === 'black')
-        UF_SiteThemeClass = 'site-theme-black'
-    }
-
-    document.documentElement.classList.add(UF_SiteThemeClass);
-
-    if (document.documentElement.classList.contains('gallery-layout'))
-    {
-      const galleryLayout      = localStorage.getItem('uf_gallery_layout');
-      let   galleryLayoutClass = 'gallery-3-col';
-
-      if (galleryLayout !== null)
-      {
-        if (galleryLayout === '1-column')
-          galleryLayoutClass = 'gallery-1-col';
-        else if (galleryLayout === '2-column')
-          galleryLayoutClass = 'gallery-2-col';
-      }
-
-      if (window.innerWidth > 1100)
-        document.documentElement.classList.add(galleryLayoutClass);
-      else
-        document.documentElement.classList.add('gallery-1-col');
-    }
-  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <?php

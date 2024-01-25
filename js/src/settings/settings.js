@@ -86,6 +86,7 @@ export const settingsSchema = {
     showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
   },
   experimental: {
+  //enableDjPlayer:       { description: '<b>List Player</b><br>Enable DJ Player testing',                  type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //realtimeTrackSearch:  { description: '<b>List Player</b><br>Show realtime track search results',        type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   },
@@ -141,6 +142,7 @@ export const defaultSettings = {
     showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,
   },
   experimental: {
+  //enableDjPlayer:       settingsSchema.experimental.enableDjPlayer.default,
   //realtimeTrackSearch:  settingsSchema.experimental.realtimeTrackSearch.default,
   //fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,
   },

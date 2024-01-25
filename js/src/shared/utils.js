@@ -265,6 +265,12 @@ export function getTrackTypeData(trackType, thumbnailUrl)
   return { isYouTubeTrack: isYouTubeTrack, thumbnailUrl: trackThumbnailUrl };
 }
 
+export function isPointerTypeTouch(event)
+{
+  // (event.mozInputSource === 5) is MOZ_SOURCE_TOUCH
+  return ((event.pointerType === 'touch') || (event.mozInputSource === 5));
+}
+
 
 // ************************************************************************************************
 // Allow / Deny keyboard shortcuts event handling closure

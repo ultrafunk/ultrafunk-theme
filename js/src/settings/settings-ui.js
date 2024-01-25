@@ -8,7 +8,11 @@
 import { newDebugLogger } from '../shared/debuglogger.js';
 import { showSnackbar }   from '../shared/snackbar.js';
 import { showModal }      from '../shared/modal.js';
-import { addListener }    from '../shared/utils.js';
+
+import {
+  addListener,
+  isPointerTypeTouch,
+} from '../shared/utils.js';
 
 import {
   settings as storedSettings
@@ -309,8 +313,7 @@ function settingClicked(event)
     if (event.type === 'contextmenu')
     {
       // showSettingDetailsModal() for Touch and Hold input on Chromium and Firefox browsers
-      // (event.mozInputSource === 5) is MOZ_SOURCE_TOUCH
-      if ((event.pointerType === 'touch') || (event.mozInputSource === 5))
+      if (isPointerTypeTouch(event))
       {
         event.preventDefault();
         showSettingDetailsModal(settingsId, settingsKey, sectionIndex);

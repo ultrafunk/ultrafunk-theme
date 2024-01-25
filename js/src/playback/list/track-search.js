@@ -28,6 +28,7 @@ import {
 import {
   isControlKey,
   escHtml,
+  isPointerTypeTouch,
 } from '../../shared/utils.js';
 
 import {
@@ -132,11 +133,11 @@ export function isTrackSearchResultsVisible()
 
 function debounceKeyup(callback, delayMilliseconds)
 {
-  let delayTimer = 0;
+  let delayTimerId = 0;
 
   return function(event, searchString)
   {
-    clearTimeout(delayTimer);
+    clearTimeout(delayTimerId);
 
     if (isControlKey(event.key))
       return;
@@ -146,7 +147,7 @@ function debounceKeyup(callback, delayMilliseconds)
       if (m.resultsCache.size === 0)
         m.trackSearchResults.style.display = 'block';
 
-      delayTimer = setTimeout(() => callback(searchString), delayMilliseconds);
+      delayTimerId = setTimeout(() => callback(searchString), delayMilliseconds);
     }
     else
     {
@@ -201,12 +202,8 @@ function playTrackClick(element)
 
 function showTrackDetailsTouch(event, element)
 {
-  // (event.mozInputSource === 5) is MOZ_SOURCE_TOUCH
-  if ((event.pointerType === 'touch') || (event.mozInputSource === 5))
-  {
-    if (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE)
-      m.modalId = showTrackDetails(element, m.searchField);
-  }
+  if (isPointerTypeTouch(event) && (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE))
+    m.modalId = showTrackDetails(element, m.searchField);
 }
 
 function playNextClick(element)
@@ -235,7 +232,7 @@ function insertResultTrack(element)
 //
 // ************************************************************************************************
 
-async function showSearchResults(searchString)
+export async function showSearchResults(searchString)
 {
   const searchStart = performance.now();
   let fetchRestTime = 0;
@@ -282,12 +279,9 @@ async function showSearchResults(searchString)
 
   const searchStop = performance.now();
 
-  // ToDo: Over 250 ms., log REST search performance for production, this will be removed in the future...
-  if ((searchStop - searchStart) > 250)
-  {
-    const searchType = settings.list.queryAllTrackArtists ? 'Artist - Title + Artists' : 'Artist - Title';
-    console.log(`%cSearch ${searchType}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${THEME_ENV.siteUrl}`, logCss);
-  }
+  // ToDo: Over 200 ms., log REST search performance for production, this will be removed in the future...
+  if ((searchStop - searchStart) > 200)
+    console.log(`%cTrack search for ${searchTypeString[getSearchTypeId()]}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${THEME_ENV.siteUrl}`, logCss);
 }
 
 async function showRestResults(searchString)
@@ -325,6 +319,13 @@ async function showRestResults(searchString)
 
   return (fetchStop - fetchStart);
 }
+
+const searchTypeString = {
+  [THEME_ENV.searchArtistTitleId]:                'Artist - Title',
+  [THEME_ENV.searchArtistTitleArtistsId]:         'Artist - Title + Artists',
+  [THEME_ENV.searchArtistTitleChannelsId]:        'Artist - Title + Channels',
+  [THEME_ENV.searchArtistTitleArtistsChannelsId]: 'Artist - Title + Artists + Channels',
+};
 
 function getSearchTypeId()
 {

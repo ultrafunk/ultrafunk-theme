@@ -135,11 +135,16 @@
 }
 
 .modal-icon-text,
+.modal-hover-icon-text,
 .modal-track-share-entry,
 .modal-track-details-entry {
   font-size: 20px;
   line-height: 25px;
   padding: 8px 30px;
+}
+
+.modal-click-item.modal-hover-icon-text {
+  padding: 0px 30px 0px 22px;
 }
 
 .modal-track-share-entry {
@@ -179,10 +184,36 @@ a.modal-click-item:hover {
   margin-left: -1px;
 }
 
-.modal-icon-text {
+.modal-icon-text,
+.modal-hover-icon-text {
   font-weight: 400;
   display: flex;
   align-items: center;
+}
+
+.modal-click-item .modal-item-icons {
+  display: inline-flex;
+}
+
+.modal-click-item .modal-item-icons .material-icons {
+  padding: 8px;
+  margin-right: 0;
+}
+
+.modal-click-item .modal-item-icons:hover .default-icon {
+  display: none;
+}
+
+.modal-click-item .modal-item-icons .hover-icon {
+  display: none;
+}
+
+.modal-click-item .modal-item-icons:hover .hover-icon {
+  display: block;
+}
+
+.modal-click-item.modal-hover-icon-text span.text-nowrap-ellipsis {
+  margin-left: 7px;
 }
 
 .modal-type-track-details .modal-click-item.modal-2-columns {
@@ -304,11 +335,16 @@ a.modal-click-item:hover {
   }
 
   .modal-icon-text,
+  .modal-hover-icon-text,
   .modal-track-share-entry,
   .modal-track-details-entry {
     font-size: 15px;
     line-height: 20px;
     padding: 8px 20px;
+  }
+
+  .modal-click-item.modal-hover-icon-text {
+    padding-left: 12px;
   }
 
   .modal-track-share-entry {
@@ -327,6 +363,10 @@ a.modal-click-item:hover {
   .modal-click-item .material-icons {
     font-size: 24px;
     margin-right: 12px;
+  }
+
+  .modal-click-item.modal-hover-icon-text span.text-nowrap-ellipsis {
+    margin-left: 4px;
   }
 
   .modal-dialog-footer {

@@ -28,6 +28,7 @@ const navSearchClosure = (() =>
     isVisible() { return isVisible; },
     init,
     toggle,
+    show,
     hide,
   };
 
@@ -62,14 +63,22 @@ const navSearchClosure = (() =>
 
   function toggle()
   {
-    hasVisibleSearchContainer() ? show() : hide();
+    isVisible ? hide() : show();
   }
 
-  function show()
+  function show(searchString = null)
   {
-    setNavSearchProps(true);
-    searchField.focus();
-    searchField.setSelectionRange(9999, 9999);
+    if (searchString !== null)
+      searchField.value = searchString;
+
+    if (hasVisibleSearchContainer())
+    {
+      if (isVisible === false)
+        setNavSearchProps(true);
+
+      searchField.focus();
+      searchField.setSelectionRange(9999, 9999);
+    }
   }
 
   function hide()
