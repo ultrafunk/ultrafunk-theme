@@ -98,23 +98,25 @@ export function showTrackDetails(element, onCloseFocusElement = null)
     modalList:  modalEntries,
     modalType:  'track-details',
     onCloseFocusElement: onCloseFocusElement,
-    onClickEntryCallback: (entryClickId, event) =>
-    {
-      if (event.target.closest('div.modal-item-icons'))
-      {
-        event.preventDefault();
-        const searchString = event.target.closest('a')?.querySelector('span.text-nowrap-ellipsis').textContent;
-        navSearch.show(searchString);
-
-        if (isListPlayer())
-          showSearchResults(searchString.toLowerCase());
-      }
-    },
+    onClickEntryCallback: (entryClickId, event) => onIconClickTrackSearch(event),
   });
 
   setTrackThumbnailClick(`${trackArtist} - ${trackTitle}`);
 
   return modalId;
+}
+
+function onIconClickTrackSearch(event)
+{
+  if (event.target.closest('div.modal-item-icons'))
+  {
+    event.preventDefault();
+    const searchString = event.target.closest('a')?.querySelector('span.text-nowrap-ellipsis').textContent;
+    navSearch.show(searchString);
+
+    if (isListPlayer())
+      showSearchResults(searchString.toLowerCase());
+  }
 }
 
 function setTrackThumbnailClick(artistTitle)

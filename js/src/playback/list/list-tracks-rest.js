@@ -149,11 +149,7 @@ function getSearchQueryParams()
   const searchParams = new URLSearchParams(window.location.search);
 
   if (searchParams.has('s'))
-  {
-    searchString = encodeURIComponent(searchParams.get('s'));
-  //Search string "R&B" needs special handling to match "R&amp;B"
-    searchString = searchString.replace(/r%26b/i, 'r%26amp;b');
-  }
+    searchString = encodeURIComponent(searchParams.get('s')).replaceAll(/(?<!%20)%26(?!%20)/g, '%26amp;'); // Encode %26 (&) without any spaces (%20) as %26amp; for search to work OK
 
   return `search=${searchString}&orderby=relevance&wpessid=true&`;
 }

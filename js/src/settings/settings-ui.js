@@ -312,7 +312,6 @@ function settingClicked(event)
 
     if (event.type === 'contextmenu')
     {
-      // showSettingDetailsModal() for Touch and Hold input on Chromium and Firefox browsers
       if (isPointerTypeTouch(event))
       {
         event.preventDefault();

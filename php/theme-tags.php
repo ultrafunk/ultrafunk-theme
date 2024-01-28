@@ -80,7 +80,7 @@ function pre_wp_head() : void
     echo '<link rel="modulepreload" href="' . esc_url(get_template_directory_uri()) . JS_PRELOAD_CHUNK . '" as="script" crossorigin>' . PHP_EOL;
 }
 
-function meta_description() : void
+function track_meta_description() : void
 {
   global $wp_query;
 
@@ -97,8 +97,27 @@ function meta_description() : void
     foreach($track_channels as $channel)
       $channels .= $channel->name . ', ';
 
-    echo '<meta name="description" content="Listen to &quot;' . esc_attr($wp_query->post->track_title) . '&quot;, Artists: ' . esc_attr(substr($artists, 0, -2)) . ', Genres: ' . esc_attr(substr($channels, 0, -2)) . '" />' . PHP_EOL;
+    echo '<meta name="description" content="Listen to &quot;' . esc_attr($wp_query->post->track_title) . '&quot;, Artists: ' . esc_attr(substr($artists, 0, -2)) . ', Genres: ' . esc_attr(substr($channels, 0, -2)) . '." />' . PHP_EOL;
   }
+}
+
+function channel_meta_description() : void
+{
+  $term_data = wp_cache_get(get_request_params()->query['term_id'], 'terms');
+
+  if ($term_data->slug === 'videos')
+    echo '<meta name="description" content="View ' . esc_html($term_data->count) . ' selected Videos from a wide range of artists." />' . PHP_EOL;
+  else if (($term_data->slug === 'albums') || ($term_data->slug === 'concerts') || ($term_data->slug === 'promos'))
+    echo '<meta name="description" content="Listen to ' . esc_html($term_data->count) . ' selected ' . esc_html(get_title()) . ' from a wide range of artists." />' . PHP_EOL;
+  else
+    echo '<meta name="description" content="Listen to ' . esc_html($term_data->count) . ' selected ' . esc_html(get_title()) . ' tracks from a wide range of artists." />' . PHP_EOL;
+}
+
+function artist_meta_description() : void
+{
+  $term_data     = wp_cache_get(get_request_params()->query['term_id'], 'terms');
+  $tracks_string = (intval($term_data->count) > 1) ? ($term_data->count . ' selected tracks') : 'a selected track';
+  echo '<meta name="description" content="Listen to ' . esc_html($tracks_string) . ' from ' . esc_html(get_title()) . '." />' . PHP_EOL;
 }
 
 function scripts_styles() : void
@@ -123,7 +142,11 @@ function head() : void
   if (is_gallery_home() || is_list_home() || (get_the_ID() === THEME_ENV['page_about_id']))
     echo '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
   else if (is_single())
-    meta_description();
+    track_meta_description();
+  else if (is_list_player('channel'))
+    channel_meta_description();
+  else if (is_list_player('artist'))
+    artist_meta_description();
 
   scripts_styles();
 
