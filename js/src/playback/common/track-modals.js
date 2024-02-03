@@ -72,6 +72,7 @@ export function showTrackDetails(element, onCloseFocusElement = null)
       link:      getPrefPlayerUrl(item.href),
       icon:      'link',
       hoverIcon: 'search',
+      hoverTitle: `Search for ${item.innerText}`,
       clickId:   element.id,
     });
   });
@@ -87,6 +88,7 @@ export function showTrackDetails(element, onCloseFocusElement = null)
       link:      getPrefPlayerUrl(item.href),
       icon:      'link',
       hoverIcon: 'search',
+      hoverTitle: `Search for ${item.innerText}`,
       clickId:   element.id,
     });
   });

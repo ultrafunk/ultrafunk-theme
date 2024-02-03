@@ -34,13 +34,14 @@ export function getModalListHtml(modalList, modalItemsCount = 0)
 
   modalList.forEach((entry, index) =>
   {
-    const entryClass      = entry.class      ? `modal-${entry.class}`                                              : 'modal-icon-text';
-    const entryTitle      = entry.title      ? entry.title                                                         : '';
-    const entryIcon       = entry.icon       ? `<span class="material-icons default-icon">${entry.icon}</span>`    : '';
-    const entryHoverIcon  = entry.hoverIcon  ? `<span class="material-icons hover-icon">${entry.hoverIcon}</span>` : '';
-    const modalItemIcons  = entry.hoverIcon  ? `<div class="modal-item-icons">${entryIcon}${entryHoverIcon}</div>` : entryIcon;
-    const entryContent    = entry.icon       ? `<span class="text-nowrap-ellipsis">${entry.content}</span>`        : entry.content;
-    const entryLinkTarget = entry.linkTarget ? `target="${entry.linkTarget}"`                                      : '';
+    const entryClass      = entry.class      ? `modal-${entry.class}`                                                            : 'modal-icon-text';
+    const entryTitle      = entry.title      ? entry.title                                                                       : '';
+    const entryIcon       = entry.icon       ? `<span class="material-icons default-icon">${entry.icon}</span>`                  : '';
+    const hoverTitle      = entry.hoverTitle ?  `title="${entry.hoverTitle}"`                                                    : '';
+    const entryHoverIcon  = entry.hoverIcon  ? `<span class="material-icons hover-icon" ${hoverTitle}>${entry.hoverIcon}</span>` : '';
+    const modalItemIcons  = entry.hoverIcon  ? `<div class="modal-item-icons">${entryIcon}${entryHoverIcon}</div>`               : entryIcon;
+    const entryContent    = entry.icon       ? `<span class="text-nowrap-ellipsis">${entry.content}</span>`                      : entry.content;
+    const entryLinkTarget = entry.linkTarget ? `target="${entry.linkTarget}"`                                                    : '';
     entry.uid             = `modal-item-${index + 1}`;
 
     if (entry.link)

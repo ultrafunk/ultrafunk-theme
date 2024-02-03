@@ -269,8 +269,6 @@ export async function showSearchResults(searchString)
 
     if ((m.trackSearchResults.style.display === 'none') && navSearch.isVisible())
       m.trackSearchResults.style.display = 'block';
-    else
-      m.trackSearchResults.querySelector('.track-results-container').scrollTop = 0;
   }
 
   // Free up some memory... (1000 entries is about 10 MB)
@@ -287,7 +285,7 @@ export async function showSearchResults(searchString)
 async function showRestResults(searchString)
 {
   const encodedString = encodeURIComponent(searchString).replaceAll(/(?<!%20)%26(?!%20)/g, '%26amp;'); // Encode %26 (&) without any spaces (%20) as %26amp; for search to work OK
-  const searchParams  = `search=${encodedString}&orderby=relevance&wpessid=${getSearchTypeId()}&`;
+  const searchParams  = `search=${encodedString}&orderby=relevance&per_page=${THEME_ENV.maxTrackSearchResults + 1}&wpessid=${getSearchTypeId()}&`;
   const fetchStart    = performance.now();
 
   const restResponse = await fetchRest({
@@ -345,11 +343,25 @@ function setResultsHtml(restResponse)
 
   restResponse.data.forEach((track, index) =>
   {
-    track.uid   = `track-${(Date.now() + index)}`;
-    tracksHtml += getTrackEntryHtml(track, 'compact');
+    if (index < THEME_ENV.maxTrackSearchResults)
+    {
+      track.uid   = `track-${(Date.now() + index)}`;
+      tracksHtml += getTrackEntryHtml(track, 'compact');
+    }
   });
 
+  if (restResponse.data.length > THEME_ENV.maxTrackSearchResults)
+  {
+    tracksHtml += `
+      <div class="max-results text-nowrap-ellipsis">
+        More than ${THEME_ENV.maxTrackSearchResults} hits, refine query or&nbsp;<a href="/list/search/?s=${encodeURIComponent(m.searchField.value)}"><b>show all results</b></a>
+      </div>`;
+  }
+
   m.resultsTracklist.innerHTML = tracksHtml;
+
+  // Sometimes yield (setTimeout(0)) is needed for scrolling to actually happen... But why?
+  setTimeout(() => { m.trackSearchResults.querySelector('.track-results-container').scrollTop = 0; }, 0);
 }
 
 function getNoMatchesMessage(searchString)

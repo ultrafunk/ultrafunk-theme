@@ -109,21 +109,32 @@ body.scrolling-disabled #track-search-results {
 
 #track-search-results .results-message {
   width: 100%;
-  padding: 5px;
+  padding: 5px 12px;
   box-sizing: border-box;
   font-size: 20px;
   line-height: 30px;
   font-weight: 400;
 }
 
-#track-search-results .results-message a {
+#track-search-results .results-message a,
+#track-search-results .max-results a {
   color: var(--primary-text-color);
   text-decoration: none;
 }
 
-#track-search-results .results-message a:hover {
+#track-search-results .results-message a:hover,
+#track-search-results .max-results a:hover {
   color: var(--link-hover-color);
   text-decoration: underline;
+}
+
+#track-search-results .max-results {
+  font-size: 20px;
+  font-weight: 400;
+  display: block;
+  text-align: center;
+  padding: 10px;
+  grid-column: 1 / -1;
 }
 
 
@@ -203,6 +214,11 @@ body.scrolling-disabled #track-search-results {
   #track-search-results .results-message {
     font-size: 14px;
     text-align: center;
+  }
+
+  #track-search-results .max-results {
+    font-size: 15px;
+    padding: 9px;
   }
 
 }

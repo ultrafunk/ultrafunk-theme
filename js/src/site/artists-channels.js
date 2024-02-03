@@ -96,9 +96,8 @@ function restoreState()
         document.getElementById(item).querySelector('div.termlist-header').click();
       });
 
-      // Forced to use { behavior: 'smooth' } because { behavior: 'instant' } does
-      // not work reliably on Firefox and WebKit browsers... ToDo: Find a better solution!
-      window.scroll({ top: termlistState.scrollPos, left: 0, behavior: 'smooth' });
+      // Sometimes yield (setTimeout(0)) is needed for scrolling to actually happen... But why?
+      setTimeout(() => { window.scroll({ top: termlistState.scrollPos, left: 0 }); }, 0);
     }
     else
     {
