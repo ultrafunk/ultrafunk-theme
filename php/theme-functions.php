@@ -48,7 +48,7 @@ function get_title() : string
   else if (is_termlist())
   {
     $title = is_termlist('artists')
-               ? ('Artists: ' . strtoupper($params->query['first_letter']))
+               ? ('Artists: ' . strtoupper($params->query_vars['first_letter']))
                : 'All Channels';
   }
   else if (is_list_player())

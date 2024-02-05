@@ -80,44 +80,53 @@ function pre_wp_head() : void
     echo '<link rel="modulepreload" href="' . esc_url(get_template_directory_uri()) . JS_PRELOAD_CHUNK . '" as="script" crossorigin>' . PHP_EOL;
 }
 
-function track_meta_description() : void
-{
-  global $wp_query;
-
-  if (isset($wp_query) && $wp_query->have_posts())
-  {
-    $track_artists  = get_cached_terms($wp_query->post->ID, 'uf_artist');
-    $track_channels = get_cached_terms($wp_query->post->ID, 'uf_channel');
-    $artists        = '';
-    $channels       = '';
-
-    foreach($track_artists as $artist)
-      $artists .= $artist->name . ', ';
-
-    foreach($track_channels as $channel)
-      $channels .= $channel->name . ', ';
-
-    echo '<meta name="description" content="Listen to &quot;' . esc_attr($wp_query->post->track_title) . '&quot;, Artists: ' . esc_attr(substr($artists, 0, -2)) . ', Genres: ' . esc_attr(substr($channels, 0, -2)) . '." />' . PHP_EOL;
-  }
-}
-
 function channel_meta_description() : void
 {
-  $term_data = wp_cache_get(get_request_params()->query['term_id'], 'terms');
+  $term_data = wp_cache_get(get_request_params()->query_vars['term_id'], 'terms');
 
   if ($term_data->slug === 'videos')
-    echo '<meta name="description" content="View ' . esc_html($term_data->count) . ' selected Videos from a wide range of artists." />' . PHP_EOL;
+    echo '<meta name="description" content="View ' . esc_html($term_data->count) . ' selected Videos from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
   else if (($term_data->slug === 'albums') || ($term_data->slug === 'concerts') || ($term_data->slug === 'promos'))
-    echo '<meta name="description" content="Listen to ' . esc_html($term_data->count) . ' selected ' . esc_html(get_title()) . ' from a wide range of artists." />' . PHP_EOL;
+    echo '<meta name="description" content="Listen to ' . esc_html($term_data->count) . ' selected ' . esc_html(get_title()) . ' from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
   else
-    echo '<meta name="description" content="Listen to ' . esc_html($term_data->count) . ' selected ' . esc_html(get_title()) . ' tracks from a wide range of artists." />' . PHP_EOL;
+    echo '<meta name="description" content="Listen to ' . esc_html($term_data->count) . ' selected ' . esc_html(get_title()) . ' tracks from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
 }
 
 function artist_meta_description() : void
 {
-  $term_data     = wp_cache_get(get_request_params()->query['term_id'], 'terms');
-  $tracks_string = (intval($term_data->count) > 1) ? ($term_data->count . ' selected tracks') : 'a selected track';
-  echo '<meta name="description" content="Listen to ' . esc_html($tracks_string) . ' from ' . esc_html(get_title()) . '." />' . PHP_EOL;
+  if (get_request_params()->found_items === 1)
+  {
+    track_meta_description(get_request_params()->query_result[0]);
+  }
+  else
+  {
+    $term_data = wp_cache_get(get_request_params()->query_vars['term_id'], 'terms');
+    echo '<meta name="description" content="Listen to ' . esc_html($term_data->count) . ' carefully selected tracks from ' . esc_html(get_title()) . '." />' . PHP_EOL;
+  }
+}
+
+function track_meta_description(object $track = null) : void
+{
+  if ($track === null)
+  {
+    global $wp_query;
+
+    if (isset($wp_query) && $wp_query->have_posts())
+      $track = $wp_query->post;
+  }
+
+  $track_artists  = get_cached_terms($track->ID, 'uf_artist');
+  $track_channels = get_cached_terms($track->ID, 'uf_channel');
+  $artists        = '';
+  $channels       = '';
+
+  foreach($track_artists as $artist)
+    $artists .= $artist->name . ', ';
+
+  foreach($track_channels as $channel)
+    $channels .= $channel->name . ', ';
+
+  echo '<meta name="description" content="Listen to &quot;' . esc_attr($track->track_title) . '&quot;, Artists: ' . esc_attr(substr($artists, 0, -2)) . ', Genres: ' . esc_attr(substr($channels, 0, -2)) . '." />' . PHP_EOL;
 }
 
 function scripts_styles() : void
@@ -141,12 +150,14 @@ function head() : void
 {
   if (is_gallery_home() || is_list_home() || (get_the_ID() === THEME_ENV['page_about_id']))
     echo '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
-  else if (is_single())
-    track_meta_description();
+  else if (is_list_player('all'))
+    echo '<meta name="description" content="Listen to ' . esc_html(get_request_params()->found_items) . ' carefully selected tracks from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
   else if (is_list_player('channel'))
     channel_meta_description();
   else if (is_list_player('artist'))
     artist_meta_description();
+  else if (is_single())
+    track_meta_description();
 
   scripts_styles();
 
@@ -453,12 +464,12 @@ function get_nav_bar_title() : string
     $prefix     = is_termlist('artists') ? '<b>Artists</b>' : '<b>All Channels</b>';
     $title      = '';
     $pagination = '';
-    $query      = $params->query;
+    $query_vars = $params->query_vars;
 
     if ($params->max_pages > 1)
       $prefix = $prefix . ' ( ' . $params->current_page . ' / ' . $params->max_pages . ' )';
-    else if (isset($query['first_letter']))
-      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($query['first_letter']) . '</span><span class="found-items"> ( ' . $params->found_items . ' found )</span>';
+    else if (isset($query_vars['first_letter']))
+      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($query_vars['first_letter']) . '</span><span class="found-items"> ( ' . $params->found_items . ' found )</span>';
     else
       $prefix = '<span class="go-back-to"><b>Go Back: </b><span class="go-back-title"></span></span>';
   }

@@ -17,10 +17,10 @@ abstract class TemplateBase
   protected mixed  $query_result;
   protected string $home_url;
 
-  public function __construct(object $request_params, mixed $query_result)
+  public function __construct(object &$request_params)
   {
     $this->params       = $request_params;
-    $this->query_result = $query_result;
+    $this->query_result = $request_params->query_result;
     $this->home_url     = \Ultrafunk\Plugin\Globals\get_cached_home_url();
   }
 
