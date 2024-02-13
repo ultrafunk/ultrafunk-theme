@@ -285,7 +285,7 @@ export async function showSearchResults(searchString)
 async function showRestResults(searchString)
 {
   const encodedString = encodeURIComponent(searchString).replaceAll(/(?<!%20)%26(?!%20)/g, '%26amp;'); // Encode %26 (&) without any spaces (%20) as %26amp; for search to work OK
-  const searchParams  = `search=${encodedString}&orderby=relevance&per_page=${THEME_ENV.maxTrackSearchResults + 1}&wpessid=${getSearchTypeId()}&`;
+  const searchParams  = `search=${encodedString}&orderby=relevance&per_page=${settings.list.maxTrackSearchResults + 1}&wpessid=${getSearchTypeId()}&`;
   const fetchStart    = performance.now();
 
   const restResponse = await fetchRest({
@@ -343,18 +343,18 @@ function setResultsHtml(restResponse)
 
   restResponse.data.forEach((track, index) =>
   {
-    if (index < THEME_ENV.maxTrackSearchResults)
+    if (index < settings.list.maxTrackSearchResults)
     {
       track.uid   = `track-${(Date.now() + index)}`;
       tracksHtml += getTrackEntryHtml(track, 'compact');
     }
   });
 
-  if (restResponse.data.length > THEME_ENV.maxTrackSearchResults)
+  if (restResponse.data.length > settings.list.maxTrackSearchResults)
   {
     tracksHtml += `
       <div class="max-results text-nowrap-ellipsis">
-        More than ${THEME_ENV.maxTrackSearchResults} hits, refine query or&nbsp;<a href="/list/search/?s=${encodeURIComponent(m.searchField.value)}"><b>show all results</b></a>
+        More than ${settings.list.maxTrackSearchResults} hits, refine query or&nbsp;<a href="/list/search/?s=${encodeURIComponent(m.searchField.value)}"><b>show all results</b></a>
       </div>`;
   }
 

@@ -11,22 +11,12 @@ import { initSettingsUi }      from './settings/settings-ui.js';
 import { navMenu }             from './site/nav-menu.js';
 import { navSearch }           from './site/nav-search.js';
 import { initArtistsChannels } from './site/artists-channels.js';
+import { noPlayback }          from './playback/common/shared-gallery-list.js';
 
 import {
   newDebugLogger,
   logStartupExecutionTime,
 } from './shared/debuglogger.js';
-
-import {
-  showSnackbar,
-  isShowingSnackbar,
-} from './shared/snackbar.js';
-
-import {
-  noPlayback,
-  isGalleryPlayer,
-  isListPlayer,
-} from './playback/common/shared-gallery-list.js';
 
 import {
   response,
@@ -86,32 +76,6 @@ function initIndex()
 
   window.addEventListener('load', () => utils.addListener('aside.widget-area', 'click', utils.linkClickUsePrefPlayer));
 }
-
-window.addEventListener('load', () =>
-{
-  if (window.localStorage && settings.internal.showSiteInfoOnLoad && document.body.classList.contains('home'))
-  {
-    if (isGalleryPlayer() || isListPlayer())
-    {
-      const siteDescription = 'Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres. <a class="snackbar-message-link" href="/about/">More Details</a>';
-
-      setTimeout(() =>
-      {
-        if (isShowingSnackbar() === false)
-        {
-          showSnackbar({
-            message: siteDescription,
-            duration: 6,
-            afterCloseCallback: () => { settings.internal.showSiteInfoOnLoad = false; },
-            backgroundColorCssVal: 'rgb(75, 10, 10)',
-          });
-
-          utils.addListener('.snackbar-message-link', 'click', () => { settings.internal.showSiteInfoOnLoad = false; });
-        }
-      }, 2000);
-    }
-  }
-});
 
 
 // ************************************************************************************************
@@ -298,7 +262,7 @@ const resize = (() =>
 
     // Setting the CSS variable --scrollbar-width only on resize events prevent document
     // reflow / repaint delays when modals are shown (body.scrolling-disabled)
-    document.documentElement.style.setProperty('--scrollbar-width', `${window.innerWidth - document.documentElement.clientWidth}px`);
+    document.body.style.setProperty('--scrollbar-width', `${window.innerWidth - document.documentElement.clientWidth}px`);
   }
 })();
 

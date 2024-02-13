@@ -85,7 +85,7 @@ function channel_meta_description() : void
   $term_data = wp_cache_get(get_request_params()->query_vars['term_id'], 'terms');
 
   if ($term_data->slug === 'videos')
-    echo '<meta name="description" content="View ' . esc_html($term_data->count) . ' selected Videos from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
+    echo '<meta name="description" content="Watch ' . esc_html($term_data->count) . ' selected Videos from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
   else if (($term_data->slug === 'albums') || ($term_data->slug === 'concerts') || ($term_data->slug === 'promos'))
     echo '<meta name="description" content="Listen to ' . esc_html($term_data->count) . ' selected ' . esc_html(get_title()) . ' from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
   else

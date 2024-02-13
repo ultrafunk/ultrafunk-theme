@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 35, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 36, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -52,6 +52,7 @@ export const settingsSchema = {
   },
   list: {
     realtimeTrackSearch:   { description: 'Show realtime Track Search results',     type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
+    maxTrackSearchResults: { description: 'Max number of Track Search results',     type: INTEGER, values: [12, 24, 36, 48],  default: 24,   valueStrings: ['12', '24', '36', '48'] },
     queryAllTrackArtists:  { description: 'Track Search: Query all Track Artists',  type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
     queryAllTrackChannels: { description: 'Track Search: Query all Track Channels', type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
     moveTrackOnPlayNext:   { description: 'Move Track on Play as Next',             type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
@@ -83,7 +84,7 @@ export const settingsSchema = {
     overlayOpacity:      { description: 'Overlay opacity',                       type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
   },
   internal: {
-    showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
+  //showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
   },
   experimental: {
   //enableDjPlayer:       { description: '<b>List Player</b><br>Enable DJ Player testing',                  type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
@@ -108,6 +109,7 @@ export const defaultSettings = {
   },
   list: {
     realtimeTrackSearch:   settingsSchema.list.realtimeTrackSearch.default,
+    maxTrackSearchResults: settingsSchema.list.maxTrackSearchResults.default,
     queryAllTrackArtists:  settingsSchema.list.queryAllTrackArtists.default,
     queryAllTrackChannels: settingsSchema.list.queryAllTrackChannels.default,
     moveTrackOnPlayNext:   settingsSchema.list.moveTrackOnPlayNext.default,
@@ -139,7 +141,7 @@ export const defaultSettings = {
     overlayOpacity:      settingsSchema.site.overlayOpacity.default,
   },
   internal: {
-    showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,
+  //showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,
   },
   experimental: {
   //enableDjPlayer:       settingsSchema.experimental.enableDjPlayer.default,

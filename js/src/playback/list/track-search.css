@@ -187,7 +187,7 @@ body.scrolling-disabled #track-search-results {
   }
 
   #track-search-results .track-results-container {
-    max-height: 296px;
+    max-height: 338px;
     max-width: calc(100% - 40px);
     border-top: var(--form-search-field-border-focus);
   }
