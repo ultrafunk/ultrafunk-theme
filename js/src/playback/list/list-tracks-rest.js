@@ -101,11 +101,11 @@ function fetchTracks(termType = '', termId = '', page = 1, tracksPerPage = 25)
   const pagination = `page=${page}&per_page=${tracksPerPage}`;
   const fields     = '&_fields=id,link,artists,channels,meta';
 
-  if ((responseData.params.list_player === 'channel') || (responseData.params.list_player === 'artist'))
+  if ((responseData.get.list_player === 'channel') || (responseData.get.list_player === 'artist'))
     params = getTermQueryParams(termType, termId);
-  else if (responseData.params.list_player === 'shuffle')
+  else if (responseData.get.list_player === 'shuffle')
     params = getShuffleQueryParams();
-  else if (responseData.params.list_player === 'search')
+  else if (responseData.get.list_player === 'search')
     params = getSearchQueryParams();
 
   return fetchRest({
@@ -132,10 +132,10 @@ function getTermQueryParams(termType, termId)
 
 function getShuffleQueryParams()
 {
-  let shuffleParams = `shuffle=true&shuffle_type=${responseData.params.shuffle_type}&`;
+  let shuffleParams = `shuffle=true&shuffle_type=${responseData.get.shuffle_type}&`;
 
-  if (responseData.params.shuffle_slug !== null)
-    shuffleParams += `shuffle_slug=${responseData.params.shuffle_slug}&`;
+  if (responseData.get.shuffle_slug !== null)
+    shuffleParams += `shuffle_slug=${responseData.get.shuffle_slug}&`;
 
   return shuffleParams;
 }

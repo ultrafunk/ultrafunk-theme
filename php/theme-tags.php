@@ -17,7 +17,7 @@ use const Ultrafunk\Theme\Config\ {
 };
 
 use function Ultrafunk\Plugin\Globals\ {
-  is_request,
+  is_response,
   is_termlist,
   is_list_player,
   is_shuffle,
@@ -33,6 +33,7 @@ use function Ultrafunk\Theme\Functions\ {
   get_shuffle_title,
   is_gallery_home,
   is_list_home,
+  get_query_field,
 };
 
 
@@ -82,7 +83,7 @@ function pre_wp_head() : void
 
 function channel_meta_description() : void
 {
-  $term_data = wp_cache_get(get_request_params()->query_vars['term_id'], 'terms');
+  $term_data = wp_cache_get(get_query_field('term_id'), 'terms');
 
   if ($term_data->slug === 'videos')
     echo '<meta name="description" content="Watch ' . esc_html($term_data->count) . ' selected Videos from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
@@ -94,27 +95,20 @@ function channel_meta_description() : void
 
 function artist_meta_description() : void
 {
-  if (get_request_params()->found_items === 1)
+  if (get_query_field('found_items') === 1)
   {
-    track_meta_description(get_request_params()->query_result[0]);
+    track_meta_description();
   }
   else
   {
-    $term_data = wp_cache_get(get_request_params()->query_vars['term_id'], 'terms');
+    $term_data = wp_cache_get(get_query_field('term_id'), 'terms');
     echo '<meta name="description" content="Listen to ' . esc_html($term_data->count) . ' carefully selected tracks from ' . esc_html(get_title()) . '." />' . PHP_EOL;
   }
 }
 
-function track_meta_description(object $track = null) : void
+function track_meta_description() : void
 {
-  if ($track === null)
-  {
-    global $wp_query;
-
-    if (isset($wp_query) && $wp_query->have_posts())
-      $track = $wp_query->post;
-  }
-
+  $track          = get_query_field('query_result')[0];
   $track_artists  = get_cached_terms($track->ID, 'uf_artist');
   $track_channels = get_cached_terms($track->ID, 'uf_channel');
   $artists        = '';
@@ -150,11 +144,11 @@ function head() : void
 {
   if (is_gallery_home() || is_list_home() || (get_the_ID() === THEME_ENV['page_about_id']))
     echo '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
-  else if (is_list_player('all'))
-    echo '<meta name="description" content="Listen to ' . esc_html(get_request_params()->found_items) . ' carefully selected tracks from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
-  else if (is_list_player('channel'))
+  else if (is_list_player('all') || is_home())
+    echo '<meta name="description" content="Listen to ' . esc_html(get_query_field('found_items')) . ' carefully selected tracks from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
+  else if (is_list_player('channel') || is_tax('uf_channel'))
     channel_meta_description();
-  else if (is_list_player('artist'))
+  else if (is_list_player('artist') || is_tax('uf_artist'))
     artist_meta_description();
   else if (is_single())
     track_meta_description();
@@ -236,7 +230,7 @@ function get_search_string() : string
 
 function search_form() : void
 {
-  $is_list_player_search = (is_list_player() || is_request('response', 'list_player', 'search'));
+  $is_list_player_search = (is_list_player() || is_response('list_player', 'search'));
 
   ?>
   <form role="search" method="get" class="search-form" action="<?php echo get_cached_home_url($is_list_player_search ? '/list/search/' : '/'); ?>">

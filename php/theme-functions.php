@@ -171,3 +171,33 @@ function get_cached_terms(int $id, string $taxonomy) : mixed
 {
   return (is_preview() ? wp_get_post_terms($id, $taxonomy) : get_object_term_cache($id, $taxonomy));
 }
+
+//
+// "Translate" custom routed query result field to matching $wp_query result field
+//
+function get_query_field(string $field_id) : mixed
+{
+  if (is_list_player())
+  {
+    switch ($field_id)
+    {
+      case 'query_result': return get_request_params()->query_result;
+      case 'found_items':  return get_request_params()->found_items;
+      case 'term_id':      return get_request_params()->query_vars['term_id'];
+    }
+  }
+  else
+  {
+    global $wp_query;
+
+    if (isset($wp_query) && $wp_query->have_posts())
+    {
+      switch ($field_id)
+      {
+        case 'query_result': return $wp_query->posts;
+        case 'found_items' : return $wp_query->found_posts;
+        case 'term_id'     : return get_queried_object()->term_id;
+      }
+    }
+  }
+}

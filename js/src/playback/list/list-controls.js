@@ -290,11 +290,11 @@ function arrowUpDownClick(targetElement, isArrowUpClick)
 
 function initLoadMoreTracks()
 {
-  if (response.params.list_player === 'all'     ||
-      response.params.list_player === 'channel' ||
-      response.params.list_player === 'artist'  ||
-      response.params.list_player === 'shuffle' ||
-      response.params.list_player === 'search')
+  if (response.get.list_player === 'all'     ||
+      response.get.list_player === 'channel' ||
+      response.get.list_player === 'artist'  ||
+      response.get.list_player === 'shuffle' ||
+      response.get.list_player === 'search')
   {
     if ((response.nextPage !== null) && (response.currentPage < response.maxPages))
     {
