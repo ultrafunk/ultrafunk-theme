@@ -86,17 +86,17 @@ function get_filter_result_by(?object $request_params) : string
   $filter_slug = isset($_GET['channel']) ? $_GET['channel'] : null;
   $filter_tax  = 'uf_channel';
 
-  if (isset($request_params->filter))
-    $filter_slug = $request_params->filter['slug'];
+  if (isset($request_params->query_filter))
+    $filter_slug = $request_params->query_filter['slug'];
   else if ($filter_slug !== null)
     $filter_slug = sanitize_title($filter_slug);
 
   if ($filter_slug !== null)
   {
-    $term = get_term_by('slug', $filter_slug, $filter_tax);
+    $wp_term = get_term_by('slug', $filter_slug, $filter_tax);
 
-    if ($term !== false)
-      return ' [ ' . esc_html($term->name) . ' ] ';
+    if ($wp_term !== false)
+      return ' [ ' . esc_html($wp_term->name) . ' ] ';
   }
 
   return '';
@@ -200,4 +200,6 @@ function get_query_field(string $field_id) : mixed
       }
     }
   }
+
+  return null;
 }

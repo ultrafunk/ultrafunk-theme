@@ -142,16 +142,19 @@ function scripts_styles() : void
 
 function head() : void
 {
-  if (is_gallery_home() || is_list_home() || (get_the_ID() === THEME_ENV['page_about_id']))
-    echo '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
-  else if (is_list_player('all') || is_home())
-    echo '<meta name="description" content="Listen to ' . esc_html(get_query_field('found_items')) . ' carefully selected tracks from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
-  else if (is_list_player('channel') || is_tax('uf_channel'))
-    channel_meta_description();
-  else if (is_list_player('artist') || is_tax('uf_artist'))
-    artist_meta_description();
-  else if (is_single())
-    track_meta_description();
+  if (is_shuffle() === false)
+  {
+    if (is_gallery_home() || is_list_home() || (get_the_ID() === THEME_ENV['page_about_id']))
+      echo '<meta name="description" content="Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres." />' . PHP_EOL;
+    else if (is_list_player('all') || is_home())
+      echo '<meta name="description" content="Listen to ' . esc_html(get_query_field('found_items')) . ' carefully selected tracks from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
+    else if (is_list_player('channel') || is_tax('uf_channel'))
+      channel_meta_description();
+    else if (is_list_player('artist') || is_tax('uf_artist'))
+      artist_meta_description();
+    else if (is_single())
+      track_meta_description();
+  }
 
   scripts_styles();
 

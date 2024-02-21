@@ -125,7 +125,14 @@ function fetchTerms(termType, termIds, maxItems = 50)
 function getTermQueryParams(termType, termId)
 {
   if ((termType.length !== 0) && (termId.length !== 0))
-    return `${termType}=${parseInt(termId)}&`;
+  {
+    let termParams = `${termType}=${parseInt(termId)}&`;
+
+    if (responseData.filter?.taxonomy && responseData.filter?.taxonomy_id)
+      termParams += `tax_relation=AND&${responseData.filter.taxonomy}=${responseData.filter.taxonomy_id}&`;
+
+    return termParams;
+  }
 
   return '';
 }

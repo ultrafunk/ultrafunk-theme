@@ -1,6 +1,6 @@
 {
   "name": "ultrafunk-theme",
-  "version": "1.46.18",
+  "version": "1.46.19",
   "description": "WordPress theme",
   "homepage": "https://github.com/ultrafunk/ultrafunk-theme",
   "repository": "git@github.com:ultrafunk/ultrafunk-theme.git",
@@ -8,12 +8,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-js-prod": "node_modules\\.bin\\esbuild --metafile=misc\\esbuild-prod-meta.json  --bundle --format=esm --splitting --target=es2022 --minify --sourcemap js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
-    "build-js-dev":  "node_modules\\.bin\\esbuild --metafile=misc\\esbuild-dev-meta.json   --bundle --format=esm --splitting --target=es2022 js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
-    "build-js-css":  "node_modules\\.bin\\esbuild --metafile=misc\\esbuild-jscss-meta.json --bundle --minify --sourcemap --target=es2022 --loader:.png=dataurl js\\src\\css\\bundle.css --outfile=js\\dist\\css\\bundle.min.css",
-    "build-css":     "node_modules\\.bin\\esbuild --minify --sourcemap style.css --outfile=inc\\css\\style.min.css",
+    "build-js-dev": "node_modules\\.bin\\esbuild --metafile=misc\\esbuild-dev-meta.json   --bundle --format=esm --splitting --target=es2022 js\\src\\index.js js\\src\\playback\\interaction.js --outdir=js\\dist",
+    "build-js-css": "node_modules\\.bin\\esbuild --metafile=misc\\esbuild-jscss-meta.json --bundle --minify --sourcemap --target=es2022 --loader:.png=dataurl js\\src\\css\\bundle.css --outfile=js\\dist\\css\\bundle.min.css",
+    "build-css": "node_modules\\.bin\\esbuild --minify --sourcemap style.css --outfile=inc\\css\\style.min.css",
     "update-build-configs": "node scripts\\update-build-configs.mjs",
     "build-prod": "scripts\\build-js-prod.bat & npm run build-js-css & npm run build-css",
-    "build-dev":  "scripts\\build-js-dev.bat  & npm run build-js-css & npm run build-css"
+    "build-dev": "scripts\\build-js-dev.bat  & npm run build-js-css & npm run build-css"
   },
   "keywords": [],
   "author": {
@@ -23,7 +23,7 @@
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.41.2",
-    "esbuild": "^0.19.12",
+    "esbuild": "^0.20.1",
     "eslint": "^8.56.0"
   },
   "eslintIgnore": [
