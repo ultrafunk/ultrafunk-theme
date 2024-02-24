@@ -201,6 +201,7 @@ body.scrolling-disabled #track-search-results {
 
   #track-search-results .track-entry .thumbnail {
     margin-right: 8px;
+    border-radius: 0;
   }
 
   #track-search-results .load-more-loader {

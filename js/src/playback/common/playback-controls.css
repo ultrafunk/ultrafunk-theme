@@ -101,7 +101,7 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   display: inline-block;
   cursor: pointer;
   overflow: hidden;
-  border-radius: var(--button-border-radius);
+  border-radius: var(--thumbnail-border-radius);
 }
 
 .playback-thumbnail-control.state-disabled {
@@ -109,7 +109,7 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
 }
 
 .playback-thumbnail-control.loading {
-  border-radius: var(--button-border-radius);
+  border-radius: var(--thumbnail-border-radius);
   background-color: var(--control-disabled-background-rgba);
 }
 
@@ -136,7 +136,7 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   width: 40px;
   height: 40px;
   background: rgba(0, 0, 0, 0.6);
-  border-radius: var(--button-border-radius);
+  border-radius: var(--thumbnail-border-radius);
 }
 
 .playback-thumbnail-control.state-loading .spinner {

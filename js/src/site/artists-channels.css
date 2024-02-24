@@ -389,6 +389,7 @@ term-list {
   -ms-user-select: none;
   user-select: none;
   background-color: var(--track-thumbnail-even-placeholder-color);
+  border-radius: var(--thumbnail-border-radius);
 }
 
 .termlist-entry:nth-child(odd) .termlist-body .body-left .thumbnail {

@@ -8,6 +8,8 @@
 namespace Ultrafunk\Theme\Tags;
 
 
+use WP_Term;
+
 use Ultrafunk\Plugin\Shared\PLAYER_TYPE;
 
 use const Ultrafunk\Theme\Config\ {
@@ -83,14 +85,17 @@ function pre_wp_head() : void
 
 function channel_meta_description() : void
 {
-  $wp_term = get_term(get_query_field('term_id'), 'uf_channel');
+  $wp_term = get_term(get_query_field('term_id'));
 
-  if ($wp_term->slug === 'videos')
-    echo '<meta name="description" content="Watch ' . esc_html($wp_term->count) . ' selected Videos from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
-  else if (($wp_term->slug === 'albums') || ($wp_term->slug === 'concerts') || ($wp_term->slug === 'promos'))
-    echo '<meta name="description" content="Listen to ' . esc_html($wp_term->count) . ' selected ' . esc_html(get_title()) . ' from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
-  else
-    echo '<meta name="description" content="Listen to ' . esc_html($wp_term->count) . ' selected ' . esc_html(get_title()) . ' tracks from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
+  if ($wp_term instanceof WP_Term)
+  {
+    if ($wp_term->slug === 'videos')
+      echo '<meta name="description" content="Watch ' . esc_html($wp_term->count) . ' selected Videos from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
+    else if (($wp_term->slug === 'albums') || ($wp_term->slug === 'concerts') || ($wp_term->slug === 'promos'))
+      echo '<meta name="description" content="Listen to ' . esc_html($wp_term->count) . ' selected ' . esc_html(get_title()) . ' from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
+    else
+      echo '<meta name="description" content="Listen to ' . esc_html($wp_term->count) . ' selected ' . esc_html(get_title()) . ' tracks from a wide range of artists playing Funk, Soul, Jazz, Disco, Hip-Hop and more." />' . PHP_EOL;
+  }
 }
 
 function artist_meta_description() : void
@@ -101,8 +106,10 @@ function artist_meta_description() : void
   }
   else
   {
-    $wp_term = get_term(get_query_field('term_id'), 'uf_artist');
-    echo '<meta name="description" content="Listen to ' . esc_html($wp_term->count) . ' carefully selected tracks from ' . esc_html(get_title()) . '." />' . PHP_EOL;
+    $wp_term = get_term(get_query_field('term_id'));
+
+    if ($wp_term instanceof WP_Term)
+      echo '<meta name="description" content="Listen to ' . esc_html($wp_term->count) . ' carefully selected tracks from ' . esc_html(get_title()) . '." />' . PHP_EOL;
   }
 }
 
