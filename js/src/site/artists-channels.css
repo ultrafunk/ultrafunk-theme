@@ -9,6 +9,7 @@ body.termlist {
   --site-max-width: 1000px;
   --site-content-margin-top: 50px;
   --site-content-margin-bottom: 50px;
+  --thumbnail-border-radius: 4px;
 }
 
 .site-theme-light {

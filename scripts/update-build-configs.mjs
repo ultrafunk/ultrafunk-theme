@@ -131,11 +131,11 @@ function getPackageUltrafunk(packageJsonPath)
 
 function getMostRecentFile(dir)
 {
-  const files = orderReccentFiles(dir);
+  const files = orderRecentFiles(dir);
   return ((files.length !== 0) ? files[0] : undefined);
 }
 
-function orderReccentFiles(dir)
+function orderRecentFiles(dir)
 {
   return readdirSync(dir)
     .filter((file) => lstatSync(join(dir, file)).isFile())

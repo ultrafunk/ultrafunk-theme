@@ -517,6 +517,32 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     margin-right: 15px;
   }
 
+  .playback-thumbnail-control {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+  }
+
+  .playback-thumbnail-control img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .playback-thumbnail-control.type-youtube img {
+    height: 48px;
+    margin-top: -6px;
+  }
+
+  .playback-thumbnail-control.state-loading .thumbnail-overlay {
+    width: 36px;
+    height: 36px;
+  }
+
+  .playback-thumbnail-control.state-loading .spinner {
+    width: 18px;
+    height: 18px;
+  }
+
   .playback-details-control {
     font-size: 13px;
     display: inline-block;

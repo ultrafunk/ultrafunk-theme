@@ -15,6 +15,7 @@ namespace Ultrafunk\Theme\Templates\Settings;
   </header>
   <div class="entry-content">
     <?php the_content(); ?>
+    <noscript><center><h3>Settings requires JavaScript to be enabled!</h3></center></noscript>
     <div id="settings-container"></div>
     <div id="settings-save-reset">
       <div class="settings-save" title="Save all settings"><span class="material-icons">save</span>Save</div>
