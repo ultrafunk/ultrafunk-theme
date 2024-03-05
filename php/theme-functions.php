@@ -138,7 +138,7 @@ function get_track_data(object $track) : array
     {
       return [
         'track_type'   => TRACK_TYPE::YOUTUBE,
-        'thumnail_src' => "https://img.youtube.com/vi/$source_uid[0]/default.jpg",
+        'thumnail_src' => "https://i.ytimg.com/vi/$source_uid[0]/default.jpg",
         'css_class'    => 'type-youtube',
         'source_uid'   => $source_uid[0],
       ];
@@ -173,7 +173,7 @@ function get_cached_terms(int $id, string $taxonomy) : mixed
 }
 
 //
-// "Translate" custom routed query result field to matching $wp_query result field
+// Map custom routed query result field to matching $wp_query result field
 //
 function get_query_field(string $field_id) : mixed
 {

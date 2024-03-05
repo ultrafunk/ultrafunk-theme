@@ -333,7 +333,7 @@ export function getYouTubeImgUrl(trackSourceUrl)
   const youTubeVideoId = trackSourceUrl.match(youTubeVideoIdRegEx);
 
   if (youTubeVideoId !== null)
-    return { src: `https://img.youtube.com/vi/${youTubeVideoId[0]}/default.jpg`, class: 'type-youtube', uid: youTubeVideoId[0] };
+    return { src: `https://i.ytimg.com/vi/${youTubeVideoId[0]}/default.jpg`, class: 'type-youtube', uid: youTubeVideoId[0] };
 
   return defThumbnailObj;
 }

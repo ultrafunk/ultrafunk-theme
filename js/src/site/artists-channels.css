@@ -9,7 +9,7 @@ body.termlist {
   --site-max-width: 1000px;
   --site-content-margin-top: 50px;
   --site-content-margin-bottom: 50px;
-  --thumbnail-border-radius: 4px;
+  --track-thumbnail-border-radius: 4px;
 }
 
 .site-theme-light {
@@ -390,7 +390,7 @@ term-list {
   -ms-user-select: none;
   user-select: none;
   background-color: var(--track-thumbnail-even-placeholder-color);
-  border-radius: var(--thumbnail-border-radius);
+  border-radius: var(--track-thumbnail-border-radius);
 }
 
 .termlist-entry:nth-child(odd) .termlist-body .body-left .thumbnail {

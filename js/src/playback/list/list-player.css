@@ -142,7 +142,7 @@ body.list-player .site-branding {
   overflow: hidden;
   position: relative;
   background-color: var(--track-thumbnail-placeholder-color);
-  border-radius: var(--thumbnail-border-radius);
+  border-radius: var(--track-thumbnail-border-radius);
 }
 
 .track-entry.type-youtube .thumbnail:hover {
