@@ -21,7 +21,7 @@ const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.46.22';
+const VERSION = '1.46.23';
 
 const THEME_ENV = [
   'menu_item_all_tracks_id' => IS_PROD_BUILD ? 4430 : 4057,
@@ -38,4 +38,4 @@ const THEME_ENV = [
 ];
 
 // Automatically updated on 'npm run build-dev' or 'npm run build-prod'
-const JS_PRELOAD_CHUNK = '/js/dist/chunk-BE6WFX7M.js';
+const JS_PRELOAD_CHUNK = '/js/dist/chunk-XK7UQ2G5.js';

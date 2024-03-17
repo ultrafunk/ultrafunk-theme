@@ -284,9 +284,10 @@ export async function showSearchResults(searchString)
 
 async function showRestResults(searchString)
 {
-  const encodedString = encodeURIComponent(searchString).replaceAll(/(?<!%20)%26(?!%20)/g, '%26amp;'); // Encode %26 (&) without any spaces (%20) as %26amp; for search to work OK
-  const searchParams  = `search=${encodedString}&orderby=relevance&per_page=${settings.list.maxTrackSearchResults + 1}&wpessid=${getSearchTypeId()}&`;
-  const fetchStart    = performance.now();
+  const replacedSearchString = searchString.replaceAll("'", " ");                                                     // Replace ' with space for better term search results...
+  const encodedSearchString  = encodeURIComponent(replacedSearchString).replaceAll(/(?<!%20)%26(?!%20)/g, '%26amp;'); // Encode %26 (&) without any spaces (%20) as %26amp; for better term search results...
+  const searchParams = `search=${encodedSearchString}&orderby=relevance&per_page=${settings.list.maxTrackSearchResults + 1}&wpessid=${getSearchTypeId()}&`;
+  const fetchStart   = performance.now();
 
   const restResponse = await fetchRest({
     endpoint: 'tracks',

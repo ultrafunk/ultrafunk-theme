@@ -79,39 +79,38 @@ const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and
 
 export function initSettingsUi()
 {
-  if (document.getElementById('settings-container') !== null)
+  debug.log('initSettingsUi');
+
+  m.container = document.getElementById(config.containerId);
+
+  if (m.container !== null)
   {
-    debug.log('initSettingsUi');
-
-    m.container = document.getElementById(config.containerId);
-
-    if (m.container !== null)
+    // For quick access to the Clear All Settings page...
+    if (document.URL.includes('?clear=true'))
     {
-      // For quick access to the Clear All Settings page...
-      if (document.URL.includes('?clear=true'))
-      {
-        readSettingsError();
-        return;
-      }
+      readSettingsError();
+      return;
+    }
 
-      readSettings(false);
+    readSettings(false);
 
-      if (m.settings !== null)
-      {
-        settingsSections.forEach(entry => setCurrentSettings(m.settings[entry.id], entry.schema));
+    if (m.settings !== null)
+    {
+      settingsSections.forEach(entry => setCurrentSettings(m.settings[entry.id], entry.schema));
 
-        insertSettingsHtml();
-        m.container.style.opacity = 1;
-        m.container.addEventListener('click',       (event) => settingClicked(event));
-        m.container.addEventListener('contextmenu', (event) => settingClicked(event));
+      insertSettingsHtml();
+      m.container.style.opacity = 1;
+      m.container.addEventListener('click',       (event) => settingClicked(event));
+      m.container.addEventListener('contextmenu', (event) => settingClicked(event));
 
-        addListener(`#${config.saveResetId} .settings-save`,  'click', settingsSaveClick);
-        addListener(`#${config.saveResetId} .settings-reset`, 'click', settingsResetClick);
-      }
-      else
-      {
-        readSettingsError();
-      }
+      addListener(`#${config.saveResetId} .settings-save`,  'click', settingsSaveClick);
+      addListener(`#${config.saveResetId} .settings-reset`, 'click', settingsResetClick);
+
+      initSaveChangesPrompt();
+    }
+    else
+    {
+      readSettingsError();
     }
   }
 }
@@ -151,6 +150,21 @@ function readSettingsError()
     {
       showSnackbar({ message: 'Sorry, unable to clear all settings', duration: 5 });
     }
+  });
+}
+
+function initSaveChangesPrompt()
+{
+  window.addEventListener('beforeunload', (event) =>
+  {
+    m.container.querySelectorAll('table tr')?.forEach(tableRow =>
+    {
+      if (tableRow.classList.contains('value-changed'))
+      {
+        event.preventDefault();
+        event.returnValue = true;
+      }
+    });
   });
 }
 
@@ -350,10 +364,7 @@ function showSettingDetailsModal(settingsId, settingsKey, sectionIndex)
 
 function clearValueChanged()
 {
-  document.querySelectorAll('#settings-container table').forEach(table =>
-  {
-    table.querySelectorAll('tr').forEach(row => row.classList.remove('value-changed'));
-  });
+  m.container.querySelectorAll('table  tr')?.forEach((tableRow) => tableRow.classList.remove('value-changed'));
 }
 
 function settingsSaveClick()

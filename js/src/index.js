@@ -47,8 +47,13 @@ document.addEventListener('DOMContentLoaded', () =>
   debug.log('DOMContentLoaded');
 
   initIndex();
-  initArtistsChannels();
-  initSettingsUi();
+
+  if (document.getElementById('termlist-container') !== null)
+    initArtistsChannels();
+
+  if (document.getElementById('settings-container') !== null)
+    initSettingsUi();
+
   setSiteContentSearchFocus();
   setPreviousPageTitle();
   logStartupExecutionTime();

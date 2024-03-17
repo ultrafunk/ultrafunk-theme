@@ -156,7 +156,10 @@ function getSearchQueryParams()
   const searchParams = new URLSearchParams(window.location.search);
 
   if (searchParams.has('s'))
-    searchString = encodeURIComponent(searchParams.get('s')).replaceAll(/(?<!%20)%26(?!%20)/g, '%26amp;'); // Encode %26 (&) without any spaces (%20) as %26amp; for search to work OK
+  {
+    searchString = searchParams.get('s').replaceAll("'", " ");                                    // Replace ' with space for better term search results...
+    searchString = encodeURIComponent(searchString).replaceAll(/(?<!%20)%26(?!%20)/g, '%26amp;'); // Encode %26 (&) without any spaces (%20) as %26amp; for better term search results...
+  }
 
   return `search=${searchString}&orderby=relevance&wpessid=true&`;
 }

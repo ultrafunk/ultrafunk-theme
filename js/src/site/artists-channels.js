@@ -41,16 +41,13 @@ const denyKeyboardShortcutsEvent  = new Event('denyKeyboardShortcuts');
 
 export function initArtistsChannels()
 {
-  if (document.getElementById('termlist-container') !== null)
-  {
-    debug.log('init()');
+  debug.log('initArtistsChannels()');
 
-    m.listContainer = document.getElementById('termlist-container');
-    m.uiElements    = new UiElements('#termlist-container');
+  m.listContainer = document.getElementById('termlist-container');
+  m.uiElements    = new UiElements('#termlist-container');
 
-    initArtistsChannelsFilter();
-    restoreState();
-  }
+  initArtistsChannelsFilter();
+  restoreState();
 }
 
 
