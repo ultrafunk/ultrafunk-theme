@@ -121,7 +121,7 @@ function getPackageUltrafunk(packageJsonPath)
     const parsedConfig = JSON.parse(readFileSync(packageJsonPath))?.com_ultrafunk;
     return ((parsedConfig !== undefined) ? parsedConfig : null);
   }
-  catch (error)
+  catch (error) // eslint-disable-line no-unused-vars
   {
     console.error(`Unable to read package.json from: ${packageJsonPath}`);
   }

@@ -4,9 +4,9 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.46.23
-Requires at least: 6.4
-Tested up to:      6.4
+Version:           1.46.24
+Requires at least: 6.5
+Tested up to:      6.5
 Requires PHP:      8.2
 License:           MIT License
 License URI:       https://opensource.org/licenses/MIT
@@ -170,6 +170,15 @@ Tags:              entertainment, portfolio, grid-layout, one-column, two-column
   --list-row-hover-color: #505050;
 
   --header-gradient-no-blur: rgba(0, 0, 0, 1.00);
+}
+
+
+/**************************************************************************************************
+* CSS resets
+***************************************************************************************************/
+
+button {
+  all: unset;
 }
 
 
@@ -798,6 +807,8 @@ body.page-settings .footer-settings {
   align-items: center;
   border-radius: var(--button-border-radius);
   margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 #footer-gallery-layout-toggle {

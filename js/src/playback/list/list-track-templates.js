@@ -26,9 +26,9 @@ export function getPageSeparatorHtml(responseData, loadingPage)
 
   return /*html*/ `
     <div id="tracklist-page-${loadingPage}" class="tracklist-page-separator" data-page-number="${loadingPage}">
-      <span class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</span>
+      <button type="button" class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</button>
       <a href="${pageUrl}" title="Go to page ${loadingPage}">Page ${loadingPage} &#9660;</a>
-      <span class="material-icons arrow-up-button" title="Scroll to previous page">arrow_upward</span>
+      <button type="button" class="material-icons arrow-up-button" title="Scroll to previous page">arrow_upward</button>
     </div>`;
 }
 
@@ -46,7 +46,7 @@ export function getTrackEntryHtml(track, density = 'default')
                              : `<a href="${track.link}"><span><b>${trackArtist}</b></span><br><span>${trackTitle}</span></a>`;
 
   const trackPlayNext = trackTypeData.isYouTubeTrack
-                          ? `<div class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></div>`
+                          ? `<button type="button" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>`
                           : '';
 
   return /*html*/ `
@@ -63,10 +63,10 @@ export function getTrackEntryHtml(track, density = 'default')
       <div class="track-artists-links" data-track-artist-ids="${track.artists.toString()}">${track.artists_links  ?? ''}</div>
       <div class="track-channels-links" data-track-channel-ids="${track.channels.toString()}">${track.channels_links ?? ''}</div>
       <div class="track-details">
-        <div class="thumbnail" ${trackTypeData.isYouTubeTrack ? 'title="Play Track"' : 'title="SoundCloud Track"'}>
+        <button type="button" class="thumbnail" ${trackTypeData.isYouTubeTrack ? 'title="Play Track"' : 'title="SoundCloud Track"'}>
           <div class="thumbnail-overlay"><div class="spinner"></div></div>
           <img src="${trackTypeData.thumbnailUrl}" alt="">
-        </div>
+        </button>
         <div class="artist-title text-nowrap-ellipsis" ${(trackTypeData.isYouTubeTrack === false) ? 'title="Link: Play SoundCloud track"' : ''}>
           ${trackArtistTitle}
         </div>
@@ -74,12 +74,12 @@ export function getTrackEntryHtml(track, density = 'default')
       <div class="track-actions">
         <div class="track-message"></div>
         <div class="track-action-buttons">
-          <div class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></div>
+          <button type="button" class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></button>
           ${trackPlayNext}
-          <div class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></div>
-          <div class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></div>
+          <button type="button" class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></button>
+          <button type="button" class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
         </div>
-        <div class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></div>
+        <button type="button" class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></button>
       </div>
       <div class="track-duration text-nowrap-ellipsis" title="Track duration">${(trackTypeData.isYouTubeTrack ? getTimeString(trackDuration) : 'N / A')}</div>
     </div>`;

@@ -34,12 +34,12 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         data-term-id="<?php   echo $this->params->query_vars['term_id']   ?? ''; ?>"
         >
         <?php $this->tracklist_entries(); ?>
-        <div id="tracklist-load-more">
+        <button type="button" id="tracklist-load-more">
           <div class="load-more-title">Load more tracks...<span class="light-text"></span></div>
           <div class="load-more-loader">
             <div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div><div class="loader-4">&#8226;</div><div class="loader-5">&#8226;</div>
           </div>
-        </div>
+        </button>
       </div>
     </div>
     <?php
@@ -83,10 +83,10 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         <div class="track-artists-links"><?php echo get_term_links($artists, '/list/artist/', '', (int)$track->track_artist_id); ?></div>
         <div class="track-channels-links"><?php echo get_term_links($channels, '/list/channel/'); ?></div>
         <div class="track-details">
-          <div class="thumbnail" <?php echo ($is_youtube_track ? 'title="Play Track"' : 'title="SoundCloud Track"'); ?>>
+          <button type="button" class="thumbnail" <?php echo ($is_youtube_track ? 'title="Play Track"' : 'title="SoundCloud Track"'); ?>>
             <div class="thumbnail-overlay"><div class="spinner"></div></div>
             <img src="<?php echo $track_thumbnail_url; ?>" alt="">
-          </div>
+          </button>
           <?php if ($is_youtube_track) { ?>
             <div class="artist-title text-nowrap-ellipsis"><span><b><?php echo $track_artist; ?></b></span><br><span><?php echo $track_title; ?></span></div>
           <?php } else { ?>
@@ -98,14 +98,14 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         <div class="track-actions">
           <div class="track-message"></div>
           <div class="track-action-buttons">
-            <div class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></div>
+            <button type="button" class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></button>
             <?php if ($is_youtube_track) { ?>
-              <div class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></div>
+              <button type="button" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>
             <?php } ?>
-            <div class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></div>
-            <div class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></div>
+            <button type="button" class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></button>
+            <button type="button" class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
           </div>
-          <div class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></div>
+          <button type="button" class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></button>
         </div>
         <div class="track-duration text-nowrap-ellipsis" title="Track duration"><?php echo ($is_youtube_track ? $this->getTimeString($track_duration) : 'N / A'); ?></div>
       </div>

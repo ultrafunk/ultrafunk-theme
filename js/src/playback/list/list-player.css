@@ -459,6 +459,7 @@ body.list-player .site-branding {
 
 #tracklist-load-more {
   display: none;
+  width: 100%;
   font-size: 20px;
   line-height: 30px;
   font-weight: 700;

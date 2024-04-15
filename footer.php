@@ -17,18 +17,18 @@
       <a href="<?php echo (\Ultrafunk\Plugin\Globals\is_list_player() ? '/' : '/list/'); ?>" id="footer-player-type-toggle" title="Gallery or List Player (p)">
         <span class="label">Pref. Player</span><span class="value">...</span>
       </a>
-      <div id="footer-autoplay-toggle" title="Toggle Autoplay On / Off (shift + a)">
+      <button type="button" id="footer-autoplay-toggle" title="Toggle Autoplay On / Off (shift + a)">
         <span class="label">Autoplay</span><span class="value">...</span>
-      </div>
-      <div id="footer-crossfade-toggle" title="Toggle Auto Crossfade On / Off (x)">
+      </button>
+      <button type="button" id="footer-crossfade-toggle" title="Toggle Auto Crossfade On / Off (x)">
         <span class="label">Auto Crossfade</span><span class="value">...</span>
-      </div>
-      <div id="footer-site-theme-toggle" title="Light, Dark, Black or Auto / System (shift + t)">
+      </button>
+      <button type="button" id="footer-site-theme-toggle" title="Light, Dark, Black or Auto / System (shift + t)">
         <span class="label">Theme</span><span class="value">...</span>
-      </div>
-      <div id="footer-gallery-layout-toggle" title="Gallery Player: 1, 2 or 3 / 4 column layout (shift + l)">
+      </button>
+      <button type="button" id="footer-gallery-layout-toggle" title="Gallery Player: 1, 2 or 3 / 4 column layout (shift + l)">
         <span class="label">Gallery</span><span class="value">...</span>
-      </div>
+      </button>
     </div>
     <div class="footer-site-info">
       <a href="/channels/"><b>View Channels</b></a><br>

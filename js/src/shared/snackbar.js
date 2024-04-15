@@ -25,8 +25,8 @@ const template = /*html*/ `
   <div id="snackbar">
     <div class="snackbar-container">
       <div class="snackbar-message"></div>
-      <div class="snackbar-action-text"></div>
-      <div class="snackbar-close-icon"><span class="material-icons" title="Dismiss">close</span></div>
+      <button type="button" class="snackbar-action-text"></button>
+      <button type="button" class="snackbar-close-icon"><span class="material-icons" title="Dismiss">close</span></button>
     </div>
   </div>
 `;

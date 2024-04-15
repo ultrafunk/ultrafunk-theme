@@ -161,28 +161,28 @@ class UiElements extends ElementClick
 
   elementClicked()
   {
-    if (this.clicked('div.thumbnail'))
+    if (this.clicked('button.thumbnail'))
       return this.setCurrentTrack(this.closest('div.track-entry').id, true, true);
 
-    if (this.clicked('div.track-actions-toggle'))
+    if (this.clicked('button.track-actions-toggle'))
       return trackActionsClick(this.closest('div.track-entry'));
 
-    if (this.clicked('div.remove-button'))
+    if (this.clicked('button.remove-button'))
       return removeClick(this.closest('div.track-entry'));
 
-    if (this.clicked('div.play-next-button'))
+    if (this.clicked('button.play-next-button'))
       return playNextClick(this.closest('div.track-entry'));
 
-    if (this.clicked('div.share-play-button'))
+    if (this.clicked('button.share-play-button'))
       return showTrackSharePlay(this.closest('div.track-entry'));
 
-    if (this.clicked('div.details-button'))
+    if (this.clicked('button.details-button'))
       return showTrackDetails(this.closest('div.track-entry'));
 
-    if (this.clicked('span.arrow-up-button'))
+    if (this.clicked('button.arrow-up-button'))
       return arrowUpDownClick(this.closest('div.tracklist-page-separator'), true);
 
-    if (this.clicked('span.arrow-down-button'))
+    if (this.clicked('button.arrow-down-button'))
       return arrowUpDownClick(this.closest('div.tracklist-page-separator'), false);
   }
 }

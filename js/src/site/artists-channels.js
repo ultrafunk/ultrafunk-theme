@@ -198,7 +198,7 @@ class UiElements extends ElementClick
     if (this.clicked('div.shuffle-button'))
       return shuffleClick(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
 
-    if (this.clicked('div.share-find-button'))
+    if (this.clicked('button.share-find-button'))
       return shareFindClick(this.element);
 
     if (this.clicked('div.termlist-header'))
@@ -278,7 +278,7 @@ function permalinkClick(event, element)
 function termlistHeaderClick(event)
 {
   const termlistEntry = event.target.closest('div.termlist-entry');
-  const expandToggle  = termlistEntry.querySelector('div.expand-toggle span');
+  const expandToggle  = termlistEntry.querySelector('button.expand-toggle span');
   const termlistBody  = termlistEntry.querySelector('div.termlist-body');
   const isExpanded    = (termlistEntry.getAttribute('data-is-expanded') === '1');
   const isDataFetched = (termlistEntry.getAttribute('data-is-fetched') === '1');

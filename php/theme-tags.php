@@ -314,15 +314,15 @@ function header_playback_controls() : void
       </div>
     </div>
     <div class="playback-controls-container">
-      <div class="playback-shuffle-control state-disabled" title="<?php echo esc_attr($player_shuffle_title); ?>"><span class="material-icons">shuffle</span></div>
-      <div class="playback-prev-control state-disabled" title="Previous track / seek (arrow left)"><span class="material-icons">skip_previous</span></div>
-      <div class="playback-play-pause-control state-disabled" title="Play / Pause (space)"><span class="material-icons">play_circle_filled</span></div>
-      <div class="playback-next-control state-disabled" title="Next track (arrow right)"><span class="material-icons">skip_next</span></div>
-      <div class="playback-repeat-control state-disabled" title="Repeat off (r)" data-repeat-mode="0"><span class="material-icons">repeat</span></div>
-      <div class="playback-player-type-control state-disabled <?php echo (is_list_player() ? 'list-player' : 'gallery-player'); ?>" title="<?php echo $player_type_title; ?>">
+      <button type="button" class="playback-shuffle-control state-disabled" title="<?php echo esc_attr($player_shuffle_title); ?>"><span class="material-icons">shuffle</span></button>
+      <button type="button" class="playback-prev-control state-disabled" title="Previous track / seek (arrow left)"><span class="material-icons">skip_previous</span></button>
+      <button type="button" class="playback-play-pause-control state-disabled" title="Play / Pause (space)"><span class="material-icons">play_circle_filled</span></button>
+      <button type="button" class="playback-next-control state-disabled" title="Next track (arrow right)"><span class="material-icons">skip_next</span></button>
+      <button type="button" class="playback-repeat-control state-disabled" title="Repeat off (r)" data-repeat-mode="0"><span class="material-icons">repeat</span></button>
+      <button type="button" class="playback-player-type-control state-disabled <?php echo (is_list_player() ? 'list-player' : 'gallery-player'); ?>" title="<?php echo $player_type_title; ?>">
         <span class="material-icons-sharp"><?php echo (is_list_player() ? 'vertical_split' : 'grid_view'); ?></span>
-      </div>
-      <div class="playback-mute-control state-disabled" title="Mute / Unmute (m)"><span class="material-icons">volume_up</span></div>
+      </button>
+      <button type="button" class="playback-mute-control state-disabled" title="Mute / Unmute (m)"><span class="material-icons">volume_up</span></button>
       <div class="playback-volume-control state-disabled" title="Volume (+ = Up, - = Down)">00</div>
     </div>
   </div>
@@ -331,8 +331,8 @@ function header_playback_controls() : void
 
 function get_nav_bar_icons() : array
 {
-  $nav_icons['search'] = '<div class="nav-search-toggle" title="Show / Hide search (s)"><span class="material-icons">search</span></div>';
-  $nav_icons['menu']   = '<div class="nav-menu-toggle" title="Toggle Navigation menu (n)"><span class="material-icons">menu</span></div>';
+  $nav_icons['search'] = '<button type="button" class="nav-search-toggle" title="Show / Hide search (s)"><span class="material-icons">search</span></button>';
+  $nav_icons['menu']   = '<button type="button" class="nav-menu-toggle" title="Toggle Navigation menu (n)"><span class="material-icons">menu</span></button>';
 
   return $nav_icons;
 }

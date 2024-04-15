@@ -124,7 +124,7 @@ const navSearchClosure = (() =>
     searchContainer.style.display = isVisible ? 'flex' : '';
     setTrackSearchResultsVisible(isVisible);
 
-    document.querySelectorAll('div.nav-search-toggle span').forEach((element) =>
+    document.querySelectorAll('button.nav-search-toggle span').forEach((element) =>
     {
       element.textContent = isVisible ? 'close' : 'search';
     });

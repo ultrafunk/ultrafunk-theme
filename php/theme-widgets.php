@@ -45,9 +45,9 @@ class Taxonomies extends \WP_Widget
     echo $args['before_widget'];
     echo $args['before_title'] . $title . $args['after_title'];
 
-    ?><ul class="<?php echo $taxonomy; ?>"><?php
-    wp_list_categories($listArgs);
-    ?></ul><?php
+    ?>
+    <ul class="<?php echo $taxonomy; ?>"><?php wp_list_categories($listArgs); ?></ul>
+    <?php
 
     echo $args['after_widget'];
   }

@@ -64,13 +64,13 @@ class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
             <div class="shuffle-button" title="Shuffle &amp; Play All - <?php echo $term_name; ?>">
               <a href="<?php echo "/shuffle/$term_path/$term_slug/"; ?>" target="_blank"><span class="material-icons">shuffle</span></a>
             </div>
-            <div class="share-find-button" title="Share <?php echo $term_name; ?> / Find On"
+            <button type="button" class="share-find-button" title="Share <?php echo $term_name; ?> / Find On"
               data-term-path="<?php echo $term_path; ?>"
               data-term-name="<?php echo $term_name; ?>"
               data-term-url="<?php echo "$this->home_url/$term_path/$term_slug/"; ?>">
               <span class="material-icons">share</span>
-            </div>
-            <div class="expand-toggle" title="Show more or less"><span class="material-icons">expand_more</span></div>
+            </button>
+            <button type="button" class="expand-toggle" title="Show more or less"><span class="material-icons">expand_more</span></button>
           </div>
         </div>
         <div class="termlist-body">

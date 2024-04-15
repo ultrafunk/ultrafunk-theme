@@ -19,10 +19,10 @@ export function getTemplateHtml()
       <div id="modal-dialog-container">
         <div class="modal-dialog-header">
           <div class="modal-dialog-title"></div>
-          <div class="modal-dialog-close-icon"><span class="material-icons" title="Dismiss (esc)">close</span></div>
+          <button type="button" class="modal-dialog-close-icon"><span class="material-icons" title="Dismiss (esc)">close</span></button>
         </div>
         <div class="modal-dialog-body"></div>
-        <div class="modal-dialog-footer"><div class="modal-dialog-close-button" title="Dismiss (esc)">Close</div></div>
+        <div class="modal-dialog-footer"><button type="button" class="modal-dialog-close-button" title="Dismiss (esc)">Close</button></div>
       </div>
     </div>`;
 }

@@ -47,7 +47,7 @@ const navMenuClosure = (() =>
     navMenuInner   = document.querySelector('#site-navigation .nav-menu-inner');
     navMenuOverlay = document.getElementById('nav-menu-overlay');
 
-    utils.addListenerAll('div.nav-menu-toggle', 'click', toggle);
+    utils.addListenerAll('button.nav-menu-toggle', 'click', toggle);
     navMenuOverlay.addEventListener('click', hide);
     window.addEventListener('resize', () => setNavMenuInnerSize());
   }
