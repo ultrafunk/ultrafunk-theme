@@ -1,0 +1,164 @@
+/*
+* Root style.css variables in a standalone file
+*
+* https://ultrafunk.com
+*
+*/
+
+
+/**************************************************************************************************
+* :root CSS variables
+***************************************************************************************************/
+
+:root {
+  --site-min-width-wide: 1351px;
+  --site-max-width: 1200px;
+  --site-max-width-mobile: 500px;
+
+  --site-header-height: 120px;
+  --site-header-height-no-playback: 115px;
+
+  --site-header-height-down: 75px;
+  --site-header-height-up: 120px;
+
+  --site-content-margin-top: 75px;
+  --site-content-margin-bottom: 100px;
+
+  --link-hover-color: #dd0000;
+  --link-bright-hover-color: #ff0000;
+
+  --site-theme-dark-color: rgb(10, 20, 40);
+  --site-theme-medium-dark-color: rgb(20, 40, 80);
+  --site-theme-medium-color: rgb(30, 60, 120);
+  --site-theme-light-color: rgb(40, 80, 160);
+  --site-theme-font-color: #efefef;
+  --site-theme-icon-color: #fff;
+
+  --button-text-color: #fff;
+  --button-border-radius: 6px;
+  --button-default-transition: background 100ms 0s ease-in;
+  --button-active-transition: background 0s;
+
+  --dialog-border-radius: 10px;
+
+  --track-thumbnail-border-radius: 5px;
+}
+
+
+/**************************************************************************************************
+* Light theme CSS variables
+***************************************************************************************************/
+
+.site-theme-light {
+  --body-background-color: #fff;
+  --branding-logo-filter: unset;
+
+  --primary-font-color: #111;
+  --primary-icon-color: #000;
+
+  --nav-menu-item-background-rgba: rgba(127, 127, 127, 0.2);
+
+  --control-hover-opacity: 0.66;
+  --control-highlight-color: rgba(0, 0, 0, 0.2);
+  --control-disabled-opacity: 0.25;
+  --control-disabled-background-rgba: rgba(127, 127, 127, 0.26);
+
+  --form-search-field-background: #eee;
+  --form-search-field-background-focus: #fff;
+  --form-search-field-outline: none !important;
+  --form-search-field-border: 2px solid #ddd;
+  --form-search-field-border-focus: 2px solid #bbb;
+  --form-input-autofill-box-shadow: 0 0 0 50px #fff inset;
+
+  --iframe-placeholder-color: #eee;
+  --iframe-placeholder-icon: url(/wp-content/themes/ultrafunk/inc/img/player_placeholder_icon_light.png);
+
+  --page-numbers-background: rgba(127, 127, 127, 0.15);
+  --page-numbers-background-hover: rgba(127, 127, 127, 0.3);
+
+  --list-row-odd-color: #e8e8e8;
+  --list-row-hover-color: #bbb;
+
+  --header-gradient-no-blur: linear-gradient(0deg, rgba(240, 240, 240, 1) 0%, rgba(250, 250, 250, 1) 100%);
+}
+
+
+/**************************************************************************************************
+* Dark theme CSS variables
+***************************************************************************************************/
+
+.site-theme-dark {
+  --body-background-color: #222;
+  --branding-logo-filter: invert(100%) brightness(200%);
+
+  --primary-font-color: #efefef;
+  --primary-icon-color: #fff;
+
+  --nav-menu-item-background-rgba: rgba(127, 127, 127, 0.2);
+
+  --control-hover-opacity: 0.75;
+  --control-highlight-color: rgba(255, 255, 255, 0.2);
+  --control-disabled-opacity: 0.20;
+  --control-disabled-background-rgba: rgba(127, 127, 127, 0.26);
+
+  --form-search-field-background: #333;
+  --form-search-field-background-focus: #222;
+  --form-search-field-outline: none !important;
+  --form-search-field-border: 2px solid #444;
+  --form-search-field-border-focus: 2px solid #666;
+  --form-input-autofill-box-shadow: 0 0 0 50px #222 inset;
+
+  --iframe-placeholder-color: #333;
+  --iframe-placeholder-icon: url(/wp-content/themes/ultrafunk/inc/img/player_placeholder_icon_dark.png);
+
+  --page-numbers-background: rgba(127, 127, 127, 0.25);
+  --page-numbers-background-hover: rgba(127, 127, 127, 0.4);
+
+  --list-row-odd-color: #333;
+  --list-row-hover-color: #666;
+
+  --header-gradient-no-blur: linear-gradient(0deg, rgba(45, 45, 45, 1) 0%, rgba(55, 55, 55, 1) 100%);
+}
+
+
+/**************************************************************************************************
+* Black theme CSS variables
+***************************************************************************************************/
+
+.site-theme-black {
+  --site-theme-dark-color: rgb(5, 10, 20);
+  --site-theme-medium-dark-color: rgb(15, 30, 60);
+  --site-theme-medium-color: rgb(20, 40, 80);
+  --site-theme-light-color: rgb(30, 60, 120);
+
+  --body-background-color: #000;
+  --branding-logo-filter: invert(100%) brightness(200%);
+
+  --primary-font-color: #efefef;
+  --primary-icon-color: #fff;
+
+  --nav-menu-item-background-rgba: rgba(127, 127, 127, 0.25);
+
+  --control-hover-opacity: 0.75;
+  --control-highlight-color: rgba(255, 255, 255, 0.2);
+  --control-disabled-opacity: 0.20;
+  --control-disabled-background-rgba: rgba(127, 127, 127, 0.26);
+
+  --form-search-field-background: #222;
+  --form-search-field-background-focus: #000;
+  --form-search-field-outline: none !important;
+  --form-search-field-border: 2px solid #333;
+  --form-search-field-border-focus: 2px solid #444;
+  --form-input-autofill-box-shadow: 0 0 0 50px #222 inset;
+
+  --iframe-placeholder-color: #181818;
+  --iframe-placeholder-icon: url(/wp-content/themes/ultrafunk/inc/img/player_placeholder_icon_dark.png);
+
+  --page-numbers-background: rgba(127, 127, 127, 0.35);
+  --page-numbers-background-hover: rgba(127, 127, 127, 0.50);
+
+  --list-row-odd-color: #282828;
+  --list-row-hover-color: #505050;
+
+  --header-gradient-no-blur: rgba(0, 0, 0, 1.00);
+}

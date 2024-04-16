@@ -165,19 +165,19 @@ class uiElements extends ElementClick
 {
   elementClicked()
   {
-    if (this.clicked('div.thumbnail'))
+    if (this.clicked('button.thumbnail'))
       return playTrackClick(this.closest('div.track-entry'));
 
     if (this.clicked('div.artist-title'))
       return showTrackDetailsTouch(this.event, this.closest('div.track-entry'));
 
-    if (this.clicked('div.play-next-button'))
+    if (this.clicked('button.play-next-button'))
       return playNextClick(this.closest('div.track-entry'));
 
-    if (this.clicked('div.share-play-button'))
+    if (this.clicked('button.share-play-button'))
       return m.modalId = showTrackSharePlay(this.closest('div.track-entry'), m.searchField);
 
-    if (this.clicked('div.details-button'))
+    if (this.clicked('button.details-button'))
       return m.modalId = showTrackDetails(this.closest('div.track-entry'), m.searchField);
   }
 }

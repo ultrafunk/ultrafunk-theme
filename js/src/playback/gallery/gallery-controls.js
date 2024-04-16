@@ -36,9 +36,9 @@ const m     = { uiElements: null, players: {} };
 const ctrl  = {};
 
 const config = {
-  crossfadePresetSelector: '.crossfade-preset-control',
+  crossfadePresetSelector: 'button.crossfade-preset-control',
   crossfadePresetData:     'data-crossfade-preset',
-  crossfadeToSelector:     '.crossfade-fadeto-control',
+  crossfadeToSelector:     'button.crossfade-fadeto-control',
 };
 
 
@@ -91,10 +91,10 @@ class UiElements extends ElementClick
 {
   elementClicked()
   {
-    if (this.clicked('div.track-share-control'))
+    if (this.clicked('button.track-share-control'))
       return showTrackSharePlay(this.closest('single-track, gallery-track'));
 
-    if (this.clicked('div.track-details-control'))
+    if (this.clicked('button.track-details-control'))
       return showTrackDetails(this.closest('single-track, gallery-track'));
 
     if (this.clicked('span.track-artists-links'))
@@ -134,7 +134,7 @@ function crossfadeToClick(event)
       const iframe = element.querySelector('iframe');
       const index  = parseInt(element.querySelector(config.crossfadePresetSelector).getAttribute(config.crossfadePresetData));
 
-      replaceClass(element.querySelector(`div${config.crossfadeToSelector}`), STATE.ENABLED.CLASS, STATE.DISABLED.CLASS);
+      replaceClass(element.querySelector(config.crossfadeToSelector), STATE.ENABLED.CLASS, STATE.DISABLED.CLASS);
       ctrl.crossfadeTo.clickCallback(iframe.id, presetList.crossfade[index]);
     }
   }

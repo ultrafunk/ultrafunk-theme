@@ -545,14 +545,14 @@ function track_meta_controls() : void
   ?>
   <div class="track-meta-controls">
     <div class="share-details-controls">
-      <div class="track-share-control" title="Share track / Play On"><span class="material-icons">share</span></div>
-      <div class="track-details-control" title="Track Details"><span class="material-icons-outlined">info</span></div>
+      <button type="button" class="track-share-control" title="Share track / Play On"><span class="material-icons">share</span></button>
+      <button type="button" class="track-details-control" title="Track Details"><span class="material-icons-outlined">info</span></button>
     </div>
     <div class="crossfade-controls">
-      <div class="crossfade-preset-control state-disabled"></div>
-      <div class="crossfade-fadeto-control state-disabled">
+      <button type="button" class="crossfade-preset-control state-disabled"></button>
+      <button type="button" class="crossfade-fadeto-control state-disabled">
         <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/crossfade_icon.png" alt="Crossfade Icon" title="Crossfade to this track">
-      </div>
+      </button>
     </div>
   </div>
   <?php
