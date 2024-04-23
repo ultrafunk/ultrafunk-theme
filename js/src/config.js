@@ -15,7 +15,11 @@ export const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-export const VERSION = '1.46.25';
+export const VERSION = '1.46.26';
+
+export const ULTRAFUNK_THEME_URI = IS_PROD_BUILD
+                                     ? 'https://ultrafunk.com/wp-content/themes/ultrafunk'
+                                     : 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk';
 
 export const THEME_ENV = {
   'siteUrl':                            IS_PROD_BUILD ? 'https://ultrafunk.com' : 'https://wordpress.ultrafunk.com',
@@ -24,7 +28,7 @@ export const THEME_ENV = {
   'searchArtistTitleArtistsId':         IS_PROD_BUILD ? 4764 : 4134,
   'searchArtistTitleChannelsId':        IS_PROD_BUILD ? 5127 : 4185,
   'searchArtistTitleArtistsChannelsId': IS_PROD_BUILD ? 5128 : 4186,
-  'defaultTrackThumbnail':              '/wp-content/themes/ultrafunk/inc/img/photo_filled_grey.png',
-  'defaultYTThumbnail':                 '/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png',
-  'defaultSCThumbnail':                 '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png',
+  'defaultTrackThumbnail':              ULTRAFUNK_THEME_URI + '/inc/img/photo_filled_grey.png',
+  'defaultYTThumbnail':                 ULTRAFUNK_THEME_URI + '/inc/img/yt_thumbnail_placeholder.png',
+  'defaultSCThumbnail':                 ULTRAFUNK_THEME_URI + '/inc/img/sc_thumbnail_placeholder.png',
 };

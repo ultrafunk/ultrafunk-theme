@@ -67,7 +67,7 @@ const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and
   <p>This can be caused by several issues, but most likely it happened because of corrupt or malformed JSON data in the browsers Local Storage.</p>
   <p>Clearing all settings stored locally in the browser will probably fix the problem, click on the button below to do that.
   <b>Note:</b> All Playback and Site settings will be reset to default values.</p>
-  <div class="settings-clear"><b>Clear All Settings</b></div>
+  <div class="settings-clear-container"><button type="button" class="settings-clear-button"><b>Clear All Settings</b></button></div>
   <p>If that does not work, another possible fix is to clear all cached data stored in the browser, the following links contain more information about how to do that for
   <a href="https://support.google.com/accounts/answer/32050">Chrome</a> and
   <a href="https://support.mozilla.org/en-US/kb/clear-cookies-and-site-data-firefox">Firefox</a>.</p>`;
@@ -103,8 +103,8 @@ export function initSettingsUi()
       m.container.addEventListener('click',       (event) => settingClicked(event));
       m.container.addEventListener('contextmenu', (event) => settingClicked(event));
 
-      addListener(`#${config.saveResetId} .settings-save`,  'click', settingsSaveClick);
-      addListener(`#${config.saveResetId} .settings-reset`, 'click', settingsResetClick);
+      addListener(`#${config.saveResetId} .settings-save-button`,  'click', settingsSaveClick);
+      addListener(`#${config.saveResetId} .settings-reset-button`, 'click', settingsResetClick);
 
       initSaveChangesPrompt();
     }
@@ -123,7 +123,7 @@ function readSettingsError()
   m.container.style.minHeight = '100%';
   m.container.style.opacity = 1;
 
-  addListener(`#${config.containerId} .settings-clear`, 'click', () =>
+  addListener(`#${config.containerId} .settings-clear-button`, 'click', () =>
   {
     localStorage.removeItem(KEY.UF_SETTINGS);
     localStorage.removeItem(KEY.UF_SITE_THEME);

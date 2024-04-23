@@ -58,7 +58,7 @@ export async function loadTracks(termType, termId)
       tracksHtml += getTrackEntryHtml(track);
     });
 
-    document.getElementById('tracklist-load-more').insertAdjacentHTML('beforebegin', tracksHtml);
+    document.getElementById('tracklist-load-more-button').insertAdjacentHTML('beforebegin', tracksHtml);
 
     debug.log(`Fetching: ${artistIds.size} artists (${m.artistsCache.size} cached) - Fetching: ${channelIds.size} channels (${m.channelsCache.size} cached)`);
 

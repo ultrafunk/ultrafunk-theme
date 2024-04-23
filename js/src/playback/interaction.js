@@ -125,7 +125,7 @@ function initPlaybackEvents()
 
 function initListeners()
 {
-  utils.addListener('.playback-shuffle-control span', 'click', shared.shuffleClickNavTo);
+  utils.addListener('.playback-shuffle-button span', 'click', shared.shuffleClickNavTo);
   document.addEventListener('keydown', documentEventKeyDown);
   document.addEventListener('keydown', documentEventMediaKeyDown);
 
@@ -362,8 +362,8 @@ function onKeysVolumeChange(event)
 
 function playbackEventPlaybackReady()
 {
-  utils.addListener('.playback-details-control',   'click', playbackDetailsClick);
   utils.addListener('.playback-thumbnail-control', 'click', playbackThumbnailClick);
+  utils.addListener('.playback-details-control',   'click', playbackDetailsClick);
   utils.addListener('.playback-timer-control',     'click', playbackTimerClick);
   m.isPlaybackReady = true;
 }

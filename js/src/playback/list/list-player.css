@@ -457,7 +457,7 @@ body.list-player .site-branding {
 
 }
 
-#tracklist-load-more {
+#tracklist-load-more-button {
   display: none;
   width: 100%;
   font-size: 20px;
@@ -475,7 +475,7 @@ body.list-player .site-branding {
 
 @media all and (pointer: fine) {
 
-  #tracklist-load-more:hover {
+  #tracklist-load-more-button:hover {
     background-color: var(--site-theme-medium-color);
     cursor: pointer;
   }
@@ -484,11 +484,11 @@ body.list-player .site-branding {
 
 @media not all and (pointer: fine) {
 
-  #tracklist-load-more {
+  #tracklist-load-more-button {
     transition: var(--button-default-transition);
   }
 
-  #tracklist-load-more:active {
+  #tracklist-load-more-button:active {
     background-color: var(--site-theme-medium-color);
     transition: var(--button-active-transition);
   }
@@ -761,7 +761,7 @@ body.list-player .site-footer-container {
     width: 40px;
   }
 
-  #tracklist-load-more {
+  #tracklist-load-more-button {
     font-size: 15px;
     line-height: 27px;
     padding: 10px 0;

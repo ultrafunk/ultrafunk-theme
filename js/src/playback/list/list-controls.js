@@ -216,7 +216,7 @@ function playNextClick(trackElement)
     else
       addTrack(nextTrackElement, m.trackElement, 'afterend');
 
-    showSnackbar({ message: 'Track will play next', duration: 3 });
+    showSnackbar({ message: 'Track will play next', duration: 5, actionText: 'details', actionClickCallback: () =>  showTrackDetails(nextTrackElement) });
   }
   else
   {
@@ -298,7 +298,7 @@ function initLoadMoreTracks()
   {
     if ((response.nextPage !== null) && (response.currentPage < response.maxPages))
     {
-      m.tracklistLoadMore = document.getElementById('tracklist-load-more');
+      m.tracklistLoadMore = document.getElementById('tracklist-load-more-button');
       m.tracklistLoadMore.querySelector('.load-more-title span').textContent = ` ( ${response.currentPage + 1} / ${response.maxPages} )`;
       m.tracklistLoadMore.style.display = 'block';
       m.tracklistLoadMore.addEventListener('click', loadMoreTracks);

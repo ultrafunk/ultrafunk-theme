@@ -13,8 +13,8 @@ import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
 
 import {
-  IS_PROD_BUILD,
   VERSION,
+  ULTRAFUNK_THEME_URI,
 } from '../../config.js';
 
 import {
@@ -70,9 +70,7 @@ function loadDragDropTouch()
     const tag = document.createElement('script');
     tag.type  = 'text/javascript';
     tag.id    = 'drag-drop-touch';
-    tag.src   = IS_PROD_BUILD
-                  ? `https://ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.min.js?ver=${VERSION}`
-                  : `https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk/inc/js/drag-drop-touch.js?ver=${VERSION}`;
+    tag.src   = `${ULTRAFUNK_THEME_URI}/inc/js/drag-drop-touch.min.js?ver=${VERSION}`;
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }

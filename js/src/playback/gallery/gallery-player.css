@@ -112,35 +112,35 @@ body.single.track .site-branding {
   line-height: 30px;
 }
 
-.gallery-2-col .track-meta-controls .track-share-control,
-.gallery-2-col .track-meta-controls .track-details-control,
-.gallery-3-col .track-meta-controls .track-share-control,
-.gallery-3-col .track-meta-controls .track-details-control {
+.gallery-2-col .track-meta-controls .track-share-button,
+.gallery-2-col .track-meta-controls .track-details-button,
+.gallery-3-col .track-meta-controls .track-share-button,
+.gallery-3-col .track-meta-controls .track-details-button {
   width: 40px;
   height: 40px;
 }
 
-.gallery-2-col .track-meta-controls .track-share-control   .material-icons,
-.gallery-2-col .track-meta-controls .track-details-control .material-icons-outlined,
-.gallery-3-col .track-meta-controls .track-share-control   .material-icons,
-.gallery-3-col .track-meta-controls .track-details-control .material-icons-outlined {
+.gallery-2-col .track-meta-controls .track-share-button   .material-icons,
+.gallery-2-col .track-meta-controls .track-details-button .material-icons-outlined,
+.gallery-3-col .track-meta-controls .track-share-button   .material-icons,
+.gallery-3-col .track-meta-controls .track-details-button .material-icons-outlined {
   font-size: 30px;
 }
 
-.gallery-2-col .crossfade-preset-control {
+.gallery-2-col .crossfade-preset-toggle {
   width: 28px;
   height: 28px;
   font-size: 18px;
   line-height: 28px;
 }
 
-.gallery-2-col .crossfade-fadeto-control {
+.gallery-2-col .crossfade-fadeto-button {
   width: 44px;
   height: 44px;
   margin-right: -6px;
 }
 
-.gallery-2-col .crossfade-fadeto-control img {
+.gallery-2-col .crossfade-fadeto-button img {
   width: 44px;
   height: 44px;
 }
@@ -150,20 +150,20 @@ body.single.track .site-branding {
   line-height: 25px;
 }
 
-.gallery-3-col .crossfade-preset-control {
+.gallery-3-col .crossfade-preset-toggle {
   width: 26px;
   height: 26px;
   font-size: 18px;
   line-height: 27px;
 }
 
-.gallery-3-col .crossfade-fadeto-control {
+.gallery-3-col .crossfade-fadeto-button {
   width: 40px;
   height: 40px;
   margin-right: -5px;
 }
 
-.gallery-3-col .crossfade-fadeto-control img {
+.gallery-3-col .crossfade-fadeto-button img {
   width: 40px;
   height: 40px;
 }

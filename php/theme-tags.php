@@ -70,7 +70,7 @@ function pre_wp_head() : void
   else
   {
     ?>
-    <script src="<?php echo esc_url(get_template_directory_uri()) . '/inc/js/site-theme-layout.js?ver=' . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
+    <script src="<?php echo ULTRAFUNK_THEME_URI . '/inc/js/site-theme-layout.js?ver=' . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
     <?php
   }
 
@@ -80,7 +80,7 @@ function pre_wp_head() : void
   <?php
 
   if (!empty(JS_PRELOAD_CHUNK) && IS_PROD_BUILD)
-    echo '<link rel="modulepreload" href="' . esc_url(get_template_directory_uri()) . JS_PRELOAD_CHUNK . '" as="script" crossorigin>' . PHP_EOL;
+    echo '<link rel="modulepreload" href="' . ULTRAFUNK_THEME_URI . JS_PRELOAD_CHUNK . '" as="script" crossorigin>' . PHP_EOL;
 }
 
 function channel_meta_description() : void
@@ -132,15 +132,13 @@ function track_meta_description() : void
 
 function scripts_styles() : void
 {
-  $template_uri = esc_url(get_template_directory_uri());
-
   \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Plugin\Request\get_session_vars());
 
   ?>
   <script><?php echo 'const UF_ResponseData = ' . json_encode(\Ultrafunk\Plugin\Globals\get_session_vars()); ?></script>
-  <script type="module" src="<?php echo $template_uri . THEME_ENV['js_path'] . 'playback/interaction.js?ver=' . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
-  <script type="module" src="<?php echo $template_uri . THEME_ENV['js_path'] . 'index.js?ver='                . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
-  <noscript><link rel="stylesheet" href="<?php echo $template_uri . '/inc/css/style-noscript.css?ver='        . \Ultrafunk\Theme\Config\VERSION; ?>" media="all" /></noscript>
+  <script type="module" src="<?php echo ULTRAFUNK_THEME_URI . THEME_ENV['js_path'] . 'playback/interaction.js?ver=' . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
+  <script type="module" src="<?php echo ULTRAFUNK_THEME_URI . THEME_ENV['js_path'] . 'index.js?ver='                . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
+  <noscript><link rel="stylesheet" href="<?php echo ULTRAFUNK_THEME_URI . '/inc/css/style-noscript.css?ver='        . \Ultrafunk\Theme\Config\VERSION; ?>" media="all" /></noscript>
   <?php
 
   if (!is_page() && !is_list_player() && !is_termlist())
@@ -149,6 +147,16 @@ function scripts_styles() : void
 
 function head() : void
 {
+  ?>
+  <link rel="manifest" href="<?php echo THEME_ENV['uf_pwa_manifest']; ?>">
+  <meta name="theme-color" content="#142850">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-startup-image" href="<?php echo THEME_ENV['uf_pwa_startup_image']; ?>">
+  <meta name="apple-mobile-web-app-title" content="Ultrafunk">
+  <meta name="application-name" content="Ultrafunk">
+  <?php
+
   if (is_shuffle() === false)
   {
     if (is_gallery_home() || is_list_home() || (get_the_ID() === THEME_ENV['page_about_id']))
@@ -302,27 +310,27 @@ function header_playback_controls() : void
   ?>
   <div id="playback-controls">
     <div class="current-track-container">
-      <div class="playback-thumbnail-control state-disabled" title="<?php echo (is_list_player() ? 'Show player' : 'Double click / tap: Toggle Fullscreen (f)'); ?>">
+      <button type="button" class="playback-thumbnail-control state-disabled" title="<?php echo (is_list_player() ? 'Show player' : 'Double click / tap: Toggle Fullscreen (f)'); ?>">
         <div class="thumbnail-overlay"><div class="spinner"></div></div>
-        <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/playback_thumbnail_placeholder.png" alt="">
-      </div>
-      <div class="playback-details-control text-nowrap-ellipsis state-disabled" title="<?php echo $player_details_title; ?>">
+        <img src="<?php echo ULTRAFUNK_THEME_URI; ?>/inc/img/playback_thumbnail_placeholder.png" alt="">
+      </button>
+      <button type="button" class="playback-details-control text-nowrap-ellipsis state-disabled" title="<?php echo $player_details_title; ?>">
         <span class="playback-details-artist"></span><br><span class="playback-details-title"></span>
-      </div>
-      <div class="playback-timer-control state-disabled" title="Toggle Autoplay (shift + a)">
+      </button>
+      <button type="button" class="playback-timer-control state-disabled" title="Toggle Autoplay (shift + a)">
         <span class="playback-timer-position"></span><br><span class="playback-timer-duration"></span>
-      </div>
+      </button>
     </div>
     <div class="playback-controls-container">
-      <button type="button" class="playback-shuffle-control state-disabled" title="<?php echo esc_attr($player_shuffle_title); ?>"><span class="material-icons">shuffle</span></button>
-      <button type="button" class="playback-prev-control state-disabled" title="Previous track / seek (arrow left)"><span class="material-icons">skip_previous</span></button>
-      <button type="button" class="playback-play-pause-control state-disabled" title="Play / Pause (space)"><span class="material-icons">play_circle_filled</span></button>
-      <button type="button" class="playback-next-control state-disabled" title="Next track (arrow right)"><span class="material-icons">skip_next</span></button>
-      <button type="button" class="playback-repeat-control state-disabled" title="Repeat off (r)" data-repeat-mode="0"><span class="material-icons">repeat</span></button>
-      <button type="button" class="playback-player-type-control state-disabled <?php echo (is_list_player() ? 'list-player' : 'gallery-player'); ?>" title="<?php echo $player_type_title; ?>">
+      <button type="button" class="playback-shuffle-button state-disabled" title="<?php echo esc_attr($player_shuffle_title); ?>"><span class="material-icons">shuffle</span></button>
+      <button type="button" class="playback-prev-button state-disabled" title="Previous track / seek (arrow left)"><span class="material-icons">skip_previous</span></button>
+      <button type="button" class="playback-play-pause-toggle state-disabled" title="Play / Pause (space)"><span class="material-icons">play_circle_filled</span></button>
+      <button type="button" class="playback-next-button state-disabled" title="Next track (arrow right)"><span class="material-icons">skip_next</span></button>
+      <button type="button" class="playback-repeat-toggle state-disabled" title="Repeat off (r)" data-repeat-mode="0"><span class="material-icons">repeat</span></button>
+      <button type="button" class="playback-player-type-toggle state-disabled <?php echo (is_list_player() ? 'list-player' : 'gallery-player'); ?>" title="<?php echo $player_type_title; ?>">
         <span class="material-icons-sharp"><?php echo (is_list_player() ? 'vertical_split' : 'grid_view'); ?></span>
       </button>
-      <button type="button" class="playback-mute-control state-disabled" title="Mute / Unmute (m)"><span class="material-icons">volume_up</span></button>
+      <button type="button" class="playback-mute-button state-disabled" title="Mute / Unmute (m)"><span class="material-icons">volume_up</span></button>
       <div class="playback-volume-control state-disabled" title="Volume (+ = Up, - = Down)">00</div>
     </div>
   </div>
@@ -545,13 +553,13 @@ function track_meta_controls() : void
   ?>
   <div class="track-meta-controls">
     <div class="share-details-controls">
-      <button type="button" class="track-share-control" title="Share track / Play On"><span class="material-icons">share</span></button>
-      <button type="button" class="track-details-control" title="Track Details"><span class="material-icons-outlined">info</span></button>
+      <button type="button" class="track-share-button" title="Share track / Play On"><span class="material-icons">share</span></button>
+      <button type="button" class="track-details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
     </div>
     <div class="crossfade-controls">
-      <button type="button" class="crossfade-preset-control state-disabled"></button>
-      <button type="button" class="crossfade-fadeto-control state-disabled">
-        <img src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/img/crossfade_icon.png" alt="Crossfade Icon" title="Crossfade to this track">
+      <button type="button" class="crossfade-preset-toggle state-disabled"></button>
+      <button type="button" class="crossfade-fadeto-button state-disabled">
+        <img src="<?php echo ULTRAFUNK_THEME_URI; ?>/inc/img/crossfade_icon.png" alt="Crossfade Icon" title="Crossfade to this track">
       </button>
     </div>
   </div>

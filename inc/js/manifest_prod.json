@@ -1,0 +1,53 @@
+{
+  "name": "Ultrafunk",
+  "short_name": "Ultrafunk",
+  "start_url": "https://ultrafunk.com",
+  "display": "standalone",
+  "background_color": "#0a1428",
+  "theme_color": "#142850",
+  "description": "Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres",
+  "icons": [
+    {
+      "src": "https://ultrafunk.com/wp-content/uploads/branding/ultrafunk_pwa_icon_05-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://ultrafunk.com/wp-content/uploads/branding/ultrafunk_pwa_icon_05.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "https://ultrafunk.com/wp-content/uploads/branding/ultrafunk_pwa_icon_05.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://ultrafunk.com/wp-content/uploads/screenshots/pwa_screenshot_wide_01.png",
+      "sizes": "475x404",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://ultrafunk.com/wp-content/uploads/screenshots/pwa_screenshot_wide_02.png",
+      "sizes": "475x404",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://ultrafunk.com/wp-content/uploads/screenshots/pwa_screenshot_narrow_01.png",
+      "sizes": "1396x985",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "https://ultrafunk.com/wp-content/uploads/screenshots/pwa_screenshot_narrow_02.png",
+      "sizes": "1396x985",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}

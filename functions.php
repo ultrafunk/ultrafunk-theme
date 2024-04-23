@@ -71,31 +71,32 @@ add_filter('widget_archives_args', 'ultrafunk_limit_archives');
 //
 function ultrafunk_enqueue_styles() : void
 {
-  $version = \Ultrafunk\Theme\Config\VERSION;
+  $version   = \Ultrafunk\Theme\Config\VERSION;
+  $theme_uri = get_theme_file_uri();
 
-  wp_enqueue_style('google-fonts-roboto', 'https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap', [], null);
+  wp_enqueue_style('google-fonts-roboto',         'https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap',                                  [], null);
   wp_enqueue_style('google-fonts-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Sharp&display=block', [], null);
 
   if (\Ultrafunk\Theme\Config\IS_PROD_BUILD)
   {
-    wp_enqueue_style('ultrafunk-style', get_theme_file_uri('/inc/css/style.min.css'), [], $version);
-    wp_enqueue_style('bundle-style', get_theme_file_uri('/js/dist/css/bundle.min.css'), [], $version);
+    wp_enqueue_style('ultrafunk-style', $theme_uri . '/inc/css/style.min.css',      [], $version);
+    wp_enqueue_style('bundle-style',    $theme_uri . '/js/dist/css/bundle.min.css', [], $version);
   }
   else
   {
-    wp_enqueue_style('ultrafunk-style', get_stylesheet_uri(), [], $version);
-    wp_enqueue_style('modal-style', get_theme_file_uri('/js/src/shared/modal.css'), [], $version);
-    wp_enqueue_style('snackbar-style', get_theme_file_uri('/js/src/shared/snackbar.css'), [], $version);
-    wp_enqueue_style('settings-ui-style', get_theme_file_uri('/js/src/settings/settings-ui.css'), [], $version);
-    wp_enqueue_style('playback-controls-style', get_theme_file_uri('/js/src/playback/common/playback-controls.css'), [], $version);
-    wp_enqueue_style('crossfade-controls-style', get_theme_file_uri('/js/src/playback/gallery/gallery-controls.css'), [], $version);
-    wp_enqueue_style('gallery-track-style', get_theme_file_uri('/js/src/playback/gallery/gallery-track.css'), [], $version);
-    wp_enqueue_style('gallery-player-style', get_theme_file_uri('/js/src/playback/gallery/gallery-player.css'), [], $version);
-    wp_enqueue_style('single-track-style', get_theme_file_uri('/js/src/playback/gallery/single-track.css'), [], $version);
-    wp_enqueue_style('list-player-style', get_theme_file_uri('/js/src/playback/list/list-player.css'), [], $version);
-    wp_enqueue_style('track-search-style', get_theme_file_uri('/js/src/playback/list/track-search.css'), [], $version);
-    wp_enqueue_style('up-next-modal-style', get_theme_file_uri('/js/src/playback/list/up-next-modal.css'), [], $version);
-    wp_enqueue_style('artists-channels-style', get_theme_file_uri('/js/src/site/artists-channels.css'), [], $version);
+    wp_enqueue_style('ultrafunk-style',          get_stylesheet_uri(),                                         [], $version);
+    wp_enqueue_style('modal-style',              $theme_uri . '/js/src/shared/modal.css',                      [], $version);
+    wp_enqueue_style('snackbar-style',           $theme_uri . '/js/src/shared/snackbar.css',                   [], $version);
+    wp_enqueue_style('settings-ui-style',        $theme_uri . '/js/src/settings/settings-ui.css',              [], $version);
+    wp_enqueue_style('playback-controls-style',  $theme_uri . '/js/src/playback/common/playback-controls.css', [], $version);
+    wp_enqueue_style('crossfade-controls-style', $theme_uri . '/js/src/playback/gallery/gallery-controls.css', [], $version);
+    wp_enqueue_style('gallery-track-style',      $theme_uri . '/js/src/playback/gallery/gallery-track.css',    [], $version);
+    wp_enqueue_style('gallery-player-style',     $theme_uri . '/js/src/playback/gallery/gallery-player.css',   [], $version);
+    wp_enqueue_style('single-track-style',       $theme_uri . '/js/src/playback/gallery/single-track.css',     [], $version);
+    wp_enqueue_style('list-player-style',        $theme_uri . '/js/src/playback/list/list-player.css',         [], $version);
+    wp_enqueue_style('track-search-style',       $theme_uri . '/js/src/playback/list/track-search.css',        [], $version);
+    wp_enqueue_style('up-next-modal-style',      $theme_uri . '/js/src/playback/list/up-next-modal.css',       [], $version);
+    wp_enqueue_style('artists-channels-style',   $theme_uri . '/js/src/site/artists-channels.css',             [], $version);
   }
 }
 add_action('wp_enqueue_scripts', 'ultrafunk_enqueue_styles');

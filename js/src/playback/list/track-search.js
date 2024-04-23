@@ -209,7 +209,7 @@ function showTrackDetailsTouch(event, element)
 function playNextClick(element)
 {
   insertResultTrack(element);
-  showSnackbar({ message: 'Track will play next', duration: 3 });
+  showSnackbar({ message: 'Track will play next', duration: 5, actionText: 'details', actionClickCallback: () =>  showTrackDetails(element) });
   navSearch.hide();
 }
 

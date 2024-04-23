@@ -36,9 +36,9 @@ const m     = { uiElements: null, players: {} };
 const ctrl  = {};
 
 const config = {
-  crossfadePresetSelector: 'button.crossfade-preset-control',
+  crossfadePresetSelector: 'button.crossfade-preset-toggle',
   crossfadePresetData:     'data-crossfade-preset',
-  crossfadeToSelector:     'button.crossfade-fadeto-control',
+  crossfadeToSelector:     'button.crossfade-fadeto-button',
 };
 
 
@@ -91,10 +91,10 @@ class UiElements extends ElementClick
 {
   elementClicked()
   {
-    if (this.clicked('button.track-share-control'))
+    if (this.clicked('button.track-share-button'))
       return showTrackSharePlay(this.closest('single-track, gallery-track'));
 
-    if (this.clicked('button.track-details-control'))
+    if (this.clicked('button.track-details-button'))
       return showTrackDetails(this.closest('single-track, gallery-track'));
 
     if (this.clicked('span.track-artists-links'))

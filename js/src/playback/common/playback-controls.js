@@ -41,8 +41,8 @@ const ctrl       = {};
 
 export function setPlaybackControlsCss()
 {
-  ctrl.prevTrack = ElementWrapper('.playback-prev-control');
-  ctrl.playPause = ElementWrapper('.playback-play-pause-control');
+  ctrl.prevTrack = ElementWrapper('.playback-prev-button');
+  ctrl.playPause = ElementWrapper('.playback-play-pause-toggle');
 
   if (matchesMedia(MATCH.SITE_MAX_WIDTH_MOBILE))
   {
@@ -76,12 +76,12 @@ export function init(getTrackData, seekClickCallback)
   ctrl.progressSeek.clickCallback = seekClickCallback;
   ctrl.progressBar  = ElementWrapper('.progress-bar-control', document.getElementById('progress-controls'));
 
+  ctrl.thumbnail     = ElementWrapper('.playback-thumbnail-control', playbackControls);
+  ctrl.thumbnail.img = ctrl.thumbnail.getElement('img');
+
   ctrl.details        = ElementWrapper('.playback-details-control', playbackControls);
   ctrl.details.artist = ctrl.details.getElement('.playback-details-artist');
   ctrl.details.title  = ctrl.details.getElement('.playback-details-title');
-
-  ctrl.thumbnail     = ElementWrapper('.playback-thumbnail-control', playbackControls);
-  ctrl.thumbnail.img = ctrl.thumbnail.getElement('img');
 
   ctrl.timer                 = ElementWrapper('.playback-timer-control', playbackControls);
   ctrl.timer.position        = ctrl.timer.getElement('.playback-timer-position');
@@ -89,18 +89,18 @@ export function init(getTrackData, seekClickCallback)
   ctrl.timer.positionSeconds = -1; // Make sure initial value is set + shown when track plays
   ctrl.timer.durationSeconds = -1; // Make sure initial value is set + shown when track plays
 
-  ctrl.playerType = ElementWrapper('.playback-player-type-control', playbackControls);
+  ctrl.playerType = ElementWrapper('.playback-player-type-toggle', playbackControls);
 
   ctrl.playPause.icon = ctrl.playPause.getElement('span.material-icons');
 
-  ctrl.nextTrack = ElementWrapper('.playback-next-control', playbackControls);
+  ctrl.nextTrack = ElementWrapper('.playback-next-button', playbackControls);
 
-  ctrl.repeat      = ElementWrapper('.playback-repeat-control', playbackControls);
+  ctrl.repeat      = ElementWrapper('.playback-repeat-toggle', playbackControls);
   ctrl.repeat.icon = ctrl.repeat.getElement('span.material-icons');
 
-  ctrl.shuffle = ElementWrapper('.playback-shuffle-control', playbackControls);
+  ctrl.shuffle = ElementWrapper('.playback-shuffle-button', playbackControls);
 
-  ctrl.mute      = ElementWrapper('.playback-mute-control', playbackControls);
+  ctrl.mute      = ElementWrapper('.playback-mute-button', playbackControls);
   ctrl.mute.icon = ctrl.mute.getElement('span.material-icons');
 
   ctrl.volume = ElementWrapper('.playback-volume-control', playbackControls);
@@ -112,8 +112,8 @@ export function ready(prevClickCallback, playPauseClickCallback, nextClickCallba
   ctrl.progressSeek.addListener('click', progressSeekClick);
   ctrl.progressBar.setState(STATE.ENABLED);
 
-  ctrl.details.setState(STATE.HIDDEN);
   ctrl.thumbnail.setState(STATE.HIDDEN);
+  ctrl.details.setState(STATE.HIDDEN);
   ctrl.timer.setState(STATE.HIDDEN);
 
   if (settings.mobile.showTrackThumbnail)

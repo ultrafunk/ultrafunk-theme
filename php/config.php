@@ -21,7 +21,9 @@ const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.46.25';
+const VERSION = '1.46.26';
+
+define('ULTRAFUNK_THEME_URI', esc_url(get_template_directory_uri()));
 
 const THEME_ENV = [
   'menu_item_all_tracks_id' => IS_PROD_BUILD ? 4430 : 4057,
@@ -31,11 +33,15 @@ const THEME_ENV = [
   'page_about_id'           => IS_PROD_BUILD ?  806 :  806,
   'channel_videos_id'       => IS_PROD_BUILD ?  899 :  875,
   'js_path'                 => IS_PROD_BUILD ? '/js/dist/' : '/js/src/',
-  'default_yt_thumbnail'    => '/wp-content/themes/ultrafunk/inc/img/yt_thumbnail_placeholder.png',
-  'default_sc_thumbnail'    => '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png',
+  'default_yt_thumbnail'    => ULTRAFUNK_THEME_URI . '/inc/img/yt_thumbnail_placeholder.png',
+  'default_sc_thumbnail'    => ULTRAFUNK_THEME_URI . '/inc/img/sc_thumbnail_placeholder.png',
   'uf_logo_desktop'         => '/wp-content/uploads/branding/ultrafunk_logo_desktop_12.png',
   'uf_logo_mobile'          => '/wp-content/uploads/branding/ultrafunk_logo_mobile_12.png',
+  'uf_pwa_manifest'         => IS_PROD_BUILD
+                                 ? ULTRAFUNK_THEME_URI . '/inc/js/manifest_prod.json'
+                                 : ULTRAFUNK_THEME_URI . '/inc/js/manifest_dev.json',
+  'uf_pwa_startup_image'    => '/wp-content/uploads/branding/ultrafunk_pwa_icon_05-192x192.png',
 ];
 
 // Automatically updated on 'npm run build-dev' or 'npm run build-prod'
-const JS_PRELOAD_CHUNK = '/js/dist/chunk-RQZXYYQF.js';
+const JS_PRELOAD_CHUNK = '/js/dist/chunk-WYIRZOFJ.js';

@@ -13,7 +13,7 @@ body.tracks.autoplay-off .crossfade-controls {
   display: contents;
 }
 
-.crossfade-preset-control {
+.crossfade-preset-toggle {
   width: 32px;
   height: 32px;
   font-size: 21px;
@@ -31,7 +31,7 @@ body.tracks.autoplay-off .crossfade-controls {
   margin-left: 20px;
 }
 
-.crossfade-fadeto-control {
+.crossfade-fadeto-button {
   width: 51px;
   height: 51px;
   margin-left: 10px;
@@ -40,33 +40,33 @@ body.tracks.autoplay-off .crossfade-controls {
   overflow: hidden;
 }
 
-.crossfade-fadeto-control img {
+.crossfade-fadeto-button img {
   width: 51px;
   height: 51px;
   image-rendering: -webkit-optimize-contrast;
 }
 
-.site-theme-dark .crossfade-fadeto-control img,
-.site-theme-black .crossfade-fadeto-control img {
+.site-theme-dark .crossfade-fadeto-button img,
+.site-theme-black .crossfade-fadeto-button img {
   filter: invert(1);
 }
 
-.crossfade-preset-control.state-enabled:hover,
-.crossfade-fadeto-control.state-enabled img:hover {
+.crossfade-preset-toggle.state-enabled:hover,
+.crossfade-fadeto-button.state-enabled img:hover {
   opacity: var(--control-hover-opacity);
 }
 
 @media not all and (pointer: fine) {
 
-  .crossfade-preset-control.state-enabled:hover,
-  .crossfade-fadeto-control.state-enabled img:hover {
+  .crossfade-preset-toggle.state-enabled:hover,
+  .crossfade-fadeto-button.state-enabled img:hover {
     opacity: 1;
   }
 
 }
 
-.crossfade-preset-control.state-disabled,
-.crossfade-fadeto-control.state-disabled {
+.crossfade-preset-toggle.state-disabled,
+.crossfade-fadeto-button.state-disabled {
   opacity: var(--control-disabled-opacity);
   cursor: default;
 }
@@ -78,7 +78,7 @@ body.tracks.autoplay-off .crossfade-controls {
 
 @media screen and (max-width: 500px) {
 
-  .crossfade-preset-control {
+  .crossfade-preset-toggle {
     width: 22px;
     height: 22px;
     font-size: 15px;
@@ -88,13 +88,13 @@ body.tracks.autoplay-off .crossfade-controls {
     margin-bottom: 6px;
   }
 
-  .crossfade-fadeto-control {
+  .crossfade-fadeto-button {
     width: 38px;
     height: 38px;
     margin-right: -5px;
   }
 
-  .crossfade-fadeto-control img {
+  .crossfade-fadeto-button img {
     width: 38px;
     height: 38px;
   }

@@ -206,14 +206,14 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   visibility: hidden;
 }
 
-.playback-player-type-control.gallery-player .material-icons-sharp {
+.playback-player-type-toggle.gallery-player .material-icons-sharp {
   font-size: 30px;
   width: 30px;
   height: 30px;
   padding: 5px;
 }
 
-.playback-player-type-control.list-player .material-icons-sharp {
+.playback-player-type-toggle.list-player .material-icons-sharp {
   font-size: 36px;
   width: 36px;
   height: 36px;
@@ -221,31 +221,31 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   transform: scaleX(-1);
 }
 
-.playback-player-type-control:hover {
+.playback-player-type-toggle:hover {
   color: var(--link-hover-color);
 }
 
-body.search .playback-player-type-control,
-body.channel-soundcloud .playback-player-type-control,
-body.single.track .playback-player-type-control {
+body.search .playback-player-type-toggle,
+body.channel-soundcloud .playback-player-type-toggle,
+body.single.track .playback-player-type-toggle {
   display: none;
 }
 
-.playback-prev-control .material-icons,
-.playback-play-pause-control .material-icons,
-.playback-next-control .material-icons {
+.playback-prev-button .material-icons,
+.playback-play-pause-toggle .material-icons,
+.playback-next-button .material-icons {
   font-size: 50px;
   width: 50px;
   height: 50px;
 }
 
-.playback-player-type-control,
-.playback-prev-control,
-.playback-play-pause-control,
-.playback-next-control,
-.playback-repeat-control,
-.playback-shuffle-control,
-.playback-mute-control,
+.playback-player-type-toggle,
+.playback-prev-button,
+.playback-play-pause-toggle,
+.playback-next-button,
+.playback-repeat-toggle,
+.playback-shuffle-button,
+.playback-mute-button,
 .playback-volume-control {
   display: inline-block;
   -webkit-user-select: none;
@@ -253,13 +253,13 @@ body.single.track .playback-player-type-control {
   user-select: none;
 }
 
-.playback-player-type-control.state-disabled,
-.playback-prev-control.state-disabled,
-.playback-play-pause-control.state-disabled,
-.playback-next-control.state-disabled,
-.playback-repeat-control.state-disabled,
-.playback-shuffle-control.state-disabled,
-.playback-mute-control.state-disabled,
+.playback-player-type-toggle.state-disabled,
+.playback-prev-button.state-disabled,
+.playback-play-pause-toggle.state-disabled,
+.playback-next-button.state-disabled,
+.playback-repeat-toggle.state-disabled,
+.playback-shuffle-button.state-disabled,
+.playback-mute-button.state-disabled,
 .playback-volume-control.state-disabled {
   opacity: var(--control-disabled-opacity);
   color: var(--primary-icon-color);
@@ -267,78 +267,78 @@ body.single.track .playback-player-type-control {
   pointer-events: none;
 }
 
-.playback-player-type-control.state-disabled:hover,
-.playback-prev-control.state-disabled:hover,
-.playback-play-pause-control.state-disabled:hover,
-.playback-next-control.state-disabled:hover,
-.playback-repeat-control.state-disabled:hover,
-.playback-shuffle-control.state-disabled:hover,
-.playback-mute-control.state-disabled:hover,
+.playback-player-type-toggle.state-disabled:hover,
+.playback-prev-button.state-disabled:hover,
+.playback-play-pause-toggle.state-disabled:hover,
+.playback-next-button.state-disabled:hover,
+.playback-repeat-toggle.state-disabled:hover,
+.playback-shuffle-button.state-disabled:hover,
+.playback-mute-button.state-disabled:hover,
 .playback-volume-control.state-disabled:hover {
   opacity: var(--control-disabled-opacity);
   cursor: default;
 }
 
-.playback-play-pause-control {
+.playback-play-pause-toggle {
   color: var(--playback-play-pause-color);
   cursor: pointer;
 }
 
-.playback-play-pause-control:hover {
+.playback-play-pause-toggle:hover {
   color: var(--playback-play-pause-hover-color);
 }
 
-body.autoplay-off .playback-play-pause-control.state-playing,
-body.autoplay-off .playback-play-pause-control.state-paused {
+body.autoplay-off .playback-play-pause-toggle.state-playing,
+body.autoplay-off .playback-play-pause-toggle.state-paused {
   color: var(--playback-play-pause-color-autoplay-off);
 }
 
-body.autoplay-off .playback-play-pause-control:hover {
+body.autoplay-off .playback-play-pause-toggle:hover {
   color: var(--playback-play-pause-hover-color-autoplay-off);
 }
 
-.playback-play-pause-control.state-playing,
-.playback-play-pause-control.state-paused {
+.playback-play-pause-toggle.state-playing,
+.playback-play-pause-toggle.state-paused {
   background-image: url(../../../../inc/img/play_pause_bg_filler.png);
   background-repeat: no-repeat;
   background-position: center;
 }
 
-body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warning {
+body.autoplay-off .playback-play-pause-toggle.state-playing.time-remaining-warning {
   opacity: 0.25;
 }
 
-.playback-player-type-control,
-.playback-prev-control,
-.playback-next-control,
-.playback-repeat-control,
-.playback-shuffle-control,
-.playback-mute-control {
+.playback-player-type-toggle,
+.playback-prev-button,
+.playback-next-button,
+.playback-repeat-toggle,
+.playback-shuffle-button,
+.playback-mute-button {
   color: var(--primary-icon-color);
   cursor: pointer;
 }
 
-.playback-prev-control:hover,
-.playback-next-control:hover,
-.playback-repeat-control:hover,
-.playback-mute-control:hover {
+.playback-prev-button:hover,
+.playback-next-button:hover,
+.playback-repeat-toggle:hover,
+.playback-mute-button:hover {
   opacity: var(--control-hover-opacity);
 }
 
-.playback-repeat-control .material-icons,
-.playback-shuffle-control .material-icons,
-.playback-mute-control .material-icons {
+.playback-repeat-toggle .material-icons,
+.playback-shuffle-button .material-icons,
+.playback-mute-button .material-icons {
   font-size: 30px;
   width: 30px;
   height: 30px;
   padding: 5px;
 }
 
-.playback-repeat-control[data-repeat-mode="0"] {
+.playback-repeat-toggle[data-repeat-mode="0"] {
   opacity: var(--control-disabled-opacity);
 }
 
-.playback-shuffle-control:hover {
+.playback-shuffle-button:hover {
   color: var(--link-hover-color);
 }
 
@@ -371,38 +371,38 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     opacity: 1;
   }
 
-  .playback-play-pause-control {
+  .playback-play-pause-toggle {
     color: var(--playback-play-pause-color);
   }
 
-  .playback-play-pause-control:hover {
+  .playback-play-pause-toggle:hover {
     -webkit-tap-highlight-color: transparent;
     color: var(--playback-play-pause-color);
     opacity: 1;
   }
 
-  body.autoplay-off .playback-play-pause-control.state-playing,
-  body.autoplay-off .playback-play-pause-control.state-paused {
+  body.autoplay-off .playback-play-pause-toggle.state-playing,
+  body.autoplay-off .playback-play-pause-toggle.state-paused {
     color: var(--playback-play-pause-color-autoplay-off);
   }
 
-  body.autoplay-off .playback-play-pause-control:hover {
+  body.autoplay-off .playback-play-pause-toggle:hover {
     -webkit-tap-highlight-color: transparent;
     color: var(--playback-play-pause-color-autoplay-off);
     opacity: 1;
   }
 
-  .playback-prev-control,
-  .playback-next-control,
-  .playback-repeat-control,
-  .playback-mute-control {
+  .playback-prev-button,
+  .playback-next-button,
+  .playback-repeat-toggle,
+  .playback-mute-button {
     color: var(--primary-icon-color);
   }
 
-  .playback-prev-control:hover,
-  .playback-next-control:hover,
-  .playback-repeat-control:hover,
-  .playback-mute-control:hover {
+  .playback-prev-button:hover,
+  .playback-next-button:hover,
+  .playback-repeat-toggle:hover,
+  .playback-mute-button:hover {
     color: var(--primary-icon-color);
     opacity: 1;
   }
@@ -429,7 +429,7 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
 
 @media screen and (max-width: 1350px) {
 
-  .playback-player-type-control {
+  .playback-player-type-toggle {
     display: none;
   }
 
@@ -461,9 +461,9 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
 
   .playback-thumbnail-control,
   .playback-timer-control,
-  .playback-repeat-control,
-  .playback-shuffle-control,
-  .playback-mute-control,
+  .playback-repeat-toggle,
+  .playback-shuffle-button,
+  .playback-mute-button,
   .playback-volume-control {
     display: none;
   }
@@ -573,23 +573,23 @@ body.autoplay-off .playback-play-pause-control.state-playing.time-remaining-warn
     margin-left: 9px;
   }
 
-  .playback-prev-control {
+  .playback-prev-button {
     display: none;
   }
 
-  .playback-prev-control.show-on-mobile {
+  .playback-prev-button.show-on-mobile {
     display: inline-block;
   }
 
-  .playback-prev-control.mobile-margin-3px {
+  .playback-prev-button.mobile-margin-3px {
     margin-left: 3px;
   }
 
-  .playback-play-pause-control.mobile-margin-6px {
+  .playback-play-pause-toggle.mobile-margin-6px {
     margin-left: 6px;
   }
 
-  .playback-play-pause-control.mobile-margin-10px {
+  .playback-play-pause-toggle.mobile-margin-10px {
     margin-left: 10px;
   }
 

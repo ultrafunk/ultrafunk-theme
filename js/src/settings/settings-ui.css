@@ -111,9 +111,13 @@ table.settings td.current-value-false {
   opacity: 0.3;
 }
 
-.settings-clear {
+.settings-clear-container {
   clear: both;
   margin: 100px auto 100px auto;
+  text-align: center;
+}
+
+.settings-clear-button {
   padding: 12px 30px;
   color: var(--button-text-color);
   background-color: var(--site-theme-light-color);
@@ -133,8 +137,8 @@ table.settings td.current-value-false {
   font-weight: 400;
 }
 
-.settings-save,
-.settings-reset {
+.settings-save-button,
+.settings-reset-button {
   display: flex;
   align-items: center;
   color: var(--button-text-color);
@@ -144,12 +148,12 @@ table.settings td.current-value-false {
   border-radius: var(--button-border-radius);
 }
 
-.settings-reset {
+.settings-reset-button {
   margin-left: 20px;
 }
 
-.settings-save .material-icons,
-.settings-reset .material-icons {
+.settings-save-button .material-icons,
+.settings-reset-button .material-icons {
   font-size: 30px;
   margin-left: 18px;
   margin-right: 12px;
@@ -157,9 +161,9 @@ table.settings td.current-value-false {
 
 @media all and (pointer: fine) {
 
-  .settings-clear:hover,
-  .settings-save:hover,
-  .settings-reset:hover {
+  .settings-clear-button:hover,
+  .settings-save-button:hover,
+  .settings-reset-button:hover {
     background: var(--site-theme-medium-color);
     cursor: pointer;
   }
@@ -168,15 +172,15 @@ table.settings td.current-value-false {
 
 @media not all and (pointer: fine) {
 
-  .settings-clear,
-  .settings-save,
-  .settings-reset {
+  .settings-clear-button,
+  .settings-save-button,
+  .settings-reset-button {
     transition: var(--button-default-transition);
   }
 
-  .settings-clear:active,
-  .settings-save:active,
-  .settings-reset:active {
+  .settings-clear-button:active,
+  .settings-save-button:active,
+  .settings-reset-button:active {
     background: var(--site-theme-medium-color);
     transition: var(--button-active-transition);
   }
@@ -254,26 +258,29 @@ table.settings td.current-value-false {
     width: calc(100% - (20px + 20px));
   }
 
-  .settings-clear {
-    max-width: 125px;
+  .settings-clear-container {
     margin: 50px auto 50px auto;
+  }
+
+  .settings-clear-button {
+    max-width: 125px;
   }
 
   #settings-save-reset {
     bottom: 16px;
   }
 
-  .settings-save,
-  .settings-reset {
+  .settings-save-button,
+  .settings-reset-button {
     padding: 10px 15px 10px 0px;
   }
 
-  .settings-reset {
+  .settings-reset-button {
     margin-left: 10px;
   }
 
-  .settings-save .material-icons,
-  .settings-reset .material-icons {
+  .settings-save-button .material-icons,
+  .settings-reset-button .material-icons {
     font-size: 22px;
     margin-left: 15px;
     margin-right: 10px;

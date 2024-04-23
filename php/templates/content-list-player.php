@@ -34,7 +34,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         data-term-id="<?php   echo $this->params->query_vars['term_id']   ?? ''; ?>"
         >
         <?php $this->tracklist_entries(); ?>
-        <button type="button" id="tracklist-load-more">
+        <button type="button" id="tracklist-load-more-button">
           <div class="load-more-title">Load more tracks...<span class="light-text"></span></div>
           <div class="load-more-loader">
             <div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div><div class="loader-4">&#8226;</div><div class="loader-5">&#8226;</div>
