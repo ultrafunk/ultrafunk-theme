@@ -23,118 +23,119 @@
   --track-results-separator-color: #444;
 }
 
+body.scrolling-disabled #track-search-results {
+  padding-right: var(--scrollbar-width);
+  box-sizing: border-box;
+}
+
 #track-search-results {
   width: 100%;
   position: fixed;
   top: 60px;
   z-index: 2000;
   display: none;
-}
 
-body.scrolling-disabled #track-search-results {
-  padding-right: var(--scrollbar-width);
-  box-sizing: border-box;
-}
-
-#track-search-results .track-results-container {
-  max-width: var(--site-max-width);
-  max-height: 490px;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  box-sizing: border-box;
-  margin: 0 auto;
-  box-shadow: var(--track-results-box-shadow);
-  border: var(--form-search-field-border-focus);
-  border-top: none;
-  background-color: var(--track-results-background-color);
-}
-
-#track-search-results .track-results-container:has(div.load-more-loader),
-#track-search-results .track-results-container:has(div.results-message) {
-  box-shadow: none;
-}
-
-#track-search-results .results-tracklist {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-#track-search-results .track-entry {
-  border-bottom: 1px solid var(--track-results-separator-color);
-}
-
-#track-search-results .track-entry:first-of-type {
-  border-top: none;
-}
-
-#track-search-results .track-entry:last-of-type {
-  border-bottom: none;
-}
-
-@media all and (pointer: fine) {
-
-  #track-search-results .track-action-buttons .remove-button {
-    display: none;
+  .track-results-container {
+    max-width: var(--site-max-width);
+    max-height: 490px;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    box-sizing: border-box;
+    margin: 0 auto;
+    box-shadow: var(--track-results-box-shadow);
+    border: var(--form-search-field-border-focus);
+    border-top: none;
+    background-color: var(--track-results-background-color);
   }
 
-}
-
-@media not all and (pointer: fine) {
-
-  #track-search-results .track-actions-toggle {
-    display: none;
+  .track-results-container:has(div.load-more-loader),
+  .track-results-container:has(div.results-message) {
+    box-shadow: none;
   }
 
-  #track-search-results .track-action-buttons {
+  .results-tracklist {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .track-entry {
+    border-bottom: 1px solid var(--track-results-separator-color);
+  }
+
+  .track-entry:first-of-type {
+    border-top: none;
+  }
+
+  .track-entry:last-of-type {
+    border-bottom: none;
+  }
+
+  @media all and (pointer: fine) {
+
+    .track-action-buttons .remove-button {
+      display: none;
+    }
+
+  }
+
+  @media not all and (pointer: fine) {
+
+    .track-actions-toggle {
+      display: none;
+    }
+
+    .track-action-buttons {
+      display: flex;
+    }
+
+    .track-action-buttons .remove-button,
+    .track-action-buttons .share-play-button,
+    .track-action-buttons .details-button {
+      display: none;
+    }
+
+  }
+
+  .load-more-loader {
+    font-size: 50px;
+    line-height: 1px;
+    height: 40px;
+    overflow: hidden;
     display: flex;
+    align-items: center;
+    padding-left: 10px;
   }
 
-  #track-search-results .track-action-buttons .remove-button,
-  #track-search-results .track-action-buttons .share-play-button,
-  #track-search-results .track-action-buttons .details-button {
-    display: none;
+  .results-message {
+    width: 100%;
+    padding: 5px 12px;
+    box-sizing: border-box;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 400;
   }
 
-}
+  .results-message a,
+  .max-results a {
+    color: var(--primary-text-color);
+    text-decoration: none;
+  }
 
-#track-search-results .load-more-loader {
-  font-size: 50px;
-  line-height: 1px;
-  height: 40px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-}
+  .results-message a:hover,
+  .max-results a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+  }
 
-#track-search-results .results-message {
-  width: 100%;
-  padding: 5px 12px;
-  box-sizing: border-box;
-  font-size: 20px;
-  line-height: 30px;
-  font-weight: 400;
-}
+  .max-results {
+    font-size: 20px;
+    font-weight: 400;
+    display: block;
+    text-align: center;
+    padding: 10px;
+    grid-column: 1 / -1;
+  }
 
-#track-search-results .results-message a,
-#track-search-results .max-results a {
-  color: var(--primary-text-color);
-  text-decoration: none;
-}
-
-#track-search-results .results-message a:hover,
-#track-search-results .max-results a:hover {
-  color: var(--link-hover-color);
-  text-decoration: underline;
-}
-
-#track-search-results .max-results {
-  font-size: 20px;
-  font-weight: 400;
-  display: block;
-  text-align: center;
-  padding: 10px;
-  grid-column: 1 / -1;
 }
 
 
@@ -178,48 +179,49 @@ body.scrolling-disabled #track-search-results {
 
 @media screen and (max-width: 500px) {
 
-  #track-search-results {
-    top: 72px;
-  }
-
   #site-header.scrolling-up #track-search-results {
     top: 110px;
   }
 
-  #track-search-results .track-results-container {
-    max-height: 338px;
-    max-width: calc(100% - 40px);
-    border-top: var(--form-search-field-border-focus);
-  }
+  #track-search-results {
+    top: 72px;
 
-  #track-search-results .track-entry {
-    padding: 0 6px 0 0;
-    border-bottom: 2px solid var(--track-results-separator-color);
-    font-size: 13px;
-    line-height: 16px;
-  }
+    .track-results-container {
+      max-height: 338px;
+      max-width: calc(100% - 40px);
+      border-top: var(--form-search-field-border-focus);
+    }
 
-  #track-search-results .track-entry .thumbnail {
-    margin-right: 8px;
-    border-radius: 0;
-  }
+    .track-entry {
+      padding: 0 6px 0 0;
+      border-bottom: 2px solid var(--track-results-separator-color);
+      font-size: 13px;
+      line-height: 16px;
+    }
 
-  #track-search-results .load-more-loader {
-    font-size: 40px;
-    line-height: 0;
-    height: 37px;
-    padding-left: 0;
-    justify-content: center;
-  }
+    .track-entry .thumbnail {
+      margin-right: 8px;
+      border-radius: 0;
+    }
 
-  #track-search-results .results-message {
-    font-size: 14px;
-    text-align: center;
-  }
+    .load-more-loader {
+      font-size: 40px;
+      line-height: 0;
+      height: 37px;
+      padding-left: 0;
+      justify-content: center;
+    }
 
-  #track-search-results .max-results {
-    font-size: 15px;
-    padding: 9px;
+    .results-message {
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .max-results {
+      font-size: 15px;
+      padding: 9px;
+    }
+
   }
 
 }

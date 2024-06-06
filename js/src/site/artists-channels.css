@@ -423,7 +423,7 @@ term-list {
 .loader-container .loader-2,
 .loader-container .loader-3 {
   display: inline-block;
-  animation: loader-animation 1s infinite;
+  animation: var(--loading-dots-animation);
 }
 
 .loader-container .loader-1 {
@@ -436,11 +436,6 @@ term-list {
 
 .loader-container .loader-3 {
   animation-delay: -0.5s;
-}
-
-@keyframes loader-animation {
-    0% { opacity: 1; }
-  100% { opacity: 0; }
 }
 
 

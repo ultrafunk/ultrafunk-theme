@@ -146,15 +146,9 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   border-radius: 50%;
   width: 22px;
   height: 22px;
-  animation: rotate-spinner 1.25s linear infinite;
+  animation: var(--loading-spinner-animation);
   margin-left: 5px;
   margin-top: 5px;
-}
-
-@keyframes rotate-spinner {
-    0% { transform: rotate(  0deg); }
-   50% { transform: rotate(110deg); }
-  100% { transform: rotate(360deg); }
 }
 
 .playback-details-control {
@@ -245,7 +239,7 @@ body.single.track .playback-player-type-toggle {
 .playback-next-button,
 .playback-repeat-toggle,
 .playback-shuffle-button,
-.playback-mute-button,
+.playback-mute-toggle,
 .playback-volume-control {
   display: inline-block;
   -webkit-user-select: none;
@@ -259,7 +253,7 @@ body.single.track .playback-player-type-toggle {
 .playback-next-button.state-disabled,
 .playback-repeat-toggle.state-disabled,
 .playback-shuffle-button.state-disabled,
-.playback-mute-button.state-disabled,
+.playback-mute-toggle.state-disabled,
 .playback-volume-control.state-disabled {
   opacity: var(--control-disabled-opacity);
   color: var(--primary-icon-color);
@@ -273,7 +267,7 @@ body.single.track .playback-player-type-toggle {
 .playback-next-button.state-disabled:hover,
 .playback-repeat-toggle.state-disabled:hover,
 .playback-shuffle-button.state-disabled:hover,
-.playback-mute-button.state-disabled:hover,
+.playback-mute-toggle.state-disabled:hover,
 .playback-volume-control.state-disabled:hover {
   opacity: var(--control-disabled-opacity);
   cursor: default;
@@ -313,7 +307,7 @@ body.autoplay-off .playback-play-pause-toggle.state-playing.time-remaining-warni
 .playback-next-button,
 .playback-repeat-toggle,
 .playback-shuffle-button,
-.playback-mute-button {
+.playback-mute-toggle {
   color: var(--primary-icon-color);
   cursor: pointer;
 }
@@ -321,13 +315,13 @@ body.autoplay-off .playback-play-pause-toggle.state-playing.time-remaining-warni
 .playback-prev-button:hover,
 .playback-next-button:hover,
 .playback-repeat-toggle:hover,
-.playback-mute-button:hover {
+.playback-mute-toggle:hover {
   opacity: var(--control-hover-opacity);
 }
 
 .playback-repeat-toggle .material-icons,
 .playback-shuffle-button .material-icons,
-.playback-mute-button .material-icons {
+.playback-mute-toggle .material-icons {
   font-size: 30px;
   width: 30px;
   height: 30px;
@@ -395,14 +389,14 @@ body.autoplay-off .playback-play-pause-toggle.state-playing.time-remaining-warni
   .playback-prev-button,
   .playback-next-button,
   .playback-repeat-toggle,
-  .playback-mute-button {
+  .playback-mute-toggle {
     color: var(--primary-icon-color);
   }
 
   .playback-prev-button:hover,
   .playback-next-button:hover,
   .playback-repeat-toggle:hover,
-  .playback-mute-button:hover {
+  .playback-mute-toggle:hover {
     color: var(--primary-icon-color);
     opacity: 1;
   }
@@ -463,7 +457,7 @@ body.autoplay-off .playback-play-pause-toggle.state-playing.time-remaining-warni
   .playback-timer-control,
   .playback-repeat-toggle,
   .playback-shuffle-button,
-  .playback-mute-button,
+  .playback-mute-toggle,
   .playback-volume-control {
     display: none;
   }

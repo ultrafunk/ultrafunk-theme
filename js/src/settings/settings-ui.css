@@ -32,83 +32,84 @@ table.settings {
   user-select: none;
   font-size: 22px;
   line-height: 30px;
-}
 
-table.settings tr:nth-child(odd) {
-  background: var(--list-row-odd-color);
-}
-
-@media all and (pointer: fine) {
-
-  table.settings tr:hover {
-    background: var(--list-row-hover-color);
-    cursor: pointer;
-  }
-
-}
-
-@media not all and (pointer: fine) {
-
-  table.settings tr:nth-child(odd) {
+  tr:nth-child(odd) {
     background: var(--list-row-odd-color);
-    transition: background 150ms 0s ease-in;
   }
 
-  table.settings tr:nth-child(even) {
-    transition: background 150ms 0s ease-in;
+  @media all and (pointer: fine) {
+
+    tr:hover {
+      background: var(--list-row-hover-color);
+      cursor: pointer;
+    }
+
   }
 
-  table.settings tr:active {
-    background: var(--list-row-hover-color);
-    transition: var(--button-active-transition);
+  @media not all and (pointer: fine) {
+
+    tr:nth-child(odd) {
+      background: var(--list-row-odd-color);
+      transition: background 150ms 0s ease-in;
+    }
+
+    tr:nth-child(even) {
+      transition: background 150ms 0s ease-in;
+    }
+
+    tr:active {
+      background: var(--list-row-hover-color);
+      transition: var(--button-active-transition);
+    }
+
   }
 
-}
+  td {
+    padding: 10px 15px;
+  }
 
-table.settings td {
-  padding: 10px 15px;
-}
+  td.changed-indicator {
+    padding: 0;
+    border-top-left-radius: var(--button-border-radius);
+    border-bottom-left-radius: var(--button-border-radius);
+    width: 6px;
+  }
 
-table.settings td.changed-indicator {
-  padding: 0;
-  border-top-left-radius: var(--button-border-radius);
-  border-bottom-left-radius: var(--button-border-radius);
-  width: 6px;
-}
+  tr.value-changed:nth-child(odd) td.changed-indicator {
+    background-color: var(--has-changed-color-odd);
+    border-radius: 0;
+  }
 
-table.settings tr.value-changed:nth-child(odd) td.changed-indicator {
-  background-color: var(--has-changed-color-odd);
-  border-radius: 0;
-}
+  tr.value-changed:nth-child(even) td.changed-indicator {
+    background-color: var(--has-changed-color-even);
+    border-radius: 0;
+  }
 
-table.settings tr.value-changed:nth-child(even) td.changed-indicator {
-  background-color: var(--has-changed-color-even);
-  border-radius: 0;
-}
+  td.spacer {
+    padding: 0;
+    width: 9px;
+  }
 
-table.settings td.spacer {
-  padding: 0;
-  width: 9px;
-}
+  td.description {
+    white-space: nowrap;
+    padding-left: 0;
+  }
 
-table.settings td.description {
-  white-space: nowrap;
-  padding-left: 0;
-}
+  td.value-string {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 700;
+    text-align: end;
+    border-top-right-radius: var(--button-border-radius);
+    border-bottom-right-radius: var(--button-border-radius);
+    color: var(--primary-icon-color);
+  }
 
-table.settings td.value-string {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 700;
-  text-align: end;
-  border-top-right-radius: var(--button-border-radius);
-  border-bottom-right-radius: var(--button-border-radius);
-  color: var(--primary-icon-color);
-}
+  td.current-value-false {
+    opacity: 0.3;
+  }
 
-table.settings td.current-value-false {
-  opacity: 0.3;
 }
 
 .settings-clear-container {

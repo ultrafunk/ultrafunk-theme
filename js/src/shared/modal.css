@@ -135,9 +135,7 @@
 }
 
 .modal-icon-text,
-.modal-hover-icon-text,
-.modal-track-share-entry,
-.modal-track-details-entry {
+.modal-hover-icon-text {
   font-size: 20px;
   line-height: 25px;
   padding: 8px 30px;
@@ -145,14 +143,6 @@
 
 .modal-click-item.modal-hover-icon-text {
   padding: 0px 30px 0px 22px;
-}
-
-.modal-track-share-entry {
-  padding: 13px 30px 18px 30px;
-}
-
-.modal-track-details-entry {
-  padding: 12px 30px 6px 30px;
 }
 
 .modal-click-item {
@@ -216,11 +206,6 @@ a.modal-click-item:hover {
   margin-left: 7px;
 }
 
-.modal-type-track-details .modal-click-item.modal-2-columns {
-  display: inline-flex;
-  width: 50%;
-}
-
 .modal-dialog-footer {
   display: none;
   justify-content: space-around;
@@ -281,11 +266,6 @@ a.modal-click-item:hover {
     max-width: 550px;
   }
 
-  .modal-type-track-details .modal-click-item.modal-2-columns {
-    display: flex;
-    width: unset;
-  }
-
 }
 
 
@@ -335,9 +315,7 @@ a.modal-click-item:hover {
   }
 
   .modal-icon-text,
-  .modal-hover-icon-text,
-  .modal-track-share-entry,
-  .modal-track-details-entry {
+  .modal-hover-icon-text {
     font-size: 15px;
     line-height: 20px;
     padding: 8px 20px;
@@ -345,14 +323,6 @@ a.modal-click-item:hover {
 
   .modal-click-item.modal-hover-icon-text {
     padding-left: 12px;
-  }
-
-  .modal-track-share-entry {
-    padding: 10px 20px 14px 20px;
-  }
-
-  .modal-track-details-entry {
-    padding: 10px 20px 5px 20px;
   }
 
   .modal-click-item {

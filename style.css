@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.46.26
+Version:           1.46.27
 Requires at least: 6.5.2
 Tested up to:      6.5.2
 Requires PHP:      8.2
@@ -75,10 +75,6 @@ body.scrolling-disabled #site-header {
 
 body.no-playback #progress-controls {
   display: none;
-}
-
-body.page {
-  --site-max-width: 1000px;
 }
 
 .site-header-container {
@@ -1096,12 +1092,6 @@ body.no-playback .scrolling-up .site-header-container {
 
 @media screen and (max-width: 1920px) {
 
-  body.search {
-    --site-max-width: 1000px;
-    --site-content-margin-top: 40px;
-    --site-content-margin-bottom: 65px;
-  }
-
   #menu-primary-channels {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
@@ -1284,11 +1274,6 @@ body.no-playback .scrolling-up .site-header-container {
 
 @media screen and (max-width: 900px) {
 
-  :root {
-    --site-content-margin-top: 50px;
-    --site-content-margin-bottom: 75px;
-  }
-
   .site-header-container,
   #site-search-container,
   nav.navigation,
@@ -1331,15 +1316,6 @@ body.no-playback .scrolling-up .site-header-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 768px) {
-
-  :root {
-    --site-content-margin-top: 40px;
-    --site-content-margin-bottom: 65px;
-  }
-
-  body.search {
-    --site-content-margin-top: 40px;
-  }
 
   .site-header-container,
   #site-search-container,
@@ -1432,24 +1408,6 @@ body.no-playback .scrolling-up .site-header-container {
 ***************************************************************************************************/
 
 @media screen and (max-width: 500px) {
-
-  :root {
-    --site-header-height: 165px;
-    --site-header-height-no-playback: 100px;
-
-    --site-header-height-down: 64px;
-    --site-header-height-up: 110px;
-
-    --site-content-margin-top: 32px;
-    --site-content-margin-bottom: 50px;
-
-    --track-thumbnail-border-radius: 4px;
-  }
-
-  body.search {
-    --site-content-margin-top: 32px;
-    --site-content-margin-bottom: 50px;
-  }
 
   .site-header-container,
   #site-search-container,

@@ -100,7 +100,7 @@ export function init(getTrackData, seekClickCallback)
 
   ctrl.shuffle = ElementWrapper('.playback-shuffle-button', playbackControls);
 
-  ctrl.mute      = ElementWrapper('.playback-mute-button', playbackControls);
+  ctrl.mute      = ElementWrapper('.playback-mute-toggle', playbackControls);
   ctrl.mute.icon = ctrl.mute.getElement('span.material-icons');
 
   ctrl.volume = ElementWrapper('.playback-volume-control', playbackControls);

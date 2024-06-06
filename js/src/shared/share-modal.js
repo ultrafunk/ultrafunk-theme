@@ -68,6 +68,10 @@ const shareModalClosure = (() =>
       { icon: icon,           content: `<b>${verb}</b> on YouTube Music`, link: youTubeLink,                                              linkTarget: '_blank' },
     ];
 
+    // If input device is touch, Spotify needs a different search link
+    if (window.matchMedia('(pointer: coarse)').matches)
+      modalList[5].link = `https://open.spotify.com/search/results/${searchString}`;
+
     if (bodyHtml !== null)
       modalList.unshift({ class: 'track-share-entry', content: bodyHtml });
 

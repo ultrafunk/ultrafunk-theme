@@ -9,11 +9,13 @@
 @import '..\\js\\src\\shared\\snackbar.css';
 @import '..\\js\\src\\settings\\settings-ui.css';
 @import '..\\js\\src\\playback\\common\\playback-controls.css';
+@import '..\\js\\src\\playback\\common\\track-modals.css';
 @import '..\\js\\src\\playback\\gallery\\gallery-controls.css';
 @import '..\\js\\src\\playback\\gallery\\gallery-track.css';
 @import '..\\js\\src\\playback\\gallery\\gallery-player.css';
 @import '..\\js\\src\\playback\\gallery\\single-track.css';
 @import '..\\js\\src\\playback\\list\\list-player.css';
+@import '..\\js\\src\\playback\\list\\track-controls.css';
 @import '..\\js\\src\\playback\\list\\track-search.css';
 @import '..\\js\\src\\playback\\list\\up-next-modal.css';
 @import '..\\js\\src\\site\\artists-channels.css';

@@ -1,0 +1,128 @@
+/*
+* Track modal dialogs (extends modal.css)
+*
+* https://ultrafunk.com
+*
+*/
+
+.modal-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-track-thumbnail {
+  margin-right: 15px;
+  width: 50px;
+  min-width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: var(--track-thumbnail-border-radius);
+  cursor: pointer;
+}
+
+.modal-track-thumbnail img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.modal-track-thumbnail.type-youtube img {
+  height: 68px;
+  margin-top: -9px;
+}
+
+.modal-track-artist-title {
+  width: 100%;
+}
+
+.modal-track-share-entry,
+.modal-track-details-entry {
+  font-size: 20px;
+  line-height: 25px;
+  padding: 8px 30px;
+}
+
+.modal-track-share-entry {
+  padding: 13px 30px 18px 30px;
+}
+
+.modal-track-details-entry {
+  padding: 12px 30px 6px 30px;
+}
+
+.modal-type-track-details .modal-click-item.modal-2-columns {
+  display: inline-flex;
+  width: 50%;
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 768px
+***************************************************************************************************/
+
+@media screen and (max-width: 768px) {
+
+  .modal-type-track-details .modal-click-item.modal-2-columns {
+    display: flex;
+    width: unset;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 500px
+***************************************************************************************************/
+
+@media screen and (max-width: 500px) {
+
+  .modal-track-thumbnail {
+    margin-right: 12px;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+  }
+
+  .modal-track-thumbnail img {
+    width: 40px;
+  }
+
+  .modal-track-thumbnail.type-youtube img {
+    height: 54px;
+    margin-top: -7px;
+  }
+
+  .modal-track-share-entry,
+  .modal-track-details-entry {
+    font-size: 15px;
+    line-height: 20px;
+    padding: 8px 20px;
+  }
+
+  .modal-track-share-entry {
+    padding: 10px 20px 14px 20px;
+  }
+
+  .modal-track-details-entry {
+    padding: 10px 20px 5px 20px;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-width: 400px
+***************************************************************************************************/
+
+@media screen and (max-width: 400px) {
+
+  .modal-track {
+    font-size: 13px;
+  }
+
+}

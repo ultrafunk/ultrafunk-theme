@@ -89,11 +89,13 @@ function ultrafunk_enqueue_styles() : void
     wp_enqueue_style('snackbar-style',           $theme_uri . '/js/src/shared/snackbar.css',                   [], $version);
     wp_enqueue_style('settings-ui-style',        $theme_uri . '/js/src/settings/settings-ui.css',              [], $version);
     wp_enqueue_style('playback-controls-style',  $theme_uri . '/js/src/playback/common/playback-controls.css', [], $version);
-    wp_enqueue_style('crossfade-controls-style', $theme_uri . '/js/src/playback/gallery/gallery-controls.css', [], $version);
+    wp_enqueue_style('track-modals-style',       $theme_uri . '/js/src/playback/common/track-modals.css',      [], $version);
+    wp_enqueue_style('gallery-controls-style',   $theme_uri . '/js/src/playback/gallery/gallery-controls.css', [], $version);
     wp_enqueue_style('gallery-track-style',      $theme_uri . '/js/src/playback/gallery/gallery-track.css',    [], $version);
     wp_enqueue_style('gallery-player-style',     $theme_uri . '/js/src/playback/gallery/gallery-player.css',   [], $version);
     wp_enqueue_style('single-track-style',       $theme_uri . '/js/src/playback/gallery/single-track.css',     [], $version);
     wp_enqueue_style('list-player-style',        $theme_uri . '/js/src/playback/list/list-player.css',         [], $version);
+    wp_enqueue_style('track-controls-style',     $theme_uri . '/js/src/playback/list/track-controls.css',      [], $version);
     wp_enqueue_style('track-search-style',       $theme_uri . '/js/src/playback/list/track-search.css',        [], $version);
     wp_enqueue_style('up-next-modal-style',      $theme_uri . '/js/src/playback/list/up-next-modal.css',       [], $version);
     wp_enqueue_style('artists-channels-style',   $theme_uri . '/js/src/site/artists-channels.css',             [], $version);
