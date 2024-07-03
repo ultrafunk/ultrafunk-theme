@@ -84,7 +84,7 @@ function getSelectedFiles(filesList)
       {
         uid: tracksUid[index++],
         id: 0,
-        link: URL.createObjectURL(file),
+        link: encodeURI(URL.createObjectURL(file)),
         artists: [],
         channels: [],
         meta: {
