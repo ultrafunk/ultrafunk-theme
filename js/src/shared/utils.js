@@ -253,14 +253,18 @@ export function getThumbnailData(metaData)
   if (metaData.track_source_type === TRACK_TYPE.YOUTUBE)
     return getYouTubeImgUrl(metaData.track_source_data);
 
-  return { src: THEME_ENV.defaultSCThumbnail, class: 'type-soundcloud', uid: '' };
+  if (metaData.track_source_type === TRACK_TYPE.SOUNDCLOUD)
+    return { src: THEME_ENV.defaultSCThumbnail, class: 'type-soundcloud', uid: '' };
+
+  if (metaData.track_source_type === TRACK_TYPE.LOCAL)
+    return { src: THEME_ENV.defaultLTThumbnail, class: 'type-local', uid: '' };
 }
 
 export function getTrackTypeData(trackType, thumbnailUrl)
 {
   const isYouTubeTrack      = (trackType === TRACK_TYPE.YOUTUBE);
   const youTubeThumbnailUrl = IS_PROD_BUILD  ? thumbnailUrl        : THEME_ENV.defaultYTThumbnail;
-  const trackThumbnailUrl   = isYouTubeTrack ? youTubeThumbnailUrl : THEME_ENV.defaultSCThumbnail;
+  const trackThumbnailUrl   = isYouTubeTrack ? youTubeThumbnailUrl : thumbnailUrl;
 
   return { isYouTubeTrack: isYouTubeTrack, thumbnailUrl: trackThumbnailUrl };
 }

@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 36, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 37, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -87,6 +87,7 @@ export const settingsSchema = {
   //showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
   },
   experimental: {
+    enableLocalPlayback:  { description: '<b>List Player</b><br>Enable local (device) track playback',      type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //enableDjPlayer:       { description: '<b>List Player</b><br>Enable DJ Player testing',                  type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //realtimeTrackSearch:  { description: '<b>List Player</b><br>Show realtime track search results',        type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
@@ -144,6 +145,7 @@ export const defaultSettings = {
   //showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,
   },
   experimental: {
+    enableLocalPlayback:  settingsSchema.experimental.enableLocalPlayback.default,
   //enableDjPlayer:       settingsSchema.experimental.enableDjPlayer.default,
   //realtimeTrackSearch:  settingsSchema.experimental.realtimeTrackSearch.default,
   //fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,

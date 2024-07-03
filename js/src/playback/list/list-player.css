@@ -61,6 +61,28 @@ body.list-player .site-branding {
   margin: 0 auto;
 }
 
+.embedded-container.soundcloud-container {
+  display: none;
+}
+
+.embedded-container.local-container {
+  display: none;
+}
+
+.embedded-container.local-container .wp-block-embed__wrapper {
+  height: unset;
+}
+
+.embedded-container.local-container audio {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.embedded-container.local-container audio::-webkit-media-controls-enclosure {
+  border-radius: 0;
+}
+
 #tracklist {
   width: 35.5%;
   max-height: 855px;
@@ -204,6 +226,32 @@ body.list-player .site-branding {
 
 .load-more-loader .loader-5 {
   animation-delay: -0.500s;
+}
+
+#tracklist-local {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--tracklist-page-separator-color);
+  padding: 12px 0;
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 400;
+}
+
+input#select-local-files {
+  font-size: 0;
+}
+
+input#select-local-files::file-selector-button {
+  font-size: 20px;
+}
+
+button#clear-local-tracks {
+  all: revert;
+  font-size: 20px;
+  margin-left: 5px;
 }
 
 body.list-player #site-footer {
@@ -395,6 +443,20 @@ body.list-player .site-footer-container {
 
   .tracklist-page-separator .arrow-up-button {
     margin-right: 6px;
+  }
+
+  #tracklist-local {
+    font-size: 15px;
+    line-height: 27px;
+    padding: 10px 0;
+  }
+
+  input#select-local-files::file-selector-button {
+    font-size: 15px;
+  }
+
+  button#clear-local-tracks {
+    font-size: 15px;
   }
 
 }

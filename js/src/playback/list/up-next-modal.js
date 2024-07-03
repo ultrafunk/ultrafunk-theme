@@ -5,12 +5,13 @@
 //
 
 
-import { newDebugLogger }    from '../../shared/debuglogger.js';
+//import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { autoplay }          from '../../site/footer-toggles.js';
 import { settings }          from '../../shared/session-data.js';
 import { isPlaying }         from '../common/playback-controls.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
+import { setCurrentTrack }   from './list-playback.js';
 
 import {
   VERSION,
@@ -42,13 +43,13 @@ import {
 /*************************************************************************************************/
 
 
-const debug = newDebugLogger('up-next-modal');
+//const debug = newDebugLogger('up-next-modal');
 
 const m = {
-  setCurrentTrack: null,
-  modalDialogId:   null,
-  dragStartY:      0,
-  dragEntryId:     null,
+  modalDialogId: null,
+  dragDropTouch: null,
+  dragStartY:    0,
+  dragEntryId:   null,
 };
 
 
@@ -56,32 +57,7 @@ const m = {
 //
 // ************************************************************************************************
 
-export function init(setCurrentTrackCallback)
-{
-  m.setCurrentTrack = setCurrentTrackCallback;
-}
-
-function loadDragDropTouch()
-{
-  if (('ontouchstart' in window) && (document.getElementById('drag-drop-touch') === null))
-  {
-    debug.log('Loading drag-drop-touch.js...');
-
-    const tag = document.createElement('script');
-    tag.type  = 'text/javascript';
-    tag.id    = 'drag-drop-touch';
-    tag.src   = `${ULTRAFUNK_THEME_URI}/inc/js/drag-drop-touch.min.js?ver=${VERSION}`;
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-  }
-}
-
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
-
-export function showUpNextModal()
+export async function showUpNextModal()
 {
   const tracklist = getTracklist(isPlaying());
 
@@ -99,7 +75,8 @@ export function showUpNextModal()
     addDragDropListeners();
 
     // Only loads this dependency if we actually need it...
-    loadDragDropTouch();
+    if (('ontouchstart' in window) && (m.dragDropTouch === null))
+      m.dragDropTouch = await import(`${ULTRAFUNK_THEME_URI}/inc/js/drag-drop-touch.min.js?ver=${VERSION}`);
   }
   else
   {
@@ -119,7 +96,7 @@ function onTrackClick(tracklist, clickedId)
   if ((nextTrackId === getCurrentTrackElement().id) && isPlaying())
     getCurrentTrackElement().scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
   else
-    m.setCurrentTrack(nextTrackId, true, false);
+    setCurrentTrack(nextTrackId, true, false);
 }
 
 function shouldCloseModal(event)

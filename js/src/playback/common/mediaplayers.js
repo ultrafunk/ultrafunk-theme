@@ -19,6 +19,7 @@ export const TRACK_TYPE = {
   NONE:       0,
   YOUTUBE:    1,
   SOUNDCLOUD: 2,
+  LOCAL:      3,
 };
 
 

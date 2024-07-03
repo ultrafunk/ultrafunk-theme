@@ -44,9 +44,9 @@ const m = {
 };
 
 const noPlayableTracksError = /*html*/ `
-  <p>The <b>List Player</b> only supports playing YouTube tracks, SoundCloud tracks will be automatically skipped over.</p>
-  <p>SoundCloud tracks must be played using the <b>Gallery Player</b> or by clicking / tapping on the track <b>Artist + Title</b> text link in the <b>List Player</b>.</p>
-  <p>To toggle between the <b>Gallery</b> and <b>List</b> players, please use the <b>Pref. Player: GALLERY / LIST</b> setting toggle button in the sites footer area.</p>`;
+  <p>The List Player only supports playing YouTube tracks, SoundCloud tracks will be automatically skipped over.</p>
+  <p>SoundCloud tracks must be played using the Gallery Player or by clicking / tapping on the track Artist + Title text link in the List Player.</p>
+  <p>To toggle between the Gallery and List players, please use the Pref. Player: GALLERY / LIST setting toggle button in the sites footer area.</p>`;
 
 
 // ************************************************************************************************
@@ -57,8 +57,8 @@ export function init()
 {
   debug.log('init()');
 
-  listControls.init(setCurrentTrack);
-  initTrackSearch(setCurrentTrack);
+  listControls.init();
+  initTrackSearch();
 
   if (cueInitialTrack() !== null)
   {
@@ -127,7 +127,7 @@ function cueInitialTrack()
 //
 // ************************************************************************************************
 
-function setCurrentTrack(nextTrackId, playTrack = true, isPointerClick = false)
+export function setCurrentTrack(nextTrackId, playTrack = true, isPointerClick = false)
 {
   const nextTrackType = listControls.getTrackType(listControls.queryTrackId(nextTrackId));
 
@@ -193,6 +193,14 @@ function cueOrPlayCurrentTrack(playTrack, positionSeconds = 0)
 export function play()
 {
   m.player.play(onYouTubePlayerError);
+}
+
+export function stop()
+{
+  if (m.player.embedded.getCurrentTime() > 0)
+    m.player.embedded.stopVideo();
+
+  playbackControls.updateTimerAndProgress(0, 0, m.player.getDuration());
 }
 
 export function pause()

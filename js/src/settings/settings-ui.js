@@ -60,7 +60,7 @@ const settingsSections = [
   { name: 'Gallery Player', id: 'gallery',      schema: settingsSchema.gallery      },
   { name: 'Mobile',         id: 'mobile',       schema: settingsSchema.mobile       },
   { name: 'Site',           id: 'site',         schema: settingsSchema.site         },
-//{ name: 'Experimental',   id: 'experimental', schema: settingsSchema.experimental },
+  { name: 'Experimental',   id: 'experimental', schema: settingsSchema.experimental },
 ];
 
 const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and Site settings</h3>

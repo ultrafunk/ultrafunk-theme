@@ -48,10 +48,9 @@ document.addEventListener('DOMContentLoaded', () =>
 
   initIndex();
 
-  if (document.getElementById('termlist-container') !== null)
+  if (response?.get?.termlist)
     initArtistsChannels();
-
-  if (document.getElementById('settings-container') !== null)
+  else if (isSettingsPage())
     initSettingsUi();
 
   setSiteContentSearchFocus();
@@ -115,7 +114,7 @@ function documentEventKeyDown(event)
     switch (event.key)
     {
       case 'L':
-        if (searchNotFocused() && notSettingsPage())
+        if (searchNotFocused() && !isSettingsPage())
         {
           themeLayout.galleryLayout.toggle(event);
           resize.trigger();
@@ -141,7 +140,7 @@ function documentEventKeyDown(event)
         break;
 
       case 'T':
-        if (searchNotFocused() && notSettingsPage())
+        if (searchNotFocused() && !isSettingsPage())
         {
           themeLayout.siteTheme.toggle(event);
         }
@@ -171,9 +170,9 @@ function searchNotFocused()
   return ((navSearch.isVisible() === false) && (elements.siteContentSearch !== document.activeElement));
 }
 
-function notSettingsPage()
+function isSettingsPage()
 {
-  return (document.body.classList.contains('page-settings') === false);
+  return document.body.classList.contains('page-settings');
 }
 
 function notFullscreenElement()

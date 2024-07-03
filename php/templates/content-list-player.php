@@ -24,9 +24,19 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
 
     ?>
     <div id="list-player-container" class="player-container">
-      <div class="embedded-container">
+      <div class="embedded-container youtube-container">
         <div class="wp-block-embed__wrapper <?php echo ($is_first_video ? 'aspect-ratio-16_9' : 'aspect-ratio-1_1'); ?>">
           <div id="youtube-player"></div>
+        </div>
+      </div>
+      <div class="embedded-container soundcloud-container">
+        <div class="wp-block-embed__wrapper">
+          <div id="soundcloud-player"></div>
+        </div>
+      </div>
+      <div class="embedded-container local-container">
+        <div class="wp-block-embed__wrapper">
+          <div id="local-player"><audio id="local-audio-player" controls ></audio></div>
         </div>
       </div>
       <div id="tracklist"

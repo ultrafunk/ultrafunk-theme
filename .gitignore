@@ -1,7 +1,6 @@
 .git/
 .vscode/
 .VSCodeCounter/
-img/
 node_modules/
 /test-results/
 /playwright-report/

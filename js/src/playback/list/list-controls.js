@@ -5,7 +5,6 @@
 //
 
 
-import * as upNextModal       from './up-next-modal.js';
 import * as playbackEvents    from '../common/playback-events.js';
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { ElementClick }       from '../../shared/element-click.js';
@@ -14,6 +13,9 @@ import { TRACK_TYPE }         from '../common/mediaplayers.js';
 import { loadTracks }         from './list-tracks-rest.js';
 import { showSnackbar }       from '../../shared/snackbar.js';
 import { response, settings } from '../../shared/session-data.js';
+import { updateUpNextModal }  from './up-next-modal.js';
+import { setCurrentTrack }    from './list-playback.js';
+import { cueOrPlayTrack }     from './local-playback.js';
 
 import {
   replaceClass,
@@ -48,16 +50,14 @@ const m = {
 //
 // ************************************************************************************************
 
-export function init(setCurrentTrackCallback)
+export function init()
 {
   debug.log('init()');
-
-  upNextModal.init(setCurrentTrackCallback);
 
   m.tracklist         = document.getElementById('tracklist');
   m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
   m.playerWrapper     = document.querySelector('.wp-block-embed__wrapper');
-  m.uiElements        = new UiElements('#tracklist', setCurrentTrackCallback);
+  m.uiElements        = new UiElements('#tracklist');
 }
 
 export function ready(player)
@@ -153,16 +153,10 @@ export function setCuedTrack(trackId)
 
 class UiElements extends ElementClick
 {
-  constructor(selectors, setCurrentTrackCallback)
-  {
-    super(selectors);
-    this.setCurrentTrack = setCurrentTrackCallback;
-  }
-
   elementClicked()
   {
     if (this.clicked('button.thumbnail'))
-      return this.setCurrentTrack(this.closest('div.track-entry').id, true, true);
+      return trackPlayClick(this.closest('div.track-entry'));
 
     if (this.clicked('button.track-actions-toggle'))
       return trackActionsClick(this.closest('div.track-entry'));
@@ -185,6 +179,16 @@ class UiElements extends ElementClick
     if (this.clicked('button.arrow-down-button'))
       return arrowUpDownClick(this.closest('div.tracklist-page-separator'), false);
   }
+}
+
+function trackPlayClick(clickedElement)
+{
+  const trackType = getTrackType(clickedElement);
+
+  if ((trackType === TRACK_TYPE.YOUTUBE) || (trackType === TRACK_TYPE.SOUNDCLOUD))
+    setCurrentTrack(clickedElement.id, true, true);
+  else if (trackType === TRACK_TYPE.LOCAL)
+    cueOrPlayTrack(clickedElement, true);
 }
 
 function trackActionsClick(element)
@@ -375,7 +379,7 @@ export function setCurrentTrackState(newState)
       else
         replaceClass(m.trackElement, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
 
-      upNextModal.updateUpNextModal(newState.ID === STATE.PLAYING.ID);
+      updateUpNextModal(newState.ID === STATE.PLAYING.ID);
     }
   }
 }

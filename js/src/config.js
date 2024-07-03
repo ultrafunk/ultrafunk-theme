@@ -15,7 +15,7 @@ export const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-export const VERSION = '1.46.27';
+export const VERSION = '1.46.28';
 
 export const ULTRAFUNK_THEME_URI = IS_PROD_BUILD
                                      ? 'https://ultrafunk.com/wp-content/themes/ultrafunk'
@@ -31,4 +31,5 @@ export const THEME_ENV = {
   'defaultTrackThumbnail':              ULTRAFUNK_THEME_URI + '/inc/img/photo_filled_grey.png',
   'defaultYTThumbnail':                 ULTRAFUNK_THEME_URI + '/inc/img/yt_thumbnail_placeholder.png',
   'defaultSCThumbnail':                 ULTRAFUNK_THEME_URI + '/inc/img/sc_thumbnail_placeholder.png',
+  'defaultLTThumbnail':                 ULTRAFUNK_THEME_URI + '/inc/img/lt_thumbnail_placeholder.png',
 };

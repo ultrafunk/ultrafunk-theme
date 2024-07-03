@@ -14,6 +14,7 @@ import { TRACK_TYPE }             from '../common/mediaplayers.js';
 import { showSnackbar }           from '../../shared/snackbar.js';
 import { getTrackEntryHtml }      from './list-track-templates.js';
 import { getCurrentTrackElement } from './list-controls.js';
+import { setCurrentTrack }        from './list-playback.js';
 
 import {
   showTrackDetails,
@@ -43,7 +44,6 @@ import {
 const debug = newDebugLogger('track-search');
 
 const m = {
-  setCurrentTrack:    null,
   debounceKeyup:      null,
   uiElements:         null,
   searchField:        null,
@@ -57,22 +57,21 @@ const m = {
 const minSearchStringLength = 3;
 
 const notPlayableTrack = /*html*/ `
-  <p>The <b>List Player</b> only supports YouTube tracks, SoundCloud tracks cannot be played or queued.
-  SoundCloud tracks must be played using the <b>Gallery Player</b> or by clicking / tapping on the
-  track <b>Artist + Title</b> text link in the <b>List Player</b>.</p>`;
+  <p>The List Player only supports YouTube tracks, SoundCloud tracks cannot be played or queued.
+  SoundCloud tracks must be played using the Gallery Player or by clicking / tapping on the
+  track Artist + Title text link in the List Player.</p>`;
 
 
 // ************************************************************************************************
 //
 // ************************************************************************************************
 
-export function initTrackSearch(setCurrentTrackCallback)
+export function initTrackSearch()
 {
   debug.log('init()');
 
   if (settings.list.realtimeTrackSearch)
   {
-    m.setCurrentTrack    = setCurrentTrackCallback;
     m.debounceKeyup      = debounceKeyup(showSearchResults, 250);
     m.uiElements         = new uiElements('#track-search-results .results-tracklist');
     m.searchField        = document.querySelector('#site-search-container .search-field');
@@ -195,7 +194,7 @@ function playTrackClick(element)
   }
   else
   {
-    m.setCurrentTrack(insertResultTrack(element).id, true, false);
+    setCurrentTrack(insertResultTrack(element).id, true, false);
     navSearch.hide();
   }
 }

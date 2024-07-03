@@ -30,7 +30,8 @@
 
   @media all and (pointer: fine) {
 
-    &.type-youtube:hover {
+    &.type-youtube:hover,
+    &.type-local:hover {
       background: var(--list-row-hover-color);
     }
 
@@ -38,7 +39,8 @@
 
   @media not all and (pointer: fine) {
 
-    &.type-youtube:hover {
+    &.type-youtube:hover,
+    &.type-local:hover {
       opacity: 1;
     }
 
@@ -77,7 +79,8 @@
     border-radius: var(--track-thumbnail-border-radius);
   }
 
-  &.type-youtube .thumbnail:hover {
+  &.type-youtube .thumbnail:hover,
+  &.type-local .thumbnail:hover {
     cursor: pointer;
   }
 
@@ -96,7 +99,8 @@
     background: rgba(0, 0, 0, 0.6);
   }
 
-  &.type-youtube:hover .thumbnail-overlay::before {
+  &.type-youtube:hover .thumbnail-overlay::before,
+  &.type-local:hover .thumbnail-overlay::before {
     opacity: 1;
   }
 
@@ -105,17 +109,20 @@
     opacity: 1;
   }
 
-  &.type-youtube.state-playing .thumbnail-overlay::before {
+  &.type-youtube.state-playing .thumbnail-overlay::before,
+  &.type-local.state-playing .thumbnail-overlay::before {
     content: "\e050"; /* volume_up */
     opacity: 1;
   }
 
-  &.type-youtube.current.state-playing:hover .thumbnail-overlay::before {
+  &.type-youtube.current.state-playing:hover .thumbnail-overlay::before,
+  &.type-local.current.state-playing:hover .thumbnail-overlay::before {
     content: "\e034"; /* pause */
     opacity: 1;
   }
 
-  &.type-youtube.current.state-paused .thumbnail-overlay::before {
+  &.type-youtube.current.state-paused .thumbnail-overlay::before,
+  &.type-local.current.state-paused .thumbnail-overlay::before {
     content: "\e037"; /* play_arrow */
     opacity: 1;
   }
