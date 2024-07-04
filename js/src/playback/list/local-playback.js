@@ -18,8 +18,9 @@ import {
 } from '../common/playback-events.js';
 
 import {
+  escHtml,
   stripAttribute,
-  stripHtml
+  stripHtml,
 } from '../../shared/utils.js';
 
 
@@ -126,7 +127,7 @@ async function setTracksMetadata(filesList, tracksUid)
     }
     catch
     {
-      const fileName = stripHtml(file.name);
+      const fileName = stripHtml(escHtml(file.name));
 
       element.setAttribute('data-track-artist', fileName);
       element.setAttribute('data-track-title',  fileName);
