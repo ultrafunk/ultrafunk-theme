@@ -19,6 +19,7 @@ import {
 
 import {
   escHtml,
+  getTimeString,
   stripAttribute,
   stripHtml,
 } from '../../shared/utils.js';
@@ -30,9 +31,16 @@ import {
 const debug = newDebugLogger('local-playback');
 
 const m = {
-  audioPlayer: null,
-  id3js:       null,
+  audioPlayer:    null,
+  id3js:          null,
+  currentTrackId: null,
 };
+
+const tracklistLocalHtml = /*html*/ `
+  <div id="tracklist-local">
+    Add local tracks:&nbsp;&nbsp;<input id="select-local-files" type="file" accept="audio/*" multiple />
+    <button id="clear-local-tracks" type="button">Clear Tracks</button>
+  </div>`;
 
 
 // ************************************************************************************************
@@ -43,21 +51,16 @@ export function initLocalPlayback()
 {
   debug.log('init()');
 
-  const tracklistLocalHtml = /*html*/ `
-    <div id="tracklist-local">
-      Add local tracks:&nbsp;&nbsp;<input id="select-local-files" type="file" accept="audio/*" multiple />
-      <button id="clear-local-tracks" type="button">Clear Tracks</button>
-    </div>`;
-
   document.getElementById('tracklist').insertAdjacentHTML("beforeend", tracklistLocalHtml);
 
   document.getElementById('select-local-files').addEventListener('change', (event) => getSelectedFiles(event.target.files));
   document.getElementById('select-local-files').addEventListener('cancel', (event) => getSelectedFiles(event.target.files));
   document.getElementById('clear-local-tracks').addEventListener('click',  clearLocalTracks);
 
-  addListener(EVENT.MEDIA_PLAYING, () => stop());
-
   m.audioPlayer = document.getElementById('local-audio-player');
+  m.audioPlayer.addEventListener('durationchange', updateTrackDuration);
+
+  addListener(EVENT.MEDIA_PLAYING, () => stop());
 }
 
 
@@ -76,6 +79,8 @@ function getSelectedFiles(filesList)
     let index       = 0;
     const tracksUid = [];
     let tracksHtml  = '';
+
+    showSnackbar({ message: `Adding ${filesList.length} local ${(filesList.length === 1) ? 'track' : 'tracks'}...` });
 
     for (const file of filesList)
     {
@@ -99,8 +104,6 @@ function getSelectedFiles(filesList)
 
     document.getElementById('tracklist').insertAdjacentHTML("beforeend", tracksHtml);
     setTracksMetadata(filesList, tracksUid);
-
-    showSnackbar({ message: `Added ${index} local ${(index === 1) ? 'track' : 'tracks'}` });
   }
 }
 
@@ -163,6 +166,7 @@ export function cueOrPlayTrack(trackElement, playTrack = false)
 
   if (playTrack)
   {
+    m.currentTrackId = trackElement.id;
     showTrackTypePlayer(TRACK_TYPE.LOCAL);
     stopYouTubeTrack();
     m.audioPlayer.play();
@@ -179,6 +183,12 @@ function stop()
     m.audioPlayer.pause();
     m.audioPlayer.currentTime = 0;
   }
+}
+
+function updateTrackDuration()
+{
+  document.getElementById(m.currentTrackId).setAttribute('data-track-duration', Math.round(m.audioPlayer.duration));
+  document.getElementById(m.currentTrackId).querySelector('div.track-duration').textContent = getTimeString(Math.round(m.audioPlayer.duration));
 }
 
 function showTrackTypePlayer(trackType)

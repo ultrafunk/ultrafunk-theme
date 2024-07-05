@@ -27,7 +27,9 @@ export function getPageSeparatorHtml(responseData, loadingPage)
   return /*html*/ `
     <div id="tracklist-page-${loadingPage}" class="tracklist-page-separator" data-page-number="${loadingPage}">
       <button type="button" class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</button>
+      <button type="button" class="material-icons arrow-last-button" title="Scroll to Last Track">vertical_align_bottom</button>
       <a href="${pageUrl}" title="Go to page ${loadingPage}">Page ${loadingPage} &#9660;</a>
+      <button type="button" class="material-icons arrow-first-button" title="Scroll to First Track">vertical_align_top</button>
       <button type="button" class="material-icons arrow-up-button" title="Scroll to previous page">arrow_upward</button>
     </div>`;
 }

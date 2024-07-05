@@ -81,6 +81,9 @@ body.list-player .site-branding {
 
 .embedded-container.local-container audio::-webkit-media-controls-enclosure {
   border-radius: 0;
+  /*
+  background-color: #777;
+  */
 }
 
 #tracklist {
@@ -109,7 +112,9 @@ body.list-player .site-branding {
 .tracklist-page-separator a {
   color: var(--primary-font-color);
   text-decoration: none;
+  text-align: center;
   padding: 8px 16px;
+  margin: 0 auto;
 }
 
 .tracklist-page-separator a:hover {

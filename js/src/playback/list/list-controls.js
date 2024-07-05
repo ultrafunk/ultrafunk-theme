@@ -173,11 +173,11 @@ class UiElements extends ElementClick
     if (this.clicked('button.details-button'))
       return showTrackDetails(this.closest('div.track-entry'));
 
-    if (this.clicked('button.arrow-up-button'))
-      return arrowUpDownClick(this.closest('div.tracklist-page-separator'), true);
+    if (this.clicked('button.arrow-up-button') || this.clicked('button.arrow-down-button'))
+      return arrowUpDownClick(this.closest('div.tracklist-page-separator'), this.clicked('button.arrow-up-button'));
 
-    if (this.clicked('button.arrow-down-button'))
-      return arrowUpDownClick(this.closest('div.tracklist-page-separator'), false);
+    if (this.clicked('button.arrow-first-button') || this.clicked('button.arrow-last-button'))
+      return arrowFirstLastClick(this.clicked('button.arrow-first-button'));
   }
 }
 
@@ -277,7 +277,7 @@ function arrowUpDownClick(targetElement, isArrowUpClick)
 
   if (gotoElement === null)
   {
-    gotoElement = isArrowUpClick ? m.tracklist.firstElementChild : m.tracklist.lastElementChild;
+    gotoElement = isArrowUpClick ? m.tracklist.firstElementChild : document.getElementById('tracklist-load-more-button');
     blockOption = isArrowUpClick ? 'end' : ((window.innerWidth > 1350) ? 'nearest' : 'center');
 
     if ((isArrowUpClick === false) && (gotoPageNum > response.maxPages))
@@ -285,6 +285,12 @@ function arrowUpDownClick(targetElement, isArrowUpClick)
   }
 
   gotoElement?.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: blockOption });
+}
+
+function arrowFirstLastClick(isArrowFirstClick)
+{
+  const scrollToElement = isArrowFirstClick ? m.tracklist.firstElementChild : m.tracklist.lastElementChild;
+  scrollToElement.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
 }
 
 
