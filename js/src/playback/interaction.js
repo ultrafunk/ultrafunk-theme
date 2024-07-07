@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () =>
   {
     initCommon();
 
-    if (settings.experimental.enableLocalPlayback)
+    if (shared.isListPlayer() && settings.experimental.enableLocalPlayback)
       initLocalPlayback();
   }
 
