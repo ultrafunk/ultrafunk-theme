@@ -36,7 +36,10 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
       </div>
       <div class="embedded-container local-container">
         <div class="wp-block-embed__wrapper">
-          <div id="local-player"><audio id="local-audio-player" controls ></audio></div>
+          <div id="local-player">
+            <img id="local-player-image" src="" />
+            <audio id="local-audio-player" controls ></audio>
+          </div>
         </div>
       </div>
       <div id="tracklist"

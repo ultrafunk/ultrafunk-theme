@@ -81,9 +81,18 @@ body.list-player .site-branding {
 
 .embedded-container.local-container audio::-webkit-media-controls-enclosure {
   border-radius: 0;
-  /*
-  background-color: #777;
-  */
+  opacity: 0.7;
+}
+
+#local-player {
+  display: flex;
+  justify-content: center;
+}
+
+#local-player-image {
+  position: absolute;
+  top: 0;
+  height: 100%;
 }
 
 #tracklist {

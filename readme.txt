@@ -15,12 +15,13 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 PHP version 8.2 or greater
 [WordPress](https://wordpress.org/download/) version 6.6 or greater
 [Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.46.X or greater
-[ESBuild](https://github.com/evanw/esbuild/) (JavaScript / CSS bundler and minifier)
+[ESBuild](https://github.com/evanw/esbuild/) - JavaScript / CSS bundler and minifier
 [Google Material Icons font](https://google.github.io/material-design-icons/#icon-font-for-the-web)
-[DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) (Polyfill that enables HTML5 drag drop support on mobile (touch) devices.)
+[DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) - Polyfill that enables HTML5 drag drop support on mobile (touch) devices
   * Original: /inc/js/DragDropTouch.js
   * Modified: /inc/js/drag-drop-touch.js
   * Modified + Minified: /inc/js/drag-drop-touch.min.js
+[id3](https://github.com/43081j/id3) - A JavaScript ID3 tags parser for Node & browsers
 
 **Optional:**
 [ESLint](https://eslint.org/) (Static code analyzer for JavaScript)

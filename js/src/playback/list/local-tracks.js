@@ -113,6 +113,8 @@ async function setTracksMetadata(filesList, tracksUid)
       element.setAttribute('data-track-artist', artist);
       element.setAttribute('data-track-title',  title);
       element.querySelector('div.artist-title').innerHTML = `<span><b>${artist}</b></span><br><span>${title}</span>`;
+
+      setLocalTrackImage(metaData, element);
     }
     catch
     {
@@ -125,11 +127,29 @@ async function setTracksMetadata(filesList, tracksUid)
   }
 }
 
+function setLocalTrackImage(metaData, element)
+{
+  if ((metaData.images !== undefined) && (metaData.images.length !== 0))
+  {
+    const imageBlob = new Blob([metaData.images[0].data], { type: metaData.images[0].mime });
+    const imageUrl  = URL.createObjectURL(imageBlob);
+    element.setAttribute('data-track-image-url', imageUrl);
+  }
+}
+
 function clearLocalTracks()
 {
   queryTrackAll('div.track-entry.type-local')?.forEach(element =>
   {
-    URL.revokeObjectURL(element.getAttribute('data-track-url'));
+    const trackBlobUrl      = element.getAttribute('data-track-url');
+    const trackImageBlobUrl = element.getAttribute('data-track-image-url');
+
+    if (trackBlobUrl !== null)
+      URL.revokeObjectURL(trackBlobUrl);
+
+    if (trackImageBlobUrl !== null)
+      URL.revokeObjectURL(trackImageBlobUrl);
+
     element.remove();
   });
 

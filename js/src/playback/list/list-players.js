@@ -165,7 +165,7 @@ class LocalPlayer extends MediaPlayer
 
   setThumbnail()
   {
-    super.setThumbnail({ src: THEME_ENV['defaultLTThumbnail'], class: 'type-local' });
+    super.setThumbnail({ src: THEME_ENV.defaultLTThumbnail, class: 'type-local' });
   }
 }
 
