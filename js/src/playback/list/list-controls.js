@@ -418,7 +418,7 @@ function setPlayerImage(player)
     const imageUrl = m.trackElement.getAttribute('data-track-image-url');
 
     if (imageUrl !== null)
-      document.getElementById('local-player-image').src = imageUrl;
+      document.getElementById('local-player-image').src = encodeURI(imageUrl);
     else
       document.getElementById('local-player-image').src = THEME_ENV.defaultLTImagePlaceholder;
   }
