@@ -10,7 +10,7 @@ import { THEME_ENV }              from '../../config.js';
 import { settings }               from '../../shared/session-data.js';
 import { navSearch }              from '../../site/nav-search.js';
 import { ElementClick }           from '../../shared/element-click.js';
-import { TRACK_TYPE }             from '../common/mediaplayers.js';
+import { TRACK_TYPE }             from '../common/mediaplayer.js';
 import { showSnackbar }           from '../../shared/snackbar.js';
 import { getTrackEntryHtml }      from './list-track-templates.js';
 import { getCurrentTrackElement } from './list-controls.js';

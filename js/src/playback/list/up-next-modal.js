@@ -12,6 +12,7 @@ import { isPlaying }         from '../common/playback-controls.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
 import { setCurrentTrack }   from './list-playback.js';
+import { getTrackTypeClass } from '../common/mediaplayer.js';
 
 import {
   VERSION,
@@ -21,7 +22,6 @@ import {
 import {
   escAttribute,
   getTimeString,
-  getTrackTypeData,
 } from '../../shared/utils.js';
 
 import {
@@ -245,22 +245,19 @@ function dragDrop(event)
 
 function getUpNextTrackHtml(element, trackArtistAttr, trackTitleAttr, isDraggable = false)
 {
-  const trackTypeData = getTrackTypeData(
-    parseInt(element.getAttribute('data-track-type')),
-    encodeURI(element.getAttribute('data-track-thumbnail-url'))
-  );
+  const trackDuration = getTimeString(parseInt(element.getAttribute('data-track-duration')));
 
   return /*html*/ `
     <div class="modal-track ${isDraggable ? 'modal-draggable-entry' : ''}" ${isDraggable ? 'draggable="true"' : ''}>
-      <div class="modal-track-thumbnail modal-ignore-touchmove ${trackTypeData.isYouTubeTrack ? 'type-youtube' : 'type-soundcloud'}" ${isDraggable ? 'title="Click to Play Track"' : ''}>
-        <img src="${trackTypeData.thumbnailUrl}">
+      <div class="modal-track-thumbnail modal-ignore-touchmove ${getTrackTypeClass(element)}" ${isDraggable ? 'title="Click to Play Track"' : ''}>
+        <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">
       </div>
       <div class="modal-track-artist-title text-nowrap-ellipsis" ${isDraggable ? 'title="Drag to Move Track"' : ''}>
         <span><b>${escAttribute(element, trackArtistAttr)}</b></span><br>
         <span class="light-text">${escAttribute(element, trackTitleAttr)}</span>
       </div>
       <div class="modal-track-duration text-nowrap-ellipsis" ${isDraggable ? 'title="Drag to Move Track"' : ''}>
-        ${getTimeString(parseInt(element.getAttribute('data-track-duration')))}
+        ${(trackDuration !== '00:00') ? trackDuration : 'N / A'}
       </div>
       ${isDraggable ? getModalTrackButtons() : ''}
     </div>`;

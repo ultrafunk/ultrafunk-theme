@@ -20,7 +20,7 @@ import {
 
 class ListPlaybackTimer extends PlaybackTimer
 {
-  #player = null;
+  #players = null;
 
   #update(positionSecondsDecimal, durationSeconds)
   {
@@ -35,22 +35,22 @@ class ListPlaybackTimer extends PlaybackTimer
     }
   }
 
-  ready(player)
+  ready(players)
   {
     super.init();
-    this.#player = player;
+    this.#players = players;
     addListener(EVENT.MEDIA_PLAYING, () => super.start());
   }
 
   updateTimer()
   {
     if (this.isVisible && isPlaying())
-      this.#update(this.#player.embedded.getCurrentTime(), this.#player.getDuration());
+      this.#update(this.#players.current.getPosition(), this.#players.current.getDuration());
   }
 
   updateVolumeMute()
   {
-    updateVolumeMuteSettings(this.#player.embedded.getVolume(), this.#player.embedded.isMuted());
+    updateVolumeMuteSettings(this.#players.current.getVolume(), this.#players.current.isMuted());
   }
 }
 

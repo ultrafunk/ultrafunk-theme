@@ -5,13 +5,13 @@
 //
 
 
-import { THEME_ENV } from '../config.js';
+import { THEME_ENV }        from '../config.js';
+import { getPrefPlayerUrl } from '../shared/utils.js';
 
 import {
-  getPrefPlayerUrl,
   getThumbnailData,
   getTrackTypeData,
-} from '../shared/utils.js';
+} from '../playback/common/mediaplayer.js';
 
 
 // ************************************************************************************************

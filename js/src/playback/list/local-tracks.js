@@ -1,5 +1,5 @@
 //
-// Local (device) files playback module
+// Local (device) tracks loading and controls
 //
 // https://ultrafunk.com
 //
@@ -7,20 +7,13 @@
 
 import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
-import { TRACK_TYPE }        from '../common/mediaplayers.js';
-import { getTrackEntryHtml } from '../list/list-track-templates.js';
-import { queryTrackAll }     from '../list/list-controls.js';
-import { stop as stopYouTubeTrack } from '../list/list-playback.js';
+import { TRACK_TYPE }        from '../common/mediaplayer.js';
+import { getTrackEntryHtml } from './list-track-templates.js';
+import { queryTrackAll }     from './list-controls.js';
 
 import {
-  EVENT,
   addListener,
-} from '../common/playback-events.js';
-
-import {
   escHtml,
-  getTimeString,
-  stripAttribute,
   stripHtml,
 } from '../../shared/utils.js';
 
@@ -28,13 +21,8 @@ import {
 /*************************************************************************************************/
 
 
-const debug = newDebugLogger('local-playback');
-
-const m = {
-  audioPlayer:    null,
-  id3js:          null,
-  currentTrackId: null,
-};
+const debug = newDebugLogger('local-tracks');
+const m     = { id3js: null };
 
 const tracklistLocalHtml = /*html*/ `
   <div id="tracklist-local">
@@ -47,20 +35,15 @@ const tracklistLocalHtml = /*html*/ `
 //
 // ************************************************************************************************
 
-export function initLocalPlayback()
+export function initLocalTracks()
 {
   debug.log('init()');
 
   document.getElementById('tracklist').insertAdjacentHTML("beforeend", tracklistLocalHtml);
 
-  document.getElementById('select-local-files').addEventListener('change', (event) => getSelectedFiles(event.target.files));
-  document.getElementById('select-local-files').addEventListener('cancel', (event) => getSelectedFiles(event.target.files));
-  document.getElementById('clear-local-tracks').addEventListener('click',  clearLocalTracks);
-
-  m.audioPlayer = document.getElementById('local-audio-player');
-  m.audioPlayer.addEventListener('durationchange', updateTrackDuration);
-
-  addListener(EVENT.MEDIA_PLAYING, () => stop());
+  addListener('#select-local-files', 'change', (event) => getSelectedFiles(event.target.files));
+  addListener('#select-local-files', 'cancel', (event) => getSelectedFiles(event.target.files));
+  addListener('#clear-local-tracks', 'click',  clearLocalTracks);
 }
 
 
@@ -84,17 +67,20 @@ function getSelectedFiles(filesList)
 
     for (const file of filesList)
     {
+      const trackUri = encodeURI(URL.createObjectURL(file));
+
       tracksUid.push(`track-${(Date.now() + index)}`);
 
       tracksHtml += getTrackEntryHtml(
       {
         uid: tracksUid[index++],
         id: 0,
-        link: encodeURI(URL.createObjectURL(file)),
+        link: trackUri,
         artists: [],
         channels: [],
         meta: {
           track_source_type: TRACK_TYPE.LOCAL,
+          track_source_data: trackUri,
           track_artist: 'Loading...',
           track_title: '',
           track_duration: 0,
@@ -148,53 +134,4 @@ function clearLocalTracks()
   });
 
   showSnackbar({ message: 'All local tracks removed'});
-}
-
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
-
-export function cueOrPlayTrack(trackElement, playTrack = false)
-{
-  const trackArtist = stripAttribute(trackElement, 'data-track-artist');
-  const trackTitle  = stripAttribute(trackElement, 'data-track-title');
-
-  debug.log(`cueOrPlayTrack(${playTrack ? 'play' : 'cue'}): ${trackArtist} - "${trackTitle}"`);
-
-  m.audioPlayer.src = trackElement.getAttribute('data-track-url');
-
-  if (playTrack)
-  {
-    m.currentTrackId = trackElement.id;
-    showTrackTypePlayer(TRACK_TYPE.LOCAL);
-    stopYouTubeTrack();
-    m.audioPlayer.play();
-  }
-}
-
-function stop()
-{
-  if ((m.audioPlayer.paused === false) || (m.audioPlayer.currentTime > 0))
-  {
-    debug.log(`stop() - paused: ${m.audioPlayer.paused} - currentTime: ${m.audioPlayer.currentTime}`);
-
-    showTrackTypePlayer(TRACK_TYPE.YOUTUBE);
-    m.audioPlayer.pause();
-    m.audioPlayer.currentTime = 0;
-  }
-}
-
-function updateTrackDuration()
-{
-  document.getElementById(m.currentTrackId).setAttribute('data-track-duration', Math.round(m.audioPlayer.duration));
-  document.getElementById(m.currentTrackId).querySelector('div.track-duration').textContent = getTimeString(Math.round(m.audioPlayer.duration));
-}
-
-function showTrackTypePlayer(trackType)
-{
-  debug.log(`showTrackPlayer(): ${debug.getKeyForValue(TRACK_TYPE, trackType)}`);
-
-  document.querySelector('.embedded-container.youtube-container').style.display = (trackType === TRACK_TYPE.YOUTUBE) ? ''      : 'none';
-  document.querySelector('.embedded-container.local-container').style.display   = (trackType === TRACK_TYPE.LOCAL)   ? 'block' : '';
 }

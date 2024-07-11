@@ -7,7 +7,7 @@
 
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { KEY }                from '../../shared/storage.js';
-import { TRACK_TYPE }         from '../common/mediaplayers.js';
+import { TRACK_TYPE }         from '../common/mediaplayer.js';
 import { replaceClass }       from '../../shared/utils.js';
 import { response, settings } from '../../shared/session-data.js';
 import { EVENT, addListener } from '../common/playback-events.js';

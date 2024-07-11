@@ -6,11 +6,16 @@
 
 
 import * as eventLogger    from '../common/eventlogger.js';
-import * as mediaPlayers   from '../common/mediaplayers.js';
 import * as playbackEvents from '../common/playback-events.js';
 import { newDebugLogger }  from '../../shared/debuglogger.js';
 import { settings }        from '../../shared/session-data.js';
 import { playbackTimer }   from './gallery-playback-timer.js';
+import { TRACK_TYPE }      from '../common/mediaplayer.js';
+
+import {
+ YouTubePlayer,
+ SoundCloudPlayer,
+} from './gallery-players.js';
 
 
 /*************************************************************************************************/
@@ -77,7 +82,7 @@ function getAllPlayers()
     const iframe    = element.querySelector('iframe');
     let player      = null;
 
-    if (trackType === mediaPlayers.TRACK_TYPE.YOUTUBE)
+    if (trackType === TRACK_TYPE.YOUTUBE)
     {
       if ((elements.length === 1) && (iframe === null))
         player = getYouTubePlayer('youtube-player', element, true);
@@ -86,11 +91,11 @@ function getAllPlayers()
 
       player.setDuration(parseInt(element.getAttribute('data-track-duration')));
     }
-    else if (trackType === mediaPlayers.TRACK_TYPE.SOUNDCLOUD)
+    else if (trackType === TRACK_TYPE.SOUNDCLOUD)
     {
       /* eslint-disable */
       const embeddedPlayer = SC.Widget(iframe.id);
-      player = new mediaPlayers.SoundCloud(element.id, iframe.id, embeddedPlayer);
+      player = new SoundCloudPlayer(element.id, iframe.id, embeddedPlayer);
 
       embeddedPlayer.bind(SC.Widget.Events.READY,  () => onSoundCloudPlayerEventReady(iframe.id, element, player, embeddedPlayer));
       embeddedPlayer.bind(SC.Widget.Events.PLAY,   () => onSoundCloudPlayerEventPlay(iframe.id));
@@ -102,7 +107,7 @@ function getAllPlayers()
 
     if (player !== null)
     {
-      player.setArtistTitle(element.getAttribute('data-track-artist'), element.getAttribute('data-track-title'));
+      player.setArtistAndTitle(element.getAttribute('data-track-artist'), element.getAttribute('data-track-title'));
       m.players.add(player);
     }
   });
@@ -127,7 +132,7 @@ function getYouTubePlayer(playerId, element, isSingleTrackPlayer = false)
     ...isSingleTrackPlayer && { videoId: videoId },
   });
 
-  return new mediaPlayers.YouTube(element.id, playerId, embeddedPlayer, videoId);
+  return new YouTubePlayer(element.id, playerId, embeddedPlayer, videoId);
 }
 
 
@@ -140,7 +145,7 @@ export function onPlayerError(player, mediaUrl)
   debug.log('onPlayerError()');
   debug.log(player);
 
-  const eventSource = (player.getTrackType() === mediaPlayers.TRACK_TYPE.YOUTUBE)
+  const eventSource = (player.getTrackType() === TRACK_TYPE.YOUTUBE)
                         ? eventLogger.SOURCE.YOUTUBE
                         : eventLogger.SOURCE.SOUNDCLOUD;
 

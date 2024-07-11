@@ -11,7 +11,7 @@ import { newDebugLogger }     from '../shared/debuglogger.js';
 import { THEME_ENV }          from '../config.js';
 import { ElementClick }       from '../shared/element-click.js';
 import { shareModal }         from '../shared/share-modal.js';
-import { TRACK_TYPE }         from '../playback/common/mediaplayers.js';
+import { TRACK_TYPE }         from '../playback/common/mediaplayer.js';
 import { KEY, setCookie }     from '../shared/storage.js';
 import { PREF_PLAYER }        from '../settings/settings.js';
 import { response, settings } from '../shared/session-data.js';

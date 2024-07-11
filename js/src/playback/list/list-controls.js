@@ -9,13 +9,13 @@ import * as playbackEvents    from '../common/playback-events.js';
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { ElementClick }       from '../../shared/element-click.js';
 import { STATE }              from '../common/element-wrappers.js';
-import { TRACK_TYPE }         from '../common/mediaplayers.js';
+import { TRACK_TYPE }         from '../common/mediaplayer.js';
 import { loadTracks }         from './list-tracks-rest.js';
 import { showSnackbar }       from '../../shared/snackbar.js';
 import { response, settings } from '../../shared/session-data.js';
 import { updateUpNextModal }  from './up-next-modal.js';
 import { setCurrentTrack }    from './list-playback.js';
-import { cueOrPlayTrack }     from './local-playback.js';
+import { playerScrollTo }     from '../common/shared-gallery-list.js';
 
 import {
   replaceClass,
@@ -37,12 +37,14 @@ const m = {
   tracklist:         null,
   tracklistObserver: null,
   tracklistLoadMore: null,
-  player:            null,
   trackElement:      null,
   currentState:      STATE.UNKNOWN,
   prevActionButtons: null,
   playerWrapper:     null,
   uiElements:        null,
+  ytContainer:       null,
+  scContainer:       null,
+  localContainer:    null,
 };
 
 
@@ -58,15 +60,18 @@ export function init()
   m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
   m.playerWrapper     = document.querySelector('.wp-block-embed__wrapper');
   m.uiElements        = new UiElements('#tracklist');
+  m.ytContainer       = document.querySelector('.embedded-container.youtube-container');
+  m.scContainer       = document.querySelector('.embedded-container.soundcloud-container');
+  m.localContainer    = document.querySelector('.embedded-container.local-container');
 }
 
-export function ready(player)
+export function ready()
 {
-  m.player = player;
   m.trackElement.classList.add('current');
 
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_LOADING,   () => setCurrentTrackState(STATE.LOADING));
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING,   () => setCurrentTrackState(STATE.PLAYING));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_LOADING, () => setCurrentTrackState(STATE.LOADING));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING, () => setCurrentTrackState(STATE.PLAYING));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PAUSED,  () => setCurrentTrackState(STATE.PAUSED));
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_TRACK, (event) => setNextTrackState(event.data.trackId, event.data.isPointerClick));
 
   if (settings.list.showLoadMoreTracks)
@@ -116,13 +121,19 @@ export function getTrackType(element)
   return TRACK_TYPE.NONE;
 }
 
+function isPlayableTrackType(trackElement)
+{
+  const trackType = getTrackType(trackElement);
+  return ((trackType === TRACK_TYPE.YOUTUBE) || (trackType === TRACK_TYPE.LOCAL));
+}
+
 export function getPrevPlayableId()
 {
   let destElement = (m.trackElement !== null)
                       ? m.trackElement.previousElementSibling
                       : null;
 
-  while ((destElement !== null) && (getTrackType(destElement) !== TRACK_TYPE.YOUTUBE))
+  while ((destElement !== null) && (isPlayableTrackType(destElement) === false))
     destElement = destElement.previousElementSibling;
 
   return ((destElement !== null) ? destElement.id : null);
@@ -134,7 +145,7 @@ export function getNextPlayableId(startElement = m.trackElement)
                       ? startElement.nextElementSibling
                       : queryTrack('div.track-entry');
 
-  while ((destElement !== null) && (getTrackType(destElement) !== TRACK_TYPE.YOUTUBE))
+  while ((destElement !== null) && (isPlayableTrackType(destElement) === false))
     destElement = destElement.nextElementSibling;
 
   return ((destElement !== null) ? destElement.id : null);
@@ -144,6 +155,15 @@ export function setCuedTrack(trackId)
 {
   m.trackElement = queryTrackId(trackId);
   m.tracklistObserver.observe(m.trackElement);
+}
+
+export function showTrackTypePlayer(trackType)
+{
+  debug.log(`showTrackTypePlayer(): ${debug.getKeyForValue(TRACK_TYPE, trackType)}`);
+
+  m.ytContainer.style.display    = (trackType === TRACK_TYPE.YOUTUBE)    ? ''      : 'none';
+  m.scContainer.style.display    = (trackType === TRACK_TYPE.SOUNDCLOUD) ? 'block' : '';
+  m.localContainer.style.display = (trackType === TRACK_TYPE.LOCAL)      ? 'block' : '';
 }
 
 
@@ -156,7 +176,7 @@ class UiElements extends ElementClick
   elementClicked()
   {
     if (this.clicked('button.thumbnail'))
-      return trackPlayClick(this.closest('div.track-entry'));
+      return setCurrentTrack(this.closest('div.track-entry').id, true, true);
 
     if (this.clicked('button.track-actions-toggle'))
       return trackActionsClick(this.closest('div.track-entry'));
@@ -179,16 +199,6 @@ class UiElements extends ElementClick
     if (this.clicked('button.arrow-first-button') || this.clicked('button.arrow-last-button'))
       return arrowFirstLastClick(this.clicked('button.arrow-first-button'));
   }
-}
-
-function trackPlayClick(clickedElement)
-{
-  const trackType = getTrackType(clickedElement);
-
-  if ((trackType === TRACK_TYPE.YOUTUBE) || (trackType === TRACK_TYPE.SOUNDCLOUD))
-    setCurrentTrack(clickedElement.id, true, true);
-  else if (trackType === TRACK_TYPE.LOCAL)
-    cueOrPlayTrack(clickedElement, true);
 }
 
 function trackActionsClick(element)
@@ -289,8 +299,10 @@ function arrowUpDownClick(targetElement, isArrowUpClick)
 
 function arrowFirstLastClick(isArrowFirstClick)
 {
-  const scrollToElement = isArrowFirstClick ? m.tracklist.firstElementChild : m.tracklist.lastElementChild;
-  scrollToElement.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
+  if (isArrowFirstClick)
+    playerScrollTo(0);
+  else
+    m.tracklist.lastElementChild.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
 }
 
 
@@ -365,9 +377,9 @@ function clearTrackState(element)
   element.classList.remove('current', STATE.LOADING.CLASS, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
 }
 
-export function setCurrentTrackState(newState)
+export function setCurrentTrackState(newState, isTrackChange = false)
 {
-  if (m.currentState.ID !== newState.ID)
+  if ((m.currentState.ID !== newState.ID) || isTrackChange)
   {
     m.currentState = newState;
 
@@ -416,13 +428,13 @@ export function setTrackMessage(message)
   m.trackElement.querySelector('.track-message').style.display = 'block';
 }
 
-export function updateTrackDetails()
+export function updateTrackDetails(player)
 {
   const sourceUid = m.trackElement.getAttribute('data-track-source-uid');
 
-  m.player.setArtistTitle(m.trackElement.getAttribute('data-track-artist'), m.trackElement.getAttribute('data-track-title'));
-  m.player.setDuration(parseInt(m.trackElement.getAttribute('data-track-duration')));
-  m.player.setThumbnail(sourceUid);
+  player.setArtistAndTitle(m.trackElement.getAttribute('data-track-artist'), m.trackElement.getAttribute('data-track-title'));
+  player.setDuration(parseInt(m.trackElement.getAttribute('data-track-duration')));
+  player.setThumbnail(sourceUid);
   setPlayerAspectRatio();
 
   return sourceUid;

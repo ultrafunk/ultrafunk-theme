@@ -5,7 +5,7 @@
 //
 
 
-import { TRACK_TYPE } from '../playback/common/mediaplayers.js';
+import { getTrackTypeClass } from '../playback/common/mediaplayer.js';
 
 
 // ************************************************************************************************
@@ -64,11 +64,9 @@ export function getModalListHtml(modalList, modalItemsCount = 0)
 
 export function getModalTrackHtml(element, trackArtist, trackTitle)
 {
-  const trackTypeClass = (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE) ? 'type-youtube' : 'type-soundcloud';
-
   return /*html*/ `
     <div class="modal-track">
-      <div class="modal-track-thumbnail ${trackTypeClass}">
+      <div class="modal-track-thumbnail ${getTrackTypeClass(element)}">
         <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">
       </div>
       <div class="modal-track-artist-title">

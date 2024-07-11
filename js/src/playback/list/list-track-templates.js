@@ -8,10 +8,14 @@
 import { THEME_ENV } from '../../config.js';
 
 import {
-  getTimeString,
-  getListPlayerUrl,
   getThumbnailData,
   getTrackTypeData,
+  TRACK_TYPE,
+} from '../common/mediaplayer.js';
+
+import {
+  getTimeString,
+  getListPlayerUrl,
   escHtml,
 } from '../../shared/utils.js';
 
@@ -43,11 +47,11 @@ export function getTrackEntryHtml(track, density = 'default')
   const trackDuration     = parseInt(track.meta.track_duration);
   const isAudioVideoClass = track.channels.includes(THEME_ENV.channelVideosId) ? 'is-video' : 'is-audio';
 
-  const trackArtistTitle = trackTypeData.isYouTubeTrack
+  const trackArtistTitle = trackTypeData.isPlayableTrack
                              ? `<span><b>${trackArtist}</b></span><br><span>${trackTitle}</span>`
                              : `<a href="${track.link}"><span><b>${trackArtist}</b></span><br><span>${trackTitle}</span></a>`;
 
-  const trackPlayNext = trackTypeData.isYouTubeTrack
+  const trackPlayNext = trackTypeData.isPlayableTrack
                           ? `<button type="button" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>`
                           : '';
 
@@ -65,11 +69,11 @@ export function getTrackEntryHtml(track, density = 'default')
       <div class="track-artists-links" data-track-artist-ids="${track.artists.toString()}">${track.artists_links  ?? ''}</div>
       <div class="track-channels-links" data-track-channel-ids="${track.channels.toString()}">${track.channels_links ?? ''}</div>
       <div class="track-details">
-        <button type="button" class="thumbnail" ${trackTypeData.isYouTubeTrack ? 'title="Play Track"' : 'title="SoundCloud Track"'}>
+        <button type="button" class="thumbnail" ${trackTypeData.isPlayableTrack ? 'title="Play Track"' : 'title="SoundCloud Track"'}>
           <div class="thumbnail-overlay"><div class="spinner"></div></div>
           <img src="${trackTypeData.thumbnailUrl}" alt="">
         </button>
-        <div class="artist-title text-nowrap-ellipsis" ${(trackTypeData.isYouTubeTrack === false) ? 'title="Link: Play SoundCloud track"' : ''}>
+        <div class="artist-title text-nowrap-ellipsis" ${(trackTypeData.isPlayableTrack === false) ? 'title="Link: Play SoundCloud track"' : ''}>
           ${trackArtistTitle}
         </div>
       </div>
@@ -83,7 +87,7 @@ export function getTrackEntryHtml(track, density = 'default')
         </div>
         <button type="button" class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></button>
       </div>
-      <div class="track-duration text-nowrap-ellipsis" title="Track duration">${(trackTypeData.isYouTubeTrack ? getTimeString(trackDuration) : 'N / A')}</div>
+      <div class="track-duration text-nowrap-ellipsis" title="Track duration">${((track.meta.track_source_type === TRACK_TYPE.YOUTUBE) ? getTimeString(trackDuration) : 'N / A')}</div>
     </div>`;
 }
 

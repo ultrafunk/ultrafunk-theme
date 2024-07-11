@@ -15,8 +15,7 @@ import * as shared            from './common/shared-gallery-list.js';
 import { ElementClick }       from '../shared/element-click.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { initScreenWakeLock } from './common/screen-wakelock.js';
-import { TRACK_TYPE }         from './common/mediaplayers.js';
-import { initLocalPlayback }  from './list/local-playback.js';
+import { TRACK_TYPE }         from './common/mediaplayer.js';
 
 import {
   showTrackSharePlay,
@@ -81,12 +80,7 @@ document.addEventListener('DOMContentLoaded', () =>
     m.player = listPlayback;
 
   if (m.player !== null)
-  {
     initCommon();
-
-    if (shared.isListPlayer() && settings.experimental.enableLocalPlayback)
-      initLocalPlayback();
-  }
 
   footerToggles.init(m.player?.getStatus);
 });

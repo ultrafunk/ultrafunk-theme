@@ -7,10 +7,13 @@
 
 import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { KEY }               from '../../shared/storage.js';
-import { TRACK_TYPE }        from '../common/mediaplayers.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
-import { getThumbnailData }  from '../../shared/utils.js';
+
+import {
+  TRACK_TYPE,
+  getThumbnailData,
+} from '../common/mediaplayer.js';
 
 import {
   response,

@@ -250,7 +250,7 @@ function setThumbnail(thumbnail)
   // Don't set thumbnail again if the image source / URL is unchanged
   if (thumbnail.src !== ctrl.thumbnail.img.src)
   {
-    ctrl.thumbnail.removeClass('type-default', 'type-youtube', 'type-soundcloud');
+    ctrl.thumbnail.removeClass('type-default', 'type-youtube', 'type-soundcloud', 'type-local');
     ctrl.thumbnail.addClass('loading', thumbnail.class);
     ctrl.thumbnail.img.src = thumbnail.src;
     ctrl.thumbnail.img.decode().then(() => ctrl.thumbnail.removeClass('loading'));

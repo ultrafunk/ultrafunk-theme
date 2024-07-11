@@ -15,11 +15,6 @@ import {
   THEME_ENV,
 } from '../config.js';
 
-import {
-  TRACK_TYPE,
-  getYouTubeImgUrl,
-} from '../playback/common/mediaplayers.js';
-
 
 /*************************************************************************************************/
 
@@ -246,27 +241,6 @@ export function getTimeString(seconds, includeHours = false)
   {
     return includeHours ? '00:00:00' : '00:00';
   }
-}
-
-export function getThumbnailData(metaData)
-{
-  if (metaData.track_source_type === TRACK_TYPE.YOUTUBE)
-    return getYouTubeImgUrl(metaData.track_source_data);
-
-  if (metaData.track_source_type === TRACK_TYPE.SOUNDCLOUD)
-    return { src: THEME_ENV.defaultSCThumbnail, class: 'type-soundcloud', uid: '' };
-
-  if (metaData.track_source_type === TRACK_TYPE.LOCAL)
-    return { src: THEME_ENV.defaultLTThumbnail, class: 'type-local', uid: '' };
-}
-
-export function getTrackTypeData(trackType, thumbnailUrl)
-{
-  const isYouTubeTrack      = (trackType === TRACK_TYPE.YOUTUBE);
-  const youTubeThumbnailUrl = IS_PROD_BUILD  ? thumbnailUrl        : THEME_ENV.defaultYTThumbnail;
-  const trackThumbnailUrl   = isYouTubeTrack ? youTubeThumbnailUrl : thumbnailUrl;
-
-  return { isYouTubeTrack: isYouTubeTrack, thumbnailUrl: trackThumbnailUrl };
 }
 
 export function isPointerTypeTouch(event)

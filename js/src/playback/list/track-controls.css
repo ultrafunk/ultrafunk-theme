@@ -164,7 +164,9 @@
   @media not all and (pointer: fine) {
 
     &.type-youtube.current.state-playing .thumbnail-overlay::before,
-    &.type-youtube.current.state-playing:hover .thumbnail-overlay::before {
+    &.type-youtube.current.state-playing:hover .thumbnail-overlay::before,
+    &.type-local.current.state-playing .thumbnail-overlay::before,
+    &.type-local.current.state-playing:hover .thumbnail-overlay::before {
       content: "\e050";
       opacity: 1;
     }
@@ -263,6 +265,13 @@
       display: none;
     }
 
+    &:hover .track-actions .play-next-button,
+    &:hover .track-actions .remove-button,
+    &:hover .track-actions .share-play-button,
+    &:hover .track-actions .details-button {
+      display: block;
+    }
+
     .track-actions .play-next-button:hover,
     .track-actions .remove-button:hover,
     .track-actions .share-play-button:hover,
@@ -270,17 +279,6 @@
     .track-actions .track-actions-toggle:hover {
       background-color: var(--control-highlight-color);
       cursor: pointer;
-    }
-
-    &.type-youtube:hover .play-next-button,
-    &.type-youtube:hover .remove-button,
-    &.type-youtube:hover .share-play-button,
-    &.type-youtube:hover .details-button,
-    &.type-soundcloud:hover .play-next-button,
-    &.type-soundcloud:hover .remove-button,
-    &.type-soundcloud:hover .share-play-button,
-    &.type-soundcloud:hover .details-button {
-      display: block;
     }
 
     &.current .play-next-button,
@@ -319,6 +317,11 @@
       display: block;
     }
 
+  }
+
+  &.type-local .track-actions .share-play-button,
+  &.type-local .track-actions .details-button {
+    display: none;
   }
 
   .track-duration {

@@ -13,7 +13,7 @@ import * as playbackControls     from '../common/playback-controls.js';
 import * as galleryControls      from './gallery-controls.js';
 import { newDebugLogger }        from '../../shared/debuglogger.js';
 import { playbackTimer }         from './gallery-playback-timer.js';
-import { galleryPlayers }        from './gallery-players.js';
+import { GalleryPlayers }        from './gallery-players.js';
 import { CROSSFADE_TYPE }        from './crossfade.js';
 import { settings }              from '../../shared/session-data.js';
 import { singleTrackFetchReady } from './single-track-fetch.js';
@@ -47,8 +47,7 @@ export function init()
 
   galleryEvents.init();
 
-  m.players = galleryPlayers();
-  m.players.init();
+  m.players = new GalleryPlayers();
 
   playbackControls.init((positionSeconds) => m.players.getTrackData(positionSeconds), seekClick);
   galleryControls.init(m.players, crossfadeToClick);
@@ -256,7 +255,7 @@ function cueOrPlaySingleTrackById(trackData, thumbnailData, playMedia = false)
   m.players.current.setIsCued(false);
   m.players.current.setIsPlayable(true);
   m.players.current.setSourceUid(thumbnailData.uid);
-  m.players.current.setArtistTitle(trackData.track_artist, trackData.track_title);
+  m.players.current.setArtistAndTitle(trackData.track_artist, trackData.track_title);
   m.players.current.setDuration(parseInt(trackData.track_duration));
   m.players.current.setThumbnail(thumbnailData);
 
