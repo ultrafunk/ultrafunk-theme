@@ -12,24 +12,24 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 
 # Dependencies
 **Required:**
-PHP version 8.2 or greater
-[WordPress](https://wordpress.org/download/) version 6.6 or greater
-[Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.46.X or greater
-[ESBuild](https://github.com/evanw/esbuild/) - JavaScript / CSS bundler and minifier
-[Google Material Icons font](https://google.github.io/material-design-icons/#icon-font-for-the-web)
-[DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) - Polyfill that enables HTML5 drag drop support on mobile (touch) devices
+PHP version 8.2 or greater.
+[WordPress](https://wordpress.org/download/) version 6.6 or greater.
+[Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.46.X or greater.
+[ESBuild](https://github.com/evanw/esbuild/) - JavaScript / CSS bundler and minifier.
+[Google Material Icons font](https://fonts.google.com/icons)
+[DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) - Polyfill that enables HTML5 drag drop support on mobile (touch) devices:
   * Original: /inc/js/DragDropTouch.js
   * Modified: /inc/js/drag-drop-touch.js
   * Modified + Minified: /inc/js/drag-drop-touch.min.js
-[id3](https://github.com/43081j/id3) - A JavaScript ID3 tags parser for Node & browsers
+[id3](https://github.com/43081j/id3) - A JavaScript ID3 tags parser for Node & browsers.
 
 **Optional:**
-[ESLint](https://eslint.org/) (Static code analyzer for JavaScript)
-[PHP Intelephense](https://intelephense.com/) (PHP code intelligence for Visual Studio Code)
-[Playwright](https://github.com/microsoft/playwright/) (Playwright is a framework for Web Testing and Automation)
-[Theme Check](https://wordpress.org/plugins/theme-check/) (WordPress Plugin from The WordPress Theme Review Team)
-[WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) (WordPress Plugin)
-[WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) (WordPress Plugin)
+[ESLint](https://eslint.org/) - Static code analyzer for JavaScript.
+[PHP Intelephense](https://intelephense.com/) - PHP code intelligence for Visual Studio Code.
+[Playwright](https://github.com/microsoft/playwright/) - Playwright is a framework for Web Testing and Automation.
+[Theme Check](https://wordpress.org/plugins/theme-check/) - WordPress Plugin from The WordPress Theme Review Team.
+[WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) - WP Extended Search is a lightweight and powerful search plugin.
+[WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) - WordPress cache plugin developed to speed up WordPress sites.
 
 ## **Desktop screenshots**
 ![Desktop 1](https://ultrafunk.com/wp-content/uploads/screenshots/desktop_1-45_20.png)

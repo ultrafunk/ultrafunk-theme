@@ -5,13 +5,11 @@
 //
 
 
-import { THEME_ENV } from "../../config.js";
-
 import {
   TRACK_TYPE,
   MediaPlayer,
   getYouTubeThumbnailUrl,
- } from "../common/mediaplayer.js";
+} from "../common/mediaplayer.js";
 
 
 // ************************************************************************************************
@@ -70,9 +68,9 @@ class YouTubePlayer extends MediaPlayer
   getPosition() { return this.embedded.getCurrentTime(); }
   getVolume()   { return this.embedded.getVolume();      }
 
-  setThumbnail(videoId)
+  setThumbnail(trackElement)
   {
-    super.setThumbnail(getYouTubeThumbnailUrl(videoId));
+    super.setThumbnail(getYouTubeThumbnailUrl(trackElement.getAttribute('data-track-source-uid')));
   }
 }
 
@@ -163,9 +161,9 @@ class LocalPlayer extends MediaPlayer
     this.embedded.volume = (volume / 100);
   }
 
-  setThumbnail()
+  setThumbnail(trackElement)
   {
-    super.setThumbnail({ src: THEME_ENV.defaultLTThumbnail, class: 'type-local' });
+    super.setThumbnail({ src: encodeURI(trackElement.getAttribute('data-track-thumbnail-url')), class: 'type-local' });
   }
 }
 
@@ -194,7 +192,7 @@ export class ListPlayers
 
   setCurrentPlayer(trackType)
   {
-    switch(trackType)
+    switch (trackType)
     {
       case TRACK_TYPE.YOUTUBE:    this.#currentPlayer = this.#youTubePlayer;    break;
       case TRACK_TYPE.SOUNDCLOUD: this.#currentPlayer = this.#soundCloudPlayer; break;

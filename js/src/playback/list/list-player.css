@@ -77,12 +77,41 @@ body.list-player .site-branding {
   width: 100%;
   position: absolute;
   bottom: 0;
+  display: none;
+}
+
+.embedded-container.local-container .wp-block-embed__wrapper:hover audio {
+  display: unset;
 }
 
 .embedded-container.local-container audio::-webkit-media-controls-enclosure {
   border-radius: 0;
-  opacity: 0.7;
+  background-color: rgba(255, 255, 255, 0.5);
+  filter: invert(1);
 }
+
+.embedded-container.local-container audio::-webkit-media-controls-current-time-display,
+.embedded-container.local-container audio::-webkit-media-controls-time-remaining-display {
+  font-weight: 700;
+}
+
+/*
+.embedded-container.local-container audio {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  visibility: hidden;
+}
+
+.embedded-container.local-container .wp-block-embed__wrapper:hover audio {
+  animation: hide-audio-controls 5000ms;
+}
+
+@keyframes hide-audio-controls {
+    0% { visibility: hidden;  }
+  100% { visibility: visible; }
+}
+*/
 
 #local-player {
   display: flex;
@@ -93,6 +122,7 @@ body.list-player .site-branding {
   position: absolute;
   top: 0;
   height: 100%;
+  cursor: pointer;
 }
 
 #tracklist {
@@ -248,7 +278,7 @@ body.list-player .site-branding {
   align-items: center;
   justify-content: center;
   background-color: var(--tracklist-page-separator-color);
-  padding: 12px 0;
+  padding: 30px 0;
   font-size: 20px;
   line-height: 30px;
   font-weight: 400;
@@ -427,6 +457,10 @@ body.list-player .site-footer-container {
     max-width: var(--site-max-width);
   }
 
+  .embedded-container.local-container audio::-webkit-media-controls-enclosure {
+    max-height: 40px;
+  }
+
   #tracklist-load-more-button {
     font-size: 15px;
     line-height: 27px;
@@ -462,7 +496,6 @@ body.list-player .site-footer-container {
   #tracklist-local {
     font-size: 15px;
     line-height: 27px;
-    padding: 10px 0;
   }
 
   input#select-local-files::file-selector-button {

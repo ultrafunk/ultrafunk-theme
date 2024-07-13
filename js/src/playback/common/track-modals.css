@@ -90,6 +90,7 @@
 
   .modal-track-thumbnail img {
     width: 40px;
+    height: 40px;
   }
 
   .modal-track-thumbnail.type-youtube img {

@@ -171,20 +171,21 @@ export function setCurrentTrack(nextTrackId, playTrack = true, isPointerClick = 
 
 function cueOrPlayCurrentTrack(playTrack, positionSeconds = 0)
 {
-  const sourceUid = listControls.updateTrackDetails(m.players.current);
+  const trackUid = listControls.getCurrentTrackElement().getAttribute('data-track-source-uid');
 
-  debug.log(`cueOrPlayCurrentTrack(): trackId: ${m.currentTrackId} (${sourceUid}) - playTrack: ${playTrack} - position: ${positionSeconds}`);
+  debug.log(`cueOrPlayCurrentTrack(): trackId: ${m.currentTrackId} (trackUid = "${trackUid}") - playTrack: ${playTrack} - position: ${positionSeconds}`);
 
+  listControls.updateTrackDetails(m.players.current);
   m.players.current.resetState();
 
   if (playTrack)
   {
-    m.players.current.playTrackById(sourceUid, positionSeconds);
+    m.players.current.playTrackById(trackUid, positionSeconds);
     listControls.setCurrentTrackState(STATE.PLAYING, true);
   }
   else
   {
-    m.players.current.cueTrackById(sourceUid, positionSeconds);
+    m.players.current.cueTrackById(trackUid, positionSeconds);
     listControls.setCurrentTrackState(STATE.PAUSED, true);
 
     if (positionSeconds !== 0)
@@ -519,6 +520,8 @@ function initLocalPlayer()
 {
   initLocalTracks();
 
+  utils.addListener('#local-player-image', 'click', togglePlayPause);
+
   m.players.localPlayer.addEventListener('play',           onLocalPlayerStateChange);
   m.players.localPlayer.addEventListener('pause',          onLocalPlayerStateChange);
   m.players.localPlayer.addEventListener('ended',          onLocalPlayerStateChange);
@@ -532,7 +535,7 @@ function onLocalPlayerStateChange(event)
 
   debug.log(`onLocalPlayerStateChange: ${event.type.toUpperCase()} (trackId: ${m.currentTrackId})`);
 
-  switch(event.type)
+  switch (event.type)
   {
     case 'play':
       onYouTubeStatePlaying();

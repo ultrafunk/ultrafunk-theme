@@ -16,7 +16,6 @@ import { response, settings } from '../../shared/session-data.js';
 import { updateUpNextModal }  from './up-next-modal.js';
 import { setCurrentTrack }    from './list-playback.js';
 import { playerScrollTo }     from '../common/shared-gallery-list.js';
-import { THEME_ENV }          from '../../config.js';
 
 import {
   replaceClass,
@@ -411,19 +410,6 @@ function setPlayerAspectRatio()
     m.playerWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
 }
 
-function setPlayerImage(player)
-{
-  if (player.getTrackType() === TRACK_TYPE.LOCAL)
-  {
-    const imageUrl = m.trackElement.getAttribute('data-track-image-url');
-
-    if (imageUrl !== null)
-      document.getElementById('local-player-image').src = encodeURI(imageUrl);
-    else
-      document.getElementById('local-player-image').src = THEME_ENV.defaultLTImagePlaceholder;
-  }
-}
-
 export function setNextTrackState(nextTrackId, isPointerClick)
 {
   clearTrackState(m.trackElement);
@@ -444,13 +430,11 @@ export function setTrackMessage(message)
 
 export function updateTrackDetails(player)
 {
-  const sourceUid = m.trackElement.getAttribute('data-track-source-uid');
-
   player.setArtistAndTitle(m.trackElement.getAttribute('data-track-artist'), m.trackElement.getAttribute('data-track-title'));
   player.setDuration(parseInt(m.trackElement.getAttribute('data-track-duration')));
-  player.setThumbnail(sourceUid);
+  player.setThumbnail(m.trackElement);
   setPlayerAspectRatio();
-  setPlayerImage(player);
 
-  return sourceUid;
+  if (player.getTrackType() === TRACK_TYPE.LOCAL)
+    document.getElementById('local-player-image').src = encodeURI(m.trackElement.getAttribute('data-track-image-url'));
 }
