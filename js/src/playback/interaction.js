@@ -241,6 +241,10 @@ function documentEventKeyDown(event)
           showSnackbar({ message: (settings.playback.masterMute ? '<b>Muted</b> (<b>m</b> to Unmute)' : '<b>Unmuted</b> (<b>m</b> to Mute)'), duration: 3 });
           break;
 
+        case 'O':
+          document.getElementById('select-local-files')?.click();
+          break;
+
         case 'p':
         case 'P':
           footerToggles.playerType.toggle();

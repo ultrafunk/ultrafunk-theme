@@ -46,53 +46,53 @@ body.list-player .site-branding {
 
 .embedded-container {
   width: 65%;
-}
 
-.embedded-container .wp-block-embed__wrapper {
-  width: 100%;
-}
+  .wp-block-embed__wrapper {
+    width: 100%;
+  }
 
-.embedded-container .wp-block-embed__wrapper.aspect-ratio-16_9 {
-  margin: 0;
-}
+  .wp-block-embed__wrapper.aspect-ratio-16_9 {
+    margin: 0;
+  }
 
-.embedded-container .wp-block-embed__wrapper.aspect-ratio-1_1 {
-  max-width: 56.25%;
-  margin: 0 auto;
-}
+  .wp-block-embed__wrapper.aspect-ratio-1_1 {
+    max-width: 56.25%;
+    margin: 0 auto;
+  }
 
-.embedded-container.soundcloud-container {
-  display: none;
-}
+  &.soundcloud-container {
+    display: none;
+  }
 
-.embedded-container.local-container {
-  display: none;
-}
+  &.local-container {
+    display: none;
+  }
 
-.embedded-container.local-container .wp-block-embed__wrapper {
-  height: unset;
-}
+  &.local-container .wp-block-embed__wrapper {
+    height: unset;
+  }
 
-.embedded-container.local-container audio {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  display: none;
-}
+  &.local-container audio {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    display: none;
+  }
 
-.embedded-container.local-container .wp-block-embed__wrapper:hover audio {
-  display: unset;
-}
+  &.local-container .wp-block-embed__wrapper:hover audio {
+    display: unset;
+  }
 
-.embedded-container.local-container audio::-webkit-media-controls-enclosure {
-  border-radius: 0;
-  background-color: rgba(255, 255, 255, 0.5);
-  filter: invert(1);
-}
+  &.local-container audio::-webkit-media-controls-enclosure {
+    border-radius: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    filter: invert(1);
+  }
 
-.embedded-container.local-container audio::-webkit-media-controls-current-time-display,
-.embedded-container.local-container audio::-webkit-media-controls-time-remaining-display {
-  font-weight: 700;
+  &.local-container audio::-webkit-media-controls-current-time-display,
+  &.local-container audio::-webkit-media-controls-time-remaining-display {
+    font-weight: 700;
+  }
 }
 
 /*
@@ -146,56 +146,57 @@ body.list-player .site-branding {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
 
-.tracklist-page-separator a {
-  color: var(--primary-font-color);
-  text-decoration: none;
-  text-align: center;
-  padding: 8px 16px;
-  margin: 0 auto;
-}
-
-.tracklist-page-separator a:hover {
-  color: var(--link-hover-color);
-  text-decoration: none;
-}
-
-.tracklist-page-separator .material-icons {
-  color: var(--primary-icon-color);
-  font-size: 30px;
-  padding: 8px;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.tracklist-page-separator .arrow-down-button {
-  margin-left: 10px;
-}
-
-.tracklist-page-separator .arrow-up-button {
-  margin-right: 5px;
-}
-
-@media all and (pointer: fine) {
-
-  .tracklist-page-separator .material-icons:hover {
-    background-color: var(--control-highlight-color);
-    cursor: pointer;
+  a {
+    color: var(--primary-font-color);
+    text-decoration: none;
+    text-align: center;
+    padding: 8px 16px;
+    margin: 0 auto;
   }
 
-}
-
-@media not all and (pointer: fine) {
-
-  .tracklist-page-separator .material-icons {
-    transition: var(--button-default-transition);
+  a:hover {
+    color: var(--link-hover-color);
+    text-decoration: none;
   }
 
-  .tracklist-page-separator .material-icons:active {
-    background-color: var(--control-highlight-color);
-    transition: var(--button-active-transition);
+  .material-icons {
+    color: var(--primary-icon-color);
+    font-size: 30px;
+    padding: 8px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .arrow-down-button {
+    margin-left: 10px;
+  }
+
+  .arrow-up-button {
+    margin-right: 5px;
+  }
+
+  @media all and (pointer: fine) {
+
+    .material-icons:hover {
+      background-color: var(--control-highlight-color);
+      cursor: pointer;
+    }
+
+  }
+
+  @media not all and (pointer: fine) {
+
+    .material-icons {
+      transition: var(--button-default-transition);
+    }
+
+    .material-icons:active {
+      background-color: var(--control-highlight-color);
+      transition: var(--button-active-transition);
+    }
+
   }
 
 }
@@ -459,6 +460,11 @@ body.list-player .site-footer-container {
 
   .embedded-container.local-container audio::-webkit-media-controls-enclosure {
     max-height: 40px;
+  }
+
+  .embedded-container.local-container audio::-webkit-media-controls-current-time-display,
+  .embedded-container.local-container audio::-webkit-media-controls-time-remaining-display {
+    font-weight: unset;
   }
 
   #tracklist-load-more-button {

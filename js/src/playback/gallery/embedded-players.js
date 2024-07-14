@@ -10,7 +10,11 @@ import * as playbackEvents from '../common/playback-events.js';
 import { newDebugLogger }  from '../../shared/debuglogger.js';
 import { settings }        from '../../shared/session-data.js';
 import { playbackTimer }   from './gallery-playback-timer.js';
-import { TRACK_TYPE }      from '../common/mediaplayer.js';
+
+import {
+  TRACK_TYPE,
+  getDataTrackType
+} from '../common/mediaplayer.js';
 
 import {
  YouTubePlayer,
@@ -78,7 +82,7 @@ function getAllPlayers()
 
   elements.forEach(element =>
   {
-    const trackType = parseInt(element.getAttribute('data-track-type'));
+    const trackType = getDataTrackType(element);
     const iframe    = element.querySelector('iframe');
     let player      = null;
 

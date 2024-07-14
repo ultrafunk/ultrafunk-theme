@@ -11,10 +11,14 @@ import { newDebugLogger }     from '../shared/debuglogger.js';
 import { THEME_ENV }          from '../config.js';
 import { ElementClick }       from '../shared/element-click.js';
 import { shareModal }         from '../shared/share-modal.js';
-import { TRACK_TYPE }         from '../playback/common/mediaplayer.js';
 import { KEY, setCookie }     from '../shared/storage.js';
 import { PREF_PLAYER }        from '../settings/settings.js';
 import { response, settings } from '../shared/session-data.js';
+
+import {
+  TRACK_TYPE,
+  getDataTrackType,
+} from '../playback/common/mediaplayer.js';
 
 
 /*************************************************************************************************/
@@ -249,9 +253,8 @@ function playTrackClick(event, element)
 {
   const termType  = (m.listContainer.getAttribute('data-term-type') === 'channels') ? 'channel' : 'artist';
   const termSlug  = utils.stripAttribute(element, 'data-term-slug');
-  const trackType = parseInt(element.getAttribute('data-track-type'));
 
-  if ((settings.playback.preferredPlayer === PREF_PLAYER.GALLERY) || (trackType === TRACK_TYPE.SOUNDCLOUD))
+  if ((settings.playback.preferredPlayer === PREF_PLAYER.GALLERY) || (getDataTrackType(element) === TRACK_TYPE.SOUNDCLOUD))
   {
     playClick(event, element.getAttribute('data-term-url'), null);
   }

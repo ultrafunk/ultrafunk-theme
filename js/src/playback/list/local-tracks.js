@@ -94,7 +94,7 @@ function inserLocalTracksHtml(filesList)
     tracksHtml += getTrackEntryHtml(
     {
       uid: tracksUid[index++],
-      id: 0,
+      id: 'local',
       link: trackUri,
       artists: [],
       channels: [],
@@ -120,8 +120,13 @@ async function setTracksMetadata(filesList, tracksUid)
   for (const file of filesList)
   {
     const trackElement = document.getElementById(tracksUid[index++]);
+    const fileName     = stripHtml(escHtml(file.name));
+    const fileExtIndex = fileName.lastIndexOf('.');
+    const fileType     = (fileExtIndex !== -1) ? fileName.slice(fileExtIndex + 1).toUpperCase() : file.type;
 
     trackElement.setAttribute('data-track-image-url', THEME_ENV.defaultLTImagePlaceholder);
+    trackElement.setAttribute('data-track-file-type', fileType);
+    trackElement.setAttribute('data-track-file-size', file.size);
 
     try
     {
@@ -137,11 +142,11 @@ async function setTracksMetadata(filesList, tracksUid)
     }
     catch
     {
-      const fileName = stripHtml(escHtml(file.name));
+      const fileNameNoExt = (fileExtIndex !== -1) ? fileName.slice(0, fileExtIndex) : fileName;
 
-      trackElement.setAttribute('data-track-artist', fileName);
-      trackElement.setAttribute('data-track-title',  fileName);
-      trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${fileName}</b></span>`;
+      trackElement.setAttribute('data-track-artist', fileNameNoExt);
+    //trackElement.setAttribute('data-track-title',  fileNameNoExt);
+      trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${fileNameNoExt}</b></span>`;
     }
   }
 }
@@ -173,17 +178,20 @@ function clearLocalTracks()
 {
   queryTrackAll('div.track-entry.type-local')?.forEach(trackElement =>
   {
-    const trackBlobUrl      = trackElement.getAttribute('data-track-url');
-    const trackImageBlobUrl = trackElement.getAttribute('data-track-image-url');
+    if (trackElement.classList.contains('current') === false)
+    {
+      const trackBlobUrl      = trackElement.getAttribute('data-track-url');
+      const trackImageBlobUrl = trackElement.getAttribute('data-track-image-url');
 
-    if (trackBlobUrl !== null)
-      URL.revokeObjectURL(trackBlobUrl);
+      if (trackBlobUrl !== null)
+        URL.revokeObjectURL(trackBlobUrl);
 
-    if ((trackImageBlobUrl !== null) && (trackImageBlobUrl.startsWith('blob:')))
-      URL.revokeObjectURL(trackImageBlobUrl);
+      if ((trackImageBlobUrl !== null) && (trackImageBlobUrl.startsWith('blob:')))
+        URL.revokeObjectURL(trackImageBlobUrl);
 
-    trackElement.remove();
+      trackElement.remove();
+    }
   });
 
-  showSnackbar({ message: 'All local tracks removed', duration: 3 });
+  showSnackbar({ message: 'Local tracks removed', duration: 3 });
 }

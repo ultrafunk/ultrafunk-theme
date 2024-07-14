@@ -16,9 +16,13 @@ import { showModal }          from '../../shared/modal.js';
 import { playbackTimer }      from './list-playback-timer.js';
 import { response, settings } from '../../shared/session-data.js';
 import { initTrackSearch }    from './track-search.js';
-import { TRACK_TYPE }         from '../common/mediaplayer.js';
 import { ListPlayers }        from './list-players.js';
 import { initLocalTracks }    from './local-tracks.js';
+
+import {
+  TRACK_TYPE,
+  getDataTrackType,
+} from '../common/mediaplayer.js';
 
 import {
   playerScrollTo,
@@ -96,7 +100,7 @@ function cueInitialTrack()
 
       if (trackElement !== null)
       {
-        if (listControls.getTrackType(trackElement) === TRACK_TYPE.YOUTUBE)
+        if (getDataTrackType(trackElement) === TRACK_TYPE.YOUTUBE)
         {
           m.currentTrackId = trackElement.id;
         }
@@ -131,7 +135,7 @@ function cueInitialTrack()
 
 export function setCurrentTrack(nextTrackId, playTrack = true, isPointerClick = false)
 {
-  const nextTrackType = listControls.getTrackType(listControls.queryTrackId(nextTrackId));
+  const nextTrackType = getDataTrackType(listControls.queryTrackId(nextTrackId));
 
   debug.log(`setCurrentTrack() - nextTrackType: ${debug.getKeyForValue(TRACK_TYPE, nextTrackType)} - nextTrackId: ${nextTrackId} - playTrack: ${playTrack} - isPointerClick: ${isPointerClick}`);
 

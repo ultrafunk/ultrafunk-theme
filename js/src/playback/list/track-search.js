@@ -10,11 +10,15 @@ import { THEME_ENV }              from '../../config.js';
 import { settings }               from '../../shared/session-data.js';
 import { navSearch }              from '../../site/nav-search.js';
 import { ElementClick }           from '../../shared/element-click.js';
-import { TRACK_TYPE }             from '../common/mediaplayer.js';
 import { showSnackbar }           from '../../shared/snackbar.js';
 import { getTrackEntryHtml }      from './list-track-templates.js';
 import { getCurrentTrackElement } from './list-controls.js';
 import { setCurrentTrack }        from './list-playback.js';
+
+import {
+  TRACK_TYPE,
+  getDataTrackType,
+} from '../common/mediaplayer.js';
 
 import {
   showTrackDetails,
@@ -183,7 +187,7 @@ class uiElements extends ElementClick
 
 function playTrackClick(element)
 {
-  if (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.SOUNDCLOUD)
+  if (getDataTrackType(element) === TRACK_TYPE.SOUNDCLOUD)
   {
     showSnackbar({
       message: 'Cannot play / cue SoundCloud track',
@@ -201,7 +205,7 @@ function playTrackClick(element)
 
 function showTrackDetailsTouch(event, element)
 {
-  if (isPointerTypeTouch(event) && (parseInt(element.getAttribute('data-track-type')) === TRACK_TYPE.YOUTUBE))
+  if (isPointerTypeTouch(event) && (getDataTrackType(element) === TRACK_TYPE.YOUTUBE))
     m.modalId = showTrackDetails(element, m.searchField);
 }
 

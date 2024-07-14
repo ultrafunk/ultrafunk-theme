@@ -9,13 +9,17 @@ import * as playbackEvents    from '../common/playback-events.js';
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { ElementClick }       from '../../shared/element-click.js';
 import { STATE }              from '../common/element-wrappers.js';
-import { TRACK_TYPE }         from '../common/mediaplayer.js';
 import { loadTracks }         from './list-tracks-rest.js';
 import { showSnackbar }       from '../../shared/snackbar.js';
 import { response, settings } from '../../shared/session-data.js';
 import { updateUpNextModal }  from './up-next-modal.js';
 import { setCurrentTrack }    from './list-playback.js';
 import { playerScrollTo }     from '../common/shared-gallery-list.js';
+
+import {
+  TRACK_TYPE,
+  getDataTrackType,
+} from '../common/mediaplayer.js';
 
 import {
   replaceClass,
@@ -111,19 +115,9 @@ export function getCurrentTrackElement()
   return m.trackElement;
 }
 
-export function getTrackType(element)
-{
-  const trackType = element.getAttribute('data-track-type');
-
-  if (trackType !== null)
-    return parseInt(trackType);
-
-  return TRACK_TYPE.NONE;
-}
-
 function isPlayableTrackType(trackElement)
 {
-  const trackType = getTrackType(trackElement);
+  const trackType = getDataTrackType(trackElement);
   return ((trackType === TRACK_TYPE.YOUTUBE) || (trackType === TRACK_TYPE.LOCAL));
 }
 

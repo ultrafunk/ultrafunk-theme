@@ -151,6 +151,16 @@ export function getTrackTypeData(trackType, thumbnailUrl)
   return { isPlayableTrack: isPlayableTrack, thumbnailUrl: thumbnailUrl };
 }
 
+export function getDataTrackType(element)
+{
+  const trackType = element.getAttribute('data-track-type');
+
+  if (trackType !== null)
+    return parseInt(trackType);
+
+  return TRACK_TYPE.NONE;
+}
+
 const trackTypeClasses = [
   'type-default',
   'type-youtube',
@@ -160,5 +170,5 @@ const trackTypeClasses = [
 
 export function getTrackTypeClass(element)
 {
-  return trackTypeClasses[parseInt(element.getAttribute('data-track-type'))];
+  return trackTypeClasses[getDataTrackType(element)];
 }

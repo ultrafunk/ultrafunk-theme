@@ -12,6 +12,11 @@ import { showSearchResults }   from '../list/track-search.js';
 import { isListPlayer }        from './shared-gallery-list.js';
 
 import {
+  TRACK_TYPE,
+  getDataTrackType,
+} from './mediaplayer.js';
+
+import {
   showModal,
   getModalRootElement,
 } from '../../shared/modal.js';
@@ -20,6 +25,7 @@ import {
   stripAttribute,
   getPrefPlayerUrl,
   getTimeString,
+  getReadableBytesSize,
 } from '../../shared/utils.js';
 
 
@@ -52,14 +58,45 @@ export function showTrackDetails(element, onCloseFocusElement = null)
   const trackArtist   = stripAttribute(element, 'data-track-artist');
   const trackTitle    = stripAttribute(element, 'data-track-title');
   const trackDuration = parseInt(element.getAttribute('data-track-duration'));
-  const artists       = element.querySelector('.track-artists-links').querySelectorAll('a');
-  const channels      = element.querySelector('.track-channels-links').querySelectorAll('a');
   const modalEntries  = [];
 
   modalEntries.push({
     class:   'track-details-entry',
     content: getModalTrackHtml(element, trackArtist, trackTitle),
   });
+
+  const modalTitle = `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? getTimeString(trackDuration) : 'duration N/A')}</span>`;
+
+  if (getDataTrackType(element) === TRACK_TYPE.LOCAL)
+    getLocalTrackDetails(element, modalEntries);
+  else
+    getTrackDetails(element, modalEntries);
+
+  const modalId = showModal({
+    modalTitle: modalTitle,
+    modalList:  modalEntries,
+    modalType:  'track-details',
+    onCloseFocusElement: onCloseFocusElement,
+    onClickEntryCallback: (entryClickId, event) => onIconClickTrackSearch(event),
+  });
+
+  setTrackThumbnailClick(`${trackArtist} - ${trackTitle}`);
+
+  return modalId;
+}
+
+function getLocalTrackDetails(element, modalEntries)
+{
+  modalEntries.push({ class: 'header-entry', content: 'Type' });
+  modalEntries.push({ content: `${element.getAttribute('data-track-file-type')} device file` });
+  modalEntries.push({ class: 'header-entry', content: 'Size' });
+  modalEntries.push({ content: getReadableBytesSize(parseInt(element.getAttribute('data-track-file-size'))) });
+}
+
+function getTrackDetails(element, modalEntries)
+{
+  const artists  = element.querySelector('.track-artists-links').querySelectorAll('a');
+  const channels = element.querySelector('.track-channels-links').querySelectorAll('a');
 
   modalEntries.push({ class: 'header-entry', content: 'Artists' });
 
@@ -92,20 +129,6 @@ export function showTrackDetails(element, onCloseFocusElement = null)
       clickId:   element.id,
     });
   });
-
-  const modalTitle = `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? getTimeString(trackDuration) : 'duration N/A')}</span>`;
-
-  const modalId = showModal({
-    modalTitle: modalTitle,
-    modalList:  modalEntries,
-    modalType:  'track-details',
-    onCloseFocusElement: onCloseFocusElement,
-    onClickEntryCallback: (entryClickId, event) => onIconClickTrackSearch(event),
-  });
-
-  setTrackThumbnailClick(`${trackArtist} - ${trackTitle}`);
-
-  return modalId;
 }
 
 function onIconClickTrackSearch(event)
