@@ -60,6 +60,8 @@ async function getSelectedFiles(filesList)
   }
   else
   {
+    showSnackbar({ message: `Adding ${filesList.length} local ${(filesList.length === 1) ? 'track' : 'tracks'}...`, duration: 4 });
+
     try
     {
       if (m.id3js === null)
@@ -71,8 +73,6 @@ async function getSelectedFiles(filesList)
       showSnackbar({ message: 'Failed to load ID3 tag parser!', duration: 30 });
       return;
     }
-
-    showSnackbar({ message: `Adding ${filesList.length} local ${(filesList.length === 1) ? 'track' : 'tracks'}...`, duration: 3 });
 
     const tracksUid = inserLocalTracksHtml(filesList);
     setTracksMetadata(filesList, tracksUid);

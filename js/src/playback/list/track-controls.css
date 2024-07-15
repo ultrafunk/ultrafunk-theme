@@ -319,8 +319,7 @@
 
   }
 
-  &.type-local .track-actions .share-play-button,
-  &.type-local .track-actions .details-button {
+  &.type-local .track-actions .share-play-button {
     display: none;
   }
 

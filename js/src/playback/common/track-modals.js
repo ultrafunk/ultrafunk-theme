@@ -88,7 +88,7 @@ export function showTrackDetails(element, onCloseFocusElement = null)
 function getLocalTrackDetails(element, modalEntries)
 {
   modalEntries.push({ class: 'header-entry', content: 'Type' });
-  modalEntries.push({ content: `${element.getAttribute('data-track-file-type')} device file` });
+  modalEntries.push({ content: `On device ${stripAttribute(element, 'data-track-file-type')} audio file` });
   modalEntries.push({ class: 'header-entry', content: 'Size' });
   modalEntries.push({ content: getReadableBytesSize(parseInt(element.getAttribute('data-track-file-size'))) });
 }
