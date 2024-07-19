@@ -107,6 +107,11 @@ export function replaceClass(element, removeClass, addClass)
   element.classList.add(addClass);
 }
 
+export function getScrollBehavior()
+{
+  return (settings.site.smoothScrolling ? 'smooth' : 'auto');
+}
+
 
 // ************************************************************************************************
 // https://github.com/janl/mustache.js/blob/master/mustache.js#L59

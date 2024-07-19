@@ -14,7 +14,6 @@ import { showSnackbar }       from '../../shared/snackbar.js';
 import { response, settings } from '../../shared/session-data.js';
 import { updateUpNextModal }  from './up-next-modal.js';
 import { setCurrentTrack }    from './list-playback.js';
-import { playerScrollTo }     from '../common/shared-gallery-list.js';
 
 import {
   TRACK_TYPE,
@@ -22,6 +21,7 @@ import {
 } from '../common/mediaplayer.js';
 
 import {
+  getScrollBehavior,
   replaceClass,
   stripAttribute,
 } from '../../shared/utils.js';
@@ -288,15 +288,22 @@ function arrowUpDownClick(targetElement, isArrowUpClick)
       gotoElement = gotoElement?.previousElementSibling;
   }
 
-  gotoElement?.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: blockOption });
+  gotoElement?.scrollIntoView({ behavior: getScrollBehavior(), block: blockOption });
 }
 
 function arrowFirstLastClick(isArrowFirstClick)
 {
   if (isArrowFirstClick)
-    playerScrollTo(0);
+  {
+    if (window.innerWidth > 1350)
+      m.tracklist.firstElementChild.scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
+    else
+      window.scroll({ top: 0, left: 0, behavior: getScrollBehavior() });
+  }
   else
-    m.tracklist.lastElementChild.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
+  {
+    m.tracklist.lastElementChild.scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
+  }
 }
 
 

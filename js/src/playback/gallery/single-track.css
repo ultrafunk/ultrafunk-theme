@@ -83,8 +83,8 @@ nav.navigation.single-track-nav {
   margin-left: 12px;
 }
 
-.prev-track-nav-thumbnail.type-youtube img,
-.next-track-nav-thumbnail.type-youtube img{
+.prev-track-nav-thumbnail.track-type-youtube img,
+.next-track-nav-thumbnail.track-type-youtube img{
   height: 62px;
   margin-top: -8px;
 }

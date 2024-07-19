@@ -134,11 +134,18 @@
   padding: 18px 30px 8px 30px;
 }
 
+.modal-default-text,
 .modal-icon-text,
 .modal-hover-icon-text {
   font-size: 20px;
   line-height: 25px;
   padding: 8px 30px;
+}
+
+.modal-default-text {
+  padding-top: 9px;
+  padding-bottom: 10px;
+  overflow-wrap: anywhere;
 }
 
 .modal-click-item.modal-hover-icon-text {
@@ -174,6 +181,7 @@ a.modal-click-item:hover {
   margin-left: -1px;
 }
 
+.modal-default-text,
 .modal-icon-text,
 .modal-hover-icon-text {
   font-weight: 400;
@@ -314,11 +322,17 @@ a.modal-click-item:hover {
     padding: 16px 20px 6px 20px;
   }
 
+  .modal-default-text,
   .modal-icon-text,
   .modal-hover-icon-text {
     font-size: 15px;
     line-height: 20px;
     padding: 8px 20px;
+  }
+
+  .modal-default-text {
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .modal-click-item.modal-hover-icon-text {

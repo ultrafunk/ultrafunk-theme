@@ -31,13 +31,14 @@
   image-rendering: -webkit-optimize-contrast;
 }
 
-.modal-track-thumbnail.type-youtube img {
+.modal-track-thumbnail.track-type-youtube img {
   height: 68px;
   margin-top: -9px;
 }
 
 .modal-track-artist-title {
   width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .modal-track-share-entry,
@@ -93,7 +94,7 @@
     height: 40px;
   }
 
-  .modal-track-thumbnail.type-youtube img {
+  .modal-track-thumbnail.track-type-youtube img {
     height: 54px;
     margin-top: -7px;
   }

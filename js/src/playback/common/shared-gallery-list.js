@@ -14,6 +14,7 @@ import { response, settings } from '../../shared/session-data.js';
 import {
   getCssPropValue,
   getPrefPlayerUrl,
+  getScrollBehavior,
   navToUrl,
 } from '../../shared/utils.js';
 
@@ -111,7 +112,7 @@ function scrollToYPos(element, destYPos)
   {
     top:      destYPos,
     left:     0,
-    behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'),
+    behavior: getScrollBehavior(),
   });
 }
 
@@ -131,7 +132,7 @@ function listPlayerScrollTo(elementId = 0)
     if (settings.list.showUpNextModal)
       showUpNextModal();
     else
-      document.getElementById(elementId)?.scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
+      document.getElementById(elementId)?.scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
   }
 }
 
@@ -181,7 +182,7 @@ export function playerOnKeysScroll(event)
       {
         top:      (event.key === 'PageUp') ? -scrollByPx : scrollByPx,
         left:     0,
-        behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'),
+        behavior: getScrollBehavior(),
       });
     }
     else if ((event.key === 'Home') || (event.key === 'End'))

@@ -40,7 +40,7 @@ export class MediaPlayer
   artist         = null;
   title          = null;
   thumbnailSrc   = THEME_ENV.defaultTrackThumbnail;
-  thumbnailClass = 'type-default';
+  thumbnailClass = 'track-type-default';
 
   constructor(trackType, trackId, iframeId, embeddedPlayer)
   {
@@ -102,7 +102,7 @@ export class MediaPlayer
 // ************************************************************************************************
 
 // Default / fallback track thumbnail object
-const defThumbnailObj = { src: THEME_ENV.defaultTrackThumbnail, class: 'type-default', uid: '' };
+const defThumbnailObj = { src: THEME_ENV.defaultTrackThumbnail, class: 'track-type-default', uid: '' };
 
 // https://webapps.stackexchange.com/a/101153
 const youTubeVideoIdRegEx = /[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/;
@@ -112,7 +112,7 @@ export function getYouTubeThumbnailUrl(trackSourceUrl)
   const youTubeVideoId = trackSourceUrl.match(youTubeVideoIdRegEx);
 
   if (youTubeVideoId !== null)
-    return { src: `https://i.ytimg.com/vi/${youTubeVideoId[0]}/default.jpg`, class: 'type-youtube', uid: youTubeVideoId[0] };
+    return { src: `https://i.ytimg.com/vi/${youTubeVideoId[0]}/default.jpg`, class: 'track-type-youtube', uid: youTubeVideoId[0] };
 
   return defThumbnailObj;
 }
@@ -124,7 +124,7 @@ export function getSoundCloudThumbnailUrl(soundObject)
                          : soundObject.user.avatar_url;
 
   if (thumbnailSrc)
-    return { src: thumbnailSrc, class: 'type-soundcloud', uid: '' };
+    return { src: thumbnailSrc, class: 'track-type-soundcloud', uid: '' };
 
   return defThumbnailObj;
 }
@@ -135,10 +135,10 @@ export function getThumbnailData(metaData)
     return getYouTubeThumbnailUrl(metaData.track_source_data);
 
   if (metaData.track_source_type === TRACK_TYPE.SOUNDCLOUD)
-    return { src: THEME_ENV.defaultSCThumbnail, class: 'type-soundcloud', uid: '' };
+    return { src: THEME_ENV.defaultSCThumbnail, class: 'track-type-soundcloud', uid: '' };
 
   if (metaData.track_source_type === TRACK_TYPE.LOCAL)
-    return { src: THEME_ENV.defaultLTThumbnail, class: 'type-local', uid: metaData.track_source_data };
+    return { src: THEME_ENV.defaultLTThumbnail, class: 'track-type-local', uid: metaData.track_source_data };
 }
 
 export function getTrackTypeData(trackType, thumbnailUrl)
@@ -162,10 +162,10 @@ export function getDataTrackType(element)
 }
 
 const trackTypeClasses = [
-  'type-default',
-  'type-youtube',
-  'type-soundcloud',
-  'type-local',
+  'track-type-default',
+  'track-type-youtube',
+  'track-type-soundcloud',
+  'track-type-local',
 ];
 
 export function getTrackTypeClass(element)

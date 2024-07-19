@@ -125,6 +125,7 @@ async function setTracksMetadata(filesList, tracksUid)
     const fileType     = (fileExtIndex !== -1) ? fileName.slice(fileExtIndex + 1).toUpperCase() : file.type;
 
     trackElement.setAttribute('data-track-image-url', THEME_ENV.defaultLTImagePlaceholder);
+    trackElement.setAttribute('data-track-file-name', fileName);
     trackElement.setAttribute('data-track-file-type', fileType);
     trackElement.setAttribute('data-track-file-size', file.size);
 
@@ -176,7 +177,7 @@ function setLocalTrackImages(metaData, trackElement)
 
 function clearLocalTracks()
 {
-  queryTrackAll('div.track-entry.type-local')?.forEach(trackElement =>
+  queryTrackAll('div.track-entry.track-type-local')?.forEach(trackElement =>
   {
     if (trackElement.classList.contains('current') === false)
     {

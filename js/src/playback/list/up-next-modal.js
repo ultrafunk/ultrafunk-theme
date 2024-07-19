@@ -22,6 +22,7 @@ import {
 import {
   escAttribute,
   getTimeString,
+  getScrollBehavior,
 } from '../../shared/utils.js';
 
 import {
@@ -94,7 +95,7 @@ function onTrackClick(tracklist, clickedId)
   const nextTrackId = tracklist.find(item => (item.clickId === clickedId)).clickId;
 
   if ((nextTrackId === getCurrentTrackElement().id) && isPlaying())
-    getCurrentTrackElement().scrollIntoView({ behavior: (settings.site.smoothScrolling ? 'smooth' : 'auto'), block: 'center' });
+    getCurrentTrackElement().scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
   else
     setCurrentTrack(nextTrackId, true, false);
 }

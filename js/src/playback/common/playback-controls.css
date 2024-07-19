@@ -120,7 +120,7 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   image-rendering: -webkit-optimize-contrast;
 }
 
-.playback-thumbnail-control.type-youtube img {
+.playback-thumbnail-control.track-type-youtube img {
   height: 54px;
   margin-top: -7px;
 }
@@ -522,7 +522,7 @@ body.autoplay-off .playback-play-pause-toggle.state-playing.time-remaining-warni
     height: 36px;
   }
 
-  .playback-thumbnail-control.type-youtube img {
+  .playback-thumbnail-control.track-type-youtube img {
     height: 48px;
     margin-top: -6px;
   }

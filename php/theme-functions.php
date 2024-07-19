@@ -126,7 +126,7 @@ function get_shuffle_title(string $prefix = 'Shuffle: ') : string
 const DEFAULT_TRACK_DATA = [
   'track_type'   => TRACK_TYPE::SOUNDCLOUD,
   'thumnail_src' => \Ultrafunk\Theme\Config\THEME_ENV['default_sc_thumbnail'],
-  'css_class'    => 'type-soundcloud',
+  'css_class'    => 'track-type-soundcloud',
   'source_uid'   => null,
 ];
 
@@ -139,7 +139,7 @@ function get_track_data(object $track) : array
       return [
         'track_type'   => TRACK_TYPE::YOUTUBE,
         'thumnail_src' => "https://i.ytimg.com/vi/$source_uid[0]/default.jpg",
-        'css_class'    => 'type-youtube',
+        'css_class'    => 'track-type-youtube',
         'source_uid'   => $source_uid[0],
       ];
     }

@@ -15,7 +15,7 @@ export const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-export const VERSION = '1.47.5';
+export const VERSION = '1.47.6';
 
 export const ULTRAFUNK_THEME_URI = IS_PROD_BUILD
                                      ? 'https://ultrafunk.com/wp-content/themes/ultrafunk'

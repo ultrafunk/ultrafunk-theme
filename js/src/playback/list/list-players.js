@@ -163,7 +163,7 @@ class LocalPlayer extends MediaPlayer
 
   setThumbnail(trackElement)
   {
-    super.setThumbnail({ src: encodeURI(trackElement.getAttribute('data-track-thumbnail-url')), class: 'type-local' });
+    super.setThumbnail({ src: encodeURI(trackElement.getAttribute('data-track-thumbnail-url')), class: 'track-type-local' });
   }
 }
 

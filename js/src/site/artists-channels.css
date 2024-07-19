@@ -404,7 +404,7 @@ term-list {
   image-rendering: -webkit-optimize-contrast;
 }
 
-.body-left .thumbnail.type-youtube img {
+.body-left .thumbnail.track-type-youtube img {
   height: 48px;
   margin-top: -6px;
 }
