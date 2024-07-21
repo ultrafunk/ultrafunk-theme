@@ -24,6 +24,8 @@ import {
   getScrollBehavior,
   replaceClass,
   stripAttribute,
+  escHtml,
+  isPointerTypeTouch,
 } from '../../shared/utils.js';
 
 import {
@@ -49,6 +51,7 @@ const m = {
   ytContainer:       null,
   scContainer:       null,
   localContainer:    null,
+  localPlayerTimeoutId: 0,
 };
 
 
@@ -158,6 +161,29 @@ export function showTrackTypePlayer(trackType)
   m.ytContainer.style.display    = (trackType === TRACK_TYPE.YOUTUBE)    ? ''      : 'none';
   m.scContainer.style.display    = (trackType === TRACK_TYPE.SOUNDCLOUD) ? 'block' : '';
   m.localContainer.style.display = (trackType === TRACK_TYPE.LOCAL)      ? 'block' : '';
+}
+
+export function showLocalPlayerInfoAndControls(event)
+{
+  if (isPointerTypeTouch(event))
+  {
+    const artistTitle = m.localContainer.querySelector('.artist-title-container');
+    const audioPlayer = m.localContainer.querySelector('audio');
+
+    artistTitle.style.display = 'unset';
+    audioPlayer.style.display = 'unset';
+
+    if (m.localPlayerTimeoutId !== 0)
+      clearTimeout(m.localPlayerTimeoutId);
+
+    m.localPlayerTimeoutId = setTimeout(() =>
+    {
+      artistTitle.style.display = '';
+      audioPlayer.style.display = '';
+      m.localPlayerTimeoutId    = 0;
+    },
+    5000);
+  }
 }
 
 
@@ -437,5 +463,12 @@ export function updateTrackDetails(player)
   setPlayerAspectRatio();
 
   if (player.getTrackType() === TRACK_TYPE.LOCAL)
+  {
+    const artistTitle = (player.getTitle().length !== 0)
+      ? `<b>${escHtml(player.getArtist())}</b> - ${escHtml(player.getTitle())}`
+      : escHtml(player.getArtist());
+
     document.getElementById('local-player-image').src = encodeURI(m.trackElement.getAttribute('data-track-image-url'));
+    m.localContainer.querySelector('.artist-title').innerHTML = artistTitle;
+  }
 }

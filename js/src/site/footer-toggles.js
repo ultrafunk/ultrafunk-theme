@@ -8,6 +8,7 @@
 import { ElementToggle }      from '../shared/element-toggle.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { response, settings } from '../shared/session-data.js';
+import { TRACK_TYPE }         from '../playback/common/mediaplayer.js';
 
 import {
   replaceClass,
@@ -63,6 +64,12 @@ class PlayerTypeToggle extends ElementToggle
 
   toggle()
   {
+    if (this.getPlayerStatus().trackType === TRACK_TYPE.LOCAL)
+    {
+      showSnackbar({ message: `Can't change Pref. Player for Local Tracks!` });
+      return;
+    }
+
     const destData = this.getDestData();
 
     settings.playback.preferredPlayer = isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST;

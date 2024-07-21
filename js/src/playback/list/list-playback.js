@@ -177,7 +177,7 @@ function cueOrPlayCurrentTrack(playTrack, positionSeconds = 0)
 {
   const trackUid = listControls.getCurrentTrackElement().getAttribute('data-track-source-uid');
 
-  debug.log(`cueOrPlayCurrentTrack(): trackId: ${m.currentTrackId} (trackUid = "${trackUid}") - playTrack: ${playTrack} - position: ${positionSeconds}`);
+  debug.log(`cueOrPlayCurrentTrack() - trackId: ${m.currentTrackId} (trackUid = "${trackUid}") - playTrack: ${playTrack} - position: ${positionSeconds}`);
 
   listControls.updateTrackDetails(m.players.current);
   m.players.current.resetState();
@@ -333,15 +333,17 @@ export function getStatus(getCurrentTrackNum = false)
       debug.log(`getStatus() - currentTrackNum: ${currentTrackIndex + 1} - trackId: ${currentTrackElement.getAttribute('data-track-id')}`);
     }
 
+    const playerElementIds = [ '', 'youtube-player', 'soundcloud-player', 'local-player' ];
+
     return {
-      isPlaying:    playbackControls.isPlaying(),
-      currentTrack: (currentTrackIndex + 1),
-      trackType:    TRACK_TYPE.YOUTUBE,
-      position:     Math.ceil(m.players.current.getPosition()),
-      numTracks:    1,
-      trackId:      currentTrackElement.getAttribute('data-track-id'),
-      elementId:    currentTrackElement.id,
-      iframeId:     'youtube-player',
+      isPlaying:      playbackControls.isPlaying(),
+      currentTrack:   (currentTrackIndex + 1),
+      trackType:      m.players.current.getTrackType(),
+      position:       Math.ceil(m.players.current.getPosition()),
+      numTracks:      1,
+      trackId:        currentTrackElement.getAttribute('data-track-id'),
+      trackElementId: currentTrackElement.id,
+      playerId:       playerElementIds[m.players.current.getTrackType()],
     };
   }
 
@@ -524,7 +526,11 @@ function initLocalPlayer()
 {
   initLocalTracks();
 
-  utils.addListener('#local-player-image', 'click', togglePlayPause);
+  utils.addListener('#local-player-image', 'click', (event) =>
+  {
+    togglePlayPause();
+    listControls.showLocalPlayerInfoAndControls(event);
+  });
 
   m.players.localPlayer.addEventListener('play',           onLocalPlayerStateChange);
   m.players.localPlayer.addEventListener('pause',          onLocalPlayerStateChange);

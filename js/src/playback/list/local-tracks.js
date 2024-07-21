@@ -154,7 +154,7 @@ async function setTracksMetadata(filesList, tracksUid)
 
 function setLocalTrackImages(metaData, trackElement)
 {
-  if ((metaData.images !== undefined) && (metaData.images.length !== 0))
+  if ((metaData.images !== undefined) && (metaData.images.length !== 0) && (metaData.images[0] !== null))
   {
     const trackImage = new Image();
     const imageBlob  = new Blob([metaData.images[0].data], { type: metaData.images[0].mime });

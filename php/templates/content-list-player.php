@@ -37,6 +37,9 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
       <div class="embedded-container local-container">
         <div class="wp-block-embed__wrapper aspect-ratio-1_1">
           <div id="local-player">
+            <div class="artist-title-container">
+              <div class="artist-title text-nowrap-ellipsis"></div>
+            </div>
             <img id="local-player-image" src="" title="Toggle Play / Pause" />
             <audio id="local-audio-player" controls ></audio>
           </div>

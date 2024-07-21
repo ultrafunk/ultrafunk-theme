@@ -72,6 +72,22 @@ body.list-player .site-branding {
     height: unset;
   }
 
+  &.local-container .artist-title-container {
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 100%);
+    display: none;
+  }
+
+  &.local-container .artist-title {
+    color: #fff;
+    font-size: 20px;
+    margin: 15px 25px 23px 25px;
+  }
+
   &.local-container audio {
     width: 100%;
     position: absolute;
@@ -79,8 +95,13 @@ body.list-player .site-branding {
     display: none;
   }
 
-  &.local-container .wp-block-embed__wrapper:hover audio {
-    display: unset;
+  @media all and (pointer: fine) {
+
+    &.local-container .wp-block-embed__wrapper:hover .artist-title-container,
+    &.local-container .wp-block-embed__wrapper:hover audio {
+      display: unset;
+    }
+
   }
 
   &.local-container audio::-webkit-media-controls-enclosure {
@@ -94,24 +115,6 @@ body.list-player .site-branding {
     font-weight: 700;
   }
 }
-
-/*
-.embedded-container.local-container audio {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  visibility: hidden;
-}
-
-.embedded-container.local-container .wp-block-embed__wrapper:hover audio {
-  animation: hide-audio-controls 5000ms;
-}
-
-@keyframes hide-audio-controls {
-    0% { visibility: hidden;  }
-  100% { visibility: visible; }
-}
-*/
 
 #local-player {
   display: flex;
@@ -465,6 +468,11 @@ body.list-player .site-footer-container {
   .embedded-container.local-container audio::-webkit-media-controls-current-time-display,
   .embedded-container.local-container audio::-webkit-media-controls-time-remaining-display {
     font-weight: unset;
+  }
+
+  #local-player .artist-title {
+    font-size: 14px;
+    margin: 12px 16px 15px 16px;
   }
 
   #tracklist-load-more-button {

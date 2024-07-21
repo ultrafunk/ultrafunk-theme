@@ -271,14 +271,14 @@ function cueOrPlaySingleTrackById(trackData, thumbnailData, playMedia = false)
 export function getStatus(getCurrentPosition = false)
 {
   const status = {
-    isPlaying:    playbackControls.isPlaying(),
-    currentTrack: m.players.getCurrentTrackNum(),
-    trackType:    m.players.current.getTrackType(),
-    position:     0,
-    numTracks:    m.players.getNumTracks(),
-    trackId:      m.players.current.getTrackId(),
-    elementId:    m.players.current.getTrackId(),
-    iframeId:     m.players.current.getIframeId(),
+    isPlaying:      playbackControls.isPlaying(),
+    currentTrack:   m.players.getCurrentTrackNum(),
+    trackType:      m.players.current.getTrackType(),
+    position:       0,
+    numTracks:      m.players.getNumTracks(),
+    trackId:        m.players.current.getTrackId(),
+    trackElementId: m.players.current.getTrackId(),
+    playerId:       m.players.current.getIframeId(),
   };
 
   if (getCurrentPosition)

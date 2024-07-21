@@ -188,7 +188,7 @@ function documentEventKeyDown(event)
       {
         case 'Backquote':
           event.preventDefault();
-          shared.playerScrollTo(m.player.getStatus().elementId);
+          shared.playerScrollTo(m.player.getStatus().trackElementId);
           break;
       }
 
@@ -221,17 +221,17 @@ function documentEventKeyDown(event)
         case 'f':
         case 'F':
           event.preventDefault();
-          shared.fullscreenElement.toggle(document.getElementById(m.player.getStatus().iframeId));
+          shared.fullscreenElement.toggle(document.getElementById(m.player.getStatus().playerId));
           break;
 
         case 'i':
           event.preventDefault();
-          showTrackDetails(document.getElementById(m.player.getStatus().elementId));
+          showTrackDetails(document.getElementById(m.player.getStatus().trackElementId));
           break;
 
         case 'I':
           event.preventDefault();
-          showTrackSharePlay(document.getElementById(m.player.getStatus().elementId));
+          showTrackSharePlay(document.getElementById(m.player.getStatus().trackElementId));
           break;
 
         case 'm':
@@ -395,7 +395,7 @@ function playbackEventMediaTimeRemaining(playbackEvent)
 
 function playbackDetailsClick()
 {
-  shared.playerScrollTo(m.player.getStatus().elementId);
+  shared.playerScrollTo(m.player.getStatus().trackElementId);
 }
 
 function playbackThumbnailClick()
@@ -405,7 +405,7 @@ function playbackThumbnailClick()
     eventLog.add(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK);
 
     if (eventLog.doubleClicked(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, 500))
-      shared.fullscreenElement.enter(document.getElementById(m.player.getStatus().iframeId));
+      shared.fullscreenElement.enter(document.getElementById(m.player.getStatus().playerId));
   }
   else if (shared.isListPlayer())
   {
