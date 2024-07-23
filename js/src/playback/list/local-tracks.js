@@ -10,7 +10,12 @@ import { showSnackbar }      from '../../shared/snackbar.js';
 import { TRACK_TYPE }        from '../common/mediaplayer.js';
 import { getTrackEntryHtml } from './list-track-templates.js';
 import { queryTrackAll }     from './list-controls.js';
-import { THEME_ENV }         from '../../config.js';
+
+import {
+  VERSION,
+  ULTRAFUNK_THEME_URI,
+  THEME_ENV,
+} from '../../config.js';
 
 import {
   addListener,
@@ -23,7 +28,7 @@ import {
 
 
 const debug = newDebugLogger('local-tracks');
-const m     = { id3js: null };
+const m     = { jsmediatags: null };
 
 const tracklistLocalHtml = /*html*/ `
   <div id="tracklist-local">
@@ -52,7 +57,7 @@ export function initLocalTracks()
 //
 // ************************************************************************************************
 
-async function getSelectedFiles(filesList)
+function getSelectedFiles(filesList)
 {
   if (filesList.length === 0)
   {
@@ -62,22 +67,59 @@ async function getSelectedFiles(filesList)
   {
     showSnackbar({ message: `Adding ${filesList.length} local ${(filesList.length === 1) ? 'track' : 'tracks'}...`, duration: 4 });
 
-    try
-    {
-      if (m.id3js === null)
-        m.id3js = await import('//unpkg.com/id3js@^2/lib/id3.js');
-    }
-    catch (error)
-    {
-      debug.error(error);
-      showSnackbar({ message: 'Failed to load ID3 tag parser!', duration: 30 });
-      return;
-    }
-
-    const tracksUid = inserLocalTracksHtml(filesList);
-    setTracksMetadata(filesList, tracksUid);
+    if (m.jsmediatags === null)
+      loadJsMediaTagsScript(() => setTracksMetadata(filesList, inserLocalTracksHtml(filesList)));
+    else
+      setTracksMetadata(filesList, inserLocalTracksHtml(filesList));
   }
 }
+
+function loadJsMediaTagsScript(onLoadedCallback)
+{
+  debug.log(`loadJsMediaTagsScript(): ${ULTRAFUNK_THEME_URI}/inc/js/jsmediatags.min.js?ver=${VERSION}`);
+
+  const scriptTag      = document.createElement('script');
+  const firstScriptTag = document.getElementsByTagName('script')[0];
+
+  scriptTag.type = 'text/javascript';
+  scriptTag.id   = 'js-media-tags';
+  scriptTag.src  = `${ULTRAFUNK_THEME_URI}/inc/js/jsmediatags.min.js?ver=${VERSION}`;
+
+  firstScriptTag.parentNode.insertBefore(scriptTag, firstScriptTag);
+
+  scriptTag.onload = () =>
+  {
+    m.jsmediatags = window.jsmediatags;
+    onLoadedCallback();
+  };
+}
+
+function clearLocalTracks()
+{
+  queryTrackAll('div.track-entry.track-type-local')?.forEach(trackElement =>
+  {
+    if (trackElement.classList.contains('current') === false)
+    {
+      const trackBlobUrl      = trackElement.getAttribute('data-track-url');
+      const trackImageBlobUrl = trackElement.getAttribute('data-track-image-url');
+
+      if (trackBlobUrl !== null)
+        URL.revokeObjectURL(trackBlobUrl);
+
+      if ((trackImageBlobUrl !== null) && (trackImageBlobUrl.startsWith('blob:')))
+        URL.revokeObjectURL(trackImageBlobUrl);
+
+      trackElement.remove();
+    }
+  });
+
+  showSnackbar({ message: 'Local tracks removed', duration: 3 });
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
 
 function inserLocalTracksHtml(filesList)
 {
@@ -113,51 +155,78 @@ function inserLocalTracksHtml(filesList)
   return tracksUid;
 }
 
-async function setTracksMetadata(filesList, tracksUid)
+function setTracksMetadata(filesList, tracksUid)
 {
   let index = 0;
 
   for (const file of filesList)
   {
-    const trackElement = document.getElementById(tracksUid[index++]);
-    const fileName     = stripHtml(escHtml(file.name));
-    const fileExtIndex = fileName.lastIndexOf('.');
-    const fileType     = (fileExtIndex !== -1) ? fileName.slice(fileExtIndex + 1).toUpperCase() : file.type;
+    const trackElement  = document.getElementById(tracksUid[index++]);
+    const fileName      = stripHtml(escHtml(file.name));
+    const fileExtIndex  = fileName.lastIndexOf('.');
+    const fileNameNoExt = (fileExtIndex !== -1) ? fileName.slice(0, fileExtIndex) : fileName;
+    const fileType      = (fileExtIndex !== -1) ? fileName.slice(fileExtIndex + 1).toUpperCase() : file.type;
 
     trackElement.setAttribute('data-track-image-url', THEME_ENV.defaultLTImagePlaceholder);
     trackElement.setAttribute('data-track-file-name', fileName);
     trackElement.setAttribute('data-track-file-type', fileType);
     trackElement.setAttribute('data-track-file-size', file.size);
 
-    try
+    m.jsmediatags.read(file,
     {
-      const metaData = await m.id3js.fromFile(file);
-      const artist   = (metaData.artist.length !== 0) ? stripHtml(metaData.artist) : stripHtml(metaData.band);
-      const title    = (metaData.title.length  !== 0) ? stripHtml(metaData.title)  : 'N / A';
-
-      trackElement.setAttribute('data-track-artist', artist);
-      trackElement.setAttribute('data-track-title',  title);
-      trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${artist}</b></span><br><span>${title}</span>`;
-
-      setLocalTrackImages(metaData, trackElement);
-    }
-    catch
-    {
-      const fileNameNoExt = (fileExtIndex !== -1) ? fileName.slice(0, fileExtIndex) : fileName;
-
-      trackElement.setAttribute('data-track-artist', fileNameNoExt);
-    //trackElement.setAttribute('data-track-title',  fileNameNoExt);
-      trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${fileNameNoExt}</b></span>`;
-    }
+      onSuccess: (mediaTags) =>
+      {
+        if (Object.keys(mediaTags.tags).length !== 0)
+          setTrackArtistTitle(mediaTags.tags, trackElement, fileNameNoExt);
+        else
+          setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
+      },
+      onError: () =>
+      {
+        setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
+      }
+    });
   }
 }
 
-function setLocalTrackImages(metaData, trackElement)
+function setTrackArtistTitle(tags, trackElement, fileNameNoExt)
 {
-  if ((metaData.images !== undefined) && (metaData.images.length !== 0) && (metaData.images[0] !== null))
+  if ((tags.artist === undefined) && (tags.title === undefined))
+  {
+    setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
+  }
+  else
+  {
+    let artist = fileNameNoExt;
+    let title  = fileNameNoExt;
+
+    if ((tags.artist !== undefined) && (tags.artist.length !== 0))
+      artist = stripHtml(tags.artist);
+
+    if ((tags.title !== undefined) && (tags.title.length !== 0))
+      title = stripHtml(tags.title);
+
+    trackElement.setAttribute('data-track-artist', artist);
+    trackElement.setAttribute('data-track-title',  title);
+    trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${artist}</b></span><br><span>${title}</span>`;
+
+    setTrackImages(tags, trackElement);
+  }
+}
+
+function setFallbackTrackArtistTitle(trackElement, fileNameNoExt)
+{
+  trackElement.setAttribute('data-track-artist', fileNameNoExt);
+//trackElement.setAttribute('data-track-title',  fileNameNoExt);
+  trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${fileNameNoExt}</b></span>`;
+}
+
+function setTrackImages(tags, trackElement)
+{
+  if (tags.picture !== undefined)
   {
     const trackImage = new Image();
-    const imageBlob  = new Blob([metaData.images[0].data], { type: metaData.images[0].mime });
+    const imageBlob  = new Blob([new Uint8Array(tags.picture.data).buffer], { type: tags.picture.format });
     const imageUrl   = encodeURI(URL.createObjectURL(imageBlob));
 
     trackImage.src = imageUrl;
@@ -173,26 +242,4 @@ function setLocalTrackImages(metaData, trackElement)
       trackElement.querySelector('button.thumbnail img').src = THEME_ENV.defaultLTThumbnail;
     });
   }
-}
-
-function clearLocalTracks()
-{
-  queryTrackAll('div.track-entry.track-type-local')?.forEach(trackElement =>
-  {
-    if (trackElement.classList.contains('current') === false)
-    {
-      const trackBlobUrl      = trackElement.getAttribute('data-track-url');
-      const trackImageBlobUrl = trackElement.getAttribute('data-track-image-url');
-
-      if (trackBlobUrl !== null)
-        URL.revokeObjectURL(trackBlobUrl);
-
-      if ((trackImageBlobUrl !== null) && (trackImageBlobUrl.startsWith('blob:')))
-        URL.revokeObjectURL(trackImageBlobUrl);
-
-      trackElement.remove();
-    }
-  });
-
-  showSnackbar({ message: 'Local tracks removed', duration: 3 });
 }

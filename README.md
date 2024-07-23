@@ -25,7 +25,7 @@ PHP version 8.2 or greater.
   • Original: /inc/js/DragDropTouch.js  
   • Modified: /inc/js/drag-drop-touch.js  
   • Modified + Minified: /inc/js/drag-drop-touch.min.js  
-[id3](https://github.com/43081j/id3) - A JavaScript ID3 tags parser for Node & browsers.  
+[JS MediaTags](https://github.com/aadsm/jsmediatags) - JavaScript Media Tags Reader (ID3, MP4, FLAC).  
 
 **Optional:**  
 [ESLint](https://eslint.org/) - Static code analyzer for JavaScript.  
