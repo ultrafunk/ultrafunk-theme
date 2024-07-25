@@ -290,6 +290,7 @@ body.list-player .site-branding {
 
 input#select-local-files {
   font-size: 0;
+  margin-left: 10px;
 }
 
 input#select-local-files::file-selector-button {

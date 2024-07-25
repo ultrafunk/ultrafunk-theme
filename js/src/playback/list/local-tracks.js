@@ -5,11 +5,15 @@
 //
 
 
-import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { TRACK_TYPE }        from '../common/mediaplayer.js';
 import { getTrackEntryHtml } from './list-track-templates.js';
 import { queryTrackAll }     from './list-controls.js';
+
+import {
+  newDebugLogger,
+  logCss,
+} from '../../shared/debuglogger.js';
 
 import {
   VERSION,
@@ -28,11 +32,17 @@ import {
 
 
 const debug = newDebugLogger('local-tracks');
-const m     = { jsmediatags: null };
+
+const m = {
+  jsmediatags: null,
+  addTracksStartTime: 0,
+  addTracksHtmlTime:  0,
+};
 
 const tracklistLocalHtml = /*html*/ `
   <div id="tracklist-local">
-    Add local tracks:&nbsp;&nbsp;<input id="select-local-files" type="file" accept="audio/*" multiple />
+    <label for="select-local-files">Add local tracks:</label>
+    <input id="select-local-files" type="file" accept="audio/*" multiple />
     <button id="clear-local-tracks" type="button">Clear Tracks</button>
   </div>`;
 
@@ -66,6 +76,8 @@ function getSelectedFiles(filesList)
   else
   {
     showSnackbar({ message: `Adding ${filesList.length} local ${(filesList.length === 1) ? 'track' : 'tracks'}...`, duration: 4 });
+
+    m.addTracksStartTime = performance.now();
 
     if (m.jsmediatags === null)
       loadJsMediaTagsScript(() => setTracksMetadata(filesList, inserLocalTracksHtml(filesList)));
@@ -116,6 +128,12 @@ function clearLocalTracks()
   showSnackbar({ message: 'Local tracks removed', duration: 3 });
 }
 
+function logPerfTime(filesCount)
+{
+  const addTracksStop = performance.now();
+  console.log(`%cAdded ${filesCount} local track(s) in ${Math.ceil(addTracksStop - m.addTracksStartTime)} ms. (insert HTML: ${Math.ceil(m.addTracksHtmlTime - m.addTracksStartTime)} ms.) for ${THEME_ENV.siteUrl}`, logCss);
+}
+
 
 // ************************************************************************************************
 //
@@ -151,6 +169,7 @@ function inserLocalTracksHtml(filesList)
   }
 
   document.getElementById('tracklist').insertAdjacentHTML("beforeend", tracksHtml);
+  m.addTracksHtmlTime = performance.now();
 
   return tracksUid;
 }
@@ -158,6 +177,7 @@ function inserLocalTracksHtml(filesList)
 function setTracksMetadata(filesList, tracksUid)
 {
   let index = 0;
+  let processedTracks = 0;
 
   for (const file of filesList)
   {
@@ -180,10 +200,16 @@ function setTracksMetadata(filesList, tracksUid)
           setTrackArtistTitle(mediaTags.tags, trackElement, fileNameNoExt);
         else
           setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
+
+        if (++processedTracks === filesList.length)
+          logPerfTime(filesList.length);
       },
       onError: () =>
       {
         setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
+
+        if (++processedTracks === filesList.length)
+          logPerfTime(filesList.length);
       }
     });
   }
@@ -217,11 +243,10 @@ function setTrackArtistTitle(tags, trackElement, fileNameNoExt)
 function setFallbackTrackArtistTitle(trackElement, fileNameNoExt)
 {
   trackElement.setAttribute('data-track-artist', fileNameNoExt);
-//trackElement.setAttribute('data-track-title',  fileNameNoExt);
   trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${fileNameNoExt}</b></span>`;
 }
 
-function setTrackImages(tags, trackElement)
+async function setTrackImages(tags, trackElement)
 {
   if (tags.picture !== undefined)
   {
@@ -230,16 +255,10 @@ function setTrackImages(tags, trackElement)
     const imageUrl   = encodeURI(URL.createObjectURL(imageBlob));
 
     trackImage.src = imageUrl;
-    trackImage.decode().then(() =>
-    {
-      trackElement.querySelector('button.thumbnail img').src = imageUrl;
-      trackElement.setAttribute('data-track-thumbnail-url', imageUrl);
-      trackElement.setAttribute('data-track-image-url', imageUrl);
-    })
-    .catch((error) =>
-    {
-      debug.log(error);
-      trackElement.querySelector('button.thumbnail img').src = THEME_ENV.defaultLTThumbnail;
-    });
+    await trackImage.decode();
+
+    trackElement.querySelector('button.thumbnail img').src = imageUrl;
+    trackElement.setAttribute('data-track-thumbnail-url', imageUrl);
+    trackElement.setAttribute('data-track-image-url', imageUrl);
   }
 }
