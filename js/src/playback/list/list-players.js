@@ -200,7 +200,7 @@ class SoundCloudPlayer extends MediaPlayer
   }
 
   //
-  // ToDo: THIS DOES NOT WORK as of 1.48.0!!!!!
+  // ToDo: THIS DOES NOT WORK as of 1.48.1!!!!!
   // See YouTube and Local players for the right stuff...
   //
   mute(setMute)

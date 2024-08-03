@@ -108,6 +108,13 @@ export function onPlayerError(trackType, errorNum = 0)
   }
   else if (trackType === TRACK_TYPE.SOUNDCLOUD)
   {
+    //
+    // SoundCloud player can trigger this too early because the initial widget load results in 404,
+    // so we skip error handling until the players are actually ready for playback...
+    //
+    if (m.playerReady === false)
+      return;
+
     m.players.current.setIsPlayable(false);
     listControls.setCurrentTrackState(STATE.PAUSED);
   }
@@ -123,6 +130,28 @@ export function onPlayerError(trackType, errorNum = 0)
       actionClickCallback: stopSkipToNextTrack,
       afterCloseCallback:  skipToNextTrack,
     });
+  }
+}
+
+function onPlayerStatePlaying()
+{
+  dismissSnackbar(m.currentSnackbarId);
+
+  if (m.firstStatePlaying)
+  {
+    m.firstStatePlaying = false;
+
+    setTimeout(() =>
+    {
+      if (settings.playback.autoplay        &&
+          playbackControls.isPlaying()      &&
+          (Math.round(window.scrollY) <= 1) &&
+          matchesMedia(MATCH.SITE_MAX_WIDTH_MOBILE))
+      {
+        playerScrollTo(0);
+      }
+    },
+    6000);
   }
 }
 
@@ -178,7 +207,7 @@ function onYouTubePlayerStateChange(event)
 
     // eslint-disable-next-line no-undef
     case YT.PlayerState.PLAYING:
-      onYouTubeStatePlaying();
+      onPlayerStatePlaying();
       playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
       break;
 
@@ -196,28 +225,9 @@ function onYouTubePlayerStateChange(event)
   }
 }
 
-function onYouTubeStatePlaying()
-{
-  dismissSnackbar(m.currentSnackbarId);
-
-  if (m.firstStatePlaying)
-  {
-    m.firstStatePlaying = false;
-
-    setTimeout(() =>
-    {
-      if (settings.playback.autoplay        &&
-          playbackControls.isPlaying()      &&
-          (Math.round(window.scrollY) <= 1) &&
-          matchesMedia(MATCH.SITE_MAX_WIDTH_MOBILE))
-      {
-        playerScrollTo(0);
-      }
-    },
-    6000);
-  }
-}
-
+//
+// ToDo: onSoundCloudPlayerAutoplayBlocked()
+//
 function onYouTubePlayerAutoplayBlocked()
 {
   listControls.setCurrentTrackState(STATE.PAUSED);
@@ -290,7 +300,7 @@ async function onSoundCloudPlayerStateChange(playerState)
       break;
 
     case 'playing':
-      onYouTubeStatePlaying();
+      onPlayerStatePlaying();
       playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
       break;
 
@@ -338,7 +348,7 @@ function onLocalPlayerStateChange(event)
   switch (event.type)
   {
     case 'play':
-      onYouTubeStatePlaying();
+      onPlayerStatePlaying();
       playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
       break;
 

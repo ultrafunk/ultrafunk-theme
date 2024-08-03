@@ -99,7 +99,7 @@ export function onPlaybackReady(players)
   listControls.ready();
 
   //
-  // ToDo: THIS DOES NOT WORK as of 1.48.0!!!!!
+  // ToDo: THIS DOES NOT WORK as of 1.48.1!!!!!
   // Current master Volume and Mute has to be set each time the player is changed (YouTube, SouldCloud & Local)
   //
   toggleMute(false);
