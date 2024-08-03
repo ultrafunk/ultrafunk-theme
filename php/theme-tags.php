@@ -141,8 +141,8 @@ function scripts_styles() : void
   <noscript><link rel="stylesheet" href="<?php echo ULTRAFUNK_THEME_URI . '/inc/css/style-noscript.css?ver='        . \Ultrafunk\Theme\Config\VERSION; ?>" media="all" /></noscript>
   <?php
 
-  if (!is_page() && !is_list_player() && !is_termlist())
-    echo '<script defer src="https://w.soundcloud.com/player/api.js"></script>' . PHP_EOL;
+  if (!is_page() && !is_termlist())
+    echo '<script src="https://w.soundcloud.com/player/api.js"></script>' . PHP_EOL;
 }
 
 function head() : void

@@ -7,11 +7,7 @@
 
 import { THEME_ENV }        from '../config.js';
 import { getPrefPlayerUrl } from '../shared/utils.js';
-
-import {
-  getThumbnailData,
-  getTrackTypeData,
-} from '../playback/common/mediaplayer.js';
+import { getThumbnailData } from '../playback/common/mediaplayer.js';
 
 
 // ************************************************************************************************
@@ -36,7 +32,7 @@ export function getTermlistHtml(header, termSlug, termData)
         data-track-id="track-${track.id}"
         data-track-source-uid="${thumbnailData.uid}" title="Play Track"
         >
-        <img src="${getTrackTypeData(track.meta.track_source_type, thumbnailData.src).thumbnailUrl}">
+        <img src="${thumbnailData.src}">
       </div>
       <div class="artist-title text-nowrap-ellipsis">
         <a href="${track.link}" title="Go to track"><span><b>${track.meta.track_artist}</b></span><br><span>${track.meta.track_title}</span></a>

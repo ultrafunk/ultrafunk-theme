@@ -220,7 +220,6 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
 }
 
 body.search .playback-player-type-toggle,
-body.channel-soundcloud .playback-player-type-toggle,
 body.single.track .playback-player-type-toggle {
   display: none;
 }

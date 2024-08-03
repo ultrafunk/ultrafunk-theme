@@ -132,23 +132,20 @@ export function getSoundCloudThumbnailUrl(soundObject)
 export function getThumbnailData(metaData)
 {
   if (metaData.track_source_type === TRACK_TYPE.YOUTUBE)
-    return getYouTubeThumbnailUrl(metaData.track_source_data);
+  {
+    const thumbnailData = getYouTubeThumbnailUrl(metaData.track_source_data);
+
+    if (IS_PROD_BUILD === false)
+      thumbnailData.src = THEME_ENV.defaultYTThumbnail;
+
+    return thumbnailData;
+  }
 
   if (metaData.track_source_type === TRACK_TYPE.SOUNDCLOUD)
-    return { src: THEME_ENV.defaultSCThumbnail, class: 'track-type-soundcloud', uid: '' };
+    return { src: THEME_ENV.defaultSCThumbnail, class: 'track-type-soundcloud', uid: metaData.track_source_data };
 
   if (metaData.track_source_type === TRACK_TYPE.LOCAL)
     return { src: THEME_ENV.defaultLTThumbnail, class: 'track-type-local', uid: metaData.track_source_data };
-}
-
-export function getTrackTypeData(trackType, thumbnailUrl)
-{
-  const isPlayableTrack = ((trackType === TRACK_TYPE.YOUTUBE) || (trackType === TRACK_TYPE.LOCAL));
-
-  if (trackType === TRACK_TYPE.YOUTUBE)
-    thumbnailUrl = IS_PROD_BUILD ? thumbnailUrl : THEME_ENV.defaultYTThumbnail;
-
-  return { isPlayableTrack: isPlayableTrack, thumbnailUrl: thumbnailUrl };
 }
 
 export function getDataTrackType(element)

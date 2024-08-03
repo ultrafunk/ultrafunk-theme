@@ -111,6 +111,19 @@ export class SoundCloudPlayer extends MediaPlayer
     });
   }
 
+  cueTrackById(positionSeconds = 0)
+  {
+    this.seekTo(positionSeconds);
+    this.setIsCued(true);
+  }
+
+  playTrackById(positionSeconds = 0, onErrorCallback = null)
+  {
+    this.seekTo(positionSeconds);
+    this.play(onErrorCallback);
+    this.setIsCued(false);
+  }
+
   pause() { this.embedded.pause(); }
 
   play(onErrorCallback)

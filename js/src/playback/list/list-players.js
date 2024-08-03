@@ -5,10 +5,14 @@
 //
 
 
+import { VOLUME }    from "../gallery/crossfade.js";
+import { THEME_ENV } from "../../config.js";
+
 import {
   TRACK_TYPE,
   MediaPlayer,
   getYouTubeThumbnailUrl,
+  getSoundCloudThumbnailUrl,
 } from "../common/mediaplayer.js";
 
 
@@ -25,7 +29,7 @@ class YouTubePlayer extends MediaPlayer
     super(TRACK_TYPE.YOUTUBE, null, null, embeddedPlayer);
   }
 
-  setPlayerError(error) { this.#playerError = error; }
+  setPlayerError(errorNum) { this.#playerError = errorNum; }
 
   resetState()
   {
@@ -37,12 +41,14 @@ class YouTubePlayer extends MediaPlayer
   {
     this.embedded.cueVideoById(sourceUid, positionSeconds);
     this.setIsCued(true);
+    return true;
   }
 
   playTrackById(sourceUid, positionSeconds = 0)
   {
     this.embedded.loadVideoById(sourceUid, positionSeconds);
     this.setIsCued(false);
+    return true;
   }
 
   play(onErrorCallback)
@@ -51,7 +57,7 @@ class YouTubePlayer extends MediaPlayer
 
     if (this.#playerError !== -1)
     {
-      onErrorCallback({ data: this.#playerError });
+      onErrorCallback(TRACK_TYPE.YOUTUBE, this.#playerError);
       this.#playerError = -1;
     }
     else
@@ -60,13 +66,21 @@ class YouTubePlayer extends MediaPlayer
     }
   }
 
-  pause()       { this.embedded.pauseVideo();            }
-  stop()        { this.embedded.stopVideo();             }
-  mute()        { this.embedded.mute();                  }
-  unMute()      { this.embedded.unMute();                }
-  isMuted()     { return this.embedded.isMuted();        }
-  getPosition() { return this.embedded.getCurrentTime(); }
-  getVolume()   { return this.embedded.getVolume();      }
+  pause()       { this.embedded.pauseVideo();     }
+  stop()        { this.embedded.stopVideo();      }
+  mute()        { this.embedded.mute();           }
+  unMute()      { this.embedded.unMute();         }
+  isMuted()     { return this.embedded.isMuted(); }
+
+  getVolume(callback)
+  {
+    callback(this.embedded.getVolume());
+  }
+
+  getPosition(callback)
+  {
+    callback(this.embedded.getCurrentTime(), this.duration);
+  }
 
   setThumbnail(trackElement)
   {
@@ -81,9 +95,147 @@ class YouTubePlayer extends MediaPlayer
 
 class SoundCloudPlayer extends MediaPlayer
 {
+  #volume  = VOLUME.MAX;
+  #isMuted = false;
+  #onPlayerStateChangeCallback = null;
+
+  #playerOptions = {
+    visual:        true,
+    single_active: true,
+    show_artwork:  true,
+  };
+
   constructor(embeddedPlayer)
   {
     super(TRACK_TYPE.SOUNDCLOUD, null, null, embeddedPlayer);
+  }
+
+  setOnPlayerStateChange(onPlayerStateChangeCallback)
+  {
+    this.#onPlayerStateChangeCallback = onPlayerStateChangeCallback;
+  }
+
+  resetState()
+  {
+    this.setIsPlayable(true);
+    this.setIsCued(false);
+  }
+
+  cueTrackById(sourceUid, positionSeconds = 0)
+  {
+    this.#onPlayerStateChangeCallback('loading');
+    this.setIsCued(true);
+    return new Promise((resolve) => this.embedded.load(`https://${sourceUid}`, {...this.#playerOptions, callback: () => this.cueOrPlayTrackById(positionSeconds, false, resolve) }));
+  }
+
+  playTrackById(sourceUid, positionSeconds = 0)
+  {
+    this.#onPlayerStateChangeCallback('loading');
+    this.setIsCued(false);
+    return new Promise((resolve) => this.embedded.load(`https://${sourceUid}`, {...this.#playerOptions, callback: () => this.cueOrPlayTrackById(positionSeconds, true, resolve) }));
+  }
+
+  cueOrPlayTrackById(positionSeconds, playTrack, resolve)
+  {
+    this.embedded.getDuration(durationMilliseconds =>
+    {
+      this.setDuration(Math.round(durationMilliseconds / 1000));
+      this.seekTo(positionSeconds);
+
+      this.embedded.getCurrentSound((soundObject) =>
+      {
+        this.setThumbnail(null, soundObject);
+        this.#onPlayerStateChangeCallback('ready');
+
+        if (playTrack && this.isPlayable())
+          this.embedded.play();
+
+        resolve(this.isPlayable());
+      });
+    });
+  }
+
+  play(onErrorCallback)
+  {
+    this.setIsCued(false);
+
+    if (this.isPlayable() === false)
+    {
+      onErrorCallback(TRACK_TYPE.SOUNDCLOUD);
+      this.setIsPlayable(true);
+    }
+    else
+    {
+      this.embedded.play();
+    }
+  }
+
+  pause() { this.embedded.pause(); }
+
+  stop()
+  {
+    this.pause();
+    super.seekTo(0);
+  }
+
+  // Override parent because SoundCloud seekTo() needs milliseconds instead of just seconds
+  seekTo(positionSeconds)
+  {
+    super.seekTo(positionSeconds * 1000);
+  }
+
+  getVolume(callback)
+  {
+    this.embedded.getVolume(volume => callback(volume));
+  }
+
+  // Override parent setVolume() because we use it for mute() as well
+  setVolume(volume)
+  {
+    if (volume !== 0)
+      this.#volume = volume;
+
+    if ((this.#isMuted === false) || (volume === 0))
+      super.setVolume(volume);
+  }
+
+  //
+  // ToDo: THIS DOES NOT WORK as of 1.48.0!!!!!
+  // See YouTube and Local players for the right stuff...
+  //
+  mute(setMute)
+  {
+    this.#isMuted = setMute ? true : false;
+
+    if (setMute)
+      this.setVolume(0);
+    else
+      this.setVolume(this.#volume);
+  }
+
+  isMuted()
+  {
+    return this.#isMuted;
+  }
+
+  getPosition(callback)
+  {
+    this.embedded.getPosition(positionMilliseconds => callback((positionMilliseconds / 1000), this.duration));
+  }
+
+  setThumbnail(trackElement, soundObject = null)
+  {
+    if (soundObject === null)
+    {
+      if (trackElement === null)
+        super.setThumbnail({ src: THEME_ENV.defaultSCThumbnail, class: 'track-type-soundcloud' });
+      else
+        super.setThumbnail({ src: encodeURI(trackElement.getAttribute('data-track-thumbnail-url')), class: 'track-type-soundcloud' });
+    }
+    else
+    {
+      super.setThumbnail(getSoundCloudThumbnailUrl(soundObject));
+    }
   }
 }
 
@@ -108,6 +260,7 @@ class LocalPlayer extends MediaPlayer
     this.embedded.src         = sourceUid;
     this.embedded.currentTime = positionSeconds;
     this.setIsCued(true);
+    return true;
   }
 
   playTrackById(sourceUid, positionSeconds = 0)
@@ -116,6 +269,7 @@ class LocalPlayer extends MediaPlayer
     this.embedded.currentTime = positionSeconds;
     this.play();
     this.setIsCued(false);
+    return true;
   }
 
   play()
@@ -134,9 +288,9 @@ class LocalPlayer extends MediaPlayer
   unMute()  { this.embedded.muted = false; }
   isMuted() { return this.embedded.muted;  }
 
-  getPosition()
+  getPosition(callback)
   {
-    return Math.floor(this.embedded.currentTime);
+    callback(Math.floor(this.embedded.currentTime), this.duration);
   }
 
   getDuration()
@@ -149,10 +303,10 @@ class LocalPlayer extends MediaPlayer
     this.embedded.currentTime = positionSeconds;
   }
 
-  getVolume()
+  getVolume(callback)
   {
     // Player volume is min 0.0 => 1.0 max, we use 0 => 100
-    return Math.round(this.embedded.volume * 100);
+    callback(Math.round(this.embedded.volume * 100));
   }
 
   setVolume(volume)
@@ -179,7 +333,7 @@ export class ListPlayers
   #localPlayer      = null;
   #currentPlayer    = null;
 
-  constructor(youTubePlayer, soundCloudPlayer = null, localPlayer = null)
+  constructor(youTubePlayer, soundCloudPlayer, localPlayer)
   {
     this.#youTubePlayer    = new YouTubePlayer(youTubePlayer);
     this.#soundCloudPlayer = new SoundCloudPlayer(soundCloudPlayer);
@@ -187,8 +341,12 @@ export class ListPlayers
     this.#currentPlayer    = this.#youTubePlayer;
   }
 
-  get current()     { return this.#currentPlayer;        }
-  get localPlayer() { return this.#localPlayer.embedded; }
+  get current() { return this.#currentPlayer; }
+
+  setOnPlayerStateChange(setOnPlayerStateChangeCallback)
+  {
+    this.#soundCloudPlayer.setOnPlayerStateChange(setOnPlayerStateChangeCallback);
+  }
 
   setCurrentPlayer(trackType)
   {

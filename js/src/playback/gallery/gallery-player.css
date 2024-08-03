@@ -29,7 +29,6 @@ body.gallery-player .site-branding {
 }
 
 body.search .site-branding,
-body.channel-soundcloud .site-branding,
 body.single.track .site-branding {
   min-width: 300px;
 }
@@ -303,7 +302,6 @@ body.single.track .site-branding {
 
   body.gallery-player .site-branding,
   body.search .site-branding,
-  body.channel-soundcloud .site-branding,
   body.single.track .site-branding {
     min-width: unset;
   }

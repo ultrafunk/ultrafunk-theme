@@ -187,7 +187,7 @@ function initYouTubeAPI()
   debug.log('initYouTubeAPI()');
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, getLoadingPercent());
 
-  window.onYouTubeIframeAPIReady = function()
+  window.onYouTubeIframeAPIReady = () =>
   {
     debug.log('onYouTubeIframeAPIReady()');
     playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, getLoadingPercent());

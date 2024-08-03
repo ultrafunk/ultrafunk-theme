@@ -31,6 +31,7 @@
   @media all and (pointer: fine) {
 
     &.track-type-youtube:hover,
+    &.track-type-soundcloud:hover,
     &.track-type-local:hover {
       background: var(--list-row-hover-color);
     }
@@ -40,6 +41,7 @@
   @media not all and (pointer: fine) {
 
     &.track-type-youtube:hover,
+    &.track-type-soundcloud:hover,
     &.track-type-local:hover {
       opacity: 1;
     }
@@ -80,6 +82,7 @@
   }
 
   &.track-type-youtube .thumbnail:hover,
+  &.track-type-soundcloud .thumbnail:hover,
   &.track-type-local .thumbnail:hover {
     cursor: pointer;
   }
@@ -100,28 +103,27 @@
   }
 
   &.track-type-youtube:hover .thumbnail-overlay::before,
+  &.track-type-soundcloud:hover .thumbnail-overlay::before,
   &.track-type-local:hover .thumbnail-overlay::before {
     opacity: 1;
   }
 
-  &.track-type-soundcloud:hover .thumbnail-overlay::before {
-    content: '\f083'; /* warning_amber */
-    opacity: 1;
-  }
-
   &.track-type-youtube.state-playing .thumbnail-overlay::before,
+  &.track-type-soundcloud.state-playing .thumbnail-overlay::before,
   &.track-type-local.state-playing .thumbnail-overlay::before {
     content: "\e050"; /* volume_up */
     opacity: 1;
   }
 
   &.track-type-youtube.current.state-playing:hover .thumbnail-overlay::before,
+  &.track-type-soundcloud.current.state-playing:hover .thumbnail-overlay::before,
   &.track-type-local.current.state-playing:hover .thumbnail-overlay::before {
     content: "\e034"; /* pause */
     opacity: 1;
   }
 
   &.track-type-youtube.current.state-paused .thumbnail-overlay::before,
+  &.track-type-soundcloud.current.state-paused .thumbnail-overlay::before,
   &.track-type-local.current.state-paused .thumbnail-overlay::before {
     content: "\e037"; /* play_arrow */
     opacity: 1;
@@ -165,6 +167,8 @@
 
     &.track-type-youtube.current.state-playing .thumbnail-overlay::before,
     &.track-type-youtube.current.state-playing:hover .thumbnail-overlay::before,
+    &.track-type-soundcloud.current.state-playing .thumbnail-overlay::before,
+    &.track-type-soundcloud.current.state-playing:hover .thumbnail-overlay::before,
     &.track-type-local.current.state-playing .thumbnail-overlay::before,
     &.track-type-local.current.state-playing:hover .thumbnail-overlay::before {
       content: "\e050";
@@ -317,10 +321,6 @@
       display: block;
     }
 
-  }
-
-  &.track-type-local .track-actions .share-play-button {
-    display: none;
   }
 
   .track-duration {

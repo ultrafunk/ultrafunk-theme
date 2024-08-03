@@ -22,7 +22,7 @@ class ListPlaybackTimer extends PlaybackTimer
 {
   #players = null;
 
-  #update(positionSecondsDecimal, durationSeconds)
+  #updateCallback(positionSecondsDecimal, durationSeconds)
   {
     if (positionSecondsDecimal !== undefined)
     {
@@ -45,12 +45,12 @@ class ListPlaybackTimer extends PlaybackTimer
   updateTimer()
   {
     if (this.isVisible && isPlaying())
-      this.#update(this.#players.current.getPosition(), this.#players.current.getDuration());
+      this.#players.current.getPosition((position, duration) => this.#updateCallback(position, duration));
   }
 
   updateVolumeMute()
   {
-    updateVolumeMuteSettings(this.#players.current.getVolume(), this.#players.current.isMuted());
+    this.#players.current.getVolume((volume) => updateVolumeMuteSettings(volume, this.#players.current.isMuted()));
   }
 }
 

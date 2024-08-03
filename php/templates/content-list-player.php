@@ -31,7 +31,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
       </div>
       <div class="embedded-container soundcloud-container">
         <div class="wp-block-embed__wrapper">
-          <div id="soundcloud-player"></div>
+          <iframe id="soundcloud-player" allow="autoplay" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?visual=true&single_active=true&show_artwork=true"></iframe>
         </div>
       </div>
       <div class="embedded-container local-container">
@@ -74,7 +74,6 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
       $track_artist        = esc_html($track->track_artist);
       $track_title         = esc_html($track->track_title);
       $track_duration      = intval($track->track_duration);
-      $track_url           = esc_url("$this->home_url/track/$track->post_name/");
       $track_data          = \Ultrafunk\Theme\Functions\get_track_data($track);
       $is_youtube_track    = ($track_data['track_type'] === \Ultrafunk\Plugin\Shared\TRACK_TYPE::YOUTUBE);
       $artists             = get_object_term_cache($track->ID, 'uf_artist');
@@ -90,34 +89,24 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         data-track-artist="<?php echo $track_artist; ?>"
         data-track-title="<?php echo $track_title; ?>"
         data-track-duration="<?php echo $track_duration; ?>"
-        data-track-url="<?php echo $track_url; ?>"
+        data-track-url="<?php echo esc_url("$this->home_url/track/$track->post_name/"); ?>"
         data-track-thumbnail-url="<?php echo $track_thumbnail_url; ?>"
-        <?php if ($is_youtube_track) { ?>
-          data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
-        <?php } ?>
+        data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
         >
         <div class="track-artists-links"><?php echo get_term_links($artists, '/list/artist/', '', (int)$track->track_artist_id); ?></div>
         <div class="track-channels-links"><?php echo get_term_links($channels, '/list/channel/'); ?></div>
         <div class="track-details">
-          <button type="button" class="thumbnail" <?php echo ($is_youtube_track ? 'title="Play Track"' : 'title="SoundCloud Track"'); ?>>
+          <button type="button" class="thumbnail" title="Play Track">
             <div class="thumbnail-overlay"><div class="spinner"></div></div>
             <img src="<?php echo $track_thumbnail_url; ?>" alt="">
           </button>
-          <?php if ($is_youtube_track) { ?>
-            <div class="artist-title text-nowrap-ellipsis"><span><b><?php echo $track_artist; ?></b></span><br><span><?php echo $track_title; ?></span></div>
-          <?php } else { ?>
-            <div class="artist-title text-nowrap-ellipsis" title="Link: Play SoundCloud track">
-              <a href="<?php echo $track_url; ?>"><span><b><?php echo $track_artist; ?></b></span><br><span><?php echo $track_title; ?></span></a>
-            </div>
-          <?php } ?>
+          <div class="artist-title text-nowrap-ellipsis"><span><b><?php echo $track_artist; ?></b></span><br><span><?php echo $track_title; ?></span></div>
         </div>
         <div class="track-actions">
           <div class="track-message"></div>
           <div class="track-action-buttons">
             <button type="button" class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></button>
-            <?php if ($is_youtube_track) { ?>
-              <button type="button" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>
-            <?php } ?>
+            <button type="button" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>
             <button type="button" class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></button>
             <button type="button" class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
           </div>

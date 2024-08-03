@@ -62,7 +62,7 @@ class PlayerTypeToggle extends ElementToggle
     this.getPlayerStatus = getPlayerStatus;
   }
 
-  toggle()
+  async toggle()
   {
     if (this.getPlayerStatus().trackType === TRACK_TYPE.LOCAL)
     {
@@ -70,7 +70,7 @@ class PlayerTypeToggle extends ElementToggle
       return;
     }
 
-    const destData = this.getDestData();
+    const destData = await this.getDestData();
 
     settings.playback.preferredPlayer = isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST;
     setCookie(KEY.UF_PREFERRED_PLAYER, `${isListPlayer() ? PLAYER_TYPE.GALLERY : PLAYER_TYPE.LIST}`, (YEAR_IN_SECONDS * 5));
@@ -108,14 +108,14 @@ class PlayerTypeToggle extends ElementToggle
     return destUrl;
   }
 
-  getDestData()
+  async getDestData()
   {
     const urlParts          = window.location.href.split('/');
     const pageIndex         = urlParts.findIndex(part => (part.toLowerCase() === 'page'));
     const currentPage       = (pageIndex !== -1)
                                 ? parseInt(urlParts[pageIndex + 1])
                                 : 1;
-    const trackData         = this.getPlayerStatus(true);
+    const trackData         = await this.getPlayerStatus(true);
     const tracksPerPageFrom = isListPlayer() ? response.listPerPage    : response.galleryPerPage;
     const tracksPerPageTo   = isListPlayer() ? response.galleryPerPage : response.listPerPage;
     const trackOffset       = trackData.currentTrack + ((currentPage - 1) * tracksPerPageFrom);

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "es6",
-    "target": "es2022",
+    "module": "ESNext",
+    "target": "ESNext",
     "strictFunctionTypes": true,
   //"checkJs": true
   },

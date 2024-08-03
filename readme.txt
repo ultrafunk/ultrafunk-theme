@@ -14,7 +14,7 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 **Required:**
 PHP version 8.2 or greater.
 [WordPress](https://wordpress.org/download/) version 6.6 or greater.
-[Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.46.X or greater.
+[Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.48.X or greater.
 [ESBuild](https://github.com/evanw/esbuild/) - JavaScript / CSS bundler and minifier.
 [Google Material Icons font](https://fonts.google.com/icons)
 [DragDropTouch](https://github.com/Bernardo-Castilho/dragdroptouch) - Polyfill that enables HTML5 drag drop support on mobile (touch) devices:

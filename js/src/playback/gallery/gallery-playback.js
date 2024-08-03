@@ -184,9 +184,6 @@ export function toggleMute()
   m.players.mute();
 }
 
-//
-// Supports only YouTube players for now...
-//
 function cueOrPlayTrackById(iframeId, autoplayData, scrollToMedia = true)
 {
   debug.log(`cueOrPlayTrackById() - iframeId: ${iframeId} - autoplay: ${autoplayData.autoplay} - position: ${autoplayData.position}`);
@@ -196,7 +193,7 @@ function cueOrPlayTrackById(iframeId, autoplayData, scrollToMedia = true)
 
   if (autoplayData.autoplay)
   {
-    m.players.current.playTrackById(autoplayData.position);
+    m.players.current.playTrackById(autoplayData.position, embeddedPlayers.onPlayerError);
   }
   else
   {
@@ -283,10 +280,13 @@ export function getStatus(getCurrentPosition = false)
 
   if (getCurrentPosition)
   {
-    m.players.current.getPosition((positionMilliseconds) =>
+    return new Promise((resolve) =>
     {
-      status.position = Math.round(positionMilliseconds / 1000);
-      return status;
+      m.players.current.getPosition((positionMilliseconds) =>
+      {
+        status.position = Math.round(positionMilliseconds / 1000);
+        resolve(status);
+      });
     });
   }
 

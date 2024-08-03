@@ -124,15 +124,17 @@ function get_shuffle_title(string $prefix = 'Shuffle: ') : string
 // Get track details / data for content-template use
 //
 const DEFAULT_TRACK_DATA = [
-  'track_type'   => TRACK_TYPE::SOUNDCLOUD,
-  'thumnail_src' => \Ultrafunk\Theme\Config\THEME_ENV['default_sc_thumbnail'],
-  'css_class'    => 'track-type-soundcloud',
+  'track_type'   => TRACK_TYPE::NONE,
+  'thumnail_src' => \Ultrafunk\Theme\Config\THEME_ENV['default_track_thumbnail'],
+  'css_class'    => 'track-type-default',
   'source_uid'   => null,
 ];
 
 function get_track_data(object $track) : array
 {
-  if (intval($track->track_source_type) === TRACK_TYPE::YOUTUBE)
+  $track_type = intval($track->track_source_type);
+
+  if ($track_type === TRACK_TYPE::YOUTUBE)
   {
     if (1 === preg_match(YOUTUBE_VIDEO_ID_REGEX, $track->track_source_data, $source_uid))
     {
@@ -143,6 +145,15 @@ function get_track_data(object $track) : array
         'source_uid'   => $source_uid[0],
       ];
     }
+  }
+  else if ($track_type === TRACK_TYPE::SOUNDCLOUD)
+  {
+    return [
+      'track_type'   => TRACK_TYPE::SOUNDCLOUD,
+      'thumnail_src' => \Ultrafunk\Theme\Config\THEME_ENV['default_sc_thumbnail'],
+      'css_class'    => 'track-type-soundcloud',
+      'source_uid'   => $track->track_source_data,
+    ];
   }
 
   return DEFAULT_TRACK_DATA;

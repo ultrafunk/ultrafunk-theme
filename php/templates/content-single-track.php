@@ -22,7 +22,6 @@ use function Ultrafunk\Theme\Functions\ {
 
 
 $track_data        = get_track_data($post);
-$is_youtube_track  = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
 $artists           = get_cached_terms($post->ID, 'uf_artist');
 $channels          = get_cached_terms($post->ID, 'uf_channel');
 $track_title_split = '<h2 class="track-artist-title type-split">' . $post->track_artist . '<br><span class="track-title-part">' . $post->track_title . '</span></h2>';
@@ -36,9 +35,7 @@ $track_title_split = '<h2 class="track-artist-title type-split">' . $post->track
   data-track-duration="<?php echo intval($post->track_duration); ?>"
   data-track-url="<?php echo esc_url(get_permalink()); ?>"
   data-track-thumbnail-url="<?php echo $track_data['thumnail_src']; ?>"
-  <?php if ($is_youtube_track) { ?>
-    data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
-  <?php } ?>
+  data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
   data-prev-track-date-time="<?php echo esc_html(get_prev_next_track_date_time(true)); ?>"
   data-next-track-date-time="<?php echo esc_html(get_prev_next_track_date_time(false)); ?>"
   >

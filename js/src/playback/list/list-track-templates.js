@@ -8,9 +8,8 @@
 import { THEME_ENV } from '../../config.js';
 
 import {
-  getThumbnailData,
-  getTrackTypeData,
   TRACK_TYPE,
+  getThumbnailData,
 } from '../common/mediaplayer.js';
 
 import {
@@ -41,19 +40,10 @@ export function getPageSeparatorHtml(responseData, loadingPage)
 export function getTrackEntryHtml(track, density = 'default')
 {
   const thumbnailData     = getThumbnailData(track.meta);
-  const trackTypeData     = getTrackTypeData(track.meta.track_source_type, thumbnailData.src);
   const trackArtist       = escHtml(track.meta.track_artist);
   const trackTitle        = escHtml(track.meta.track_title);
   const trackDuration     = parseInt(track.meta.track_duration);
   const isAudioVideoClass = track.channels.includes(THEME_ENV.channelVideosId) ? 'is-video' : 'is-audio';
-
-  const trackArtistTitle = trackTypeData.isPlayableTrack
-                             ? `<span><b>${trackArtist}</b></span><br><span>${trackTitle}</span>`
-                             : `<a href="${track.link}"><span><b>${trackArtist}</b></span><br><span>${trackTitle}</span></a>`;
-
-  const trackPlayNext = trackTypeData.isPlayableTrack
-                          ? `<button type="button" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>`
-                          : '';
 
   return /*html*/ `
     <div id="${track.uid}" class="track-entry ${density}-density ${thumbnailData.class} ${isAudioVideoClass}"
@@ -63,25 +53,23 @@ export function getTrackEntryHtml(track, density = 'default')
       data-track-title="${trackTitle}"
       data-track-duration="${trackDuration}"
       data-track-url="${track.link}"
-      data-track-thumbnail-url="${trackTypeData.thumbnailUrl}"
+      data-track-thumbnail-url="${thumbnailData.src}"
       data-track-source-uid ="${thumbnailData.uid}"
       >
       <div class="track-artists-links" data-track-artist-ids="${track.artists.toString()}">${track.artists_links  ?? ''}</div>
       <div class="track-channels-links" data-track-channel-ids="${track.channels.toString()}">${track.channels_links ?? ''}</div>
       <div class="track-details">
-        <button type="button" class="thumbnail" ${trackTypeData.isPlayableTrack ? 'title="Play Track"' : 'title="SoundCloud Track"'}>
+        <button type="button" class="thumbnail" title="Play Track">
           <div class="thumbnail-overlay"><div class="spinner"></div></div>
-          <img src="${trackTypeData.thumbnailUrl}" alt="">
+          <img src="${thumbnailData.src}" alt="">
         </button>
-        <div class="artist-title text-nowrap-ellipsis" ${(trackTypeData.isPlayableTrack === false) ? 'title="Link: Play SoundCloud track"' : ''}>
-          ${trackArtistTitle}
-        </div>
+        <div class="artist-title text-nowrap-ellipsis"><span><b>${trackArtist}</b></span><br><span>${trackTitle}</span></div>
       </div>
       <div class="track-actions">
         <div class="track-message"></div>
         <div class="track-action-buttons">
           <button type="button" class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></button>
-          ${trackPlayNext}
+          <button type="button" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>
           <button type="button" class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></button>
           <button type="button" class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
         </div>

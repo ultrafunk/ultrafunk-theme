@@ -21,7 +21,7 @@ const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.47.9';
+const VERSION = '1.48.0';
 
 define('ULTRAFUNK_THEME_URI', esc_url(get_template_directory_uri()));
 
@@ -33,6 +33,7 @@ const THEME_ENV = [
   'page_about_id'           => IS_PROD_BUILD ?  806 :  806,
   'channel_videos_id'       => IS_PROD_BUILD ?  899 :  875,
   'js_path'                 => IS_PROD_BUILD ? '/js/dist/' : '/js/src/',
+  'default_track_thumbnail' => ULTRAFUNK_THEME_URI . '/inc/img/photo_filled_grey.png',
   'default_yt_thumbnail'    => ULTRAFUNK_THEME_URI . '/inc/img/yt_thumbnail_placeholder.png',
   'default_sc_thumbnail'    => ULTRAFUNK_THEME_URI . '/inc/img/sc_thumbnail_placeholder.png',
   'uf_logo_desktop'         => '/wp-content/uploads/branding/ultrafunk_logo_desktop_12.png',
@@ -44,4 +45,4 @@ const THEME_ENV = [
 ];
 
 // Automatically updated on 'npm run build-dev' or 'npm run build-prod'
-const JS_PRELOAD_CHUNK = '/js/dist/chunk-ZVJYS6VP.js';
+const JS_PRELOAD_CHUNK = '/js/dist/chunk-SBLX3HMJ.js';

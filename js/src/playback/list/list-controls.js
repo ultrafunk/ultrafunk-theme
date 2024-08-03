@@ -6,6 +6,7 @@
 
 
 import * as playbackEvents    from '../common/playback-events.js';
+import * as utils             from '../../shared/utils.js';
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { ElementClick }       from '../../shared/element-click.js';
 import { STATE }              from '../common/element-wrappers.js';
@@ -13,20 +14,16 @@ import { loadTracks }         from './list-tracks-rest.js';
 import { showSnackbar }       from '../../shared/snackbar.js';
 import { response, settings } from '../../shared/session-data.js';
 import { updateUpNextModal }  from './up-next-modal.js';
-import { setCurrentTrack }    from './list-playback.js';
+
+import {
+  setCurrentTrack,
+  togglePlayPause,
+} from './list-playback.js';
 
 import {
   TRACK_TYPE,
   getDataTrackType,
 } from '../common/mediaplayer.js';
-
-import {
-  getScrollBehavior,
-  replaceClass,
-  stripAttribute,
-  escHtml,
-  isPointerTypeTouch,
-} from '../../shared/utils.js';
 
 import {
   showTrackDetails,
@@ -76,13 +73,22 @@ export function ready()
 {
   m.trackElement.classList.add('current');
 
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_LOADING, () => setCurrentTrackState(STATE.LOADING));
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING, () => setCurrentTrackState(STATE.PLAYING));
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PAUSED,  () => setCurrentTrackState(STATE.PAUSED));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_LOADING,   ()      => setCurrentTrackState(STATE.LOADING));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING,   ()      => setCurrentTrackState(STATE.PLAYING));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PAUSED,    ()      => setCurrentTrackState(STATE.PAUSED));
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_TRACK, (event) => setNextTrackState(event.data.trackId, event.data.isPointerClick));
 
   if (settings.list.showLoadMoreTracks)
     initLoadMoreTracks();
+
+  if (settings.experimental.enableLocalPlayback)
+  {
+    utils.addListener('#local-player-image', 'click', (event) =>
+    {
+      togglePlayPause();
+      showLocalPlayerInfoAndControls(event);
+    });
+  }
 }
 
 function observerCallback(entries)
@@ -118,19 +124,13 @@ export function getCurrentTrackElement()
   return m.trackElement;
 }
 
-function isPlayableTrackType(trackElement)
-{
-  const trackType = getDataTrackType(trackElement);
-  return ((trackType === TRACK_TYPE.YOUTUBE) || (trackType === TRACK_TYPE.LOCAL));
-}
-
 export function getPrevPlayableId()
 {
   let destElement = (m.trackElement !== null)
                       ? m.trackElement.previousElementSibling
                       : null;
 
-  while ((destElement !== null) && (isPlayableTrackType(destElement) === false))
+  while ((destElement !== null) && (getDataTrackType(destElement) === TRACK_TYPE.NONE))
     destElement = destElement.previousElementSibling;
 
   return ((destElement !== null) ? destElement.id : null);
@@ -142,7 +142,7 @@ export function getNextPlayableId(startElement = m.trackElement)
                       ? startElement.nextElementSibling
                       : queryTrack('div.track-entry');
 
-  while ((destElement !== null) && (isPlayableTrackType(destElement) === false))
+  while ((destElement !== null) && (getDataTrackType(destElement) === TRACK_TYPE.NONE))
     destElement = destElement.nextElementSibling;
 
   return ((destElement !== null) ? destElement.id : null);
@@ -165,7 +165,7 @@ export function showTrackTypePlayer(trackType)
 
 export function showLocalPlayerInfoAndControls(event)
 {
-  if (isPointerTypeTouch(event))
+  if (utils.isPointerTypeTouch(event))
   {
     const artistTitle = m.localContainer.querySelector('.artist-title-container');
     const audioPlayer = m.localContainer.querySelector('audio');
@@ -314,7 +314,7 @@ function arrowUpDownClick(targetElement, isArrowUpClick)
       gotoElement = gotoElement?.previousElementSibling;
   }
 
-  gotoElement?.scrollIntoView({ behavior: getScrollBehavior(), block: blockOption });
+  gotoElement?.scrollIntoView({ behavior: utils.getScrollBehavior(), block: blockOption });
 }
 
 function arrowFirstLastClick(isArrowFirstClick)
@@ -322,13 +322,13 @@ function arrowFirstLastClick(isArrowFirstClick)
   if (isArrowFirstClick)
   {
     if (window.innerWidth > 1350)
-      m.tracklist.firstElementChild.scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
+      m.tracklist.firstElementChild.scrollIntoView({ behavior: utils.getScrollBehavior(), block: 'center' });
     else
-      window.scroll({ top: 0, left: 0, behavior: getScrollBehavior() });
+      window.scroll({ top: 0, left: 0, behavior: utils.getScrollBehavior() });
   }
   else
   {
-    m.tracklist.lastElementChild.scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
+    m.tracklist.lastElementChild.scrollIntoView({ behavior: utils.getScrollBehavior(), block: 'center' });
   }
 }
 
@@ -362,7 +362,7 @@ export async function loadMoreTracks()
   if ((response.currentPage + 1) <= response.maxPages)
   {
     setIsLoadingTracks(true);
-    tracksLoaded = await loadTracks(stripAttribute(m.tracklist, 'data-term-type'), stripAttribute(m.tracklist, 'data-term-id'));
+    tracksLoaded = await loadTracks(utils.stripAttribute(m.tracklist, 'data-term-type'), utils.stripAttribute(m.tracklist, 'data-term-id'));
     setIsLoadingTracks(false);
 
     if (tracksLoaded)
@@ -420,9 +420,9 @@ export function setCurrentTrackState(newState, isTrackChange = false)
       m.trackElement.classList.remove(STATE.LOADING.CLASS);
 
       if (newState.ID === STATE.PLAYING.ID)
-        replaceClass(m.trackElement, STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
+        utils.replaceClass(m.trackElement, STATE.PAUSED.CLASS, STATE.PLAYING.CLASS);
       else
-        replaceClass(m.trackElement, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
+        utils.replaceClass(m.trackElement, STATE.PLAYING.CLASS, STATE.PAUSED.CLASS);
 
       updateUpNextModal(newState.ID === STATE.PLAYING.ID);
     }
@@ -455,20 +455,27 @@ export function setTrackMessage(message)
   m.trackElement.querySelector('.track-message').style.display = 'block';
 }
 
+function setLocalPlayerDetails(player)
+{
+  if (settings.experimental.enableLocalPlayback)
+  {
+    if (player.getTrackType() === TRACK_TYPE.LOCAL)
+    {
+      const artistTitle = (player.getTitle().length !== 0)
+        ? `<b>${utils.escHtml(player.getArtist())}</b> - ${utils.escHtml(player.getTitle())}`
+        : utils.escHtml(player.getArtist());
+
+      m.localContainer.querySelector('.artist-title').innerHTML = artistTitle;
+      document.getElementById('local-player-image').src = encodeURI(m.trackElement.getAttribute('data-track-image-url'));
+    }
+  }
+}
+
 export function updateTrackDetails(player)
 {
   player.setArtistAndTitle(m.trackElement.getAttribute('data-track-artist'), m.trackElement.getAttribute('data-track-title'));
   player.setDuration(parseInt(m.trackElement.getAttribute('data-track-duration')));
   player.setThumbnail(m.trackElement);
+  setLocalPlayerDetails(player);
   setPlayerAspectRatio();
-
-  if (player.getTrackType() === TRACK_TYPE.LOCAL)
-  {
-    const artistTitle = (player.getTitle().length !== 0)
-      ? `<b>${escHtml(player.getArtist())}</b> - ${escHtml(player.getTitle())}`
-      : escHtml(player.getArtist());
-
-    document.getElementById('local-player-image').src = encodeURI(m.trackElement.getAttribute('data-track-image-url'));
-    m.localContainer.querySelector('.artist-title').innerHTML = artistTitle;
-  }
 }

@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.47.9
+Version:           1.48.0
 Requires at least: 6.6
 Tested up to:      6.6
 Requires PHP:      8.2
@@ -676,8 +676,6 @@ body.no-playback #footer-crossfade-toggle,
 
 body.search #menu-primary-sections .menu-item-pref-player,
 body.search #footer-player-type-toggle,
-body.channel-soundcloud #menu-primary-sections .menu-item-pref-player,
-body.channel-soundcloud #footer-player-type-toggle,
 body.single.track #menu-primary-sections .menu-item-pref-player,
 body.single.track #footer-player-type-toggle,
 

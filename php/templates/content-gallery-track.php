@@ -8,18 +8,15 @@
 namespace Ultrafunk\Theme\Templates\GalleryTrack;
 
 
-use Ultrafunk\Plugin\Shared\TRACK_TYPE;
-
 use function Ultrafunk\Plugin\Shared\get_term_links;
 
 
 /**************************************************************************************************************************/
 
 
-$track_data       = \Ultrafunk\Theme\Functions\get_track_data($post);
-$is_youtube_track = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
-$artists          = get_object_term_cache($post->ID, 'uf_artist');
-$channels         = get_object_term_cache($post->ID, 'uf_channel');
+$track_data = \Ultrafunk\Theme\Functions\get_track_data($post);
+$artists    = get_object_term_cache($post->ID, 'uf_artist');
+$channels   = get_object_term_cache($post->ID, 'uf_channel');
 
 
 ?>
@@ -30,9 +27,7 @@ $channels         = get_object_term_cache($post->ID, 'uf_channel');
   data-track-duration="<?php echo intval($post->track_duration); ?>"
   data-track-url="<?php echo esc_url(get_permalink()); ?>"
   data-track-thumbnail-url="<?php echo $track_data['thumnail_src']; ?>"
-  <?php if ($is_youtube_track) { ?>
-    data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
-  <?php } ?>
+  data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
   >
   <header class="track-header">
     <?php \Ultrafunk\Theme\Tags\track_title($post); ?>

@@ -37,6 +37,7 @@ export function showTrackSharePlay(element, onCloseFocusElement = null)
 {
   const trackArtist = stripAttribute(element, 'data-track-artist');
   const trackTitle  = stripAttribute(element, 'data-track-title');
+  const sourceUid   = (getDataTrackType(element) === TRACK_TYPE.YOUTUBE) ? stripAttribute(element, 'data-track-source-uid') : null;
 
   const modalId = shareModal.show({
     bodyText:       `${trackArtist} - ${trackTitle}`,
@@ -44,7 +45,7 @@ export function showTrackSharePlay(element, onCloseFocusElement = null)
     bodyHtml:       getModalTrackHtml(element, trackArtist, trackTitle),
     url:            stripAttribute(element, 'data-track-url'),
     urlType:        'Track link',
-    sourceUid:      stripAttribute(element, 'data-track-source-uid'),
+    sourceUid:      sourceUid,
     onCloseFocusElement: onCloseFocusElement,
   });
 
