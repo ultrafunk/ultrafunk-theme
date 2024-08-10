@@ -23,7 +23,10 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
     $is_first_video = $this->is_video(get_object_term_cache($this->query_result[0]->ID, 'uf_channel'));
 
     ?>
-    <div id="list-player-container" class="player-container">
+    <div id="list-players-container" class="players-container">
+      <div class="embedded-container placeholder-container">
+        <div class="wp-block-embed__wrapper"></div>
+      </div>
       <div class="embedded-container youtube-container">
         <div class="wp-block-embed__wrapper <?php echo ($is_first_video ? 'aspect-ratio-16_9' : 'aspect-ratio-1_1'); ?>">
           <div id="youtube-player"></div>

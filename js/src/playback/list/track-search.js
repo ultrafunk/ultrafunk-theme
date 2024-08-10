@@ -14,11 +14,7 @@ import { showSnackbar }           from '../../shared/snackbar.js';
 import { getTrackEntryHtml }      from './list-track-templates.js';
 import { getCurrentTrackElement } from './list-controls.js';
 import { setCurrentTrack }        from './list-playback.js';
-
-import {
-  TRACK_TYPE,
-  getDataTrackType,
-} from '../common/mediaplayer.js';
+import { isShowingModal }         from '../../shared/modal.js';
 
 import {
   showTrackDetails,
@@ -35,11 +31,6 @@ import {
   escHtml,
   isPointerTypeTouch,
 } from '../../shared/utils.js';
-
-import {
-  showModal,
-  isShowingModal,
-} from '../../shared/modal.js';
 
 
 /*************************************************************************************************/
@@ -59,11 +50,6 @@ const m = {
 };
 
 const minSearchStringLength = 3;
-
-const notPlayableTrack = /*html*/ `
-  <p>The List Player only supports YouTube tracks, SoundCloud tracks cannot be played or queued.
-  SoundCloud tracks must be played using the Gallery Player or by clicking / tapping on the
-  track Artist + Title text link in the List Player.</p>`;
 
 
 // ************************************************************************************************
@@ -187,25 +173,13 @@ class uiElements extends ElementClick
 
 function playTrackClick(element)
 {
-  if (getDataTrackType(element) === TRACK_TYPE.SOUNDCLOUD)
-  {
-    showSnackbar({
-      message: 'Cannot play / cue SoundCloud track',
-      duration: 5,
-      actionText: 'help',
-      actionClickCallback: () => showModal({ modalTitle: 'Cannot play SoundCloud track', modalBody: notPlayableTrack }),
-    });
-  }
-  else
-  {
-    setCurrentTrack(insertResultTrack(element).id, true, false);
-    navSearch.hide();
-  }
+  setCurrentTrack(insertResultTrack(element).id, true, false);
+  navSearch.hide();
 }
 
 function showTrackDetailsTouch(event, element)
 {
-  if (isPointerTypeTouch(event) && (getDataTrackType(element) === TRACK_TYPE.YOUTUBE))
+  if (isPointerTypeTouch(event))
     m.modalId = showTrackDetails(element, m.searchField);
 }
 
@@ -280,8 +254,8 @@ export async function showSearchResults(searchString)
 
   const searchStop = performance.now();
 
-  // ToDo: Over 200 ms., log REST search performance for production, this will be removed in the future...
-  if ((searchStop - searchStart) > 200)
+  // ToDo: Over 500 ms., log REST search performance for production, this will be removed in the future...
+  if ((searchStop - searchStart) > 500)
     console.log(`%cTrack search for ${searchTypeString[getSearchTypeId()]}: ${Math.ceil(searchStop - searchStart)} ms. (fetch: ${Math.ceil(fetchRestTime)} ms.) for ${THEME_ENV.siteUrl}`, logCss);
 }
 

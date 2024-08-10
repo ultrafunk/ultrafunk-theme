@@ -22,7 +22,8 @@ export default [
       "no-duplicate-imports": ["error"],
       "max-params": ["warn", 4],
       "no-constant-condition": ["error"],
-      "no-constant-binary-expression": ["error"]
+      "no-constant-binary-expression": ["error"],
+      "require-await": ["error"]
     },
   },
   {

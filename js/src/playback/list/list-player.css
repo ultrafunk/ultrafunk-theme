@@ -37,7 +37,7 @@ body.list-player .site-branding {
   min-width: 340px;
 }
 
-.player-container {
+.players-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,10 +60,8 @@ body.list-player .site-branding {
     margin: 0 auto;
   }
 
-  &.soundcloud-container {
-    display: none;
-  }
-
+  &.youtube-container,
+  &.soundcloud-container,
   &.local-container {
     display: none;
   }
@@ -370,7 +368,7 @@ body.list-player .site-footer-container {
     padding-right: unset;
   }
 
-  .player-container {
+  .players-container {
     display: block;
   }
 

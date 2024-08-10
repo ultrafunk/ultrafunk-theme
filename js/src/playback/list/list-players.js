@@ -9,6 +9,11 @@ import { VOLUME }    from "../gallery/crossfade.js";
 import { THEME_ENV } from "../../config.js";
 
 import {
+  onSoundCloudPlayerStateChange,
+  onLocalPlayerStateChange,
+} from "./embedded-players.js";
+
+import {
   TRACK_TYPE,
   MediaPlayer,
   getYouTubeThumbnailUrl,
@@ -97,7 +102,6 @@ class SoundCloudPlayer extends MediaPlayer
 {
   #volume  = VOLUME.MAX;
   #isMuted = false;
-  #onPlayerStateChangeCallback = null;
 
   #playerOptions = {
     visual:        true,
@@ -110,11 +114,6 @@ class SoundCloudPlayer extends MediaPlayer
     super(TRACK_TYPE.SOUNDCLOUD, null, null, embeddedPlayer);
   }
 
-  setOnPlayerStateChange(onPlayerStateChangeCallback)
-  {
-    this.#onPlayerStateChangeCallback = onPlayerStateChangeCallback;
-  }
-
   resetState()
   {
     this.setIsPlayable(true);
@@ -123,19 +122,19 @@ class SoundCloudPlayer extends MediaPlayer
 
   cueTrackById(sourceUid, positionSeconds = 0)
   {
-    this.#onPlayerStateChangeCallback('loading');
+    onSoundCloudPlayerStateChange('loading');
     this.setIsCued(true);
-    return new Promise((resolve) => this.embedded.load(`https://${sourceUid}`, {...this.#playerOptions, callback: () => this.cueOrPlayTrackById(positionSeconds, false, resolve) }));
+    return new Promise((resolve) => this.embedded.load(`https://${sourceUid}`, {...this.#playerOptions, callback: () => this.#cueOrPlayTrackById(positionSeconds, false, resolve) }));
   }
 
   playTrackById(sourceUid, positionSeconds = 0)
   {
-    this.#onPlayerStateChangeCallback('loading');
+    onSoundCloudPlayerStateChange('loading');
     this.setIsCued(false);
-    return new Promise((resolve) => this.embedded.load(`https://${sourceUid}`, {...this.#playerOptions, callback: () => this.cueOrPlayTrackById(positionSeconds, true, resolve) }));
+    return new Promise((resolve) => this.embedded.load(`https://${sourceUid}`, {...this.#playerOptions, callback: () => this.#cueOrPlayTrackById(positionSeconds, true, resolve) }));
   }
 
-  cueOrPlayTrackById(positionSeconds, playTrack, resolve)
+  #cueOrPlayTrackById(positionSeconds, playTrack, resolve)
   {
     this.embedded.getDuration(durationMilliseconds =>
     {
@@ -145,7 +144,7 @@ class SoundCloudPlayer extends MediaPlayer
       this.embedded.getCurrentSound((soundObject) =>
       {
         this.setThumbnail(null, soundObject);
-        this.#onPlayerStateChangeCallback('ready');
+        onSoundCloudPlayerStateChange('ready');
 
         if (playTrack && this.isPlayable())
           this.embedded.play();
@@ -159,15 +158,18 @@ class SoundCloudPlayer extends MediaPlayer
   {
     this.setIsCued(false);
 
-    if (this.isPlayable() === false)
+    this.embedded.getCurrentSound((soundObject) =>
     {
-      onErrorCallback(TRACK_TYPE.SOUNDCLOUD);
-      this.setIsPlayable(true);
-    }
-    else
-    {
-      this.embedded.play();
-    }
+      if ((this.isPlayable() === false) || (soundObject === null))
+      {
+        onErrorCallback(TRACK_TYPE.SOUNDCLOUD);
+        this.setIsPlayable(true);
+      }
+      else
+      {
+        this.embedded.play();
+      }
+    });
   }
 
   pause() { this.embedded.pause(); }
@@ -186,7 +188,8 @@ class SoundCloudPlayer extends MediaPlayer
 
   getVolume(callback)
   {
-    this.embedded.getVolume(volume => callback(volume));
+    if (this.#isMuted === false)
+      this.embedded.getVolume(volume => callback(volume));
   }
 
   // Override parent setVolume() because we use it for mute() as well
@@ -199,18 +202,16 @@ class SoundCloudPlayer extends MediaPlayer
       super.setVolume(volume);
   }
 
-  //
-  // ToDo: THIS DOES NOT WORK as of 1.48.1!!!!!
-  // See YouTube and Local players for the right stuff...
-  //
-  mute(setMute)
+  mute()
   {
-    this.#isMuted = setMute ? true : false;
+    this.#isMuted = true;
+    this.setVolume(0);
+  }
 
-    if (setMute)
-      this.setVolume(0);
-    else
-      this.setVolume(this.#volume);
+  unMute()
+  {
+    this.#isMuted = false;
+    this.setVolume(this.#volume);
   }
 
   isMuted()
@@ -257,6 +258,7 @@ class LocalPlayer extends MediaPlayer
 
   cueTrackById(sourceUid, positionSeconds = 0)
   {
+    onLocalPlayerStateChange({ type: 'cued' });
     this.embedded.src         = sourceUid;
     this.embedded.currentTime = positionSeconds;
     this.setIsCued(true);
@@ -265,6 +267,7 @@ class LocalPlayer extends MediaPlayer
 
   playTrackById(sourceUid, positionSeconds = 0)
   {
+    onLocalPlayerStateChange({ type: 'cued' });
     this.embedded.src         = sourceUid;
     this.embedded.currentTime = positionSeconds;
     this.play();
@@ -342,11 +345,6 @@ export class ListPlayers
   }
 
   get current() { return this.#currentPlayer; }
-
-  setOnPlayerStateChange(setOnPlayerStateChangeCallback)
-  {
-    this.#soundCloudPlayer.setOnPlayerStateChange(setOnPlayerStateChangeCallback);
-  }
 
   setCurrentPlayer(trackType)
   {

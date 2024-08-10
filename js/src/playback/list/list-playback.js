@@ -14,8 +14,17 @@ import { KEY }                from '../../shared/storage.js';
 import { STATE }              from '../common/element-wrappers.js';
 import { response, settings } from '../../shared/session-data.js';
 import { initTrackSearch }    from './track-search.js';
-import { showSnackbar }       from '../../shared/snackbar.js';
 import { playbackTimer }      from './list-playback-timer.js';
+
+import {
+  MATCH,
+  matchesMedia,
+} from '../../shared/utils.js';
+
+import {
+  showSnackbar,
+  dismissSnackbar,
+} from '../../shared/snackbar.js';
 
 import {
   TRACK_TYPE,
@@ -34,9 +43,11 @@ import {
 const debug = newDebugLogger('list-playback');
 
 const m = {
-  players:        null,
-  autoplayData:   null,
-  currentTrackId: null,
+  players:           null,
+  autoplayData:      null,
+  currentTrackId:    null,
+  firstStatePlaying: true,
+  currentSnackbarId: 0,
 };
 
 
@@ -50,15 +61,9 @@ export function init()
 
   listControls.init();
   initTrackSearch();
-
-  if (cueInitialTrack() !== null)
-    embeddedPlayers.init(m.autoplayData, m.currentTrackId);
+  cueInitialTrack();
+  embeddedPlayers.init(m.autoplayData, m.currentTrackId);
 }
-
-
-// ************************************************************************************************
-//
-// ************************************************************************************************
 
 function cueInitialTrack()
 {
@@ -84,35 +89,6 @@ function cueInitialTrack()
   debug.log(`cueInitialTrack() - currentTrackId: ${m.currentTrackId} - autoplayData: ${(m.autoplayData !== null) ? JSON.stringify(m.autoplayData) : 'N/A'}`);
 
   return m.currentTrackId;
-}
-
-export function onPlaybackReady(players)
-{
-  debug.log('onPlaybackReady()');
-
-  m.players = players;
-
-  playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
-  playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 66 });
-
-  playbackTimer.ready(m.players);
-  listControls.ready();
-
-  //
-  // ToDo: THIS DOES NOT WORK as of 1.48.1!!!!!
-  // Current master Volume and Mute has to be set each time the player is changed (YouTube, SouldCloud & Local)
-  //
-  toggleMute(false);
-  m.players.current.setVolume(settings.playback.masterVolume);
-  playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: false });
-
-  const initialTrackType = getDataTrackType(listControls.queryTrackId(m.currentTrackId));
-  m.players.setCurrentPlayer(initialTrackType);
-  listControls.showTrackTypePlayer(initialTrackType);
-
-  cueOrPlayCurrentTrack((m.autoplayData?.autoplay === true), (m.autoplayData?.position ?? 0));
-
-  return m.autoplayData;
 }
 
 
@@ -202,15 +178,10 @@ export function setVolume()
   m.players.current.setVolume(settings.playback.masterVolume);
 }
 
-export function toggleMute(setMuteSetting = true)
+export function toggleMute()
 {
-  if (setMuteSetting)
-    settings.playback.masterMute = (settings.playback.masterMute === true) ? false : true;
-
-  if (settings.playback.masterMute)
-    m.players.current.mute();
-  else
-    m.players.current.unMute();
+  settings.playback.masterMute = (settings.playback.masterMute === true) ? false : true;
+  settings.playback.masterMute ? m.players.current.mute() : m.players.current.unMute();
 }
 
 export function prevTrack()
@@ -339,4 +310,79 @@ export function getStatus(getCurrentTrackNum = false)
   }
 
   return { isPlaying: false, currentTrack: 1, position: 0, trackId: 0 };
+}
+
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+export function onPlaybackReady(players)
+{
+  debug.log('onPlaybackReady()');
+
+  m.players = players;
+
+  playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
+  playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 66 });
+
+  playbackTimer.ready(m.players);
+  listControls.ready();
+
+  const initialTrackType = getDataTrackType(listControls.queryTrackId(m.currentTrackId));
+  m.players.setCurrentPlayer(initialTrackType);
+  listControls.showTrackTypePlayer(initialTrackType);
+
+  playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: false });
+  cueOrPlayCurrentTrack((m.autoplayData?.autoplay === true), (m.autoplayData?.position ?? 0));
+}
+
+export function onPlaybackPlaying()
+{
+  dismissSnackbar(m.currentSnackbarId);
+
+  if (m.firstStatePlaying)
+  {
+    m.firstStatePlaying = false;
+
+    setTimeout(() =>
+    {
+      if (settings.playback.autoplay        &&
+          playbackControls.isPlaying()      &&
+          (Math.round(window.scrollY) <= 1) &&
+          matchesMedia(MATCH.SITE_MAX_WIDTH_MOBILE))
+      {
+        playerScrollTo(0);
+      }
+    },
+    6000);
+  }
+}
+
+export function onPlaybackError()
+{
+  if (m.players.current.isCued() === false)
+  {
+    listControls.setTrackMessage('Error!');
+
+    showSnackbar({
+      message: 'Unable to play track, skipping to next',
+      duration: 5,
+      actionText: 'Stop',
+      actionClickCallback: stopSkipToNextTrack,
+      afterCloseCallback:  skipToNextTrack,
+    });
+  }
+}
+
+export function onPlaybackAutoplayBlocked()
+{
+  listControls.setCurrentTrackState(STATE.PAUSED);
+
+  m.currentSnackbarId = showSnackbar({
+    message: 'Autoplay blocked, Play to continue',
+    duration: 0,
+    actionText: 'play',
+    actionClickCallback: play(),
+  });
 }

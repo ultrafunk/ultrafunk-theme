@@ -132,6 +132,14 @@ function getTrackDetails(element, modalEntries)
       clickId:   element.id,
     });
   });
+
+  const trackType = (getDataTrackType(element) === TRACK_TYPE.YOUTUBE) ? 'YouTube' : 'SoundCloud';
+  const trackLink = (getDataTrackType(element) === TRACK_TYPE.YOUTUBE)
+    ? encodeURI(`https://music.youtube.com/watch?v=${element.getAttribute('data-track-source-uid')}`)
+    : encodeURI(`https://${element.getAttribute('data-track-source-uid')}`);
+
+  modalEntries.push({ class: 'header-entry', content: 'Type / Source Link' });
+  modalEntries.push({ content: `${trackType} track`, link: trackLink, icon: 'link', linkTarget: '_blank', title: `Link to ${trackType} track` });
 }
 
 function onIconClickTrackSearch(event)

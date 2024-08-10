@@ -1,38 +1,28 @@
 //
-// Embedded players (YouTube, SoundCloud, Local HTML Audio)
+// Embedded players (YouTube, SoundCloud & Local HTML Audio)
 //
 // https://ultrafunk.com
 //
 
 
-import { newDebugLogger }    from '../../shared/debuglogger.js';
 import * as playbackEvents   from '../common/playback-events.js';
 import * as listControls     from './list-controls.js';
 import * as playbackControls from '../common/playback-controls.js';
+import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { TRACK_TYPE }        from '../common/mediaplayer.js';
 import { initLocalTracks }   from './local-tracks.js';
 import { playbackTimer }     from './list-playback-timer.js';
 import { ListPlayers }       from './list-players.js';
 import { settings }          from '../../shared/session-data.js';
 import { STATE }             from '../common/element-wrappers.js';
-import { playerScrollTo }    from '../common/shared-gallery-list.js';
-
-import {
-  MATCH,
-  getTimeString,
-  matchesMedia,
-} from '../../shared/utils.js';
-
-import {
-  showSnackbar,
-  dismissSnackbar,
-} from '../../shared/snackbar.js';
+import { getTimeString }     from '../../shared/utils.js';
 
 import {
   onPlaybackReady,
+  onPlaybackPlaying,
+  onPlaybackError,
+  onPlaybackAutoplayBlocked,
   advanceToNextTrack,
-  skipToNextTrack,
-  stopSkipToNextTrack,
 } from './list-playback.js';
 
 
@@ -42,12 +32,10 @@ import {
 const debug = newDebugLogger('embedded-players');
 
 const m = {
-  players:           null,
-  autoplayData:      null,
-  currentTrackId:    null,
-  playerReady:       false,
-  firstStatePlaying: true,
-  currentSnackbarId: 0,
+  players:        null,
+  autoplayData:   null,
+  currentTrackId: null,
+  playerReady:    false,
 };
 
 
@@ -85,33 +73,16 @@ export function init(autoplayData, currentTrackId)
 // Shared functions for all player types
 // ************************************************************************************************
 
-function onFirstPlayerReady()
-{
-  if (m.playerReady === false)
-  {
-    m.playerReady = true;
-
-    if ((m.autoplayData?.position ?? 0) === 0)
-      playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 0 });
-
-    m.autoplayData = null;
-  }
-}
-
 export function onPlayerError(trackType, errorNum = 0)
 {
-  debug.log(`onPlayerError(${(errorNum !== 0) ? errorNum : ''}) - trackType: ${debug.getKeyForValue(TRACK_TYPE, trackType)} - trackId: ${m.currentTrackId} - isCued: ${m.players.current.isCued()}`);
-
   if (trackType === TRACK_TYPE.YOUTUBE)
   {
     m.players.current.setPlayerError(errorNum);
   }
   else if (trackType === TRACK_TYPE.SOUNDCLOUD)
   {
-    //
     // SoundCloud player can trigger this too early because the initial widget load results in 404,
     // so we skip error handling until the players are actually ready for playback...
-    //
     if (m.playerReady === false)
       return;
 
@@ -119,40 +90,62 @@ export function onPlayerError(trackType, errorNum = 0)
     listControls.setCurrentTrackState(STATE.PAUSED);
   }
 
-  if (m.players.current.isCued() === false)
-  {
-    listControls.setTrackMessage('Error!');
+  debug.log(`onPlayerError(${(errorNum !== 0) ? errorNum : ''}) - trackType: ${debug.getKeyForValue(TRACK_TYPE, trackType)} - trackId: ${m.currentTrackId} - isCued: ${m.players.current.isCued()}`);
 
-    showSnackbar({
-      message: 'Unable to play track, skipping to next',
-      duration: 5,
-      actionText: 'Stop',
-      actionClickCallback: stopSkipToNextTrack,
-      afterCloseCallback:  skipToNextTrack,
-    });
+  onPlaybackError();
+}
+
+function onFirstPlayerReady()
+{
+  if (m.playerReady === false)
+  {
+    m.playerReady = true;
+
+    if ((m.autoplayData?.position ?? 0) === 0)
+    {
+      playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 100 });
+
+      setTimeout(() =>
+      {
+        if (playbackControls.isPlaying() === false)
+          playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 0 });
+      },
+      100);
+    }
+
+    m.autoplayData = null;
   }
 }
 
-function onPlayerStatePlaying()
+function onLoadingState()
 {
-  dismissSnackbar(m.currentSnackbarId);
+  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
+}
 
-  if (m.firstStatePlaying)
-  {
-    m.firstStatePlaying = false;
+function onPlayingState()
+{
+  onPlaybackPlaying();
+  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
+}
 
-    setTimeout(() =>
-    {
-      if (settings.playback.autoplay        &&
-          playbackControls.isPlaying()      &&
-          (Math.round(window.scrollY) <= 1) &&
-          matchesMedia(MATCH.SITE_MAX_WIDTH_MOBILE))
-      {
-        playerScrollTo(0);
-      }
-    },
-    6000);
-  }
+function onPausedState()
+{
+  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PAUSED);
+}
+
+function onEndedState()
+{
+  playbackTimer.stop();
+  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED);
+  advanceToNextTrack(settings.playback.autoplay);
+}
+
+function setPlayerVolumeMute()
+{
+  debug.log(`setPlayerVolumeMute(${debug.getKeyForValue(TRACK_TYPE, m.players.current.getTrackType())}) - masterVolume: ${settings.playback.masterVolume} - masterMute: ${settings.playback.masterMute}`);
+
+  settings.playback.masterMute ? m.players.current.mute() : m.players.current.unMute();
+  m.players.current.setVolume(settings.playback.masterVolume);
 }
 
 
@@ -170,7 +163,7 @@ function initYouTubePlayer()
       onReady:           () => onPlaybackReady(m.players),
       onStateChange:     onYouTubePlayerStateChange,
       onError:           (event) => onPlayerError(TRACK_TYPE.YOUTUBE, event.data),
-      onAutoplayBlocked: onYouTubePlayerAutoplayBlocked,
+      onAutoplayBlocked: onPlaybackAutoplayBlocked,
     },
     playerVars: {
       'disablekb': 1,
@@ -202,42 +195,14 @@ function onYouTubePlayerStateChange(event)
 
     // eslint-disable-next-line no-undef
     case YT.PlayerState.BUFFERING:
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
+      onLoadingState();
+      setPlayerVolumeMute();
       break;
 
-    // eslint-disable-next-line no-undef
-    case YT.PlayerState.PLAYING:
-      onPlayerStatePlaying();
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
-      break;
-
-    // eslint-disable-next-line no-undef
-    case YT.PlayerState.PAUSED:
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PAUSED);
-      break;
-
-    // eslint-disable-next-line no-undef
-    case YT.PlayerState.ENDED:
-      playbackTimer.stop();
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED);
-      advanceToNextTrack(settings.playback.autoplay);
-      break;
+    case YT.PlayerState.PLAYING: onPlayingState(); break; // eslint-disable-line no-undef
+    case YT.PlayerState.PAUSED:  onPausedState();  break; // eslint-disable-line no-undef
+    case YT.PlayerState.ENDED:   onEndedState();   break; // eslint-disable-line no-undef
   }
-}
-
-//
-// ToDo: onSoundCloudPlayerAutoplayBlocked()
-//
-function onYouTubePlayerAutoplayBlocked()
-{
-  listControls.setCurrentTrackState(STATE.PAUSED);
-
-  m.currentSnackbarId = showSnackbar({
-    message: 'Autoplay blocked, Play to continue',
-    duration: 0,
-    actionText: 'play',
-    actionClickCallback: () => m.players.current.play(onPlayerError),
-  });
 }
 
 
@@ -245,9 +210,9 @@ function onYouTubePlayerAutoplayBlocked()
 // SoundCloud player init and state change handling
 // ************************************************************************************************
 
-export function initSoundCloudPlayer()
+function initSoundCloudPlayer()
 {
-  const player = SC.Widget('soundcloud-player');                        // eslint-disable-line no-undef
+  const player = SC.Widget('soundcloud-player');                              // eslint-disable-line no-undef
   player.bind(SC.Widget.Events.READY, () => onSoundCloudPlayerReady(player)); // eslint-disable-line no-undef
   return player;
 }
@@ -256,17 +221,15 @@ function onSoundCloudPlayerReady(player)
 {
   debug.log('onSoundCloudPlayerReady()');
 
-  m.players.setOnPlayerStateChange(onSoundCloudPlayerStateChange);
-
   /* eslint-disable */
-  player.bind(SC.Widget.Events.PLAY,   (event) => onSoundCloudPlayerStateChange('playing', event));
-  player.bind(SC.Widget.Events.PAUSE,  (event) => onSoundCloudPlayerStateChange('paused',  event));
-  player.bind(SC.Widget.Events.FINISH, (event) => onSoundCloudPlayerStateChange('ended',   event));
-  player.bind(SC.Widget.Events.ERROR,  ()      => onPlayerError(TRACK_TYPE.SOUNDCLOUD));
+  player.bind(SC.Widget.Events.PLAY,   () => onSoundCloudPlayerStateChange('playing'));
+  player.bind(SC.Widget.Events.PAUSE,  () => onSoundCloudPlayerStateChange('paused'));
+  player.bind(SC.Widget.Events.FINISH, () => onSoundCloudPlayerStateChange('ended'));
+  player.bind(SC.Widget.Events.ERROR,  () => onPlayerError(TRACK_TYPE.SOUNDCLOUD));
   /* eslint-enable */
 }
 
-async function onSoundCloudPlayerStateChange(playerState)
+export function onSoundCloudPlayerStateChange(playerState)
 {
   if (m.players.current.getTrackType() !== TRACK_TYPE.SOUNDCLOUD)
     return;
@@ -280,13 +243,10 @@ async function onSoundCloudPlayerStateChange(playerState)
 
   switch (playerState)
   {
-    case 'loading':
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_LOADING);
-      break;
-
     case 'ready':
       {
         onFirstPlayerReady();
+        setPlayerVolumeMute();
 
         const trackElement = listControls.getCurrentTrackElement();
 
@@ -299,29 +259,19 @@ async function onSoundCloudPlayerStateChange(playerState)
       }
       break;
 
-    case 'playing':
-      onPlayerStatePlaying();
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
-      break;
-
-    case 'paused':
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PAUSED);
-      break;
-
-    case 'ended':
-      playbackTimer.stop();
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED);
-      advanceToNextTrack(settings.playback.autoplay);
-      break;
+    case 'loading': onLoadingState(); break;
+    case 'playing': onPlayingState(); break;
+    case 'paused':  onPausedState();  break;
+    case 'ended':   onEndedState();   break;
   }
 }
 
 
 // ************************************************************************************************
-// Local player init and state change handling
+// Local HTML <audio> player init and state change handling
 // ************************************************************************************************
 
-export function initLocalPlayer()
+function initLocalPlayer()
 {
   if (settings.experimental.enableLocalPlayback)
   {
@@ -338,7 +288,7 @@ export function initLocalPlayer()
   }
 }
 
-function onLocalPlayerStateChange(event)
+export function onLocalPlayerStateChange(event)
 {
   if (m.players.current.getTrackType() !== TRACK_TYPE.LOCAL)
     return;
@@ -347,21 +297,6 @@ function onLocalPlayerStateChange(event)
 
   switch (event.type)
   {
-    case 'play':
-      onPlayerStatePlaying();
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
-      break;
-
-    case 'pause':
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PAUSED);
-      break;
-
-    case 'ended':
-      playbackTimer.stop();
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED);
-      advanceToNextTrack(settings.playback.autoplay);
-      break;
-
     case 'durationchange':
       {
         const duration = Math.round(m.players.current.getDuration());
@@ -372,5 +307,10 @@ function onLocalPlayerStateChange(event)
         playbackControls.updateTrackData(0);
       }
       break;
+
+    case 'cued':  setPlayerVolumeMute(); break;
+    case 'play':  onPlayingState();      break;
+    case 'pause': onPausedState();       break;
+    case 'ended': onEndedState();        break;
   }
 }

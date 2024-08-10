@@ -45,8 +45,6 @@ const m = {
   prevActionButtons: null,
   playerWrapper:     null,
   uiElements:        null,
-  ytContainer:       null,
-  scContainer:       null,
   localContainer:    null,
   localPlayerTimeoutId: 0,
 };
@@ -64,8 +62,6 @@ export function init()
   m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
   m.playerWrapper     = document.querySelector('.wp-block-embed__wrapper');
   m.uiElements        = new UiElements('#tracklist');
-  m.ytContainer       = document.querySelector('.embedded-container.youtube-container');
-  m.scContainer       = document.querySelector('.embedded-container.soundcloud-container');
   m.localContainer    = document.querySelector('.embedded-container.local-container');
 }
 
@@ -158,9 +154,10 @@ export function showTrackTypePlayer(trackType)
 {
   debug.log(`showTrackTypePlayer(): ${debug.getKeyForValue(TRACK_TYPE, trackType)}`);
 
-  m.ytContainer.style.display    = (trackType === TRACK_TYPE.YOUTUBE)    ? ''      : 'none';
-  m.scContainer.style.display    = (trackType === TRACK_TYPE.SOUNDCLOUD) ? 'block' : '';
-  m.localContainer.style.display = (trackType === TRACK_TYPE.LOCAL)      ? 'block' : '';
+  document.querySelector('.embedded-container.placeholder-container').style.display = 'none';
+  document.querySelector('.embedded-container.youtube-container').style.display     = (trackType === TRACK_TYPE.YOUTUBE)    ? 'block' : '';
+  document.querySelector('.embedded-container.soundcloud-container').style.display  = (trackType === TRACK_TYPE.SOUNDCLOUD) ? 'block' : '';
+  m.localContainer.style.display                                                    = (trackType === TRACK_TYPE.LOCAL)      ? 'block' : '';
 }
 
 export function showLocalPlayerInfoAndControls(event)

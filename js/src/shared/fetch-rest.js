@@ -28,7 +28,7 @@ export const FETCH_ERROR = {
 //
 // ************************************************************************************************
 
-export async function fetchRest({
+export function fetchRest({
   path     = '/wp-json/wp/v2/',
   endpoint = null,
   id       = null,

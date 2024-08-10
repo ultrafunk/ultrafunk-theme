@@ -29,7 +29,7 @@ class DJPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
       <link rel='stylesheet' id='content-dj-player-style' href='<?php echo $stylesheet_href; ?>' media='all' />
     </head>
     <body>
-      <div id="players-container">
+      <div id="dj-players-container">
         <div id="player-left-container"> <iframe id="player-left"  src="<?php echo $iframe_src; ?>" title="DJ player left"></iframe></div>
         <div id="player-right-container"><iframe id="player-right" src="<?php echo $iframe_src; ?>" title="DJ player right"></iframe></div>
       </div>

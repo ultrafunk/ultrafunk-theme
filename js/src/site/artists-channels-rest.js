@@ -38,7 +38,7 @@ export function loadTermlist(termlistContainer, termlistEntry, termlistBody)
   const termSlug      = stripAttribute(termlistEntry, 'data-term-slug');
   const isAllChannels = (termType === 'channels');
 
-  fetchTracks(termType, termId, (isAllChannels ? 10 : 50), async (termData) =>
+  fetchTracks(termType, termId, (isAllChannels ? 10 : 50), (termData) =>
   {
     const header  = isAllChannels ? 'Latest Tracks' : 'All Tracks';
     const element = termlistBody.querySelector('.body-left');

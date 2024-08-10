@@ -29,7 +29,12 @@ const navMenuClosure = (() =>
   window.addEventListener('load', () =>
   {
     utils.addListener('#menu-primary-sections .menu-item-reshuffle a', 'click', shuffleClickNavTo);
-    utils.addListener('#menu-primary-sections .menu-item-pref-player', 'click', () => playerType.toggle());
+    utils.addListener('#menu-primary-sections .menu-item-pref-player', 'click', (event) =>
+    {
+      event.preventDefault();
+      playerType.toggle();
+    });
+
     document.getElementById('menu-primary-channels')?.addEventListener('click', menuClickUsePrefPlayer);
   });
 
