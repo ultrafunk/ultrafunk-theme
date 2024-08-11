@@ -37,15 +37,15 @@ import {
 const debug = newDebugLogger('list-controls');
 
 const m = {
-  tracklist:         null,
-  tracklistObserver: null,
-  tracklistLoadMore: null,
-  trackElement:      null,
-  currentState:      STATE.UNKNOWN,
-  prevActionButtons: null,
-  playerWrapper:     null,
-  uiElements:        null,
-  localContainer:    null,
+  tracklist:            null,
+  tracklistObserver:    null,
+  tracklistLoadMore:    null,
+  trackElement:         null,
+  currentState:         STATE.UNKNOWN,
+  prevActionButtons:    null,
+  youTubePlayerWrapper: null,
+  uiElements:           null,
+  localContainer:       null,
   localPlayerTimeoutId: 0,
 };
 
@@ -58,11 +58,11 @@ export function init()
 {
   debug.log('init()');
 
-  m.tracklist         = document.getElementById('tracklist');
-  m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
-  m.playerWrapper     = document.querySelector('.wp-block-embed__wrapper');
-  m.uiElements        = new UiElements('#tracklist');
-  m.localContainer    = document.querySelector('.embedded-container.local-container');
+  m.tracklist            = document.getElementById('tracklist');
+  m.tracklistObserver    = new IntersectionObserver(observerCallback, { root: m.tracklist });
+  m.youTubePlayerWrapper = document.querySelector('#list-players-container .youtube-container .wp-block-embed__wrapper');
+  m.uiElements           = new UiElements('#tracklist');
+  m.localContainer       = document.querySelector('.embedded-container.local-container');
 }
 
 export function ready()
@@ -426,12 +426,15 @@ export function setCurrentTrackState(newState, isTrackChange = false)
   }
 }
 
+//
+// ToDo: This only works for YouTube tracks since they are the only track type that can change aspect ration for now...
+//
 function setPlayerAspectRatio()
 {
   if (m.trackElement.classList.contains('is-video'))
-    m.playerWrapper.classList.replace('aspect-ratio-1_1', 'aspect-ratio-16_9');
+    m.youTubePlayerWrapper.classList.replace('aspect-ratio-1_1', 'aspect-ratio-16_9');
   else
-    m.playerWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
+    m.youTubePlayerWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
 }
 
 export function setNextTrackState(nextTrackId, isPointerClick)
