@@ -15,11 +15,6 @@ import { KEY, setCookie }     from '../shared/storage.js';
 import { PREF_PLAYER }        from '../settings/settings.js';
 import { response, settings } from '../shared/session-data.js';
 
-import {
-  TRACK_TYPE,
-  getDataTrackType,
-} from '../playback/common/mediaplayer.js';
-
 
 /*************************************************************************************************/
 
@@ -254,7 +249,7 @@ function playTrackClick(event, element)
   const termType  = (m.listContainer.getAttribute('data-term-type') === 'channels') ? 'channel' : 'artist';
   const termSlug  = utils.stripAttribute(element, 'data-term-slug');
 
-  if ((settings.playback.preferredPlayer === PREF_PLAYER.GALLERY) || (getDataTrackType(element) === TRACK_TYPE.SOUNDCLOUD))
+  if (settings.playback.preferredPlayer === PREF_PLAYER.GALLERY)
   {
     playClick(event, element.getAttribute('data-term-url'), null);
   }

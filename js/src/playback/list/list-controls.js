@@ -77,7 +77,7 @@ export function ready()
   if (settings.list.showLoadMoreTracks)
     initLoadMoreTracks();
 
-  if (settings.experimental.enableLocalPlayback)
+  if (settings.list.enableLocalPlayback)
   {
     utils.addListener('#local-player-image', 'click', (event) =>
     {
@@ -454,7 +454,7 @@ export function setTrackMessage(message)
 
 function setLocalPlayerDetails(player)
 {
-  if (settings.experimental.enableLocalPlayback)
+  if (settings.list.enableLocalPlayback)
   {
     if (player.getTrackType() === TRACK_TYPE.LOCAL)
     {

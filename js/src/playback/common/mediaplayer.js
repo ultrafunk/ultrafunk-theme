@@ -158,6 +158,11 @@ export function getDataTrackType(element)
   return TRACK_TYPE.NONE;
 }
 
+export function getDataTrackTypeFromId(elementId)
+{
+  return getDataTrackType(document.getElementById(elementId));
+}
+
 const trackTypeClasses = [
   'track-type-default',
   'track-type-youtube',

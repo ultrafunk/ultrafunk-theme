@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 37, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 38, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -51,14 +51,15 @@ export const settingsSchema = {
     autoExitFsOnWarning:  { description: 'Exit Fullscreen on Time Warning', type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
   },
   list: {
-    realtimeTrackSearch:   { description: 'Show realtime Track Search results',     type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    maxTrackSearchResults: { description: 'Max number of Track Search results',     type: INTEGER, values: [12, 24, 36, 48],  default: 24,   valueStrings: ['12', '24', '36', '48'] },
-    queryAllTrackArtists:  { description: 'Track Search: Query all Track Artists',  type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    queryAllTrackChannels: { description: 'Track Search: Query all Track Channels', type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    moveTrackOnPlayNext:   { description: 'Move Track on Play as Next',             type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    showUpNextModal:       { description: 'Show Up Next Modal',                     type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    showLoadMoreTracks:    { description: 'Show "Load More Tracks..." prompt',      type: BOOLEAN, values: [true, false],     default: true, valueStrings: ['ON', 'OFF'] },
-    tracksPerPage:         { description: 'Tracks Per Page: Search & Shuffle',      type: INTEGER, values: listPerPageValues, default: 25,   valueStrings: listPerPageValueStrings },
+    realtimeTrackSearch:   { description: 'Show realtime Track Search results',     type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
+    maxTrackSearchResults: { description: 'Max number of Track Search results',     type: INTEGER, values: [12, 24, 36, 48],  default: 24,    valueStrings: ['12', '24', '36', '48'] },
+    queryAllTrackArtists:  { description: 'Track Search: Query all Track Artists',  type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
+    queryAllTrackChannels: { description: 'Track Search: Query all Track Channels', type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
+    moveTrackOnPlayNext:   { description: 'Move Track on Play as Next',             type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
+    showUpNextModal:       { description: 'Show Up Next Modal',                     type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
+    showLoadMoreTracks:    { description: 'Show "Load More Tracks..." prompt',      type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
+    tracksPerPage:         { description: 'Tracks Per Page: Search & Shuffle',      type: INTEGER, values: listPerPageValues, default: 25,    valueStrings: listPerPageValueStrings },
+    enableLocalPlayback:   { description: 'Enable local (device) tracks playback',  type: BOOLEAN, values: [true, false],     default: false, valueStrings: ['ON', 'OFF'] },
   },
   gallery: {
     layout:                  { description: 'Track Layout',                         type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
@@ -87,7 +88,7 @@ export const settingsSchema = {
   //showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
   },
   experimental: {
-    enableLocalPlayback:  { description: '<b>List Player</b><br>Enable local (device) track playback',      type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
+  //enableLocalPlayback:  { description: '<b>List Player</b><br>Enable local (device) track playback',      type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //enableDjPlayer:       { description: '<b>List Player</b><br>Enable DJ Player testing',                  type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //realtimeTrackSearch:  { description: '<b>List Player</b><br>Show realtime track search results',        type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
   //fetchNextSingleTrack: { description: '<b>Gallery Player</b><br>Play single tracks without page reload', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },
@@ -117,6 +118,7 @@ export const defaultSettings = {
     showUpNextModal:       settingsSchema.list.showUpNextModal.default,
     showLoadMoreTracks:    settingsSchema.list.showLoadMoreTracks.default,
     tracksPerPage:         settingsSchema.list.tracksPerPage.default,
+    enableLocalPlayback:   settingsSchema.list.enableLocalPlayback.default,
   },
   gallery: {
     layout:                  settingsSchema.gallery.layout.default,
@@ -145,7 +147,7 @@ export const defaultSettings = {
   //showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,
   },
   experimental: {
-    enableLocalPlayback:  settingsSchema.experimental.enableLocalPlayback.default,
+  //enableLocalPlayback:  settingsSchema.experimental.enableLocalPlayback.default,
   //enableDjPlayer:       settingsSchema.experimental.enableDjPlayer.default,
   //realtimeTrackSearch:  settingsSchema.experimental.realtimeTrackSearch.default,
   //fetchNextSingleTrack: settingsSchema.experimental.fetchNextSingleTrack.default,

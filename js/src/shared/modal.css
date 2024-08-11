@@ -194,7 +194,7 @@ a.modal-click-item:hover {
 }
 
 .modal-click-item .modal-item-icons .material-icons {
-  padding: 8px;
+  padding: 6px 8px;
   margin-right: 0;
 }
 
@@ -347,6 +347,10 @@ a.modal-click-item:hover {
   .modal-click-item .material-icons {
     font-size: 24px;
     margin-right: 12px;
+  }
+
+  .modal-click-item .modal-item-icons .material-icons {
+    padding: 8px;
   }
 
   .modal-click-item.modal-hover-icon-text span.text-nowrap-ellipsis {

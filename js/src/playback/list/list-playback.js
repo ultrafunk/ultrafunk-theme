@@ -28,7 +28,7 @@ import {
 
 import {
   TRACK_TYPE,
-  getDataTrackType,
+  getDataTrackTypeFromId,
 } from '../common/mediaplayer.js';
 
 import {
@@ -62,7 +62,7 @@ export function init()
   listControls.init();
   initTrackSearch();
   cueInitialTrack();
-  embeddedPlayers.init(m.autoplayData, m.currentTrackId);
+  embeddedPlayers.init(m.autoplayData, m.currentTrackId, getDataTrackTypeFromId(m.currentTrackId));
 }
 
 function cueInitialTrack()
@@ -71,24 +71,20 @@ function cueInitialTrack()
   m.autoplayData   = JSON.parse(sessionStorage.getItem(KEY.UF_AUTOPLAY));
   sessionStorage.removeItem(KEY.UF_AUTOPLAY);
 
-  if (m.currentTrackId !== null)
+  if ((m.autoplayData !== null) && (m.autoplayData.trackId !== null))
   {
-    if ((m.autoplayData !== null) && (m.autoplayData.trackId !== null))
-    {
-      const trackElement = listControls.queryTrack(`[data-track-id="${m.autoplayData.trackId}"]`);
+    const trackElement = listControls.queryTrack(`[data-track-id="${m.autoplayData.trackId}"]`);
 
-      if (trackElement !== null)
-        m.currentTrackId = trackElement.id;
-      else
-        showSnackbar({ message: 'Unable to cue track (not found)', duration: 5 });
-    }
-
-    listControls.setCuedTrack(m.currentTrackId);
+    if (trackElement !== null)
+      m.currentTrackId = trackElement.id;
+    else
+      showSnackbar({ message: 'Unable to cue track (not found)', duration: 5 });
   }
 
-  debug.log(`cueInitialTrack() - currentTrackId: ${m.currentTrackId} - autoplayData: ${(m.autoplayData !== null) ? JSON.stringify(m.autoplayData) : 'N/A'}`);
+  listControls.setCuedTrack(m.currentTrackId);
 
-  return m.currentTrackId;
+  const trackTypeString = debug.getKeyForValue(TRACK_TYPE, getDataTrackTypeFromId(m.currentTrackId));
+  debug.log(`cueInitialTrack() - trackType: ${trackTypeString} - currentTrackId: ${m.currentTrackId} - autoplayData: ${(m.autoplayData !== null) ? JSON.stringify(m.autoplayData) : 'N/A'}`);
 }
 
 
@@ -98,7 +94,7 @@ function cueInitialTrack()
 
 export function setCurrentTrack(nextTrackId, playTrack = true, isPointerClick = false)
 {
-  const nextTrackType = getDataTrackType(listControls.queryTrackId(nextTrackId));
+  const nextTrackType = getDataTrackTypeFromId(nextTrackId);
 
   debug.log(`setCurrentTrack() - nextTrackType: ${debug.getKeyForValue(TRACK_TYPE, nextTrackType)} - nextTrackId: ${nextTrackId} - playTrack: ${playTrack} - isPointerClick: ${isPointerClick}`);
 
@@ -317,9 +313,9 @@ export function getStatus(getCurrentTrackNum = false)
 //
 // ************************************************************************************************
 
-export function onPlaybackReady(players)
+export function onPlaybackReady(players, initialTrackType)
 {
-  debug.log('onPlaybackReady()');
+  debug.log(`onPlaybackReady(): ${debug.getKeyForValue(TRACK_TYPE, initialTrackType)}`);
 
   m.players = players;
 
@@ -329,7 +325,6 @@ export function onPlaybackReady(players)
   playbackTimer.ready(m.players);
   listControls.ready();
 
-  const initialTrackType = getDataTrackType(listControls.queryTrackId(m.currentTrackId));
   m.players.setCurrentPlayer(initialTrackType);
   listControls.showTrackTypePlayer(initialTrackType);
 
@@ -375,6 +370,9 @@ export function onPlaybackError()
   }
 }
 
+//
+// ToDo: As of 1.48.2 this does not work for SoundCloud tracks yet!...
+//
 export function onPlaybackAutoplayBlocked()
 {
   listControls.setCurrentTrackState(STATE.PAUSED);

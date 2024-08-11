@@ -32,10 +32,11 @@ import {
 const debug = newDebugLogger('embedded-players');
 
 const m = {
-  players:        null,
-  autoplayData:   null,
-  currentTrackId: null,
-  playerReady:    false,
+  players:           null,
+  autoplayData:      null,
+  currentTrackId:    null,
+  initialPlayerType: TRACK_TYPE.NONE,
+  initialPlayerCued: false,
 };
 
 
@@ -43,12 +44,13 @@ const m = {
 //
 // ************************************************************************************************
 
-export function init(autoplayData, currentTrackId)
+export function init(autoplayData, currentTrackId, initialPlayerType)
 {
   debug.log('init()');
 
-  m.autoplayData   = autoplayData;
-  m.currentTrackId = currentTrackId;
+  m.autoplayData      = autoplayData;
+  m.currentTrackId    = currentTrackId;
+  m.initialPlayerType = initialPlayerType;
 
   window.onYouTubeIframeAPIReady = () =>
   {
@@ -83,7 +85,7 @@ export function onPlayerError(trackType, errorNum = 0)
   {
     // SoundCloud player can trigger this too early because the initial widget load results in 404,
     // so we skip error handling until the players are actually ready for playback...
-    if (m.playerReady === false)
+    if (m.initialPlayerCued === false)
       return;
 
     m.players.current.setIsPlayable(false);
@@ -95,11 +97,13 @@ export function onPlayerError(trackType, errorNum = 0)
   onPlaybackError();
 }
 
-function onFirstPlayerReady()
+function onInitialPlayerCued()
 {
-  if (m.playerReady === false)
+  if (m.initialPlayerCued === false)
   {
-    m.playerReady = true;
+    debug.log(`onInitialPlayerCued(): ${debug.getKeyForValue(TRACK_TYPE, m.players.current.getTrackType())}`);
+
+    m.initialPlayerCued = true;
 
     if ((m.autoplayData?.position ?? 0) === 0)
     {
@@ -107,14 +111,22 @@ function onFirstPlayerReady()
 
       setTimeout(() =>
       {
-        if (playbackControls.isPlaying() === false)
+        if ((playbackControls.getProgressPercent() === 100) && (playbackControls.isPlaying() === false))
           playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 0 });
       },
-      100);
+      150);
     }
 
     m.autoplayData = null;
   }
+}
+
+function onPlayerReady(trackType)
+{
+  debug.log(`onPlayerReady(): ${debug.getKeyForValue(TRACK_TYPE, trackType)}`);
+
+  if (trackType === m.initialPlayerType)
+    onPlaybackReady(m.players, trackType);
 }
 
 function onLoadingState()
@@ -160,7 +172,7 @@ function initYouTubePlayer()
   {
     events:
     {
-      onReady:           () => onPlaybackReady(m.players),
+      onReady:           () => onPlayerReady(TRACK_TYPE.YOUTUBE),
       onStateChange:     onYouTubePlayerStateChange,
       onError:           (event) => onPlayerError(TRACK_TYPE.YOUTUBE, event.data),
       onAutoplayBlocked: onPlaybackAutoplayBlocked,
@@ -190,7 +202,7 @@ function onYouTubePlayerStateChange(event)
   {
     // eslint-disable-next-line no-undef
     case YT.PlayerState.UNSTARTED:
-      onFirstPlayerReady();
+      onInitialPlayerCued();
       break;
 
     // eslint-disable-next-line no-undef
@@ -219,14 +231,14 @@ function initSoundCloudPlayer()
 
 function onSoundCloudPlayerReady(player)
 {
-  debug.log('onSoundCloudPlayerReady()');
-
   /* eslint-disable */
   player.bind(SC.Widget.Events.PLAY,   () => onSoundCloudPlayerStateChange('playing'));
   player.bind(SC.Widget.Events.PAUSE,  () => onSoundCloudPlayerStateChange('paused'));
   player.bind(SC.Widget.Events.FINISH, () => onSoundCloudPlayerStateChange('ended'));
   player.bind(SC.Widget.Events.ERROR,  () => onPlayerError(TRACK_TYPE.SOUNDCLOUD));
   /* eslint-enable */
+
+  onPlayerReady(TRACK_TYPE.SOUNDCLOUD);
 }
 
 export function onSoundCloudPlayerStateChange(playerState)
@@ -245,7 +257,7 @@ export function onSoundCloudPlayerStateChange(playerState)
   {
     case 'ready':
       {
-        onFirstPlayerReady();
+        onInitialPlayerCued();
         setPlayerVolumeMute();
 
         const trackElement = listControls.getCurrentTrackElement();
@@ -273,7 +285,7 @@ export function onSoundCloudPlayerStateChange(playerState)
 
 function initLocalPlayer()
 {
-  if (settings.experimental.enableLocalPlayback)
+  if (settings.list.enableLocalPlayback)
   {
     initLocalTracks();
 

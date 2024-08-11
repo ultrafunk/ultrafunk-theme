@@ -74,7 +74,8 @@ export function init(getTrackData, seekClickCallback)
 
   ctrl.progressSeek = ElementWrapper('.progress-seek-control', document.getElementById('progress-controls'));
   ctrl.progressSeek.clickCallback = seekClickCallback;
-  ctrl.progressBar  = ElementWrapper('.progress-bar-control', document.getElementById('progress-controls'));
+  ctrl.progressBar = ElementWrapper('.progress-bar-control', document.getElementById('progress-controls'));
+  ctrl.progressBar.progressPercent = 0;
 
   ctrl.thumbnail     = ElementWrapper('.playback-thumbnail-control', playbackControls);
   ctrl.thumbnail.img = ctrl.thumbnail.getElement('img');
@@ -165,7 +166,13 @@ export function ready(prevClickCallback, playPauseClickCallback, nextClickCallba
 
 export function updateProgressPercent(progressPercent)
 {
+  ctrl.progressBar.progressPercent = progressPercent;
   updateProgressBar(progressPercent / 100);
+}
+
+export function getProgressPercent()
+{
+  return ctrl.progressBar.progressPercent;
 }
 
 function updateProgressBar(scaleX)
