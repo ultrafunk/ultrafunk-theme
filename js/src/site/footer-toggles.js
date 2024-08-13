@@ -25,11 +25,17 @@ import {
   KEY,
   YEAR_IN_SECONDS,
   setCookie,
+  addSettingsObserver,
 } from '../shared/storage.js';
 
 
 /*************************************************************************************************/
 
+
+const m = {
+  player: null,
+  onKeysVolumeChange: null,
+};
 
 export let playerType = null;
 export let crossfade  = null;
@@ -40,13 +46,61 @@ export let autoplay   = null;
 //
 // ************************************************************************************************
 
-export function init(getPlayerStatus)
+export function init(player, onKeysVolumeChange)
 {
-  playerType = new PlayerTypeToggle('footer-player-type-toggle', getPlayerStatus);
+  m.player = player;
+  m.onKeysVolumeChange = onKeysVolumeChange;
+
+  new MuteToggle('footer-mute-toggle');
+  new VolumeToggle('footer-volume-toggle');
+
+  playerType = new PlayerTypeToggle('footer-player-type-toggle');
 
   // Init crossfade before autoplay because autoplay can disable crossfade in update()
   crossfade = new CrossfadeToggle('footer-crossfade-toggle');
   autoplay  = new AutoplayToggle('footer-autoplay-toggle');
+}
+
+
+// ************************************************************************************************
+// Footer mute and volume toggles
+// ************************************************************************************************
+
+class MuteToggle extends ElementToggle
+{
+  constructor(elementId)
+  {
+    super(elementId);
+    addSettingsObserver('masterMute', () => this.update());
+  }
+
+  toggle() { m.player.toggleMute(); }
+  update() { this.value = settings.playback.masterMute ? 'Yes' : 'No'; }
+}
+
+class VolumeToggle extends ElementToggle
+{
+  constructor(elementId)
+  {
+    super(elementId);
+    addSettingsObserver('masterVolume', () => this.update());
+  }
+
+  toggle(event)
+  {
+    if (event.target.classList.contains('volume-up'))
+    {
+      event.key = '+';
+      m.onKeysVolumeChange(event);
+    }
+    else if (event.target.classList.contains('volume-down'))
+    {
+      event.key = '-';
+      m.onKeysVolumeChange(event);
+    }
+  }
+
+  update() { this.value = settings.playback.masterVolume; }
 }
 
 
@@ -56,15 +110,9 @@ export function init(getPlayerStatus)
 
 class PlayerTypeToggle extends ElementToggle
 {
-  constructor(elementId, getPlayerStatus)
-  {
-    super(elementId);
-    this.getPlayerStatus = getPlayerStatus;
-  }
-
   async toggle()
   {
-    if (this.getPlayerStatus().trackType === TRACK_TYPE.LOCAL)
+    if (m.player.getStatus().trackType === TRACK_TYPE.LOCAL)
     {
       showSnackbar({ message: `Can't change Pref. Player for Local Tracks!` });
       return;
@@ -115,7 +163,7 @@ class PlayerTypeToggle extends ElementToggle
     const currentPage       = (pageIndex !== -1)
                                 ? parseInt(urlParts[pageIndex + 1])
                                 : 1;
-    const trackData         = await this.getPlayerStatus(true);
+    const trackData         = await m.player.getStatus(true);
     const tracksPerPageFrom = isListPlayer() ? response.listPerPage    : response.galleryPerPage;
     const tracksPerPageTo   = isListPlayer() ? response.galleryPerPage : response.listPerPage;
     const trackOffset       = trackData.currentTrack + ((currentPage - 1) * tracksPerPageFrom);

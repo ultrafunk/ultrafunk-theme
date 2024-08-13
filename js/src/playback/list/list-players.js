@@ -46,6 +46,7 @@ class YouTubePlayer extends MediaPlayer
   {
     this.embedded.cueVideoById(sourceUid, positionSeconds);
     this.setIsCued(true);
+
     return true;
   }
 
@@ -53,6 +54,7 @@ class YouTubePlayer extends MediaPlayer
   {
     this.embedded.loadVideoById(sourceUid, positionSeconds);
     this.setIsCued(false);
+
     return true;
   }
 
@@ -124,6 +126,7 @@ class SoundCloudPlayer extends MediaPlayer
   {
     onSoundCloudPlayerStateChange('loading');
     this.setIsCued(true);
+
     return new Promise((resolve) => this.embedded.load(`https://${sourceUid}`, {...this.#playerOptions, callback: () => this.#cueOrPlayTrackById(positionSeconds, false, resolve) }));
   }
 
@@ -131,6 +134,7 @@ class SoundCloudPlayer extends MediaPlayer
   {
     onSoundCloudPlayerStateChange('loading');
     this.setIsCued(false);
+
     return new Promise((resolve) => this.embedded.load(`https://${sourceUid}`, {...this.#playerOptions, callback: () => this.#cueOrPlayTrackById(positionSeconds, true, resolve) }));
   }
 
@@ -262,6 +266,7 @@ class LocalPlayer extends MediaPlayer
     this.embedded.src         = sourceUid;
     this.embedded.currentTime = positionSeconds;
     this.setIsCued(true);
+
     return true;
   }
 
@@ -272,6 +277,7 @@ class LocalPlayer extends MediaPlayer
     this.embedded.currentTime = positionSeconds;
     this.play();
     this.setIsCued(false);
+
     return true;
   }
 

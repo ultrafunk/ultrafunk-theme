@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.48.4
+Version:           1.48.5
 Requires at least: 6.6
 Tested up to:      6.6
 Requires PHP:      8.2
@@ -631,6 +631,8 @@ body.page-settings .footer-settings {
   text-decoration: underline;
 }
 
+#footer-mute-toggle,
+#footer-volume-toggle,
 #footer-settings-button,
 #footer-player-type-toggle,
 #footer-autoplay-toggle,
@@ -650,6 +652,37 @@ body.page-settings .footer-settings {
   margin-bottom: 10px;
   width: 100%;
   box-sizing: border-box;
+}
+
+#footer-mute-toggle,
+#footer-volume-toggle {
+  display: none;
+}
+
+#footer-volume-toggle span.label {
+  margin-right: auto;
+}
+
+#footer-volume-toggle span.value {
+  margin-left: auto;
+  min-width: 35px;
+  text-align: right;
+}
+
+#footer-volume-toggle span.volume-up,
+#footer-volume-toggle span.volume-down {
+  font-size: 22px;
+  padding: 10px 12px 10px 12px;
+  margin-top: -10px;
+  margin-bottom: -10px;
+}
+
+#footer-volume-toggle span.volume-up {
+  transform: rotate(-90deg);
+}
+
+#footer-volume-toggle span.volume-down {
+  transform: rotate(90deg);
 }
 
 #footer-gallery-layout-toggle {
@@ -689,6 +722,8 @@ body.list-player #footer-crossfade-toggle {
   user-select: none;
 }
 
+#footer-mute-toggle .value,
+#footer-volume-toggle .value,
 #footer-player-type-toggle .value,
 #footer-autoplay-toggle .value,
 #footer-crossfade-toggle .value,
@@ -706,6 +741,8 @@ a:hover#footer-player-type-toggle {
 
 @media all and (pointer: fine) {
 
+  #footer-mute-toggle:hover,
+  #footer-volume-toggle:hover,
   #footer-settings-button:hover,
   #footer-player-type-toggle:hover,
   #footer-autoplay-toggle:hover,
@@ -716,10 +753,17 @@ a:hover#footer-player-type-toggle {
     cursor: pointer;
   }
 
+  #footer-volume-toggle span.volume-up:hover,
+  #footer-volume-toggle span.volume-down:hover {
+    background-color: rgba(0,0,0,0.33);
+  }
+
 }
 
 @media not all and (pointer: fine) {
 
+  #footer-mute-toggle,
+  #footer-volume-toggle,
   #footer-autoplay-toggle,
   #footer-crossfade-toggle,
   #footer-site-theme-toggle,
@@ -727,12 +771,19 @@ a:hover#footer-player-type-toggle {
     transition: var(--button-default-transition);
   }
 
+  #footer-mute-toggle:active,
+  #footer-volume-toggle:active,
   #footer-autoplay-toggle:active,
   #footer-crossfade-toggle:active,
   #footer-site-theme-toggle:active,
   #footer-gallery-layout-toggle:active {
     background-color: var(--site-theme-medium-color);
     transition: var(--button-active-transition);
+  }
+
+  #footer-volume-toggle span.volume-up:active,
+  #footer-volume-toggle span.volume-down:active {
+    background-color: rgba(0,0,0,0.33);
   }
 
 }
@@ -1209,6 +1260,11 @@ body.no-playback .scrolling-up .site-header-container {
     margin-bottom: 150px;
   }
 
+  #footer-mute-toggle,
+  #footer-volume-toggle {
+    display: flex;
+  }
+
   .footer-site-info {
     font-size: 22px;
     line-height: 40px;
@@ -1620,6 +1676,12 @@ body.no-playback .scrolling-up .site-header-container {
     min-width: 0;
     font-size: 17px;
     line-height: 24px;
+  }
+
+  #footer-volume-toggle span.volume-up,
+  #footer-volume-toggle span.volume-down {
+    padding: 10px 11px 10px 11px;
+    font-size: 18px;
   }
 
   .footer-site-info {

@@ -381,6 +381,6 @@ export function onPlaybackAutoplayBlocked()
     message: 'Autoplay blocked, Play to continue',
     duration: 0,
     actionText: 'play',
-    actionClickCallback: play(),
+    actionClickCallback: () => play(),
   });
 }

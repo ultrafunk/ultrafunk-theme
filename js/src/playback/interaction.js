@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () =>
   if (m.player !== null)
     initCommon();
 
-  footerToggles.init(m.player?.getStatus);
+  footerToggles.init(m.player, onKeysVolumeChange);
 });
 
 

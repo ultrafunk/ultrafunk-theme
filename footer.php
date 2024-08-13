@@ -11,6 +11,12 @@
 <footer id="site-footer">
   <div class="site-footer-container">
     <div class="footer-settings">
+      <button type="button" id="footer-mute-toggle" title="Toggle Mute / Unmute">
+        <span class="label">Muted</span><span class="value">...</span>
+      </button>
+      <button type="button" id="footer-volume-toggle" title="Adjust Volume Up / Down">
+        <span class="label">Volume</span><span class="volume-up" title="Volume Up">&#10140;</span><span class="volume-down" title="Volume Down">&#10140;</span><span class="value">...</span>
+      </button>
       <a href="/settings/" id="footer-settings-button" title="Ultrafunk Settings">
         <span class="label">Settings</span><span class="material-icons">settings</span>
       </a>
