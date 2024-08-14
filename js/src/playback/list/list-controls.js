@@ -325,7 +325,8 @@ function arrowFirstLastClick(isArrowFirstClick)
   }
   else
   {
-    m.tracklist.lastElementChild.scrollIntoView({ behavior: utils.getScrollBehavior(), block: 'center' });
+    const allTracks = queryTrackAll('.track-entry');
+    allTracks[allTracks.length - 1].scrollIntoView({ behavior: utils.getScrollBehavior(), block: 'center' });
   }
 }
 
