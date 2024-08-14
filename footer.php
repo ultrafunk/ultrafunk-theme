@@ -14,7 +14,7 @@
       <button type="button" id="footer-mute-toggle" title="Toggle Mute / Unmute">
         <span class="label">Muted</span><span class="value">...</span>
       </button>
-      <button type="button" id="footer-volume-toggle" title="Adjust Volume Up / Down">
+      <button type="button" id="footer-volume-toggle" title="Reset Volume & Mute to default">
         <span class="label">Volume</span><span class="volume-up" title="Volume Up">&#10140;</span><span class="volume-down" title="Volume Down">&#10140;</span><span class="value">...</span>
       </button>
       <a href="/settings/" id="footer-settings-button" title="Ultrafunk Settings">

@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.48.5
+Version:           1.48.6
 Requires at least: 6.6
 Tested up to:      6.6
 Requires PHP:      8.2
@@ -689,6 +689,8 @@ body.page-settings .footer-settings {
   margin-bottom: 0;
 }
 
+#footer-mute-toggle.disabled,
+#footer-volume-toggle.disabled,
 #footer-player-type-toggle.disabled,
 #footer-autoplay-toggle.disabled,
 #footer-crossfade-toggle.disabled,
@@ -702,8 +704,10 @@ body.page-settings .footer-settings {
 html:not(.gallery-layout) #footer-gallery-layout-toggle,
 
 body.no-playback #menu-primary-sections .menu-item-pref-player,
-body.no-playback #footer-player-type-toggle,
 
+body.no-playback #footer-mute-toggle,
+body.no-playback #footer-volume-toggle,
+body.no-playback #footer-player-type-toggle,
 body.no-playback #footer-autoplay-toggle,
 body.no-playback #footer-crossfade-toggle,
 
