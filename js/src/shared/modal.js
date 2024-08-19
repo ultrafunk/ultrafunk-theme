@@ -6,7 +6,7 @@
 
 
 import { newDebugLogger } from './debuglogger.js';
-import { settings }       from './session-data.js';
+import { getOverlayOpacityCssValue } from './utils.js';
 
 import {
   getTemplateHtml,
@@ -72,7 +72,7 @@ export function showModal({
   elements.container.classList.add((m.clickItemsCount > 10) ? 'modal-click-items-2-columns' : 'modal-click-items-1-column');
   elements.container.querySelector('.modal-dialog-title').innerHTML = modalTitle;
 
-  elements.overlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.overlayOpacity / 100)) / 10})`;
+  elements.overlay.style.backgroundColor = getOverlayOpacityCssValue();
   elements.overlay.classList.add('show');
   elements.overlay.addEventListener('keydown', keyDown);
   elements.overlay.focus();

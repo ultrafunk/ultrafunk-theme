@@ -30,7 +30,6 @@ export const EVENT = {
   CONTINUE_AUTOPLAY:    'continueAutoplay',
   RESUME_AUTOPLAY:      'resumeAutoplay',
   AUTOPLAY_BLOCKED:     'autoplayBlocked',
-  PLAYBACK_BLOCKED:     'playbackBlocked',
 };
 
 const eventListeners = {
@@ -48,7 +47,6 @@ const eventListeners = {
   [EVENT.CONTINUE_AUTOPLAY]:    [],
   [EVENT.RESUME_AUTOPLAY]:      [],
   [EVENT.AUTOPLAY_BLOCKED]:     [],
-  [EVENT.PLAYBACK_BLOCKED]:     [],
 };
 
 

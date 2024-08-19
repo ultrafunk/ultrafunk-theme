@@ -46,7 +46,7 @@ const config = {
 //
 // ************************************************************************************************
 
-export function init(mediaPlayers, crossfadeClickCallback)
+export function initGalleryControls(mediaPlayers, crossfadeClickCallback)
 {
   debug.log('init()');
 

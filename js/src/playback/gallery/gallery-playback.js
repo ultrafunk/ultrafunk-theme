@@ -6,17 +6,21 @@
 
 
 import * as eventLogger          from '../common/eventlogger.js';
-import * as embeddedPlayers      from './embedded-players.js';
 import * as playbackEvents       from '../common/playback-events.js';
-import * as galleryEvents        from './gallery-events.js';
 import * as playbackControls     from '../common/playback-controls.js';
-import * as galleryControls      from './gallery-controls.js';
 import { newDebugLogger }        from '../../shared/debuglogger.js';
 import { playbackTimer }         from './gallery-playback-timer.js';
 import { GalleryPlayers }        from './gallery-players.js';
 import { CROSSFADE_TYPE }        from './crossfade.js';
 import { settings }              from '../../shared/session-data.js';
 import { singleTrackFetchReady } from './single-track-fetch.js';
+import { initGalleryEvents }     from './gallery-events.js';
+import { initGalleryControls }   from './gallery-controls.js';
+
+import {
+  eventLog as embeddedPlayersEventLog,
+  initEmbeddedPlayers,
+} from './embedded-players.js';
 
 
 /*************************************************************************************************/
@@ -43,16 +47,16 @@ export function init()
 {
   debug.log('init()');
 
-  m.eventLog = embeddedPlayers.eventLog;
+  m.eventLog = embeddedPlayersEventLog;
 
-  galleryEvents.init();
+  initGalleryEvents();
 
   m.players = new GalleryPlayers();
 
   playbackControls.init((positionSeconds) => m.players.getTrackData(positionSeconds), seekClick);
-  galleryControls.init(m.players, crossfadeToClick);
+  initGalleryControls(m.players, crossfadeToClick);
   playbackTimer.init(m.players, crossfadeInit);
-  embeddedPlayers.init(m.players, playbackState, embeddedEventHandler);
+  initEmbeddedPlayers(m.players, playbackState, embeddedEventHandler);
 }
 
 
@@ -63,7 +67,7 @@ export function init()
 export function play()
 {
   playbackControls.setPlayState();
-  m.players.current.play(embeddedPlayers.onPlayerError);
+  m.players.current.play();
 }
 
 export function pause()
@@ -193,7 +197,7 @@ function cueOrPlayTrackById(iframeId, autoplayData, scrollToMedia = true)
 
   if (autoplayData.autoplay)
   {
-    m.players.current.playTrackById(autoplayData.position, embeddedPlayers.onPlayerError);
+    m.players.current.playTrackById(autoplayData.position);
   }
   else
   {
@@ -230,6 +234,9 @@ function resumeAutoplay(autoplayData = null, iframeId = null)
 {
   if ((autoplayData !== null) && (iframeId !== null))
   {
+    if (autoplayData.autoplay)
+      m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
+
     cueOrPlayTrackById(iframeId, autoplayData);
   }
   else if ((autoplayData !== null) && (autoplayData.autoplay))
@@ -343,6 +350,16 @@ function crossfadeInit(crossfadeType, crossfadePreset, crossfadeInUid = null)
 // Embedded players event handler proxy for playbackEvents.dispatch()
 // ************************************************************************************************
 
+export function onEmbeddedPlayersReady()
+{
+  debug.log('onEmbeddedPlayersReady()');
+
+  playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
+  singleTrackFetchReady(cueOrPlaySingleTrackById);
+  playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: true });
+  playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
+}
+
 function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
 {
   debug.log(`embeddedEventHandler() - event: ${debug.getKeyForValue(playbackEvents.EVENT, embeddedEvent)}`);
@@ -355,20 +372,12 @@ function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
       nextTrack(true);
       break;
 
-    case playbackEvents.EVENT.PLAYBACK_READY:
-      playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
-      singleTrackFetchReady(cueOrPlaySingleTrackById);
-      playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, embeddedEventData);
-      playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
-      break;
-
     case playbackEvents.EVENT.AUTOPLAY_BLOCKED:
       playbackEvents.dispatch(playbackEvents.EVENT.AUTOPLAY_BLOCKED, null, { 'play': play });
       break;
 
-    case playbackEvents.EVENT.PLAYBACK_BLOCKED:
     case playbackEvents.EVENT.MEDIA_UNAVAILABLE:
-      playbackEvents.dispatch(embeddedEvent, embeddedEventData, { 'skipToTrack': skipToTrack });
+      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_UNAVAILABLE, embeddedEventData, { 'skipToTrack': skipToTrack });
       break;
   }
 }

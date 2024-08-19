@@ -11,6 +11,7 @@ import { THEME_ENV } from "../../config.js";
 import {
   onSoundCloudPlayerStateChange,
   onLocalPlayerStateChange,
+  onPlayerError,
 } from "./embedded-players.js";
 
 import {
@@ -58,13 +59,13 @@ class YouTubePlayer extends MediaPlayer
     return true;
   }
 
-  play(onErrorCallback)
+  play()
   {
     this.setIsCued(false);
 
     if (this.#playerError !== -1)
     {
-      onErrorCallback(TRACK_TYPE.YOUTUBE, this.#playerError);
+      onPlayerError(TRACK_TYPE.YOUTUBE, this.#playerError);
       this.#playerError = -1;
     }
     else
@@ -150,30 +151,31 @@ class SoundCloudPlayer extends MediaPlayer
         this.setThumbnail(null, soundObject);
         onSoundCloudPlayerStateChange('ready');
 
-        if (playTrack && this.isPlayable())
-          this.embedded.play();
+        if (playTrack)
+          this.#playSoundObject(soundObject);
 
         resolve(this.isPlayable());
       });
     });
   }
 
-  play(onErrorCallback)
+  #playSoundObject(soundObject)
+  {
+    if ((this.isPlayable() === false) || (soundObject === null))
+    {
+      onPlayerError(TRACK_TYPE.SOUNDCLOUD);
+      this.setIsPlayable(true);
+    }
+    else
+    {
+      this.embedded.play();
+    }
+  }
+
+  play()
   {
     this.setIsCued(false);
-
-    this.embedded.getCurrentSound((soundObject) =>
-    {
-      if ((this.isPlayable() === false) || (soundObject === null))
-      {
-        onErrorCallback(TRACK_TYPE.SOUNDCLOUD);
-        this.setIsPlayable(true);
-      }
-      else
-      {
-        this.embedded.play();
-      }
-    });
+    this.embedded.getCurrentSound((soundObject) => this.#playSoundObject(soundObject));
   }
 
   pause() { this.embedded.pause(); }
@@ -347,7 +349,6 @@ export class ListPlayers
     this.#youTubePlayer    = new YouTubePlayer(youTubePlayer);
     this.#soundCloudPlayer = new SoundCloudPlayer(soundCloudPlayer);
     this.#localPlayer      = new LocalPlayer(localPlayer);
-    this.#currentPlayer    = this.#youTubePlayer;
   }
 
   get current() { return this.#currentPlayer; }

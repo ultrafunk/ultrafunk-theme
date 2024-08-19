@@ -8,13 +8,18 @@
 import * as playbackControls  from '../common/playback-controls.js';
 import * as listControls      from './list-controls.js';
 import * as playbackEvents    from '../common/playback-events.js';
-import * as embeddedPlayers   from './embedded-players.js';
+import * as eventLogger       from '../common/eventlogger.js';
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { KEY }                from '../../shared/storage.js';
 import { STATE }              from '../common/element-wrappers.js';
 import { response, settings } from '../../shared/session-data.js';
 import { initTrackSearch }    from './track-search.js';
 import { playbackTimer }      from './list-playback-timer.js';
+
+import {
+  eventLog as embeddedPlayersEventLog,
+  initEmbeddedPlayers,
+} from './embedded-players.js';
 
 import {
   MATCH,
@@ -43,6 +48,7 @@ import {
 const debug = newDebugLogger('list-playback');
 
 const m = {
+  eventLog:          null,
   players:           null,
   autoplayData:      null,
   currentTrackId:    null,
@@ -59,10 +65,12 @@ export function init()
 {
   debug.log('init()');
 
+  m.eventLog = embeddedPlayersEventLog;
+
   listControls.init();
   initTrackSearch();
   cueInitialTrack();
-  embeddedPlayers.init(m.autoplayData, m.currentTrackId, getDataTrackTypeFromId(m.currentTrackId));
+  initEmbeddedPlayers(m.autoplayData, m.currentTrackId, getDataTrackTypeFromId(m.currentTrackId));
 }
 
 function cueInitialTrack()
@@ -153,7 +161,7 @@ async function cueOrPlayCurrentTrack(playTrack, positionSeconds = 0)
 
 export function play()
 {
-  m.players.current.play(embeddedPlayers.onPlayerError);
+  m.players.current.play();
 }
 
 export function pause()
@@ -216,7 +224,7 @@ export async function advanceToNextTrack(autoplay = false, isPlaybackError = fal
   if (autoplay && (repeatMode === playbackControls.REPEAT.ONE))
   {
     m.players.current.seekTo(0);
-    m.players.current.play(embeddedPlayers.onPlayerError);
+    m.players.current.play();
   }
   else if (autoplay && (nextTrackId === null) && (repeatMode === playbackControls.REPEAT.ALL))
   {
@@ -249,7 +257,10 @@ export async function advanceToNextTrack(autoplay = false, isPlaybackError = fal
 export function skipToNextTrack()
 {
   if (playbackControls.isPlaying() === false)
+  {
+    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
     advanceToNextTrack(true, true);
+  }
 }
 
 export function stopSkipToNextTrack()
@@ -313,11 +324,16 @@ export function getStatus(getCurrentTrackNum = false)
 //
 // ************************************************************************************************
 
-export function onPlaybackReady(players, initialTrackType)
+export function onEmbeddedPlayersReady(players, initialTrackType)
 {
-  debug.log(`onPlaybackReady(): ${debug.getKeyForValue(TRACK_TYPE, initialTrackType)}`);
+  debug.log(`onEmbeddedPlayersReady(): ${debug.getKeyForValue(TRACK_TYPE, initialTrackType)}`);
 
   m.players = players;
+
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PLAYING,     onMediaPlaying);
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,       () => advanceToNextTrack(settings.playback.autoplay));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_UNAVAILABLE, onMediaUnavailable);
+  playbackEvents.addListener(playbackEvents.EVENT.AUTOPLAY_BLOCKED,  onAutoplayBlocked);
 
   playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 66 });
@@ -332,7 +348,7 @@ export function onPlaybackReady(players, initialTrackType)
   cueOrPlayCurrentTrack((m.autoplayData?.autoplay === true), (m.autoplayData?.position ?? 0));
 }
 
-export function onPlaybackPlaying()
+function onMediaPlaying()
 {
   dismissSnackbar(m.currentSnackbarId);
 
@@ -354,10 +370,11 @@ export function onPlaybackPlaying()
   }
 }
 
-export function onPlaybackError()
+function onMediaUnavailable()
 {
   if (m.players.current.isCued() === false)
   {
+    playbackControls.updateProgressPercent(0);
     listControls.setTrackMessage('Error!');
 
     showSnackbar({
@@ -370,10 +387,7 @@ export function onPlaybackError()
   }
 }
 
-//
-// ToDo: As of 1.48.2 this does not work for SoundCloud tracks yet!...
-//
-export function onPlaybackAutoplayBlocked()
+function onAutoplayBlocked()
 {
   listControls.setCurrentTrackState(STATE.PAUSED);
 

@@ -20,6 +20,7 @@ import {
 import {
   PLAYER_TYPE,
   isListPlayer,
+  onKeysVolumeChange,
 } from '../playback/common/shared-gallery-list.js';
 
 import {
@@ -33,10 +34,7 @@ import {
 /*************************************************************************************************/
 
 
-const m = {
-  player: null,
-  onKeysVolumeChange: null,
-};
+const m = { player: null };
 
 export let playerType = null;
 export let crossfade  = null;
@@ -47,10 +45,9 @@ export let autoplay   = null;
 //
 // ************************************************************************************************
 
-export function init(player, onKeysVolumeChange)
+export function init(player)
 {
   m.player = player;
-  m.onKeysVolumeChange = onKeysVolumeChange;
 
   new MuteToggle('footer-mute-toggle');
   new VolumeToggle('footer-volume-toggle');
@@ -92,12 +89,12 @@ class VolumeToggle extends ElementToggle
     if (event.target.classList.contains('volume-up'))
     {
       event.key = '+';
-      m.onKeysVolumeChange(event);
+      onKeysVolumeChange(event, m.player);
     }
     else if (event.target.classList.contains('volume-down'))
     {
       event.key = '-';
-      m.onKeysVolumeChange(event);
+      onKeysVolumeChange(event, m.player);
     }
     else
     {

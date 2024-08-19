@@ -6,30 +6,24 @@
 
 
 import * as playbackEvents   from '../common/playback-events.js';
+import * as eventLogger      from '../common/eventlogger.js';
 import * as listControls     from './list-controls.js';
 import * as playbackControls from '../common/playback-controls.js';
 import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { TRACK_TYPE }        from '../common/mediaplayer.js';
 import { initLocalTracks }   from './local-tracks.js';
-import { playbackTimer }     from './list-playback-timer.js';
 import { ListPlayers }       from './list-players.js';
 import { settings }          from '../../shared/session-data.js';
 import { STATE }             from '../common/element-wrappers.js';
 import { getTimeString }     from '../../shared/utils.js';
-
-import {
-  onPlaybackReady,
-  onPlaybackPlaying,
-  onPlaybackError,
-  onPlaybackAutoplayBlocked,
-  advanceToNextTrack,
-} from './list-playback.js';
+import { onEmbeddedPlayersReady } from './list-playback.js';
 
 
 /*************************************************************************************************/
 
 
 const debug = newDebugLogger('embedded-players');
+export const eventLog = new eventLogger.Playback(10);
 
 const m = {
   players:           null,
@@ -44,7 +38,7 @@ const m = {
 //
 // ************************************************************************************************
 
-export function init(autoplayData, currentTrackId, initialPlayerType)
+export function initEmbeddedPlayers(autoplayData, currentTrackId, initialPlayerType)
 {
   debug.log('init()');
 
@@ -94,7 +88,7 @@ export function onPlayerError(trackType, errorNum = 0)
 
   debug.log(`onPlayerError(${(errorNum !== 0) ? errorNum : ''}) - trackType: ${debug.getKeyForValue(TRACK_TYPE, trackType)} - trackId: ${m.currentTrackId} - isCued: ${m.players.current.isCued()}`);
 
-  onPlaybackError();
+  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_UNAVAILABLE);
 }
 
 function onInitialPlayerCued()
@@ -117,6 +111,9 @@ function onInitialPlayerCued()
       150);
     }
 
+    if ((m.autoplayData?.autoplay === true) && (m.initialPlayerType === TRACK_TYPE.SOUNDCLOUD))
+      eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
+
     m.autoplayData = null;
   }
 }
@@ -126,7 +123,7 @@ function onPlayerReady(trackType)
   debug.log(`onPlayerReady(): ${debug.getKeyForValue(TRACK_TYPE, trackType)}`);
 
   if (trackType === m.initialPlayerType)
-    onPlaybackReady(m.players, trackType);
+    onEmbeddedPlayersReady(m.players, trackType);
 }
 
 function onLoadingState()
@@ -136,7 +133,6 @@ function onLoadingState()
 
 function onPlayingState()
 {
-  onPlaybackPlaying();
   playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_PLAYING);
 }
 
@@ -147,9 +143,12 @@ function onPausedState()
 
 function onEndedState()
 {
-  playbackTimer.stop();
   playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED);
-  advanceToNextTrack(settings.playback.autoplay);
+}
+
+function onAutoplayBlocked()
+{
+  playbackEvents.dispatch(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
 }
 
 function setPlayerVolumeMute()
@@ -175,7 +174,7 @@ function initYouTubePlayer()
       onReady:           () => onPlayerReady(TRACK_TYPE.YOUTUBE),
       onStateChange:     onYouTubePlayerStateChange,
       onError:           (event) => onPlayerError(TRACK_TYPE.YOUTUBE, event.data),
-      onAutoplayBlocked: onPlaybackAutoplayBlocked,
+      onAutoplayBlocked: onAutoplayBlocked,
     },
     playerVars: {
       'disablekb': 1,
@@ -271,9 +270,23 @@ export function onSoundCloudPlayerStateChange(playerState)
       }
       break;
 
+    case 'playing':
+      eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PLAYING, m.currentTrackId);
+      onPlayingState();
+      break;
+
+    case 'paused':
+      {
+        eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PAUSED, m.currentTrackId);
+
+        if (eventLog.scAutoplayBlocked(m.currentTrackId, 3000))
+          onAutoplayBlocked();
+        else
+          onPausedState();
+      }
+      break;
+
     case 'loading': onLoadingState(); break;
-    case 'playing': onPlayingState(); break;
-    case 'paused':  onPausedState();  break;
     case 'ended':   onEndedState();   break;
   }
 }

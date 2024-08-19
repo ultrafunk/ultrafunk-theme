@@ -11,7 +11,7 @@
 <footer id="site-footer">
   <div class="site-footer-container">
     <div class="footer-settings">
-      <button type="button" id="footer-mute-toggle" title="Toggle Mute / Unmute">
+      <button type="button" id="footer-mute-toggle" title="Toggle Mute">
         <span class="label">Muted</span><span class="value">...</span>
       </button>
       <button type="button" id="footer-volume-toggle" title="Reset Volume & Mute to default">

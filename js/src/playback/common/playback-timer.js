@@ -6,8 +6,13 @@
 
 
 import { settings } from '../../shared/session-data.js';
-import { EVENT, dispatch } from './playback-events.js';
 import { timeRemainingWarningBlink } from './playback-controls.js';
+
+import {
+  EVENT,
+  dispatch,
+  addListener,
+} from './playback-events.js';
 
 
 /*************************************************************************************************/
@@ -30,6 +35,12 @@ export class PlaybackTimer
     {
       this.isVisible = (document.visibilityState === 'visible');
     });
+
+    addListener(EVENT.MEDIA_PLAYING,     () => this.start());
+    addListener(EVENT.MEDIA_PAUSED,      () => this.stop());
+    addListener(EVENT.MEDIA_ENDED,       () => this.stop());
+    addListener(EVENT.MEDIA_UNAVAILABLE, () => this.stop());
+    addListener(EVENT.AUTOPLAY_BLOCKED,  () => this.stop());
   }
 
   // Abstract methods to override in child class(es)

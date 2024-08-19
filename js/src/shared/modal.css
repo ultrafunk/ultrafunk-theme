@@ -337,6 +337,7 @@ a.modal-click-item:hover {
 
   .modal-click-item.modal-hover-icon-text {
     padding-left: 12px;
+    padding-right: 20px;
   }
 
   .modal-click-item {

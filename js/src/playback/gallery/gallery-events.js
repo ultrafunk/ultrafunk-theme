@@ -48,7 +48,7 @@ const config = {
 //
 // ************************************************************************************************
 
-export function init()
+export function initGalleryEvents()
 {
   debug.log('init()');
 
@@ -61,7 +61,6 @@ export function init()
   addListener(EVENT.CONTINUE_AUTOPLAY, continueAutoplay);
   addListener(EVENT.RESUME_AUTOPLAY,   resumeAutoplay);
   addListener(EVENT.AUTOPLAY_BLOCKED,  autoplayBlocked);
-  addListener(EVENT.PLAYBACK_BLOCKED,  playbackBlocked);
   addListener(EVENT.MEDIA_UNAVAILABLE, mediaUnavailable);
 }
 
@@ -155,18 +154,6 @@ function autoplayBlocked(playbackEvent)
     duration: 0,
     actionText: 'play',
     actionClickCallback: () => playbackEvent.callback.play(),
-  });
-}
-
-function playbackBlocked(playbackEvent)
-{
-  debug.log(playbackEvent);
-
-  showSnackbar({
-    message: 'Unable to play track, skipping to next',
-    duration: 5,
-    actionText: 'Stop',
-    afterCloseCallback: () => playbackEventErrorTryNext(playbackEvent),
   });
 }
 

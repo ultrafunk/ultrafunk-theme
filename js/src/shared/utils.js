@@ -112,6 +112,11 @@ export function getScrollBehavior()
   return (settings.site.smoothScrolling ? 'smooth' : 'auto');
 }
 
+export function getOverlayOpacityCssValue()
+{
+  return `rgba(0, 0, 0, ${Math.round(10 * (settings.site.overlayOpacity / 100)) / 10})`;
+}
+
 
 // ************************************************************************************************
 // https://github.com/janl/mustache.js/blob/master/mustache.js#L59

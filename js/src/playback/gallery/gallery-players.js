@@ -8,6 +8,7 @@
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { settings }           from '../../shared/session-data.js';
 import { EVENT, addListener } from '../common/playback-events.js';
+import { onPlayerError }      from './embedded-players.js';
 
 import {
   VOLUME,
@@ -55,12 +56,12 @@ export class YouTubePlayer extends MediaPlayer
     this.embedded.loadVideoById(this.getSourceUid(), positionSeconds);
   }
 
-  play(onErrorCallback)
+  play()
   {
     if (this.isPlayable())
       this.embedded.playVideo();
     else
-      onErrorCallback(this, this.embedded.getVideoUrl());
+      onPlayerError(this, this.embedded.getVideoUrl());
   }
 
   getVolume(callback)
@@ -117,16 +118,16 @@ export class SoundCloudPlayer extends MediaPlayer
     this.setIsCued(true);
   }
 
-  playTrackById(positionSeconds = 0, onErrorCallback = null)
+  playTrackById(positionSeconds = 0)
   {
     this.seekTo(positionSeconds);
-    this.play(onErrorCallback);
+    this.play();
     this.setIsCued(false);
   }
 
   pause() { this.embedded.pause(); }
 
-  play(onErrorCallback)
+  play()
   {
     // playable is set to FALSE if the widget fires SC.Widget.Events.ERROR (track does not exist)
     if (this.isPlayable())
@@ -136,12 +137,12 @@ export class SoundCloudPlayer extends MediaPlayer
         if (soundObject.playable === true)
           this.embedded.play();
         else
-          onErrorCallback(this, soundObject.permalink_url);
+          onPlayerError(this, soundObject.permalink_url);
       });
     }
     else
     {
-      onErrorCallback(this, 'https://soundcloud.com');
+      onPlayerError(this, 'https://soundcloud.com');
     }
   }
 

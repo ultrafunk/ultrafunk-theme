@@ -6,7 +6,6 @@
 
 
 import { PlaybackTimer }            from '../common/playback-timer.js';
-import { EVENT, addListener }       from '../common/playback-events.js';
 import { updateVolumeMuteSettings } from '../common/shared-gallery-list.js';
 
 import {
@@ -39,7 +38,6 @@ class ListPlaybackTimer extends PlaybackTimer
   {
     super.init();
     this.#players = players;
-    addListener(EVENT.MEDIA_PLAYING, () => super.start());
   }
 
   updateTimer()

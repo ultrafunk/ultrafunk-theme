@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () =>
   if (m.player !== null)
     initCommon();
 
-  footerToggles.init(m.player, onKeysVolumeChange);
+  footerToggles.init(m.player);
 });
 
 
@@ -170,14 +170,14 @@ function documentEventKeyDown(event)
     {
       case '+':
       case '-':
-        onKeysVolumeChange(event);
+        shared.onKeysVolumeChange(event, m.player);
         break;
 
       case 'ArrowUp':
       case 'ArrowDown':
         if (event.shiftKey)
         {
-          onKeysVolumeChange(event);
+          shared.onKeysVolumeChange(event, m.player);
         }
         break;
     }
@@ -346,17 +346,6 @@ function cueOrPlayPrevNextTrack(event, prevNextTrack, prevNextPage)
   {
     prevNextNavTo(null, prevNextPage);
   }
-}
-
-function onKeysVolumeChange(event)
-{
-  event.preventDefault();
-
-  settings.playback.masterVolume = ((event.key === '+') || (event.key === 'ArrowUp'))
-    ? (settings.playback.masterVolume < 100) ? (settings.playback.masterVolume + 5) : 100
-    : (settings.playback.masterVolume > 5  ) ? (settings.playback.masterVolume - 5) : 5;
-
-  m.player.setVolume();
 }
 
 

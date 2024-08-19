@@ -6,7 +6,6 @@
 
 
 import * as utils             from '../shared/utils.js';
-import { settings }           from '../shared/session-data.js';
 import { playerType }         from './footer-toggles.js';
 import { isSingleTrackFetch } from '../playback/gallery/single-track-fetch.js';
 
@@ -71,7 +70,7 @@ const navMenuClosure = (() =>
 
       siteHeader.classList.remove('hide-nav-menu');
       navMenuOuter.style.display = 'flex';
-      navMenuOverlay.style.backgroundColor = `rgba(0, 0, 0, ${Math.round(10 * (settings.site.overlayOpacity / 100)) / 10})`;
+      navMenuOverlay.style.backgroundColor = utils.getOverlayOpacityCssValue();
       navMenuOverlay.classList.add('show');
 
       if (utils.matchesMedia(utils.MATCH.SITE_MAX_WIDTH_MOBILE))

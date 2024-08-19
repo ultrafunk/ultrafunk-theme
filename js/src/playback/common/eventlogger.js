@@ -193,21 +193,6 @@ export class Playback extends EventLog
     return this.isPatternMatch(5, 'SoundCloud Autoplay Blocked');
   }
 
-  scWidgetPlayBlocked(uId, deltaTime)
-  {
-    this.initMatch();
-
-    if (this.getLastPos() >= 2)
-    {
-      this.matchesEvent(2, SOURCE.SOUNDCLOUD, EVENT.STATE_PLAYING, uId);
-      this.matchesEvent(1, SOURCE.SOUNDCLOUD, EVENT.STATE_PAUSED,  uId);
-      this.matchesEvent(0, SOURCE.SOUNDCLOUD, EVENT.STATE_PAUSED,  uId);
-      this.matchesDelta(2, deltaTime);
-    }
-
-    return this.isPatternMatch(4, 'SoundCloud WidgetPlay Blocked');
-  }
-
   scPlayDoubleTrigger(uId, deltaTime)
   {
     this.initMatch();

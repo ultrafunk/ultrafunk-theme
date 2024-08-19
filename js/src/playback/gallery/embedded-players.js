@@ -9,7 +9,7 @@ import * as eventLogger    from '../common/eventlogger.js';
 import * as playbackEvents from '../common/playback-events.js';
 import { newDebugLogger }  from '../../shared/debuglogger.js';
 import { settings }        from '../../shared/session-data.js';
-import { playbackTimer }   from './gallery-playback-timer.js';
+import { onEmbeddedPlayersReady } from './gallery-playback.js';
 
 import {
   TRACK_TYPE,
@@ -45,8 +45,10 @@ const config = {
 //
 // ************************************************************************************************
 
-export function init(players, playbackState, embeddedEventHandler)
+export function initEmbeddedPlayers(players, playbackState, embeddedEventHandler)
 {
+  debug.log('init()');
+
   m.players       = players;
   m.playbackState = playbackState;
   m.embeddedEvent = embeddedEventHandler;
@@ -66,7 +68,7 @@ function getLoadingPercent()
 function updatePlayersReady()
 {
   if (m.loadEventsCount >= m.loadEventsTotal)
-    m.embeddedEvent(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: true });
+    onEmbeddedPlayersReady();
   else
     playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, getLoadingPercent());
 }
@@ -264,7 +266,6 @@ function onYouTubeStatePlaying(iframeId)
 
   // Call order is important on play events for state handling: Always sync first!
   m.playbackState.sync(iframeId, m.playbackState.STATE.PLAY);
-  playbackTimer.start();
 }
 
 function onYouTubeStatePaused(iframeId)
@@ -272,14 +273,9 @@ function onYouTubeStatePaused(iframeId)
   debug.log(`onYouTubePlayerStateChange: PAUSED    (iframeId: ${iframeId})`);
 
   if (m.players.isCurrent(iframeId))
-  {
     m.playbackState.sync(iframeId, m.playbackState.STATE.PAUSE);
-    playbackTimer.stop();
-  }
   else
-  {
     m.players.crossfade.stop();
-  }
 }
 
 function onYouTubeStateCued(iframeId)
@@ -292,14 +288,9 @@ function onYouTubeStateEnded(iframeId)
   debug.log(`onYouTubePlayerStateChange: ENDED     (iframeId: ${iframeId})`);
 
   if (m.players.isCurrent(iframeId))
-  {
-    playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
-  }
   else
-  {
     m.players.crossfade.stop();
-  }
 }
 
 function onYouTubePlayerError(event, iframeId)
@@ -364,8 +355,6 @@ function onSoundCloudPlayerEventPlay(iframeId)
     m.players.current.mute(settings.playback.masterMute);
     m.players.current.setVolume(settings.playback.masterVolume);
   }
-
-  playbackTimer.start();
 }
 
 function onSoundCloudPlayerEventPause(iframeId)
@@ -375,13 +364,7 @@ function onSoundCloudPlayerEventPause(iframeId)
 
   if (eventLog.scAutoplayBlocked(iframeId, 3000))
   {
-    playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
-  }
-  else if (eventLog.scWidgetPlayBlocked(iframeId, 30000))
-  {
-    playbackTimer.stop();
-    m.embeddedEvent(playbackEvents.EVENT.PLAYBACK_BLOCKED, { currentTrack: m.players.trackNumFromIframeId(iframeId), numTracks: m.players.getNumTracks() });
   }
   else
   {
@@ -391,10 +374,7 @@ function onSoundCloudPlayerEventPause(iframeId)
       m.players.current.getPosition(positionMilliseconds =>
       {
         if (positionMilliseconds > 0)
-        {
           m.playbackState.sync(iframeId, m.playbackState.STATE.PAUSE);
-          playbackTimer.stop();
-        }
       });
     }
     else
@@ -409,14 +389,9 @@ function onSoundCloudPlayerEventFinish(iframeId)
   debug.log(`onSoundCloudPlayerEvent: FINISH (iframeId: ${iframeId})`);
 
   if (m.players.isCurrent(iframeId))
-  {
-    playbackTimer.stop();
     m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
-  }
   else
-  {
     m.players.crossfade.stop();
-  }
 }
 
 function onSoundCloudPlayerEventError(iframeId)
