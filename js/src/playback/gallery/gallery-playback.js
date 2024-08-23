@@ -5,7 +5,6 @@
 //
 
 
-import * as eventLogger          from '../common/eventlogger.js';
 import * as playbackEvents       from '../common/playback-events.js';
 import * as playbackControls     from '../common/playback-controls.js';
 import { newDebugLogger }        from '../../shared/debuglogger.js';
@@ -56,7 +55,7 @@ export function init()
   playbackControls.init((positionSeconds) => m.players.getTrackData(positionSeconds), seekClick);
   initGalleryControls(m.players, crossfadeToClick);
   playbackTimer.init(m.players, crossfadeInit);
-  initEmbeddedPlayers(m.players, playbackState, embeddedEventHandler);
+  initEmbeddedPlayers(m.players, playbackState);
 }
 
 
@@ -223,7 +222,7 @@ function skipToTrack(trackNum, playMedia = true)
 
   if ((playMedia === true) && (playbackControls.isPlaying() === false))
   {
-    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
+    m.eventLog.add(m.eventLog.SOURCE.ULTRAFUNK, m.eventLog.EVENT.RESUME_AUTOPLAY);
 
     if (m.players.gotoTrackNum(trackNum))
       playCurrentTrack(playMedia);
@@ -235,14 +234,14 @@ function resumeAutoplay(autoplayData = null, iframeId = null)
   if ((autoplayData !== null) && (iframeId !== null))
   {
     if (autoplayData.autoplay)
-      m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
+      m.eventLog.add(m.eventLog.SOURCE.ULTRAFUNK, m.eventLog.EVENT.RESUME_AUTOPLAY);
 
     cueOrPlayTrackById(iframeId, autoplayData);
   }
   else if ((autoplayData !== null) && (autoplayData.autoplay))
   {
     debug.log(`resumeAutoplay(): Play first track`);
-    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
+    m.eventLog.add(m.eventLog.SOURCE.ULTRAFUNK, m.eventLog.EVENT.RESUME_AUTOPLAY);
     play();
   }
   else
@@ -328,7 +327,7 @@ function crossfadeToClick(fadeInUid, crossfadePreset)
 
 function crossfadeInit(crossfadeType, crossfadePreset, crossfadeInUid = null)
 {
-  m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.CROSSFADE_START);
+  m.eventLog.add(m.eventLog.SOURCE.ULTRAFUNK, m.eventLog.EVENT.CROSSFADE_START);
 
   if (m.players.crossfade.init(crossfadeType, crossfadePreset, crossfadeInUid))
   {
@@ -347,7 +346,7 @@ function crossfadeInit(crossfadeType, crossfadePreset, crossfadeInUid = null)
 
 
 // ************************************************************************************************
-// Embedded players event handler proxy for playbackEvents.dispatch()
+// Embedded players proxy for playbackEvents.dispatch()
 // ************************************************************************************************
 
 export function onEmbeddedPlayersReady()
@@ -360,12 +359,12 @@ export function onEmbeddedPlayersReady()
   playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
 }
 
-function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
+export function eventHandlerProxy(proxyEvent, proxyData = null)
 {
-  debug.log(`embeddedEventHandler() - event: ${debug.getKeyForValue(playbackEvents.EVENT, embeddedEvent)}`);
-  if (embeddedEventData !== null) debug.log(embeddedEventData);
+  debug.log(`eventHandlerProxy(): ${debug.getKeyForValue(playbackEvents.EVENT, proxyEvent)}`);
+  if (proxyData !== null) debug.log(proxyData);
 
-  switch (embeddedEvent)
+  switch (proxyEvent)
   {
     case playbackEvents.EVENT.MEDIA_ENDED:
       playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED, getStatus());
@@ -377,7 +376,7 @@ function embeddedEventHandler(embeddedEvent, embeddedEventData = null)
       break;
 
     case playbackEvents.EVENT.MEDIA_UNAVAILABLE:
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_UNAVAILABLE, embeddedEventData, { 'skipToTrack': skipToTrack });
+      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_UNAVAILABLE, proxyData, { 'skipToTrack': skipToTrack });
       break;
   }
 }

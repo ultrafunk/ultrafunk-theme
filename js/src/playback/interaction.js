@@ -5,7 +5,6 @@
 //
 
 
-import * as eventLogger       from './common/eventlogger.js';
 import * as galleryPlayback   from './gallery/gallery-playback.js';
 import * as listPlayback      from './list/list-playback.js';
 import * as playbackEvents    from './common/playback-events.js';
@@ -16,6 +15,7 @@ import { ElementClick }       from '../shared/element-click.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { initScreenWakeLock } from './common/screen-wakelock.js';
 import { TRACK_TYPE }         from './common/mediaplayer.js';
+import { InteractionLog }     from './common/eventlogger.js';
 
 import {
   showTrackSharePlay,
@@ -50,7 +50,7 @@ import {
 
 
 const debug    = newDebugLogger('playback-interaction');
-const eventLog = new eventLogger.Interaction(10);
+const eventLog = new InteractionLog(10);
 
 const m = {
   player:             null,
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () =>
 
 function initCommon()
 {
-  debug.log('initCommon()');
+  debug.log('init()');
 
   // Set user settings CSS with JS as early as possible...
   setPlaybackControlsCss();
@@ -255,6 +255,10 @@ function documentEventKeyDown(event)
           showSnackbar({ message: `${toggleRepeat().title} (<b>r</b> to change)`, duration: 3 });
           break;
 
+        case 'V':
+          shared.resetVolumeMute(m.player);
+          break;
+
         case 'x':
         case 'X':
           footerToggles.crossfade.toggle();
@@ -391,9 +395,9 @@ function playbackThumbnailClick()
 {
   if (shared.isGalleryPlayer())
   {
-    eventLog.add(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK);
+    eventLog.add(eventLog.SOURCE.MOUSE, eventLog.EVENT.MOUSE_CLICK);
 
-    if (eventLog.doubleClicked(eventLogger.SOURCE.MOUSE, eventLogger.EVENT.MOUSE_CLICK, 500))
+    if (eventLog.doubleClicked(eventLog.SOURCE.MOUSE, eventLog.EVENT.MOUSE_CLICK, 500))
       shared.fullscreenElement.enter(document.getElementById(m.player.getStatus().playerId));
   }
   else if (shared.isListPlayer())

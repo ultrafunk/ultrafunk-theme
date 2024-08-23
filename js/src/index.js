@@ -12,6 +12,7 @@ import { navMenu }             from './site/nav-menu.js';
 import { navSearch }           from './site/nav-search.js';
 import { initArtistsChannels } from './site/artists-channels.js';
 import { noPlayback }          from './playback/common/shared-gallery-list.js';
+import { showSnackbarLog }     from './shared/snackbar.js';
 
 import {
   newDebugLogger,
@@ -60,8 +61,6 @@ document.addEventListener('DOMContentLoaded', () =>
 
 function initIndex()
 {
-  debug.log('initIndex()');
-
   m.keyboardShortcuts = utils.keyboardShortcuts(settings.site.keyboardShortcuts);
 
   elements.siteHeader        = document.getElementById('site-header');
@@ -143,6 +142,14 @@ function documentEventKeyDown(event)
         if (searchNotFocused() && !isSettingsPage())
         {
           themeLayout.siteTheme.toggle(event);
+        }
+        break;
+
+      case 'v':
+        if (searchNotFocused())
+        {
+          event.preventDefault();
+          showSnackbarLog();
         }
         break;
 

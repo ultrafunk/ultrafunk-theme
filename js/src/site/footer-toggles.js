@@ -9,7 +9,6 @@ import { ElementToggle }      from '../shared/element-toggle.js';
 import { showSnackbar }       from '../shared/snackbar.js';
 import { response, settings } from '../shared/session-data.js';
 import { TRACK_TYPE }         from '../playback/common/mediaplayer.js';
-import { VOLUME }             from '../playback/gallery/crossfade.js';
 
 import {
   replaceClass,
@@ -21,6 +20,7 @@ import {
   PLAYER_TYPE,
   isListPlayer,
   onKeysVolumeChange,
+  resetVolumeMute,
 } from '../playback/common/shared-gallery-list.js';
 
 import {
@@ -98,13 +98,7 @@ class VolumeToggle extends ElementToggle
     }
     else
     {
-      if (settings.playback.masterMute)
-        m.player.toggleMute();
-
-      settings.playback.masterVolume = VOLUME.MAX;
-      m.player.setVolume();
-
-      showSnackbar({ message: 'Volume & Mute reset to default values' });
+      resetVolumeMute(m.player);
     }
   }
 

@@ -8,7 +8,6 @@
 import * as playbackControls  from '../common/playback-controls.js';
 import * as listControls      from './list-controls.js';
 import * as playbackEvents    from '../common/playback-events.js';
-import * as eventLogger       from '../common/eventlogger.js';
 import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { KEY }                from '../../shared/storage.js';
 import { STATE }              from '../common/element-wrappers.js';
@@ -258,7 +257,7 @@ export function skipToNextTrack()
 {
   if (playbackControls.isPlaying() === false)
   {
-    m.eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
+    m.eventLog.add(m.eventLog.SOURCE.ULTRAFUNK, m.eventLog.EVENT.RESUME_AUTOPLAY);
     advanceToNextTrack(true, true);
   }
 }

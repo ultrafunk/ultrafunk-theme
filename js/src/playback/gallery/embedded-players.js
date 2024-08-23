@@ -5,11 +5,15 @@
 //
 
 
-import * as eventLogger    from '../common/eventlogger.js';
 import * as playbackEvents from '../common/playback-events.js';
 import { newDebugLogger }  from '../../shared/debuglogger.js';
 import { settings }        from '../../shared/session-data.js';
-import { onEmbeddedPlayersReady } from './gallery-playback.js';
+import { PlaybackLog }     from '../common/eventlogger.js';
+
+import {
+  eventHandlerProxy,
+  onEmbeddedPlayersReady
+} from './gallery-playback.js';
 
 import {
   TRACK_TYPE,
@@ -26,12 +30,11 @@ import {
 
 
 const debug = newDebugLogger('embedded-players');
-export const eventLog = new eventLogger.Playback(10);
+export const eventLog = new PlaybackLog(10);
 
 const m = {
   players:         {},
   playbackState:   null,
-  embeddedEvent:   null,
   loadEventsTotal: 0,
   loadEventsCount: 1,
 };
@@ -45,13 +48,12 @@ const config = {
 //
 // ************************************************************************************************
 
-export function initEmbeddedPlayers(players, playbackState, embeddedEventHandler)
+export function initEmbeddedPlayers(players, playbackState)
 {
   debug.log('init()');
 
   m.players       = players;
   m.playbackState = playbackState;
-  m.embeddedEvent = embeddedEventHandler;
 
   // The total number of loadEvents include 3 stages before embedded players are loaded
   m.loadEventsTotal = 3 + parseInt(document.body.getAttribute('data-gallery-track-count'));
@@ -130,7 +132,7 @@ function getYouTubePlayer(playerId, element, isSingleTrackPlayer = false)
       onReady:           (event) => onYouTubePlayerReady(event, playerId),
       onStateChange:     (event) => onYouTubePlayerStateChange(event, playerId),
       onError:           (event) => onYouTubePlayerError(event, playerId),
-      onAutoplayBlocked: ()      => m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED),
+      onAutoplayBlocked: ()      => eventHandlerProxy(playbackEvents.EVENT.AUTOPLAY_BLOCKED),
     },
     playerVars: {
       'disablekb': 1,
@@ -152,15 +154,15 @@ export function onPlayerError(player, mediaUrl)
   debug.log(player);
 
   const eventSource = (player.getTrackType() === TRACK_TYPE.YOUTUBE)
-                        ? eventLogger.SOURCE.YOUTUBE
-                        : eventLogger.SOURCE.SOUNDCLOUD;
+                        ? eventLog.SOURCE.YOUTUBE
+                        : eventLog.SOURCE.SOUNDCLOUD;
 
   // Stop the current track if it is not the one we are going to next
   if (m.players.isCurrent(player.getIframeId()) === false)
     m.players.stop();
 
-  eventLog.add(eventSource, eventLogger.EVENT.PLAYER_ERROR, player.getIframeId());
-  m.embeddedEvent(playbackEvents.EVENT.MEDIA_UNAVAILABLE, getPlayerErrorData(player, mediaUrl));
+  eventLog.add(eventSource, eventLog.EVENT.PLAYER_ERROR, player.getIframeId());
+  eventHandlerProxy(playbackEvents.EVENT.MEDIA_UNAVAILABLE, getPlayerErrorData(player, mediaUrl));
 }
 
 function getPlayerErrorData(player, mediaUrl)
@@ -227,7 +229,7 @@ function onYouTubePlayerReady(event, iframeId)
 
 function onYouTubePlayerStateChange(event, iframeId)
 {
-  eventLog.add(eventLogger.SOURCE.YOUTUBE, event.data, iframeId);
+  eventLog.add(eventLog.SOURCE.YOUTUBE, event.data, iframeId);
 
   switch (event.data)
   {
@@ -288,7 +290,7 @@ function onYouTubeStateEnded(iframeId)
   debug.log(`onYouTubePlayerStateChange: ENDED     (iframeId: ${iframeId})`);
 
   if (m.players.isCurrent(iframeId))
-    m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
+    eventHandlerProxy(playbackEvents.EVENT.MEDIA_ENDED);
   else
     m.players.crossfade.stop();
 }
@@ -340,7 +342,7 @@ function onSoundCloudPlayerEventReady(iframeId, element, player, embeddedPlayer)
 function onSoundCloudPlayerEventPlay(iframeId)
 {
   debug.log(`onSoundCloudPlayerEvent: PLAY   (iframeId: ${iframeId})`);
-  eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PLAYING, iframeId);
+  eventLog.add(eventLog.SOURCE.SOUNDCLOUD, eventLog.EVENT.STATE_PLAYING, iframeId);
 
   if (m.players.crossfade.isFading() && m.players.isCurrent(iframeId))
   {
@@ -360,11 +362,11 @@ function onSoundCloudPlayerEventPlay(iframeId)
 function onSoundCloudPlayerEventPause(iframeId)
 {
   debug.log(`onSoundCloudPlayerEvent: PAUSE  (iframeId: ${iframeId})`);
-  eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PAUSED, iframeId);
+  eventLog.add(eventLog.SOURCE.SOUNDCLOUD, eventLog.EVENT.STATE_PAUSED, iframeId);
 
   if (eventLog.scAutoplayBlocked(iframeId, 3000))
   {
-    m.embeddedEvent(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
+    eventHandlerProxy(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
   }
   else
   {
@@ -389,7 +391,7 @@ function onSoundCloudPlayerEventFinish(iframeId)
   debug.log(`onSoundCloudPlayerEvent: FINISH (iframeId: ${iframeId})`);
 
   if (m.players.isCurrent(iframeId))
-    m.embeddedEvent(playbackEvents.EVENT.MEDIA_ENDED);
+    eventHandlerProxy(playbackEvents.EVENT.MEDIA_ENDED);
   else
     m.players.crossfade.stop();
 }

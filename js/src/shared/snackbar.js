@@ -6,6 +6,7 @@
 
 
 import { newDebugLogger }      from './debuglogger.js';
+import { showModal }           from './modal.js';
 import { MATCH, matchesMedia } from './utils.js';
 
 
@@ -19,6 +20,7 @@ const m = {
   actionClick:   null,
   afterClose:    null,
   showTimeoutId: -1,
+  messageLog:    [],
 };
 
 const template = /*html*/ `
@@ -55,6 +57,7 @@ export function showSnackbar({
 
   initElements();
   resetState(false);
+  addToLog(message);
 
   elements.snackbar.querySelector('.snackbar-message').innerHTML = message;
   elements.snackbar.querySelector('.snackbar-container').style = `background-color: ${backgroundColorCssVal};`;
@@ -151,4 +154,26 @@ function resetState(hideSnackbar = false)
 
   if (hideSnackbar)
     elements.snackbar.className = '';
+}
+
+function addToLog(message)
+{
+  if (m.messageLog.length >= 10)
+    m.messageLog.shift();
+
+  m.messageLog.push({ time: new Date().toISOString().slice(11, 19), message: message });
+}
+
+export function showSnackbarLog()
+{
+  if (m.messageLog.length > 0)
+  {
+    let html = '<p class="text-nowrap-ellipsis">';
+    m.messageLog.forEach((entry) => html += `<b>${entry.time}</b> - ${entry.message}</br>`);
+    showModal({ modalTitle: 'Snackbar Message Log', modalBody: html + '</p>' });
+  }
+  else
+  {
+    showModal({ modalTitle: 'Snackbar Message Log', modalBody: '<p>The snackbar message log is currently empty!</p>' });
+  }
 }

@@ -6,7 +6,6 @@
 
 
 import * as playbackEvents   from '../common/playback-events.js';
-import * as eventLogger      from '../common/eventlogger.js';
 import * as listControls     from './list-controls.js';
 import * as playbackControls from '../common/playback-controls.js';
 import { newDebugLogger }    from '../../shared/debuglogger.js';
@@ -16,6 +15,7 @@ import { ListPlayers }       from './list-players.js';
 import { settings }          from '../../shared/session-data.js';
 import { STATE }             from '../common/element-wrappers.js';
 import { getTimeString }     from '../../shared/utils.js';
+import { PlaybackLog }       from '../common/eventlogger.js';
 import { onEmbeddedPlayersReady } from './list-playback.js';
 
 
@@ -23,7 +23,7 @@ import { onEmbeddedPlayersReady } from './list-playback.js';
 
 
 const debug = newDebugLogger('embedded-players');
-export const eventLog = new eventLogger.Playback(10);
+export const eventLog = new PlaybackLog(10);
 
 const m = {
   players:           null,
@@ -112,7 +112,7 @@ function onInitialPlayerCued()
     }
 
     if ((m.autoplayData?.autoplay === true) && (m.initialPlayerType === TRACK_TYPE.SOUNDCLOUD))
-      eventLog.add(eventLogger.SOURCE.ULTRAFUNK, eventLogger.EVENT.RESUME_AUTOPLAY);
+      eventLog.add(eventLog.SOURCE.ULTRAFUNK, eventLog.EVENT.RESUME_AUTOPLAY);
 
     m.autoplayData = null;
   }
@@ -271,13 +271,13 @@ export function onSoundCloudPlayerStateChange(playerState)
       break;
 
     case 'playing':
-      eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PLAYING, m.currentTrackId);
+      eventLog.add(eventLog.SOURCE.SOUNDCLOUD, eventLog.EVENT.STATE_PLAYING, m.currentTrackId);
       onPlayingState();
       break;
 
     case 'paused':
       {
-        eventLog.add(eventLogger.SOURCE.SOUNDCLOUD, eventLogger.EVENT.STATE_PAUSED, m.currentTrackId);
+        eventLog.add(eventLog.SOURCE.SOUNDCLOUD, eventLog.EVENT.STATE_PAUSED, m.currentTrackId);
 
         if (eventLog.scAutoplayBlocked(m.currentTrackId, 3000))
           onAutoplayBlocked();

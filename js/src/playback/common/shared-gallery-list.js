@@ -10,6 +10,7 @@ import { showSnackbar }       from '../../shared/snackbar.js';
 import { KEY, setCookie }     from '../../shared/storage.js';
 import { showUpNextModal }    from '../list/up-next-modal.js';
 import { response, settings } from '../../shared/session-data.js';
+import { VOLUME }             from '../gallery/crossfade.js';
 
 import {
   getCssPropValue,
@@ -105,6 +106,17 @@ export function onKeysVolumeChange(event, player)
     : (settings.playback.masterVolume > 5  ) ? (settings.playback.masterVolume - 5) : 5;
 
   player.setVolume();
+}
+
+export function resetVolumeMute(player)
+{
+  if (settings.playback.masterMute)
+    player.toggleMute();
+
+  settings.playback.masterVolume = VOLUME.MAX;
+  player.setVolume();
+
+  showSnackbar({ message: 'Volume & Mute reset to default values' });
 }
 
 
