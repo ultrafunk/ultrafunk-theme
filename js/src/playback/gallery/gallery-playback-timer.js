@@ -5,11 +5,15 @@
 //
 
 
-import { PlaybackTimer }            from '../common/playback-timer.js';
-import { settings }                 from '../../shared/session-data.js';
-import { CROSSFADE_TYPE }           from './crossfade.js';
-import { updateTimerAndProgress }   from '../common/playback-controls.js';
+import { settings }       from '../../shared/session-data.js';
+import { PlaybackTimer }  from '../common/playback-timer.js';
+import { CROSSFADE_TYPE } from './crossfade.js';
 import { updateVolumeMuteSettings } from '../common/shared-gallery-list.js';
+
+import {
+  isPlaying,
+  updateTimerAndProgress,
+} from '../common/playback-controls.js';
 
 
 /*************************************************************************************************/
@@ -72,7 +76,7 @@ class GalleryPlaybackTimer extends PlaybackTimer
 
   updateVolumeMute()
   {
-    if (this.#players.crossfade.isFading() === false)
+    if (isPlaying() && (this.#players.crossfade.isFading() === false))
       this.#players.current.getVolume((volume) => updateVolumeMuteSettings(Math.round(volume), this.#players.current.isMuted()));
   }
 }
