@@ -11,8 +11,10 @@ import { settings }        from '../../shared/session-data.js';
 import { PlaybackLog }     from '../common/eventlogger.js';
 
 import {
-  eventHandlerProxy,
-  onEmbeddedPlayersReady
+  onEmbeddedPlayersReady,
+  onAutoplayBlocked,
+  onMediaEnded,
+  onMediaUnavailable,
 } from './gallery-playback.js';
 
 import {
@@ -132,7 +134,7 @@ function getYouTubePlayer(playerId, element, isSingleTrackPlayer = false)
       onReady:           (event) => onYouTubePlayerReady(event, playerId),
       onStateChange:     (event) => onYouTubePlayerStateChange(event, playerId),
       onError:           (event) => onYouTubePlayerError(event, playerId),
-      onAutoplayBlocked: ()      => eventHandlerProxy(playbackEvents.EVENT.AUTOPLAY_BLOCKED),
+      onAutoplayBlocked: ()      => onAutoplayBlocked(),
     },
     playerVars: {
       'disablekb': 1,
@@ -162,7 +164,7 @@ export function onPlayerError(player, mediaUrl)
     m.players.stop();
 
   eventLog.add(eventSource, eventLog.EVENT.PLAYER_ERROR, player.getIframeId());
-  eventHandlerProxy(playbackEvents.EVENT.MEDIA_UNAVAILABLE, getPlayerErrorData(player, mediaUrl));
+  onMediaUnavailable(getPlayerErrorData(player, mediaUrl));
 }
 
 function getPlayerErrorData(player, mediaUrl)
@@ -290,7 +292,7 @@ function onYouTubeStateEnded(iframeId)
   debug.log(`onYouTubePlayerStateChange: ENDED     (iframeId: ${iframeId})`);
 
   if (m.players.isCurrent(iframeId))
-    eventHandlerProxy(playbackEvents.EVENT.MEDIA_ENDED);
+    onMediaEnded();
   else
     m.players.crossfade.stop();
 }
@@ -366,7 +368,7 @@ function onSoundCloudPlayerEventPause(iframeId)
 
   if (eventLog.scAutoplayBlocked(iframeId, 3000))
   {
-    eventHandlerProxy(playbackEvents.EVENT.AUTOPLAY_BLOCKED);
+    onAutoplayBlocked();
   }
   else
   {
@@ -391,7 +393,7 @@ function onSoundCloudPlayerEventFinish(iframeId)
   debug.log(`onSoundCloudPlayerEvent: FINISH (iframeId: ${iframeId})`);
 
   if (m.players.isCurrent(iframeId))
-    eventHandlerProxy(playbackEvents.EVENT.MEDIA_ENDED);
+    onMediaEnded();
   else
     m.players.crossfade.stop();
 }

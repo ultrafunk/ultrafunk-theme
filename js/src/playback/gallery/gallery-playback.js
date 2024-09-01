@@ -346,39 +346,36 @@ function crossfadeInit(crossfadeType, crossfadePreset, crossfadeInUid = null)
 
 
 // ************************************************************************************************
-// Embedded players proxy for playbackEvents.dispatch()
+// Proxy functions for embedded-players playbackEvents.dispatch()
 // ************************************************************************************************
 
 export function onEmbeddedPlayersReady()
 {
   debug.log('onEmbeddedPlayersReady()');
-
   playbackControls.ready(prevTrack, togglePlayPause, nextTrack, toggleMute);
   singleTrackFetchReady(cueOrPlaySingleTrackById);
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: true });
   playbackEvents.dispatch(playbackEvents.EVENT.RESUME_AUTOPLAY, null, { 'resumeAutoplay': resumeAutoplay });
 }
 
-export function eventHandlerProxy(proxyEvent, proxyData = null)
+export function onMediaEnded()
 {
-  debug.log(`eventHandlerProxy(): ${debug.getKeyForValue(playbackEvents.EVENT, proxyEvent)}`);
-  if (proxyData !== null) debug.log(proxyData);
+  debug.log('onMediaEnded()');
+  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED, getStatus());
+  nextTrack(true);
+}
 
-  switch (proxyEvent)
-  {
-    case playbackEvents.EVENT.MEDIA_ENDED:
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_ENDED, getStatus());
-      nextTrack(true);
-      break;
+export function onAutoplayBlocked()
+{
+  debug.log('onAutoplayBlocked()');
+  playbackEvents.dispatch(playbackEvents.EVENT.AUTOPLAY_BLOCKED, null, { 'play': play });
+}
 
-    case playbackEvents.EVENT.AUTOPLAY_BLOCKED:
-      playbackEvents.dispatch(playbackEvents.EVENT.AUTOPLAY_BLOCKED, null, { 'play': play });
-      break;
-
-    case playbackEvents.EVENT.MEDIA_UNAVAILABLE:
-      playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_UNAVAILABLE, proxyData, { 'skipToTrack': skipToTrack });
-      break;
-  }
+export function onMediaUnavailable(errorData)
+{
+  debug.log('onMediaUnavailable()');
+  debug.log(errorData);
+  playbackEvents.dispatch(playbackEvents.EVENT.MEDIA_UNAVAILABLE, errorData, { 'skipToTrack': skipToTrack });
 }
 
 

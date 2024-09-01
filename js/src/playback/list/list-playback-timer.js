@@ -48,7 +48,7 @@ class ListPlaybackTimer extends PlaybackTimer
 
   updateVolumeMute()
   {
-    if (isPlaying())
+    if ((this.playedSeconds >= this.config.minPlayedSeconds) && isPlaying())
       this.#players.current.getVolume((volume) => updateVolumeMuteSettings(volume, this.#players.current.isMuted()));
   }
 }

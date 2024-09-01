@@ -40,7 +40,7 @@ const denyKeyboardShortcutsEvent  = new Event('denyKeyboardShortcuts');
 
 export function initArtistsChannels()
 {
-  debug.log('initArtistsChannels()');
+  debug.log('init()');
 
   m.listContainer = document.getElementById('termlist-container');
   m.uiElements    = new UiElements('#termlist-container');

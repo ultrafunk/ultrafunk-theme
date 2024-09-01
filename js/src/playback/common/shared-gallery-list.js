@@ -81,6 +81,10 @@ export function autoplayNavTo(destUrl, continueAutoplay = false)
 
 export function updateVolumeMuteSettings(currentVolume, isMuted)
 {
+  /*
+  console.log(`updateVolumeMuteSettings() - currentVolume: ${currentVolume} - isMuted: ${isMuted}`);
+  */
+
   // settings.playback.masterVolume has a range of 5 => 100% in multiples of 5 (5, 10, 15, 20 etc...)
   let multipleOf5Volume = (Math.round(currentVolume / 5) * 5);
 

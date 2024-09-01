@@ -174,6 +174,6 @@ export function showSnackbarLog()
   }
   else
   {
-    showModal({ modalTitle: 'Snackbar Message Log', modalBody: '<p>The snackbar message log is currently empty!</p>' });
+    showModal({ modalTitle: 'Snackbar Message Log', modalBody: '<p>The snackbar message log is currently empty...</p>' });
   }
 }

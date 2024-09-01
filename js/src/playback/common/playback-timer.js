@@ -22,11 +22,13 @@ export class PlaybackTimer
 {
   #intervalId     = -1;
   #lastPosSeconds = 0;
+  playedSeconds   = 0;
   isVisible       = true;
 
   config = {
     updateTimerInterval: 250, // Milliseconds between each timer event
     maxBufferingDelay:   3,   // VERY rough estimate of "max" network buffering delay in seconds
+    minPlayedSeconds:    3,   //
   };
 
   init()
@@ -39,6 +41,7 @@ export class PlaybackTimer
     addListener(EVENT.MEDIA_PLAYING,     () => this.start());
     addListener(EVENT.MEDIA_PAUSED,      () => this.stop());
     addListener(EVENT.MEDIA_ENDED,       () => this.stop());
+    addListener(EVENT.MEDIA_CUE_TRACK,   () => this.stop());
     addListener(EVENT.MEDIA_UNAVAILABLE, () => this.stop());
     addListener(EVENT.AUTOPLAY_BLOCKED,  () => this.stop());
   }
@@ -62,6 +65,8 @@ export class PlaybackTimer
     }
 
     this.#lastPosSeconds = 0;
+    this.playedSeconds   = 0;
+
     timeRemainingWarningBlink(false);
   }
 
@@ -70,6 +75,7 @@ export class PlaybackTimer
     if (this.#lastPosSeconds !== positionSeconds)
     {
       this.#lastPosSeconds = positionSeconds;
+      this.playedSeconds++;
       this.updateVolumeMute();
 
       if ((settings.playback.autoplay === false) && settings.playback.timeRemainingWarning)

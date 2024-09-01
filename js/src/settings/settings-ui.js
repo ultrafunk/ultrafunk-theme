@@ -60,7 +60,7 @@ const settingsSections = [
   { name: 'Gallery Player', id: 'gallery',      schema: settingsSchema.gallery      },
   { name: 'Mobile',         id: 'mobile',       schema: settingsSchema.mobile       },
   { name: 'Site',           id: 'site',         schema: settingsSchema.site         },
-//{ name: 'Experimental',   id: 'experimental', schema: settingsSchema.experimental },
+  { name: 'Experimental',   id: 'experimental', schema: settingsSchema.experimental },
 ];
 
 const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and Site settings</h3>
@@ -79,7 +79,7 @@ const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and
 
 export function initSettingsUi()
 {
-  debug.log('initSettingsUi');
+  debug.log('init()');
 
   m.container = document.getElementById(config.containerId);
 
@@ -237,8 +237,11 @@ function insertSettingsHtml()
 
   settingsSections.slice(1).forEach(entry =>
   {
-    html += `\n</tbody>\n</table>\n<h3>${entry.name}</h3>\n<table id="${entry.id}-settings" class="settings">\n<tbody>`;
-    Object.entries(entry.schema).forEach(row => (html += addTableRow(entry.id, row)));
+    if (Object.keys(entry.schema).length > 0)
+    {
+      html += `\n</tbody>\n</table>\n<h3>${entry.name}</h3>\n<table id="${entry.id}-settings" class="settings">\n<tbody>`;
+      Object.entries(entry.schema).forEach(row => (html += addTableRow(entry.id, row)));
+    }
   });
 
   m.container.insertAdjacentHTML('afterbegin', html + '\n</tbody>\n</table>\n');
