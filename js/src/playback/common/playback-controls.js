@@ -414,13 +414,13 @@ function updateVolumeMuteState()
 
   if (settings.playback.masterMute)
   {
-    ctrl.mute.element.title    = 'Muted (m to Unmute)';
+    ctrl.mute.element.title    = 'Muted (m to Unmute), Reset: shift + v';
     ctrl.mute.icon.textContent = 'volume_off';
     ctrl.volume.setState(STATE.DISABLED);
   }
   else
   {
-    ctrl.mute.element.title    = 'Unmuted (m to Mute)';
+    ctrl.mute.element.title    = 'Unmuted (m to Mute), Reset: shift + v';
     ctrl.mute.icon.textContent = (settings.playback.masterVolume > 50) ? 'volume_up' : 'volume_down_alt';
     ctrl.volume.setState(STATE.ENABLED);
   }

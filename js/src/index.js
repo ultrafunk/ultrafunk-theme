@@ -146,7 +146,7 @@ function documentEventKeyDown(event)
         break;
 
       case 'v':
-        if (searchNotFocused())
+        if (settings.site.snackbarMessageLog && searchNotFocused())
         {
           event.preventDefault();
           showSnackbarLog();

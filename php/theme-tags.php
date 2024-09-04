@@ -330,8 +330,8 @@ function header_playback_controls() : void
       <button type="button" class="playback-player-type-toggle state-disabled <?php echo (is_list_player() ? 'list-player' : 'gallery-player'); ?>" title="<?php echo $player_type_title; ?>">
         <span class="material-icons-sharp"><?php echo (is_list_player() ? 'vertical_split' : 'grid_view'); ?></span>
       </button>
-      <button type="button" class="playback-mute-toggle state-disabled" title="Mute / Unmute (m)"><span class="material-icons">volume_up</span></button>
-      <div class="playback-volume-control state-disabled" title="Volume (+ = Up, - = Down)">00</div>
+      <button type="button" class="playback-mute-toggle state-disabled" title="Mute / Unmute (m), Reset: shift + v"><span class="material-icons">volume_up</span></button>
+      <div class="playback-volume-control state-disabled" title="Volume (+ = Up, - = Down), Reset: shift + v">00</div>
     </div>
   </div>
   <?php

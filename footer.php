@@ -11,22 +11,22 @@
 <footer id="site-footer">
   <div class="site-footer-container">
     <div class="footer-settings">
-      <button type="button" id="footer-mute-toggle" title="Toggle Mute">
+      <button type="button" id="footer-mute-toggle" title="Toggle Mute (m)">
         <span class="label">Muted</span><span class="value">...</span>
       </button>
-      <button type="button" id="footer-volume-toggle" title="Reset Volume & Mute to default">
-        <span class="label">Volume</span><span class="volume-up" title="Volume Up">&#10140;</span><span class="volume-down" title="Volume Down">&#10140;</span><span class="value">...</span>
+      <button type="button" id="footer-volume-toggle" title="Reset Volume & Mute (shift + v)">
+        <span class="label">Volume</span><span class="volume-up" title="Volume Up (+)">&#10140;</span><span class="volume-down" title="Volume Down (-)">&#10140;</span><span class="value">...</span>
       </button>
       <a href="/settings/" id="footer-settings-button" title="Ultrafunk Settings">
         <span class="label">Settings</span><span class="material-icons">settings</span>
       </a>
-      <a href="<?php echo (\Ultrafunk\Plugin\Globals\is_list_player() ? '/' : '/list/'); ?>" id="footer-player-type-toggle" title="Gallery or List Player (p)">
+      <a href="<?php echo (\Ultrafunk\Plugin\Globals\is_list_player() ? '/' : '/list/'); ?>" id="footer-player-type-toggle" title="Toggle Gallery / List Player (p)">
         <span class="label">Pref. Player</span><span class="value">...</span>
       </a>
-      <button type="button" id="footer-autoplay-toggle" title="Toggle Autoplay On / Off (shift + a)">
+      <button type="button" id="footer-autoplay-toggle" title="Toggle Autoplay (shift + a)">
         <span class="label">Autoplay</span><span class="value">...</span>
       </button>
-      <button type="button" id="footer-crossfade-toggle" title="Toggle Auto Crossfade On / Off (x)">
+      <button type="button" id="footer-crossfade-toggle" title="Toggle Auto Crossfade (x)">
         <span class="label">Auto Crossfade</span><span class="value">...</span>
       </button>
       <button type="button" id="footer-site-theme-toggle" title="Light, Dark, Black or Auto / System (shift + t)">

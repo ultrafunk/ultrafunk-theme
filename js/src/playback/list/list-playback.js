@@ -68,11 +68,11 @@ export function init()
 
   listControls.init();
   initTrackSearch();
-  cueInitialTrack();
+  setInitialTrack();
   initEmbeddedPlayers(m.autoplayData, m.currentTrackId, getDataTrackTypeFromId(m.currentTrackId));
 }
 
-function cueInitialTrack()
+function setInitialTrack()
 {
   m.currentTrackId = listControls.getNextPlayableId();
   m.autoplayData   = JSON.parse(sessionStorage.getItem(KEY.UF_AUTOPLAY));
@@ -88,10 +88,10 @@ function cueInitialTrack()
       showSnackbar({ message: 'Unable to cue track (not found)', duration: 5 });
   }
 
-  listControls.setCuedTrack(m.currentTrackId);
+  listControls.setInitialTrack(m.currentTrackId);
 
   const trackTypeString = debug.getKeyForValue(TRACK_TYPE, getDataTrackTypeFromId(m.currentTrackId));
-  debug.log(`cueInitialTrack() - trackType: ${trackTypeString} - currentTrackId: ${m.currentTrackId} - autoplayData: ${(m.autoplayData !== null) ? JSON.stringify(m.autoplayData) : 'N/A'}`);
+  debug.log(`setInitialTrack() - trackType: ${trackTypeString} - currentTrackId: ${m.currentTrackId} - autoplayData: ${(m.autoplayData !== null) ? JSON.stringify(m.autoplayData) : 'N/A'}`);
 }
 
 

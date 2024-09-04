@@ -144,7 +144,7 @@ export function getNextPlayableId(startElement = m.trackElement)
   return ((destElement !== null) ? destElement.id : null);
 }
 
-export function setCuedTrack(trackId)
+export function setInitialTrack(trackId)
 {
   m.trackElement = queryTrackId(trackId);
   m.tracklistObserver.observe(m.trackElement);

@@ -30,6 +30,7 @@ export const KEY = {
   UF_PRESET_LIST:      'uf_preset_list',
   UF_SITE_THEME:       'uf_site_theme',
   UF_GALLERY_LAYOUT:   'uf_gallery_layout',
+  UF_MESSAGE_LOGS:     'uf_message_logs',
 //document.cookie keys
 //ToDo: Merge all cookies into one cookie (UF_USER_SETTINGS) as a JSON encoded string?
 //UF_USER_SETTINGS:    'uf_user_settings',

@@ -7,6 +7,8 @@
 
 import { newDebugLogger }      from './debuglogger.js';
 import { showModal }           from './modal.js';
+import { settings }            from './session-data.js';
+import { KEY }                 from './storage.js';
 import { MATCH, matchesMedia } from './utils.js';
 
 
@@ -57,7 +59,9 @@ export function showSnackbar({
 
   initElements();
   resetState(false);
-  addToLog(message);
+
+  if (settings.site.snackbarMessageLog)
+    writeLog(message);
 
   elements.snackbar.querySelector('.snackbar-message').innerHTML = message;
   elements.snackbar.querySelector('.snackbar-container').style = `background-color: ${backgroundColorCssVal};`;
@@ -156,20 +160,50 @@ function resetState(hideSnackbar = false)
     elements.snackbar.className = '';
 }
 
-function addToLog(message)
+
+// ************************************************************************************************
+//
+// ************************************************************************************************
+
+function writeLog(message)
 {
-  if (m.messageLog.length >= 10)
+  readLog();
+
+  if (m.messageLog.length >= 15)
     m.messageLog.shift();
 
-  m.messageLog.push({ time: new Date().toISOString().slice(11, 19), message: message });
+  m.messageLog.push({ timestamp: Date.now(), message: message });
+
+  localStorage.setItem(KEY.UF_MESSAGE_LOGS, JSON.stringify({ snackbarLog: m.messageLog }));
+}
+
+function readLog()
+{
+  if (m.messageLog.length === 0)
+  {
+    const messageLogs = JSON.parse(localStorage.getItem(KEY.UF_MESSAGE_LOGS));
+
+    if ((messageLogs !== null) && (messageLogs.snackbarLog !== undefined))
+      m.messageLog = messageLogs.snackbarLog;
+  }
 }
 
 export function showSnackbarLog()
 {
+  readLog();
+
   if (m.messageLog.length > 0)
   {
     let html = '<p class="text-nowrap-ellipsis">';
-    m.messageLog.forEach((entry) => html += `<b>${entry.time}</b> - ${entry.message}</br>`);
+
+    m.messageLog.forEach((entry) =>
+    {
+      const dateString = new Date(entry.timestamp).toDateString().slice(0, 11);
+      const timeString = new Date(entry.timestamp).toTimeString().slice(0, 8);
+
+      html += `<span class="normal-text">${dateString}</span> at <span class="normal-text">${timeString}</span> - ${entry.message}</br>`;
+    });
+
     showModal({ modalTitle: 'Snackbar Message Log', modalBody: html + '</p>' });
   }
   else

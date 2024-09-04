@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 38, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 39, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -80,6 +80,7 @@ export const settingsSchema = {
   },
   site: {
     keyboardShortcuts:   { description: 'Keyboard Shortcuts',                    type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
+    snackbarMessageLog:  { description: 'Enable Snackbar message log',           type: BOOLEAN, values: [true, false],                        default: false,  valueStrings: ['ON', 'OFF'] },
     theme:               { description: 'Theme',                                 type: STRING,  values: ['light', 'dark', 'black', 'auto'],   default: 'auto', valueStrings: ['Light', 'Dark', 'Black', 'Auto / System'] },
     smoothScrolling:     { description: 'Use Smooth Scrolling (where possible)', type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
     overlayOpacity:      { description: 'Overlay opacity',                       type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
@@ -139,6 +140,7 @@ export const defaultSettings = {
   },
   site: {
     keyboardShortcuts:   settingsSchema.site.keyboardShortcuts.default,
+    snackbarMessageLog:  settingsSchema.site.snackbarMessageLog.default,
     theme:               settingsSchema.site.theme.default,
     smoothScrolling:     settingsSchema.site.smoothScrolling.default,
     overlayOpacity:      settingsSchema.site.overlayOpacity.default,
@@ -158,6 +160,9 @@ export const settingsDescriptions = {
   playback: {
     pauseOnPlayerChange: "Pause all ultrafunk.com playback in other browser tabs and windows when starting track playback in a new player.",
   },
+  site: {
+    snackbarMessageLog: "The 15 last snackbar (toast) messages shown on ultrafunk.com are stored with a timestamp and can be viewed by pressing <b>v</b>.",
+  }
 };
 
 

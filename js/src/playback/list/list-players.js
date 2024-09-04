@@ -9,6 +9,7 @@ import { VOLUME }    from "../gallery/crossfade.js";
 import { THEME_ENV } from "../../config.js";
 
 import {
+  onYouTubePlayerStateChange,
   onSoundCloudPlayerStateChange,
   onLocalPlayerStateChange,
   onPlayerError,
@@ -20,6 +21,12 @@ import {
   getYouTubeThumbnailUrl,
   getSoundCloudThumbnailUrl,
 } from "../common/mediaplayer.js";
+
+
+/*************************************************************************************************/
+
+
+export const UF_PlayerState = { READY: 'ready' };
 
 
 // ************************************************************************************************
@@ -47,6 +54,7 @@ class YouTubePlayer extends MediaPlayer
   {
     this.embedded.cueVideoById(sourceUid, positionSeconds);
     this.setIsCued(true);
+    onYouTubePlayerStateChange({ data: UF_PlayerState.READY });
 
     return true;
   }
@@ -55,6 +63,7 @@ class YouTubePlayer extends MediaPlayer
   {
     this.embedded.loadVideoById(sourceUid, positionSeconds);
     this.setIsCued(false);
+    onYouTubePlayerStateChange({ data: UF_PlayerState.READY });
 
     return true;
   }
@@ -149,7 +158,7 @@ class SoundCloudPlayer extends MediaPlayer
       this.embedded.getCurrentSound((soundObject) =>
       {
         this.setThumbnail(null, soundObject);
-        onSoundCloudPlayerStateChange('ready');
+        onSoundCloudPlayerStateChange(UF_PlayerState.READY);
 
         if (playTrack)
           this.#playSoundObject(soundObject);
