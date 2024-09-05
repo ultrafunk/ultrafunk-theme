@@ -11,16 +11,12 @@ import * as playbackControls from '../common/playback-controls.js';
 import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { TRACK_TYPE }        from '../common/mediaplayer.js';
 import { initLocalTracks }   from './local-tracks.js';
+import { ListPlayers }       from './list-players.js';
 import { settings }          from '../../shared/session-data.js';
 import { STATE }             from '../common/element-wrappers.js';
 import { getTimeString }     from '../../shared/utils.js';
 import { PlaybackLog }       from '../common/eventlogger.js';
 import { onEmbeddedPlayersReady } from './list-playback.js';
-
-import {
-  UF_PlayerState,
-  ListPlayers,
-} from './list-players.js';
 
 
 /*************************************************************************************************/
@@ -77,11 +73,6 @@ export function onPlayerError(trackType, errorNum = 0)
 {
   if (trackType === TRACK_TYPE.YOUTUBE)
   {
-    // Discard errors if the trackType param and the current playing track type don't match,
-    // this will happen if the initially loaded track is not TRACK_TYPE.YOUTUBE
-    if (m.players.current.getTrackType() !== TRACK_TYPE.YOUTUBE)
-      return;
-
     m.players.current.setPlayerError(errorNum);
   }
   else if (trackType === TRACK_TYPE.SOUNDCLOUD)
@@ -117,7 +108,7 @@ function onInitialPlayerCued()
         if ((playbackControls.getProgressPercent() === 100) && (playbackControls.isPlaying() === false))
           playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_LOADING, { loadingPercent: 0 });
       },
-      200);
+      150);
     }
 
     if ((m.autoplayData?.autoplay === true) && (m.initialPlayerType === TRACK_TYPE.SOUNDCLOUD))
@@ -175,16 +166,9 @@ function setPlayerVolumeMute()
 
 function initYouTubePlayer()
 {
-  const videoId = (m.initialPlayerType === TRACK_TYPE.YOUTUBE)
-    ? listControls.getCurrentTrackElement().getAttribute('data-track-source-uid')
-    : '';
-
   // eslint-disable-next-line no-undef
   const player = new YT.Player('youtube-player',
   {
-    videoId: videoId,
-    height: '',
-    width: '',
     events:
     {
       onReady:           () => onPlayerReady(TRACK_TYPE.YOUTUBE),
@@ -200,14 +184,13 @@ function initYouTubePlayer()
   return player;
 }
 
-export function onYouTubePlayerStateChange(event)
+function onYouTubePlayerStateChange(event)
 {
   if (m.players.current.getTrackType() !== TRACK_TYPE.YOUTUBE)
     return;
 
   // eslint-disable-next-line no-undef
-  const playerStateString = (event.data !== UF_PlayerState.READY) ? debug.getKeyForValue(YT.PlayerState, event.data) : UF_PlayerState.READY.toUpperCase();
-  debug.log(`onYouTubePlayerStateChange: ${playerStateString} (trackId: ${m.currentTrackId})`);
+  debug.log(`onYouTubePlayerStateChange: ${debug.getKeyForValue(YT.PlayerState, event.data)} (trackId: ${m.currentTrackId})`);
 
   // Set playback controls state to current YouTube Player state so we have a single source of truth:
   // playbackControls.isPlaying()
@@ -216,14 +199,8 @@ export function onYouTubePlayerStateChange(event)
 
   switch (event.data)
   {
-    /*
     // eslint-disable-next-line no-undef
     case YT.PlayerState.UNSTARTED:
-      onInitialPlayerCued();
-      break;
-    */
-
-    case UF_PlayerState.READY:
       onInitialPlayerCued();
       break;
 
@@ -277,7 +254,7 @@ export function onSoundCloudPlayerStateChange(playerState)
 
   switch (playerState)
   {
-    case UF_PlayerState.READY:
+    case 'ready':
       {
         onInitialPlayerCued();
         setPlayerVolumeMute();

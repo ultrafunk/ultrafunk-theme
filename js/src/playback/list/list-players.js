@@ -9,7 +9,6 @@ import { VOLUME }    from "../gallery/crossfade.js";
 import { THEME_ENV } from "../../config.js";
 
 import {
-  onYouTubePlayerStateChange,
   onSoundCloudPlayerStateChange,
   onLocalPlayerStateChange,
   onPlayerError,
@@ -21,12 +20,6 @@ import {
   getYouTubeThumbnailUrl,
   getSoundCloudThumbnailUrl,
 } from "../common/mediaplayer.js";
-
-
-/*************************************************************************************************/
-
-
-export const UF_PlayerState = { READY: 'ready' };
 
 
 // ************************************************************************************************
@@ -54,7 +47,6 @@ class YouTubePlayer extends MediaPlayer
   {
     this.embedded.cueVideoById(sourceUid, positionSeconds);
     this.setIsCued(true);
-    onYouTubePlayerStateChange({ data: UF_PlayerState.READY });
 
     return true;
   }
@@ -63,7 +55,6 @@ class YouTubePlayer extends MediaPlayer
   {
     this.embedded.loadVideoById(sourceUid, positionSeconds);
     this.setIsCued(false);
-    onYouTubePlayerStateChange({ data: UF_PlayerState.READY });
 
     return true;
   }
@@ -83,11 +74,11 @@ class YouTubePlayer extends MediaPlayer
     }
   }
 
-  pause()       { this.embedded.pauseVideo();     }
-  stop()        { this.embedded.stopVideo();      }
-  mute()        { this.embedded.mute();           }
-  unMute()      { this.embedded.unMute();         }
-  isMuted()     { return this.embedded.isMuted(); }
+  pause()   { this.embedded.pauseVideo();     }
+  stop()    { this.embedded.stopVideo();      }
+  mute()    { this.embedded.mute();           }
+  unMute()  { this.embedded.unMute();         }
+  isMuted() { return this.embedded.isMuted(); }
 
   getVolume(callback)
   {
@@ -158,7 +149,7 @@ class SoundCloudPlayer extends MediaPlayer
       this.embedded.getCurrentSound((soundObject) =>
       {
         this.setThumbnail(null, soundObject);
-        onSoundCloudPlayerStateChange(UF_PlayerState.READY);
+        onSoundCloudPlayerStateChange('ready');
 
         if (playTrack)
           this.#playSoundObject(soundObject);
