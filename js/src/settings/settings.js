@@ -80,10 +80,10 @@ export const settingsSchema = {
   },
   site: {
     keyboardShortcuts:   { description: 'Keyboard Shortcuts',                    type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
-    snackbarMessageLog:  { description: 'Enable Snackbar message log',           type: BOOLEAN, values: [true, false],                        default: false,  valueStrings: ['ON', 'OFF'] },
     theme:               { description: 'Theme',                                 type: STRING,  values: ['light', 'dark', 'black', 'auto'],   default: 'auto', valueStrings: ['Light', 'Dark', 'Black', 'Auto / System'] },
     smoothScrolling:     { description: 'Use Smooth Scrolling (where possible)', type: BOOLEAN, values: [true, false],                        default: true,   valueStrings: ['ON', 'OFF'] },
     overlayOpacity:      { description: 'Overlay opacity',                       type: INTEGER, values: [10, 20, 30, 40, 50, 60, 70, 80, 90], default: 60,     valueStrings: ['10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%'] },
+    snackbarMessageLog:  { description: 'Enable Snackbar message log',           type: BOOLEAN, values: [true, false],                        default: false,  valueStrings: ['ON', 'OFF'] },
   },
   internal: {
   //showSiteInfoOnLoad: { description: '', type: BOOLEAN, values: [true, false], default: true, valueStrings: [] },
@@ -140,10 +140,10 @@ export const defaultSettings = {
   },
   site: {
     keyboardShortcuts:   settingsSchema.site.keyboardShortcuts.default,
-    snackbarMessageLog:  settingsSchema.site.snackbarMessageLog.default,
     theme:               settingsSchema.site.theme.default,
     smoothScrolling:     settingsSchema.site.smoothScrolling.default,
     overlayOpacity:      settingsSchema.site.overlayOpacity.default,
+    snackbarMessageLog:  settingsSchema.site.snackbarMessageLog.default,
   },
   internal: {
   //showSiteInfoOnLoad: settingsSchema.internal.showSiteInfoOnLoad.default,

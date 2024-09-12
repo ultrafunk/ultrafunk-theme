@@ -34,7 +34,8 @@ export function getModalListHtml(modalList, modalItemsCount = 0)
 
   modalList.forEach((entry, index) =>
   {
-    const entryClass      = entry.class      ? `modal-${entry.class}`                                                            : 'modal-icon-text';
+    let   entryClass      = entry.class      ? `modal-${entry.class}`                                                            : 'modal-icon-text';
+          entryClass      = entry.state      ? `${entryClass} state-${entry.state}`                                              : entryClass;
     const entryTitle      = entry.title      ? entry.title                                                                       : '';
     const entryIcon       = entry.icon       ? `<span class="material-icons default-icon">${entry.icon}</span>`                  : '';
     const hoverTitle      = entry.hoverTitle ?  `title="${entry.hoverTitle}"`                                                    : '';

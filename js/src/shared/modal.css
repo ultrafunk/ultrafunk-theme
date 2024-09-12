@@ -148,6 +148,11 @@
   overflow-wrap: anywhere;
 }
 
+.modal-click-item.state-disabled {
+  pointer-events: none;
+  color: rgba(256, 256, 256, 0.33);
+}
+
 .modal-click-item.modal-hover-icon-text {
   padding: 0px 30px 0px 22px;
 }
