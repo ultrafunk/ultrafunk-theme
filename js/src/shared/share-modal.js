@@ -56,6 +56,11 @@ const shareModalClosure = (() =>
       ? encodeURIComponent(bodyText.replace(filterBodyTextRegEx, ' '))
       : encodeURIComponent(bodyText);
 
+    // If input device is touch, Spotify needs a different search link
+    const spotifyLink = (window.matchMedia('(pointer: coarse)').matches)
+      ? `https://open.spotify.com/search/results/${searchString}`
+      : `https://open.spotify.com/search/${searchString}`;
+
     const youTubeLink = (trackType === TRACK_TYPE.YOUTUBE)
       ? `https://music.youtube.com/watch?v=${trackSourceUid}`
       : `https://music.youtube.com/search?q=${searchString}`;
@@ -67,13 +72,9 @@ const shareModalClosure = (() =>
       { icon: icon,           content: `<b>${verb}</b> on Amazon Music`,  link: `https://music.amazon.com/search/${searchString}`,        linkTarget: '_blank' },
       { icon: icon,           content: `<b>${verb}</b> on Apple Music`,   link: `https://music.apple.com/ca/search?term=${searchString}`, linkTarget: '_blank' },
       { icon: icon,           content: `<b>${verb}</b> on SoundCloud`,    link: `https://${trackSourceUid}`,                              linkTarget: '_blank' },
-      { icon: icon,           content: `<b>${verb}</b> on Spotify`,       link: `https://open.spotify.com/search/${searchString}`,        linkTarget: '_blank' },
+      { icon: icon,           content: `<b>${verb}</b> on Spotify`,       link: spotifyLink,                                              linkTarget: '_blank' },
       { icon: icon,           content: `<b>${verb}</b> on YouTube Music`, link: youTubeLink,                                              linkTarget: '_blank' },
     ];
-
-    // If input device is touch, Spotify needs a different search link
-    if (window.matchMedia('(pointer: coarse)').matches)
-      modalList[5].link = `https://open.spotify.com/search/results/${searchString}`;
 
     if (trackType === TRACK_TYPE.LOCAL)
     {

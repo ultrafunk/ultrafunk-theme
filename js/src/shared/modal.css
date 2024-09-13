@@ -150,7 +150,7 @@
 
 .modal-click-item.state-disabled {
   pointer-events: none;
-  color: rgba(256, 256, 256, 0.33);
+  opacity: 0.4;
 }
 
 .modal-click-item.modal-hover-icon-text {
