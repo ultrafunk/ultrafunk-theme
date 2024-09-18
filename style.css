@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.48.15
+Version:           1.48.16
 Requires at least: 6.6
 Tested up to:      6.6.1
 Requires PHP:      8.3
@@ -176,6 +176,7 @@ body.no-playback .scrolling-up #site-search-container form {
 
 input[type=search]{
   -webkit-appearance: textfield; /* Safari / WebKit only fix so we can style <input type="search"> */
+  appearance: textfield;
 }
 
 input:-webkit-autofill {

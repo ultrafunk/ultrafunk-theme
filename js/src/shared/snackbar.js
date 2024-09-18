@@ -194,17 +194,31 @@ export function showSnackbarLog()
 
   if (m.messageLog.length > 0)
   {
-    let html = '<p class="text-nowrap-ellipsis">';
+    const tableHeader = /*html*/
+      `<table>
+        <tr>
+          <td><b>Date</b></td>
+          <td class="spacer"></td>
+          <td><b>Time</b></td>
+          <td class="spacer"></td>
+          <td><b>Message</b></td>
+        </tr>`;
+
+    let htmlTable = tableHeader;
 
     m.messageLog.forEach((entry) =>
     {
-      const dateString = new Date(entry.timestamp).toDateString().slice(0, 11);
-      const timeString = new Date(entry.timestamp).toTimeString().slice(0, 8);
-
-      html += `<span class="normal-text">${dateString}</span> at <span class="normal-text">${timeString}</span> - ${entry.message}</br>`;
+      htmlTable += /*html*/
+        `<tr>
+          <td class="normal-text nowrap">${new Date(entry.timestamp).toDateString().slice(4, 10)}</td>
+          <td class="spacer"></td>
+          <td class="normal-text nowrap">${new Date(entry.timestamp).toTimeString().slice(0, 5)}</td>
+          <td class="spacer"></td>
+          <td>${entry.message}</td>
+        </tr>`;
     });
 
-    showModal({ modalTitle: 'Snackbar Message Log', modalBody: html + '</p>' });
+    showModal({ modalTitle: 'Snackbar Message Log', modalBody: htmlTable + '</table>' });
   }
   else
   {

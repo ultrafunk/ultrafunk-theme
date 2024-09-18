@@ -124,10 +124,31 @@
   opacity: var(--control-hover-opacity);
 }
 
-.modal-dialog-body p {
+.modal-dialog-body p,
+.modal-dialog-body table {
   margin: 0 30px 25px 30px;
   font-size: 20px;
   line-height: 30px;
+}
+
+.modal-dialog-body table {
+  border-collapse: collapse;
+}
+
+.modal-dialog-body tr {
+  border-bottom: 1px solid #777;
+}
+
+.modal-dialog-body td {
+  padding: 2px 0;
+}
+
+.modal-dialog-body td.nowrap {
+  white-space: nowrap;
+}
+
+.modal-dialog-body td.spacer {
+  width: 20px;
 }
 
 .modal-header-entry {
@@ -257,7 +278,8 @@ a.modal-click-item:hover {
 
 @media screen and (max-width: 1100px) {
 
-  .modal-dialog-body p {
+  .modal-dialog-body p,
+  .modal-dialog-body table {
     font-size: unset;
     line-height: unset;
   }
@@ -317,10 +339,23 @@ a.modal-click-item:hover {
     font-size: 32px;
   }
 
-  .modal-dialog-body p {
+  .modal-dialog-body p,
+  .modal-dialog-body table {
     margin: 0 20px 20px 20px;
     font-size: 14px;
     line-height: 22px;
+  }
+
+  .modal-dialog-body table {
+    width: calc(100% - (20px + 20px));
+  }
+
+  .modal-dialog-body td {
+    padding: 1px 0;
+  }
+
+  .modal-dialog-body td.spacer {
+    width: 15px;
   }
 
   .modal-header-entry {
