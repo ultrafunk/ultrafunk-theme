@@ -188,31 +188,40 @@ function readLog()
   }
 }
 
+const logTableHeaderHtml = /*html*/
+  `<table>
+    <tr>
+      <td><b>Date</b></td>
+      <td class="spacer"></td>
+      <td><b>Time</b></td>
+      <td class="spacer"></td>
+      <td><b>Message</b></td>
+    </tr>`;
+
 export function showSnackbarLog()
 {
   readLog();
 
   if (m.messageLog.length > 0)
   {
-    const tableHeader = /*html*/
-      `<table>
-        <tr>
-          <td><b>Date</b></td>
-          <td class="spacer"></td>
-          <td><b>Time</b></td>
-          <td class="spacer"></td>
-          <td><b>Message</b></td>
-        </tr>`;
-
-    let htmlTable = tableHeader;
+    const matchesMobile = matchesMedia(MATCH.SITE_MAX_WIDTH_MOBILE);
+    let htmlTable = logTableHeaderHtml;
 
     m.messageLog.forEach((entry) =>
     {
+      const dateString = matchesMobile
+        ? new Date(entry.timestamp).toDateString().slice(4, 10)
+        : new Date(entry.timestamp).toDateString().slice(0, 10);
+
+      const tiemString = matchesMobile
+        ? new Date(entry.timestamp).toTimeString().slice(0, 5)
+        : new Date(entry.timestamp).toTimeString().slice(0, 8);
+
       htmlTable += /*html*/
         `<tr>
-          <td class="normal-text nowrap">${new Date(entry.timestamp).toDateString().slice(4, 10)}</td>
+          <td class="normal-text nowrap">${dateString}</td>
           <td class="spacer"></td>
-          <td class="normal-text nowrap">${new Date(entry.timestamp).toTimeString().slice(0, 5)}</td>
+          <td class="normal-text nowrap">${tiemString}</td>
           <td class="spacer"></td>
           <td>${entry.message}</td>
         </tr>`;

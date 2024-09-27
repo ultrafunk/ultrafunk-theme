@@ -133,6 +133,7 @@
 
 .modal-dialog-body table {
   border-collapse: collapse;
+  width: calc(100% - (30px + 30px));
 }
 
 .modal-dialog-body tr {

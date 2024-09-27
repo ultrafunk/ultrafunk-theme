@@ -21,7 +21,7 @@ const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.48.16';
+const VERSION = '1.48.18';
 
 define('ULTRAFUNK_THEME_URI', esc_url(get_template_directory_uri()));
 
@@ -45,4 +45,4 @@ const THEME_ENV = [
 ];
 
 // Automatically updated on 'npm run build-dev' or 'npm run build-prod'
-const JS_PRELOAD_CHUNK = '/js/dist/chunk-HGWRV7JC.js';
+const JS_PRELOAD_CHUNK = '/js/dist/chunk-D63OPCY2.js';

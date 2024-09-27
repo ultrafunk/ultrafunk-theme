@@ -48,10 +48,7 @@ export function fetchRest({
 
   debug.log(`"${restRequest}" - timeout: ${timeoutSeconds} sec.`);
 
-  const controller = new AbortController();
-  setTimeout(() => controller.abort(), (timeoutSeconds * 1000));
-
-  return fetch(restRequest, { signal: controller.signal })
+  return fetch(restRequest, { signal: AbortSignal.timeout(timeoutSeconds * 1000) })
   .then(async (response) =>
   {
     if (!response.ok)

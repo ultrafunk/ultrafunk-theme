@@ -90,8 +90,12 @@ function setInitialTrack()
 
   listControls.setInitialTrack(m.currentTrackId);
 
-  const trackTypeString = debug.getKeyForValue(TRACK_TYPE, getDataTrackTypeFromId(m.currentTrackId));
-  debug.log(`setInitialTrack() - trackType: ${trackTypeString} - currentTrackId: ${m.currentTrackId} - autoplayData: ${(m.autoplayData !== null) ? JSON.stringify(m.autoplayData) : 'N/A'}`);
+  const trackType = getDataTrackTypeFromId(m.currentTrackId);
+
+  debug.log(`setInitialTrack() - trackType: ${debug.getKeyForValue(TRACK_TYPE, trackType)} - currentTrackId: ${m.currentTrackId} - autoplayData: ${(m.autoplayData !== null) ? JSON.stringify(m.autoplayData) : 'N/A'}`);
+
+  if (trackType === TRACK_TYPE.SOUNDCLOUD)
+    listControls.showTrackTypePlayer(trackType);
 }
 
 
@@ -341,7 +345,9 @@ export function onEmbeddedPlayersReady(players, initialTrackType)
   listControls.ready();
 
   m.players.setCurrentPlayer(initialTrackType);
-  listControls.showTrackTypePlayer(initialTrackType);
+
+  if (initialTrackType !== TRACK_TYPE.SOUNDCLOUD)
+    listControls.showTrackTypePlayer(initialTrackType);
 
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: false });
   cueOrPlayCurrentTrack((m.autoplayData?.autoplay === true), (m.autoplayData?.position ?? 0));

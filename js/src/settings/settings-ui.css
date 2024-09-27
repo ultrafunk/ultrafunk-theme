@@ -23,6 +23,16 @@
   transition: opacity 250ms;
 }
 
+.show-snackbar-log {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.show-snackbar-log:hover,
+.show-snackbar-log:active {
+  text-decoration: underline;
+}
+
 table.settings {
   border-collapse: collapse;
   table-layout: fixed;

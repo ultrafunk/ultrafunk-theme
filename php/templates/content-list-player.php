@@ -21,6 +21,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
   protected function render_response() : void
   {
     $is_first_video = $this->is_video(get_object_term_cache($this->query_result[0]->ID, 'uf_channel'));
+    $soundcloud_url = 'https://api.soundcloud.com/tracks/';
 
     ?>
     <div id="list-players-container" class="players-container">
@@ -34,7 +35,7 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
       </div>
       <div class="embedded-container soundcloud-container">
         <div class="wp-block-embed__wrapper">
-          <iframe id="soundcloud-player" allow="autoplay" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?visual=true&single_active=true&show_artwork=true"></iframe>
+          <iframe id="soundcloud-player" allow="autoplay" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $soundcloud_url; ?>&visual=true&single_active=true&show_artwork=true"></iframe>
         </div>
       </div>
       <div class="embedded-container local-container">

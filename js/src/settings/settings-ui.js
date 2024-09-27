@@ -6,8 +6,12 @@
 
 
 import { newDebugLogger } from '../shared/debuglogger.js';
-import { showSnackbar }   from '../shared/snackbar.js';
 import { showModal }      from '../shared/modal.js';
+
+import {
+  showSnackbar,
+  showSnackbarLog,
+} from '../shared/snackbar.js';
 
 import {
   addListener,
@@ -63,15 +67,6 @@ const settingsSections = [
   { name: 'Experimental',   id: 'experimental', schema: settingsSchema.experimental },
 ];
 
-const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and Site settings</h3>
-  <p>This can be caused by several issues, but most likely it happened because of corrupt or malformed JSON data in the browsers Local Storage.</p>
-  <p>Clearing all settings stored locally in the browser will probably fix the problem, click on the button below to do that.
-  <b>Note:</b> All Playback and Site settings will be reset to default values.</p>
-  <div class="settings-clear-container"><button type="button" class="settings-clear-button"><b>Clear All Settings</b></button></div>
-  <p>If that does not work, another possible fix is to clear all cached data stored in the browser, the following links contain more information about how to do that for
-  <a href="https://support.google.com/accounts/answer/32050">Chrome</a> and
-  <a href="https://support.mozilla.org/en-US/kb/clear-cookies-and-site-data-firefox">Firefox</a>.</p>`;
-
 
 // ************************************************************************************************
 // Init + settings read error handling
@@ -107,6 +102,7 @@ export function initSettingsUi()
       addListener(`#${config.saveResetId} .settings-reset-button`, 'click', settingsResetClick);
 
       initSaveChangesPrompt();
+      initViewSnackbarLog();
     }
     else
     {
@@ -114,6 +110,61 @@ export function initSettingsUi()
     }
   }
 }
+
+function initSaveChangesPrompt()
+{
+  window.addEventListener('beforeunload', (event) =>
+  {
+    m.container.querySelectorAll('table tr')?.forEach(tableRow =>
+    {
+      if (tableRow.classList.contains('value-changed'))
+      {
+        event.preventDefault();
+        event.returnValue = true;
+      }
+    });
+  });
+}
+
+function initViewSnackbarLog()
+{
+  if (m.settings.site.snackbarMessageLog)
+  {
+    const html = ' <span title="Click / tap to view log" class="show-snackbar-log">View Snackbar Message Log</span>.';
+    document.querySelector('.entry-content p').insertAdjacentHTML('beforeend', html);
+    document.querySelector('.entry-content .show-snackbar-log').addEventListener('click', () => showSnackbarLog());
+  }
+}
+
+
+// ************************************************************************************************
+// Read and write settings JSON data
+// ************************************************************************************************
+
+function readSettings(setDefault = false)
+{
+  m.settings = readJson(KEY.UF_SETTINGS, setDefault ? defaultSettings : null, setDefault);
+}
+
+function writeSettings()
+{
+  writeJson(KEY.UF_SETTINGS, m.settings);
+
+  setCookie(KEY.UF_GALLERY_PER_PAGE, m.settings.gallery.tracksPerPage,    (YEAR_IN_SECONDS * 5));
+  setCookie(KEY.UF_LIST_PER_PAGE,    m.settings.list.tracksPerPage,       (YEAR_IN_SECONDS * 5));
+  setCookie(KEY.UF_PREFERRED_PLAYER, m.settings.playback.preferredPlayer, (YEAR_IN_SECONDS * 5));
+
+  document.dispatchEvent(m.updatedEvent);
+}
+
+const errorTemplate = /*html*/ `<h3>An error occurred while reading Playback and Site settings</h3>
+  <p>This can be caused by several issues, but most likely it happened because of corrupt or malformed JSON data in the browsers Local Storage.</p>
+  <p>Clearing all settings stored locally in the browser will probably fix the problem, click on the button below to do that.
+  <b>Note:</b> All Playback and Site settings will be reset to default values.</p>
+  <div class="settings-clear-container"><button type="button" class="settings-clear-button"><b>Clear All Settings</b></button></div>
+  <p>If that does not work, another possible fix is to clear all cached data stored in the browser, the following links contain more information about how to do that for
+  <a href="https://support.google.com/accounts/answer/32050">Chrome</a> and
+  <a href="https://support.mozilla.org/en-US/kb/clear-cookies-and-site-data-firefox">Firefox</a>.</p>`;
 
 function readSettingsError()
 {
@@ -151,42 +202,6 @@ function readSettingsError()
       showSnackbar({ message: 'Sorry, unable to clear all settings', duration: 5 });
     }
   });
-}
-
-function initSaveChangesPrompt()
-{
-  window.addEventListener('beforeunload', (event) =>
-  {
-    m.container.querySelectorAll('table tr')?.forEach(tableRow =>
-    {
-      if (tableRow.classList.contains('value-changed'))
-      {
-        event.preventDefault();
-        event.returnValue = true;
-      }
-    });
-  });
-}
-
-
-// ************************************************************************************************
-// Read and write settings JSON data
-// ************************************************************************************************
-
-function readSettings(setDefault = false)
-{
-  m.settings = readJson(KEY.UF_SETTINGS, setDefault ? defaultSettings : null, setDefault);
-}
-
-function writeSettings()
-{
-  writeJson(KEY.UF_SETTINGS, m.settings);
-
-  setCookie(KEY.UF_GALLERY_PER_PAGE, m.settings.gallery.tracksPerPage,    (YEAR_IN_SECONDS * 5));
-  setCookie(KEY.UF_LIST_PER_PAGE,    m.settings.list.tracksPerPage,       (YEAR_IN_SECONDS * 5));
-  setCookie(KEY.UF_PREFERRED_PLAYER, m.settings.playback.preferredPlayer, (YEAR_IN_SECONDS * 5));
-
-  document.dispatchEvent(m.updatedEvent);
 }
 
 
