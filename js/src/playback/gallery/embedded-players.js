@@ -19,7 +19,7 @@ import {
 
 import {
   TRACK_TYPE,
-  getDataTrackType
+  getAttrTrackType
 } from '../common/mediaplayer.js';
 
 import {
@@ -88,7 +88,7 @@ function getAllPlayers()
 
   elements.forEach(element =>
   {
-    const trackType = getDataTrackType(element);
+    const trackType = getAttrTrackType(element);
     const iframe    = element.querySelector('iframe');
     let player      = null;
 

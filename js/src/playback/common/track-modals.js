@@ -13,7 +13,7 @@ import { isListPlayer }        from './shared-gallery-list.js';
 
 import {
   TRACK_TYPE,
-  getDataTrackType,
+  getAttrTrackType,
 } from './mediaplayer.js';
 
 import {
@@ -44,7 +44,7 @@ export function showTrackSharePlay(element, onCloseFocusElement = null)
     bodyHtml:       getModalTrackHtml(element, trackArtist, trackTitle),
     url:            stripAttribute(element, 'data-track-url'),
     urlType:        'Track Link',
-    trackType:      getDataTrackType(element),
+    trackType:      getAttrTrackType(element),
     trackSourceUid: stripAttribute(element, 'data-track-source-uid'),
     onCloseFocusElement: onCloseFocusElement,
   });
@@ -68,7 +68,7 @@ export function showTrackDetails(element, onCloseFocusElement = null)
 
   const modalTitle = `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? getTimeString(trackDuration) : 'duration N/A')}</span>`;
 
-  if (getDataTrackType(element) === TRACK_TYPE.LOCAL)
+  if (getAttrTrackType(element) === TRACK_TYPE.LOCAL)
     getLocalTrackDetails(element, modalEntries);
   else
     getTrackDetails(element, modalEntries);
@@ -133,8 +133,8 @@ function getTrackDetails(element, modalEntries)
     });
   });
 
-  const trackType = (getDataTrackType(element) === TRACK_TYPE.YOUTUBE) ? 'YouTube' : 'SoundCloud';
-  const trackLink = (getDataTrackType(element) === TRACK_TYPE.YOUTUBE)
+  const trackType = (getAttrTrackType(element) === TRACK_TYPE.YOUTUBE) ? 'YouTube' : 'SoundCloud';
+  const trackLink = (getAttrTrackType(element) === TRACK_TYPE.YOUTUBE)
     ? encodeURI(`https://music.youtube.com/watch?v=${element.getAttribute('data-track-source-uid')}`)
     : encodeURI(`https://${element.getAttribute('data-track-source-uid')}`);
 

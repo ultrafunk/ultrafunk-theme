@@ -82,7 +82,7 @@ function playbackReady(playbackEvent)
   debug.log(playbackEvent);
 
   // Prevents fractional pixel "extra" 1px border
-  document.querySelectorAll('#list-players-container .wp-block-embed__wrapper').forEach((element) =>
+  document.querySelectorAll('#list-player-container .wp-block-embed__wrapper').forEach((element) =>
   {
     element.style = 'background-color: var(--body-background-color)';
   });

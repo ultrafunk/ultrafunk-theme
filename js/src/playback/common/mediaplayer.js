@@ -148,7 +148,7 @@ export function getThumbnailData(metaData)
     return { src: THEME_ENV.defaultLTThumbnail, class: 'track-type-local', uid: metaData.track_source_data };
 }
 
-export function getDataTrackType(element)
+export function getAttrTrackType(element)
 {
   const trackType = element.getAttribute('data-track-type');
 
@@ -158,9 +158,9 @@ export function getDataTrackType(element)
   return TRACK_TYPE.NONE;
 }
 
-export function getDataTrackTypeFromId(elementId)
+export function getAttrTrackTypeById(elementId)
 {
-  return getDataTrackType(document.getElementById(elementId));
+  return getAttrTrackType(document.getElementById(elementId));
 }
 
 const trackTypeClasses = [
@@ -172,5 +172,5 @@ const trackTypeClasses = [
 
 export function getTrackTypeClass(element)
 {
-  return trackTypeClasses[getDataTrackType(element)];
+  return trackTypeClasses[getAttrTrackType(element)];
 }

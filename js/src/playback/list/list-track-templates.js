@@ -39,14 +39,13 @@ export function getPageSeparatorHtml(responseData, loadingPage)
 
 export function getTrackEntryHtml(track, density = 'default')
 {
-  const thumbnailData     = getThumbnailData(track.meta);
-  const trackArtist       = escHtml(track.meta.track_artist);
-  const trackTitle        = escHtml(track.meta.track_title);
-  const trackDuration     = parseInt(track.meta.track_duration);
-  const isAudioVideoClass = track.channels.includes(THEME_ENV.channelVideosId) ? 'is-video' : 'is-audio';
+  const thumbnailData = getThumbnailData(track.meta);
+  const trackArtist   = escHtml(track.meta.track_artist);
+  const trackTitle    = escHtml(track.meta.track_title);
+  const trackDuration = parseInt(track.meta.track_duration);
 
   return /*html*/ `
-    <div id="${track.uid}" class="track-entry ${density}-density ${thumbnailData.class} ${isAudioVideoClass}"
+    <div id="${track.uid}" class="track-entry ${density}-density ${thumbnailData.class} ${getTrackAspectRatio(track)}"
       data-track-type="${track.meta.track_source_type}"
       data-track-id="track-${track.id}"
       data-track-artist="${trackArtist}"
@@ -77,6 +76,14 @@ export function getTrackEntryHtml(track, density = 'default')
       </div>
       <div class="track-duration text-nowrap-ellipsis" title="Track duration">${((track.meta.track_source_type === TRACK_TYPE.YOUTUBE) ? getTimeString(trackDuration) : 'N / A')}</div>
     </div>`;
+}
+
+function getTrackAspectRatio(track)
+{
+  if (track.meta.track_source_type === TRACK_TYPE.SOUNDCLOUD)
+    return 'aspect-ratio-16_9';
+
+  return (track.channels.includes(THEME_ENV.channelVideosId) ? 'aspect-ratio-16_9' : 'aspect-ratio-1_1');
 }
 
 export function setTrackMeta(

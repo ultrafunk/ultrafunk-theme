@@ -22,7 +22,7 @@ import {
 
 import {
   TRACK_TYPE,
-  getDataTrackType,
+  getAttrTrackType,
 } from '../common/mediaplayer.js';
 
 import {
@@ -43,10 +43,17 @@ const m = {
   trackElement:         null,
   currentState:         STATE.UNKNOWN,
   prevActionButtons:    null,
-  youTubePlayerWrapper: null,
   uiElements:           null,
-  localContainer:       null,
   localPlayerTimeoutId: 0,
+};
+
+const elements = {
+  placeholderWrapper:   null,
+  youTubeWrapper:       null,
+  placeholderContainer: null,
+  youTubeContainer:     null,
+  soundCloudContainer:  null,
+  localContainer:       null,
 };
 
 
@@ -58,11 +65,16 @@ export function init()
 {
   debug.log('init()');
 
-  m.tracklist            = document.getElementById('tracklist');
-  m.tracklistObserver    = new IntersectionObserver(observerCallback, { root: m.tracklist });
-  m.youTubePlayerWrapper = document.querySelector('#list-players-container .youtube-container .wp-block-embed__wrapper');
-  m.uiElements           = new UiElements('#tracklist');
-  m.localContainer       = document.querySelector('.embedded-container.local-container');
+  m.tracklist         = document.getElementById('tracklist');
+  m.tracklistObserver = new IntersectionObserver(observerCallback, { root: m.tracklist });
+  m.uiElements        = new UiElements('#tracklist');
+
+  elements.placeholderWrapper   = document.querySelector('#list-player-container .placeholder-container .wp-block-embed__wrapper');
+  elements.youTubeWrapper       = document.querySelector('#list-player-container .youtube-container     .wp-block-embed__wrapper');
+  elements.placeholderContainer = document.querySelector('.embedded-container.placeholder-container');
+  elements.youTubeContainer     = document.querySelector('.embedded-container.youtube-container');
+  elements.soundCloudContainer  = document.querySelector('.embedded-container.soundcloud-container');
+  elements.localContainer       = document.querySelector('.embedded-container.local-container');
 }
 
 export function ready()
@@ -126,7 +138,7 @@ export function getPrevPlayableId()
                       ? m.trackElement.previousElementSibling
                       : null;
 
-  while ((destElement !== null) && (getDataTrackType(destElement) === TRACK_TYPE.NONE))
+  while ((destElement !== null) && (getAttrTrackType(destElement) === TRACK_TYPE.NONE))
     destElement = destElement.previousElementSibling;
 
   return ((destElement !== null) ? destElement.id : null);
@@ -138,7 +150,7 @@ export function getNextPlayableId(startElement = m.trackElement)
                       ? startElement.nextElementSibling
                       : queryTrack('div.track-entry');
 
-  while ((destElement !== null) && (getDataTrackType(destElement) === TRACK_TYPE.NONE))
+  while ((destElement !== null) && (getAttrTrackType(destElement) === TRACK_TYPE.NONE))
     destElement = destElement.nextElementSibling;
 
   return ((destElement !== null) ? destElement.id : null);
@@ -154,18 +166,18 @@ export function showTrackTypePlayer(trackType)
 {
   debug.log(`showTrackTypePlayer(): ${debug.getKeyForValue(TRACK_TYPE, trackType)}`);
 
-  document.querySelector('.embedded-container.placeholder-container').style.display = 'none';
-  document.querySelector('.embedded-container.youtube-container').style.display     = (trackType === TRACK_TYPE.YOUTUBE)    ? 'block' : '';
-  document.querySelector('.embedded-container.soundcloud-container').style.display  = (trackType === TRACK_TYPE.SOUNDCLOUD) ? 'block' : '';
-  m.localContainer.style.display                                                    = (trackType === TRACK_TYPE.LOCAL)      ? 'block' : '';
+  elements.placeholderContainer.style.visibility = 'hidden';
+  elements.youTubeContainer.style.visibility     = (trackType === TRACK_TYPE.YOUTUBE)    ? 'visible' : 'hidden';
+  elements.soundCloudContainer.style.visibility  = (trackType === TRACK_TYPE.SOUNDCLOUD) ? 'visible' : 'hidden';
+  elements.localContainer.style.visibility       = (trackType === TRACK_TYPE.LOCAL)      ? 'visible' : 'hidden';
 }
 
 export function showLocalPlayerInfoAndControls(event)
 {
   if (utils.isPointerTypeTouch(event))
   {
-    const artistTitle = m.localContainer.querySelector('.artist-title-container');
-    const audioPlayer = m.localContainer.querySelector('audio');
+    const artistTitle = elements.localContainer.querySelector('.artist-title-container');
+    const audioPlayer = elements.localContainer.querySelector('audio');
 
     artistTitle.style.display = 'unset';
     audioPlayer.style.display = 'unset';
@@ -427,15 +439,22 @@ export function setCurrentTrackState(newState, isTrackChange = false)
   }
 }
 
-//
-// ToDo: This only works for YouTube tracks since they are the only track type that can change aspect ration for now...
-//
-function setPlayerAspectRatio()
+function setPlayersAspectRatio(trackType)
 {
-  if (m.trackElement.classList.contains('is-video'))
-    m.youTubePlayerWrapper.classList.replace('aspect-ratio-1_1', 'aspect-ratio-16_9');
+  if (m.trackElement.classList.contains('aspect-ratio-16_9'))
+  {
+    elements.placeholderWrapper.classList.replace('aspect-ratio-1_1', 'aspect-ratio-16_9');
+
+    if (trackType === TRACK_TYPE.YOUTUBE)
+      elements.youTubeWrapper.classList.replace('aspect-ratio-1_1', 'aspect-ratio-16_9');
+  }
   else
-    m.youTubePlayerWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
+  {
+    elements.placeholderWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
+
+    if (trackType === TRACK_TYPE.YOUTUBE)
+      elements.youTubeWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
+  }
 }
 
 export function setNextTrackState(nextTrackId, isPointerClick)
@@ -466,7 +485,7 @@ function setLocalPlayerDetails(player)
         ? `<b>${utils.escHtml(player.getArtist())}</b> - ${utils.escHtml(player.getTitle())}`
         : utils.escHtml(player.getArtist());
 
-      m.localContainer.querySelector('.artist-title').innerHTML = artistTitle;
+      elements.localContainer.querySelector('.artist-title').innerHTML = artistTitle;
       document.getElementById('local-player-image').src = encodeURI(m.trackElement.getAttribute('data-track-image-url'));
     }
   }
@@ -478,5 +497,5 @@ export function updateTrackDetails(player)
   player.setDuration(parseInt(m.trackElement.getAttribute('data-track-duration')));
   player.setThumbnail(m.trackElement);
   setLocalPlayerDetails(player);
-  setPlayerAspectRatio();
+  setPlayersAspectRatio(getAttrTrackType(m.trackElement));
 }

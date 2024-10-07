@@ -9,7 +9,6 @@ import * as playbackEvents   from '../common/playback-events.js';
 import * as listControls     from './list-controls.js';
 import * as playbackControls from '../common/playback-controls.js';
 import { newDebugLogger }    from '../../shared/debuglogger.js';
-import { TRACK_TYPE }        from '../common/mediaplayer.js';
 import { initLocalTracks }   from './local-tracks.js';
 import { ListPlayers }       from './list-players.js';
 import { settings }          from '../../shared/session-data.js';
@@ -17,6 +16,11 @@ import { STATE }             from '../common/element-wrappers.js';
 import { getTimeString }     from '../../shared/utils.js';
 import { PlaybackLog }       from '../common/eventlogger.js';
 import { onEmbeddedPlayersReady } from './list-playback.js';
+
+import {
+  TRACK_TYPE,
+  getAttrTrackTypeById,
+} from '../common/mediaplayer.js';
 
 
 /*************************************************************************************************/
@@ -38,13 +42,13 @@ const m = {
 //
 // ************************************************************************************************
 
-export function initEmbeddedPlayers(autoplayData, currentTrackId, initialPlayerType)
+export function initEmbeddedPlayers(autoplayData, currentTrackId)
 {
   debug.log('init()');
 
   m.autoplayData      = autoplayData;
   m.currentTrackId    = currentTrackId;
-  m.initialPlayerType = initialPlayerType;
+  m.initialPlayerType = getAttrTrackTypeById(currentTrackId);
 
   window.onYouTubeIframeAPIReady = () =>
   {

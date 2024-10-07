@@ -8,6 +8,8 @@
 namespace Ultrafunk\Theme\Templates;
 
 
+use Ultrafunk\Plugin\Shared\TRACK_TYPE;
+
 use const Ultrafunk\Theme\Config\IS_PROD_BUILD;
 
 use function Ultrafunk\Plugin\Shared\get_term_links;
@@ -20,32 +22,35 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
 {
   protected function render_response() : void
   {
-    $is_first_video = $this->is_video(get_object_term_cache($this->query_result[0]->ID, 'uf_channel'));
-    $soundcloud_url = 'https://api.soundcloud.com/tracks/';
+    $track_type     = intval($this->query_result[0]->track_source_type);
+    $aspect_ratio   = $this->get_aspect_ratio(get_object_term_cache($this->query_result[0]->ID, 'uf_channel'), $track_type);
+    $soundcloud_src = 'https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/&visual=true&single_active=true&show_artwork=true';
 
     ?>
-    <div id="list-players-container" class="players-container">
-      <div class="embedded-container placeholder-container">
-        <div class="wp-block-embed__wrapper"></div>
-      </div>
-      <div class="embedded-container youtube-container">
-        <div class="wp-block-embed__wrapper <?php echo ($is_first_video ? 'aspect-ratio-16_9' : 'aspect-ratio-1_1'); ?>">
-          <div id="youtube-player"></div>
+    <div id="list-player-container">
+      <div class="players-wrapper">
+        <div class="embedded-container placeholder-container">
+          <div class="wp-block-embed__wrapper <?php echo $aspect_ratio; ?>"></div>
         </div>
-      </div>
-      <div class="embedded-container soundcloud-container">
-        <div class="wp-block-embed__wrapper">
-          <iframe id="soundcloud-player" allow="autoplay" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=<?php echo $soundcloud_url; ?>&visual=true&single_active=true&show_artwork=true"></iframe>
+        <div class="embedded-container youtube-container">
+          <div class="wp-block-embed__wrapper <?php echo $aspect_ratio; ?>">
+            <div id="youtube-player"></div>
+          </div>
         </div>
-      </div>
-      <div class="embedded-container local-container">
-        <div class="wp-block-embed__wrapper aspect-ratio-1_1">
-          <div id="local-player">
-            <div class="artist-title-container">
-              <div class="artist-title text-nowrap-ellipsis"></div>
+        <div class="embedded-container soundcloud-container">
+          <div class="wp-block-embed__wrapper aspect-ratio-16_9">
+            <iframe id="soundcloud-player" allow="autoplay" scrolling="no" frameborder="no" src="<?php echo $soundcloud_src; ?>"></iframe>
+          </div>
+        </div>
+        <div class="embedded-container local-container">
+          <div class="wp-block-embed__wrapper aspect-ratio-1_1">
+            <div id="local-player">
+              <div class="artist-title-container">
+                <div class="artist-title text-nowrap-ellipsis"></div>
+              </div>
+              <img id="local-player-image" src="" title="Toggle Play / Pause" />
+              <audio id="local-audio-player" controls ></audio>
             </div>
-            <img id="local-player-image" src="" title="Toggle Play / Pause" />
-            <audio id="local-audio-player" controls ></audio>
           </div>
         </div>
       </div>
@@ -79,15 +84,15 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
       $track_title         = esc_html($track->track_title);
       $track_duration      = intval($track->track_duration);
       $track_data          = \Ultrafunk\Theme\Functions\get_track_data($track);
-      $is_youtube_track    = ($track_data['track_type'] === \Ultrafunk\Plugin\Shared\TRACK_TYPE::YOUTUBE);
+      $is_youtube_track    = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
       $artists             = get_object_term_cache($track->ID, 'uf_artist');
       $channels            = get_object_term_cache($track->ID, 'uf_channel');
-      $is_video_class      = $this->is_video($channels) ? ' is-video' : ' is-audio';
+      $track_aspect_ratio  = $this->get_aspect_ratio($channels, $track_data['track_type']);
       $yt_thumbnail_url    = IS_PROD_BUILD     ? $track_data['thumnail_src'] : \Ultrafunk\Theme\Config\THEME_ENV['default_yt_thumbnail'];
       $track_thumbnail_url = $is_youtube_track ? $yt_thumbnail_url           : \Ultrafunk\Theme\Config\THEME_ENV['default_sc_thumbnail'];
 
       ?>
-      <div id="track-<?php echo uniqid(); ?>" class="track-entry default-density <?php echo $track_data['css_class'] . $is_video_class; ?>"
+      <div id="track-<?php echo uniqid(); ?>" class="track-entry default-density <?php echo $track_data['css_class'] . ' ' . $track_aspect_ratio; ?>"
         data-track-type="<?php echo $track_data['track_type']; ?>"
         data-track-id="track-<?php echo $track->ID; ?>"
         data-track-artist="<?php echo $track_artist; ?>"
@@ -126,15 +131,18 @@ class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
   /**************************************************************************************************************************/
 
 
-  private function is_video(array $channels) : bool
+  private function get_aspect_ratio(array $channels, int $track_type = TRACK_TYPE::NONE) : string
   {
+    if ($track_type === TRACK_TYPE::SOUNDCLOUD)
+      return 'aspect-ratio-16_9';
+
     foreach ($channels as $channel)
     {
       if ($channel->term_id === \Ultrafunk\Theme\Config\THEME_ENV['channel_videos_id'])
-        return true;
+        return 'aspect-ratio-16_9';
     }
 
-    return false;
+    return 'aspect-ratio-1_1';
   }
 
   private function getTimeString(int $seconds) : string

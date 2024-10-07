@@ -32,7 +32,7 @@ import {
 
 import {
   TRACK_TYPE,
-  getDataTrackTypeFromId,
+  getAttrTrackTypeById,
 } from '../common/mediaplayer.js';
 
 import {
@@ -69,7 +69,7 @@ export function init()
   listControls.init();
   initTrackSearch();
   setInitialTrack();
-  initEmbeddedPlayers(m.autoplayData, m.currentTrackId, getDataTrackTypeFromId(m.currentTrackId));
+  initEmbeddedPlayers(m.autoplayData, m.currentTrackId);
 }
 
 function setInitialTrack()
@@ -90,12 +90,8 @@ function setInitialTrack()
 
   listControls.setInitialTrack(m.currentTrackId);
 
-  const trackType = getDataTrackTypeFromId(m.currentTrackId);
-
-  debug.log(`setInitialTrack() - trackType: ${debug.getKeyForValue(TRACK_TYPE, trackType)} - currentTrackId: ${m.currentTrackId} - autoplayData: ${(m.autoplayData !== null) ? JSON.stringify(m.autoplayData) : 'N/A'}`);
-
-  if (trackType === TRACK_TYPE.SOUNDCLOUD)
-    listControls.showTrackTypePlayer(trackType);
+  const trackType = debug.getKeyForValue(TRACK_TYPE, getAttrTrackTypeById(m.currentTrackId));
+  debug.log(`setInitialTrack() - trackType: ${trackType} - currentTrackId: ${m.currentTrackId} - autoplayData: ${(m.autoplayData !== null) ? JSON.stringify(m.autoplayData) : 'N/A'}`);
 }
 
 
@@ -105,7 +101,7 @@ function setInitialTrack()
 
 export function setCurrentTrack(nextTrackId, playTrack = true, isPointerClick = false)
 {
-  const nextTrackType = getDataTrackTypeFromId(nextTrackId);
+  const nextTrackType = getAttrTrackTypeById(nextTrackId);
 
   debug.log(`setCurrentTrack() - nextTrackType: ${debug.getKeyForValue(TRACK_TYPE, nextTrackType)} - nextTrackId: ${nextTrackId} - playTrack: ${playTrack} - isPointerClick: ${isPointerClick}`);
 
@@ -345,9 +341,7 @@ export function onEmbeddedPlayersReady(players, initialTrackType)
   listControls.ready();
 
   m.players.setCurrentPlayer(initialTrackType);
-
-  if (initialTrackType !== TRACK_TYPE.SOUNDCLOUD)
-    listControls.showTrackTypePlayer(initialTrackType);
+  listControls.showTrackTypePlayer(initialTrackType);
 
   playbackEvents.dispatch(playbackEvents.EVENT.PLAYBACK_READY, { resetProgressBar: false });
   cueOrPlayCurrentTrack((m.autoplayData?.autoplay === true), (m.autoplayData?.position ?? 0));

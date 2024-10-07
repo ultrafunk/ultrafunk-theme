@@ -37,15 +37,20 @@ body.list-player .site-branding {
   min-width: 340px;
 }
 
-.players-container {
+#list-player-container {
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
-.embedded-container {
+#list-player-container .players-wrapper {
+  position: relative;
   width: 65%;
+}
+
+.embedded-container {
+  width: 100%;
 
   .wp-block-embed__wrapper {
     width: 100%;
@@ -60,10 +65,16 @@ body.list-player .site-branding {
     margin: 0 auto;
   }
 
+  &.placeholder-container {
+    position: relative;
+  }
+
   &.youtube-container,
   &.soundcloud-container,
   &.local-container {
-    display: none;
+    position: absolute;
+    top: 0;
+    visibility: hidden;
   }
 
   &.local-container .wp-block-embed__wrapper {
@@ -368,8 +379,12 @@ body.list-player .site-footer-container {
     padding-right: unset;
   }
 
-  .players-container {
+  #list-player-container {
     display: block;
+  }
+
+  #list-player-container .players-wrapper {
+    width: 100%;
   }
 
   .embedded-container {
