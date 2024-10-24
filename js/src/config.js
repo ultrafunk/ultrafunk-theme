@@ -15,11 +15,11 @@ export const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-export const VERSION = '1.48.19';
+export const VERSION = '1.48.20';
 
 export const ULTRAFUNK_THEME_URI = IS_PROD_BUILD
-                                     ? 'https://ultrafunk.com/wp-content/themes/ultrafunk'
-                                     : 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk';
+  ? 'https://ultrafunk.com/wp-content/themes/ultrafunk'
+  : 'https://wordpress.ultrafunk.com/wp-content/themes/ultrafunk';
 
 export const THEME_ENV = {
   'siteUrl':                            IS_PROD_BUILD ? 'https://ultrafunk.com' : 'https://wordpress.ultrafunk.com',

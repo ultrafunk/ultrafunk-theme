@@ -53,8 +53,7 @@ export function addListener(selectors, type, listener)
 // Adds event listeners of 'type' to all matching selectors
 export function addListenerAll(selectors, type, listener)
 {
-  const elementList = document.querySelectorAll(selectors);
-  elementList.forEach(element => element.addEventListener(type, listener));
+  document.querySelectorAll(selectors)?.forEach(element => element.addEventListener(type, listener));
 }
 
 export function getCssPropString(prop, element = document.documentElement)

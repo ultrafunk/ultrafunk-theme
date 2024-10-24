@@ -4,7 +4,6 @@
 // https://ultrafunk.com
 //
 
-import { getModalTrackHtml }   from '../../shared/modal-templates.js';
 import { shareModal }          from '../../shared/share-modal.js';
 import { copyTextToClipboard } from '../../shared/clipboard.js';
 import { navSearch }           from '../../site/nav-search.js';
@@ -20,6 +19,16 @@ import {
   showModal,
   getModalRootElement,
 } from '../../shared/modal.js';
+
+import {
+  getModalTrackHtml,
+  getModalListHtml,
+} from '../../shared/modal-templates.js';
+
+import {
+  fetchRest,
+  HTTP_RESPONSE,
+} from '../../shared/fetch-rest.js';
 
 import {
   stripAttribute,
@@ -69,7 +78,7 @@ export function showTrackDetails(element, onCloseFocusElement = null)
   const modalTitle = `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? getTimeString(trackDuration) : 'duration N/A')}</span>`;
 
   if (getAttrTrackType(element) === TRACK_TYPE.LOCAL)
-    getLocalTrackDetails(element, modalEntries);
+    getLocalTrackDetails(element, modalEntries, trackArtist);
   else
     getTrackDetails(element, modalEntries);
 
@@ -86,7 +95,7 @@ export function showTrackDetails(element, onCloseFocusElement = null)
   return modalId;
 }
 
-function getLocalTrackDetails(element, modalEntries)
+async function getLocalTrackDetails(element, modalEntries, trackArtist)
 {
   modalEntries.push({ class: 'header-entry', content: 'Filename' });
   modalEntries.push({ class: 'default-text', content: `${stripAttribute(element, 'data-track-file-name')}` });
@@ -94,6 +103,39 @@ function getLocalTrackDetails(element, modalEntries)
   modalEntries.push({ class: 'default-text', content: `On device ${stripAttribute(element, 'data-track-file-type')} audio file` });
   modalEntries.push({ class: 'header-entry', content: 'Size' });
   modalEntries.push({ class: 'default-text', content: getReadableBytesSize(parseInt(element.getAttribute('data-track-file-size'))) });
+  modalEntries.push({ class: 'header-entry', content: 'Matching Artists' });
+  modalEntries.push({ class: 'default-text matching-artists', content: 'Searching...' });
+
+  const restResponse = await fetchRest({
+    endpoint: 'artists',
+    query:    `search=${encodeURIComponent(trackArtist.toLowerCase())}&_fields=link,name`,
+  });
+
+  if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length !== 0))
+    getModalRootElement().querySelector('.modal-default-text.matching-artists').outerHTML = getMatchingArtistsHtml(restResponse, element.id);
+  else
+    getModalRootElement().querySelector('.modal-default-text.matching-artists').innerHTML = 'None Found';
+}
+
+function getMatchingArtistsHtml(restResponse, clickId)
+{
+  const matchingArtists = [];
+
+  restResponse.data.forEach(item =>
+  {
+    matchingArtists.push({
+      class:     `hover-icon-text`,
+      title:     'Go to Artist',
+      content:   item.name,
+      link:      getPrefPlayerUrl(item.link),
+      icon:      'link',
+      hoverIcon: 'search',
+      hoverTitle: `Search for ${item.name}`,
+      clickId:   clickId,
+    });
+  });
+
+  return getModalListHtml(matchingArtists, matchingArtists.length);
 }
 
 function getTrackDetails(element, modalEntries)

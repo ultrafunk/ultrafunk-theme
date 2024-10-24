@@ -57,8 +57,8 @@ export function initLocalTracks()
 
   document.getElementById('tracklist').insertAdjacentHTML("beforeend", tracklistLocalHtml);
 
-  addListener('#select-local-files', 'change', (event) => getSelectedFiles(event.target.files));
-  addListener('#select-local-files', 'cancel', (event) => getSelectedFiles(event.target.files));
+  addListener('#select-local-files', 'change', (event) => getSelectedFiles('change', event.target.files));
+  addListener('#select-local-files', 'cancel', ()      => getSelectedFiles('cancel'));
   addListener('#clear-local-tracks', 'click',  clearLocalTracks);
 }
 
@@ -67,9 +67,9 @@ export function initLocalTracks()
 //
 // ************************************************************************************************
 
-function getSelectedFiles(filesList)
+function getSelectedFiles(eventType, filesList)
 {
-  if (filesList.length === 0)
+  if ((eventType === 'cancel') || (filesList.length === 0))
   {
     showSnackbar({ message: 'No tracks selected', duration: 3 });
   }

@@ -441,20 +441,14 @@ export function setCurrentTrackState(newState, isTrackChange = false)
 
 function setPlayersAspectRatio(trackType)
 {
-  if (m.trackElement.classList.contains('aspect-ratio-16_9'))
-  {
-    elements.placeholderWrapper.classList.replace('aspect-ratio-1_1', 'aspect-ratio-16_9');
+  const replaceClass = m.trackElement.classList.contains('aspect-ratio-16_9')
+    ? ['aspect-ratio-1_1',  'aspect-ratio-16_9']
+    : ['aspect-ratio-16_9', 'aspect-ratio-1_1' ];
 
-    if (trackType === TRACK_TYPE.YOUTUBE)
-      elements.youTubeWrapper.classList.replace('aspect-ratio-1_1', 'aspect-ratio-16_9');
-  }
-  else
-  {
-    elements.placeholderWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
+  elements.placeholderWrapper.classList.replace(replaceClass[0], replaceClass[1]);
 
-    if (trackType === TRACK_TYPE.YOUTUBE)
-      elements.youTubeWrapper.classList.replace('aspect-ratio-16_9', 'aspect-ratio-1_1');
-  }
+  if (trackType === TRACK_TYPE.YOUTUBE)
+    elements.youTubeWrapper.classList.replace(replaceClass[0], replaceClass[1]);
 }
 
 export function setNextTrackState(nextTrackId, isPointerClick)
@@ -477,17 +471,14 @@ export function setTrackMessage(message)
 
 function setLocalPlayerDetails(player)
 {
-  if (settings.list.enableLocalPlayback)
+  if ((settings.list.enableLocalPlayback) && (player.getTrackType() === TRACK_TYPE.LOCAL))
   {
-    if (player.getTrackType() === TRACK_TYPE.LOCAL)
-    {
-      const artistTitle = (player.getTitle().length !== 0)
-        ? `<b>${utils.escHtml(player.getArtist())}</b> - ${utils.escHtml(player.getTitle())}`
-        : utils.escHtml(player.getArtist());
+    const artistTitle = (player.getTitle().length !== 0)
+      ? `<b>${utils.escHtml(player.getArtist())}</b> - ${utils.escHtml(player.getTitle())}`
+      : utils.escHtml(player.getArtist());
 
-      elements.localContainer.querySelector('.artist-title').innerHTML = artistTitle;
-      document.getElementById('local-player-image').src = encodeURI(m.trackElement.getAttribute('data-track-image-url'));
-    }
+    elements.localContainer.querySelector('.artist-title').innerHTML = artistTitle;
+    document.getElementById('local-player-image').src = encodeURI(m.trackElement.getAttribute('data-track-image-url'));
   }
 }
 
