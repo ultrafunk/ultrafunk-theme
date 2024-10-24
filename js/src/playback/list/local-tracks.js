@@ -242,8 +242,19 @@ function setTrackArtistTitle(tags, trackElement, fileNameNoExt)
 
 function setFallbackTrackArtistTitle(trackElement, fileNameNoExt)
 {
-  trackElement.setAttribute('data-track-artist', fileNameNoExt);
-  trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${fileNameNoExt}</b></span>`;
+  const trackArtistTitle = fileNameNoExt.split(/\s{1,}[\u002D\u00B7\u2013]\s{1,}/i);
+
+  if (trackArtistTitle.length === 2)
+  {
+    trackElement.setAttribute('data-track-artist', trackArtistTitle[0]);
+    trackElement.setAttribute('data-track-title',  trackArtistTitle[1]);
+    trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${trackArtistTitle[0]}</b></span><br><span>${trackArtistTitle[1]}</span>`;
+  }
+  else
+  {
+    trackElement.setAttribute('data-track-artist', fileNameNoExt);
+    trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${fileNameNoExt}</b></span>`;
+  }
 }
 
 async function setTrackImages(tags, trackElement)

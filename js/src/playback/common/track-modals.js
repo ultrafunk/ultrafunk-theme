@@ -106,9 +106,12 @@ async function getLocalTrackDetails(element, modalEntries, trackArtist)
   modalEntries.push({ class: 'header-entry', content: 'Matching Artists' });
   modalEntries.push({ class: 'default-text matching-artists', content: 'Searching...' });
 
+  // Do some character replacements for better search results
+  const trackArtistReplaced = trackArtist.replaceAll(/['";,.:]/g, '').replaceAll(/[&]/g, '&amp;');
+
   const restResponse = await fetchRest({
     endpoint: 'artists',
-    query:    `search=${encodeURIComponent(trackArtist.toLowerCase())}&_fields=link,name`,
+    query:    `search=${encodeURIComponent(trackArtistReplaced.toLowerCase())}&_fields=link,name`,
   });
 
   if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length !== 0))
