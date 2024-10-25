@@ -125,6 +125,9 @@ function clearLocalTracks()
     }
   });
 
+  // Clear previously selected files from the form value
+  document.getElementById('select-local-files').value = '';
+
   showSnackbar({ message: 'Local tracks removed', duration: 3 });
 }
 
@@ -242,13 +245,16 @@ function setTrackArtistTitle(tags, trackElement, fileNameNoExt)
 
 function setFallbackTrackArtistTitle(trackElement, fileNameNoExt)
 {
-  const trackArtistTitle = fileNameNoExt.split(/\s{1,}[\u002D\u00B7\u2013]\s{1,}/i);
+  const trackArtistTitle = fileNameNoExt.split(/\s{1,}[\u002D\u00B7\u2013]\s{1,}/, 2);
 
   if (trackArtistTitle.length === 2)
   {
-    trackElement.setAttribute('data-track-artist', trackArtistTitle[0]);
-    trackElement.setAttribute('data-track-title',  trackArtistTitle[1]);
-    trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${trackArtistTitle[0]}</b></span><br><span>${trackArtistTitle[1]}</span>`;
+    const trackArtist = trackArtistTitle[0];
+    const trackTitle  = fileNameNoExt.slice(fileNameNoExt.indexOf(trackArtistTitle[1]));
+
+    trackElement.setAttribute('data-track-artist', trackArtist);
+    trackElement.setAttribute('data-track-title',  trackTitle);
+    trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${trackArtist}</b></span><br><span>${trackTitle}</span>`;
   }
   else
   {
