@@ -9,6 +9,7 @@ import { showSnackbar }      from '../../shared/snackbar.js';
 import { TRACK_TYPE }        from '../common/mediaplayer.js';
 import { getTrackEntryHtml } from './list-track-templates.js';
 import { queryTrackAll }     from './list-controls.js';
+import { settings }          from '../../shared/session-data.js';
 
 import {
   newDebugLogger,
@@ -35,6 +36,7 @@ const debug = newDebugLogger('local-tracks');
 
 const m = {
   jsmediatags: null,
+  filesArray: [],
   addTracksStartTime: 0,
   addTracksHtmlTime:  0,
 };
@@ -75,18 +77,26 @@ function getSelectedFiles(eventType, filesList)
   }
   else
   {
-    showSnackbar({ message: `Adding ${filesList.length} local ${(filesList.length === 1) ? 'track' : 'tracks'}...`, duration: 4 });
+    showSnackbar({
+      message: `Adding ${filesList.length} local ${(filesList.length === 1) ? 'track' : 'tracks'}...`,
+      showImmediate: true,
+      duration: 5,
+    });
 
     m.addTracksStartTime = performance.now();
+    m.filesArray = Array.from(filesList);
+
+    if (settings.list.sortLocalTracks)
+      m.filesArray.sort((a, b) => a.name.localeCompare(b.name));
 
     if (m.jsmediatags === null)
-      loadJsMediaTagsScript(() => setTracksMetadata(filesList, inserLocalTracksHtml(filesList)));
+      loadJsMediaTagsScript();
     else
-      setTracksMetadata(filesList, inserLocalTracksHtml(filesList));
+      inserLocalTracksHtml();
   }
 }
 
-function loadJsMediaTagsScript(onLoadedCallback)
+function loadJsMediaTagsScript()
 {
   debug.log(`loadJsMediaTagsScript(): ${ULTRAFUNK_THEME_URI}/inc/js/jsmediatags.min.js?ver=${VERSION}`);
 
@@ -102,7 +112,7 @@ function loadJsMediaTagsScript(onLoadedCallback)
   scriptTag.onload = () =>
   {
     m.jsmediatags = window.jsmediatags;
-    onLoadedCallback();
+    inserLocalTracksHtml();
   };
 }
 
@@ -133,8 +143,10 @@ function clearLocalTracks()
 
 function logPerfTime(filesCount)
 {
-  const addTracksStop = performance.now();
-  console.log(`%cAdded ${filesCount} local track(s) in ${Math.ceil(addTracksStop - m.addTracksStartTime)} ms. (insert HTML: ${Math.ceil(m.addTracksHtmlTime - m.addTracksStartTime)} ms.) for ${THEME_ENV.siteUrl}`, logCss);
+  const totalTime      = Math.ceil(performance.now() - m.addTracksStartTime);
+  const insertHtmlTime = Math.ceil(m.addTracksHtmlTime - m.addTracksStartTime);
+
+  console.log(`%cAdded ${filesCount} local track(s) in ${totalTime} ms. (insert HTML: ${insertHtmlTime} ms.) for ${THEME_ENV.siteUrl}`, logCss);
 }
 
 
@@ -142,21 +154,18 @@ function logPerfTime(filesCount)
 //
 // ************************************************************************************************
 
-function inserLocalTracksHtml(filesList)
+function inserLocalTracksHtml()
 {
-  const tracksUid = [];
-  let index       = 0;
-  let tracksHtml  = '';
+  let tracksHtml = '';
 
-  for (const file of filesList)
+  m.filesArray.forEach((file, index) =>
   {
     const trackUri = encodeURI(URL.createObjectURL(file));
-
-    tracksUid.push(`track-${(Date.now() + index)}`);
+    file.trackUid  = `track-${(Date.now() + index)}`;
 
     tracksHtml += getTrackEntryHtml(
     {
-      uid: tracksUid[index++],
+      uid: file.trackUid,
       id: 'local',
       link: trackUri,
       artists: [],
@@ -169,22 +178,21 @@ function inserLocalTracksHtml(filesList)
         track_duration: 0,
       }
     });
-  }
+  });
 
   document.getElementById('tracklist').insertAdjacentHTML("beforeend", tracksHtml);
   m.addTracksHtmlTime = performance.now();
 
-  return tracksUid;
+  setTracksMetadata();
 }
 
-function setTracksMetadata(filesList, tracksUid)
+function setTracksMetadata()
 {
-  let index = 0;
   let processedTracks = 0;
 
-  for (const file of filesList)
+  m.filesArray.forEach((file) =>
   {
-    const trackElement  = document.getElementById(tracksUid[index++]);
+    const trackElement  = document.getElementById(file.trackUid);
     const fileName      = stripHtml(escHtml(file.name));
     const fileExtIndex  = fileName.lastIndexOf('.');
     const fileNameNoExt = (fileExtIndex !== -1) ? fileName.slice(0, fileExtIndex) : fileName;
@@ -204,18 +212,18 @@ function setTracksMetadata(filesList, tracksUid)
         else
           setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
 
-        if (++processedTracks === filesList.length)
-          logPerfTime(filesList.length);
+        if (++processedTracks === m.filesArray.length)
+          logPerfTime(m.filesArray.length);
       },
       onError: () =>
       {
         setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
 
-        if (++processedTracks === filesList.length)
-          logPerfTime(filesList.length);
+        if (++processedTracks === m.filesArray.length)
+          logPerfTime(m.filesArray.length);
       }
     });
-  }
+  });
 }
 
 function setTrackArtistTitle(tags, trackElement, fileNameNoExt)

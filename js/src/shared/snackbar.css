@@ -110,9 +110,14 @@
   opacity: var(--control-hover-opacity);
 }
 
-#snackbar.show {
+#snackbar.show-default {
   visibility: visible;
   animation: snackbar-show 0.3s;
+}
+
+#snackbar.show-immediate {
+  visibility: visible;
+  animation: snackbar-show 0s;
 }
 
 @keyframes snackbar-show {

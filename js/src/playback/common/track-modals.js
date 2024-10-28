@@ -117,7 +117,7 @@ async function getLocalTrackDetails(element, modalEntries, trackArtist)
   if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length !== 0))
     getModalRootElement().querySelector('.modal-default-text.matching-artists').outerHTML = getMatchingArtistsHtml(restResponse, element.id);
   else
-    getModalRootElement().querySelector('.modal-default-text.matching-artists').innerHTML = 'None Found';
+    getModalRootElement().querySelector('.modal-default-text.matching-artists').innerHTML = 'None found';
 }
 
 function getMatchingArtistsHtml(restResponse, clickId)

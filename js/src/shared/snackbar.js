@@ -48,6 +48,7 @@ const elements = {
 
 export function showSnackbar({
   message = 'Snackbar Message',
+  showImmediate = false,
   duration = 5,
   actionText = null,
   actionClickCallback = () => {},
@@ -65,7 +66,7 @@ export function showSnackbar({
 
   elements.snackbar.querySelector('.snackbar-message').innerHTML = message;
   elements.snackbar.querySelector('.snackbar-container').style = `background-color: ${backgroundColorCssVal};`;
-  elements.snackbar.classList.add('show');
+  elements.snackbar.classList.add(showImmediate ? 'show-immediate' : 'show-default');
   elements.actionText.style.display = 'none';
   m.afterClose = afterCloseCallback;
 
@@ -95,7 +96,7 @@ export function isShowingSnackbar()
 {
   return ((elements.snackbar !== null)               &&
           (elements.snackbar.classList.length === 1) &&
-           elements.snackbar.classList.contains('show'));
+           elements.snackbar.matches('.show-default, .show-immediate'));
 }
 
 export function dismissSnackbar(dismissId = 0)

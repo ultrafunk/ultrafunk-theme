@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 39, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 40, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -60,6 +60,7 @@ export const settingsSchema = {
     showLoadMoreTracks:    { description: 'Show "Load More Tracks..." prompt',      type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
     tracksPerPage:         { description: 'Tracks Per Page: Search & Shuffle',      type: INTEGER, values: listPerPageValues, default: 25,    valueStrings: listPerPageValueStrings },
     enableLocalPlayback:   { description: 'Enable local (device) tracks playback',  type: BOOLEAN, values: [true, false],     default: false, valueStrings: ['ON', 'OFF'] },
+    sortLocalTracks:       { description: 'Sort local tracks alphabetically (asc.)',type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
   },
   gallery: {
     layout:                  { description: 'Track Layout',                         type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
@@ -120,6 +121,7 @@ export const defaultSettings = {
     showLoadMoreTracks:    settingsSchema.list.showLoadMoreTracks.default,
     tracksPerPage:         settingsSchema.list.tracksPerPage.default,
     enableLocalPlayback:   settingsSchema.list.enableLocalPlayback.default,
+    sortLocalTracks:       settingsSchema.list.sortLocalTracks.default,
   },
   gallery: {
     layout:                  settingsSchema.gallery.layout.default,
@@ -159,6 +161,9 @@ export const defaultSettings = {
 export const settingsDescriptions = {
   playback: {
     pauseOnPlayerChange: "Pause all ultrafunk.com playback in other browser tabs and windows when starting track playback in a new player.",
+  },
+  list: {
+    sortLocalTracks: "All locally added (device) tracks will be sorted in numerical (0 => 9) and/or alphabetical ascending order (A => Z) based on their file names.",
   },
   site: {
     snackbarMessageLog: "The 15 last snackbar (toast) messages shown on ultrafunk.com are stored with a timestamp and can be viewed by pressing <b>v</b>.",

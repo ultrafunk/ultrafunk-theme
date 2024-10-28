@@ -75,19 +75,30 @@ export function initEmbeddedPlayers(autoplayData, currentTrackId)
 
 export function onPlayerError(trackType, errorNum = 0)
 {
-  if (trackType === TRACK_TYPE.YOUTUBE)
+  switch (trackType)
   {
-    m.players.current.setPlayerError(errorNum);
-  }
-  else if (trackType === TRACK_TYPE.SOUNDCLOUD)
-  {
-    // SoundCloud player can trigger this too early because the initial widget load results in 404,
-    // so we skip error handling until the players are actually ready for playback...
-    if (m.initialPlayerCued === false)
-      return;
+    case TRACK_TYPE.YOUTUBE:
+      m.players.current.setPlayerError(errorNum);
+      break;
 
-    m.players.current.setIsPlayable(false);
-    listControls.setCurrentTrackState(STATE.PAUSED);
+    case TRACK_TYPE.SOUNDCLOUD:
+      {
+        // SoundCloud player can trigger this too early because the initial widget load results in 404,
+        // so we skip error handling until the players are actually ready for playback...
+        if (m.initialPlayerCued === false)
+          return;
+
+        m.players.current.setIsPlayable(false);
+        listControls.setCurrentTrackState(STATE.PAUSED);
+      }
+      break;
+
+    case TRACK_TYPE.LOCAL:
+      {
+        m.players.current.setIsPlayable(false);
+        listControls.setCurrentTrackState(STATE.PAUSED);
+      }
+      break;
   }
 
   debug.log(`onPlayerError(${(errorNum !== 0) ? errorNum : ''}) - trackType: ${debug.getKeyForValue(TRACK_TYPE, trackType)} - trackId: ${m.currentTrackId} - isCued: ${m.players.current.isCued()}`);
@@ -312,6 +323,7 @@ function initLocalPlayer()
     player.addEventListener('pause',          onLocalPlayerStateChange);
     player.addEventListener('ended',          onLocalPlayerStateChange);
     player.addEventListener('durationchange', onLocalPlayerStateChange);
+    player.addEventListener('error',          () => onPlayerError(TRACK_TYPE.LOCAL));
 
     return player;
   }
