@@ -45,6 +45,7 @@ const m = {
   trackSearchResults: null,
   resultsTracklist:   null,
   resultsCache:       new Map(),
+  localSearchResults: [],
   prevSearchString:   '',
   modalId:            -1,
 };
@@ -222,6 +223,9 @@ export async function showSearchResults(searchString)
   }
   else
   {
+    if (settings.list.searchLocalTracks && (searchString !== m.prevSearchString))
+      searchLocalTracks(searchString);
+
     if ((searchString !== m.prevSearchString) && (m.resultsCache.get(searchString) === undefined))
     {
       m.searchField.autocomplete = 'off';
@@ -236,7 +240,7 @@ export async function showSearchResults(searchString)
       m.searchField.autocomplete = 'off';
       m.prevSearchString = searchString;
 
-      if ((cachedResult.status.code === HTTP_RESPONSE.OK) && (cachedResult.data.length !== 0))
+      if ((cachedResult.status.code === HTTP_RESPONSE.OK) && (cachedResult.data.length !== 0) || (m.localSearchResults.length > 0))
         setResultsHtml(cachedResult);
       else
         showResultsMessage(getNoMatchesMessage(searchString));
@@ -273,7 +277,7 @@ async function showRestResults(searchString)
 
   const fetchStop = performance.now();
 
-  if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length >= 1))
+  if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length >= 1) || (m.localSearchResults.length > 0))
   {
     m.resultsCache.set(searchString, restResponse);
     setResultsHtml(restResponse);
@@ -294,6 +298,36 @@ async function showRestResults(searchString)
   }
 
   return (fetchStop - fetchStart);
+}
+
+function searchLocalTracks(searchString)
+{
+  const searchStart = performance.now();
+  let   numOfTracks = 0, matches = 0;
+  const resultIds   = [];
+  searchString      = searchString.trim();
+
+  document.getElementById('tracklist')?.querySelectorAll('.track-entry.track-type-local')?.forEach((element) =>
+  {
+    const trackArtist = element.getAttribute('data-track-artist').toLowerCase();
+    const trackTitle  = element.getAttribute('data-track-title').toLowerCase();
+
+    if (trackArtist.includes(searchString) || trackTitle.includes(searchString))
+    {
+      resultIds.push(element.id);
+      matches++;
+    }
+
+    numOfTracks++;
+  });
+
+  m.localSearchResults = resultIds;
+
+  const searchStop = performance.now();
+
+  // ToDo: Over 25 ms., log local search performance for production, this will be removed in the future...
+  if ((searchStop - searchStart) > 25)
+    console.log(`%cLocal track search for '${searchString}' - Found ${matches} matches in ${Math.ceil(searchStop - searchStart)} ms. from ${numOfTracks} tracks`, logCss);
 }
 
 const searchTypeString = {
@@ -317,7 +351,9 @@ function getSearchTypeId()
 
 function setResultsHtml(restResponse)
 {
-  let tracksHtml = '';
+  let tracksHtml  = '';
+  let tracksAdded = 0;
+  const moreThanMaxResults = ((restResponse.data.length + m.localSearchResults.length) > settings.list.maxTrackSearchResults);
 
   restResponse.data.forEach((track, index) =>
   {
@@ -325,18 +361,34 @@ function setResultsHtml(restResponse)
     {
       track.uid   = `track-${(Date.now() + index)}`;
       tracksHtml += getTrackEntryHtml(track, 'compact');
+      tracksAdded++;
     }
   });
 
-  if (restResponse.data.length > settings.list.maxTrackSearchResults)
+  m.resultsTracklist.innerHTML = tracksHtml;
+
+  if ((moreThanMaxResults === false) || (tracksAdded < settings.list.maxTrackSearchResults))
   {
-    tracksHtml += `
-      <div class="max-results text-nowrap-ellipsis">
-        More than ${settings.list.maxTrackSearchResults} hits, refine query or&nbsp;<a href="/list/search/?s=${encodeURIComponent(m.searchField.value)}"><b>show all results</b></a>
-      </div>`;
+    m.localSearchResults.forEach((entry, index) =>
+    {
+      if ((index + tracksAdded) < settings.list.maxTrackSearchResults)
+      {
+        const trackElement = document.getElementById(entry).cloneNode(true);
+        trackElement.id    = `track-${Date.now() + index}`;
+        trackElement.classList.replace('default-density', 'compact-density');
+        m.resultsTracklist.append(trackElement);
+      }
+    });
   }
 
-  m.resultsTracklist.innerHTML = tracksHtml;
+  if (moreThanMaxResults)
+  {
+    m.resultsTracklist.insertAdjacentHTML("beforeend", `
+      <div class="max-results text-nowrap-ellipsis">
+        More than ${settings.list.maxTrackSearchResults} hits, refine query or&nbsp;<a href="/list/search/?s=${encodeURIComponent(m.searchField.value)}"><b>show all results</b></a>
+      </div>`
+    );
+  }
 
   // Sometimes yield (setTimeout(0)) is needed for scrolling to actually happen... But why?
   setTimeout(() => { m.trackSearchResults.querySelector('.track-results-container').scrollTop = 0; }, 0);
