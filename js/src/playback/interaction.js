@@ -151,6 +151,18 @@ function initListeners()
     if ((event.data === playbackEvents.EVENT.MEDIA_PLAYING) && settings.playback.pauseOnPlayerChange)
       m.player.pause();
   });
+
+  if (shared.isListPlayer() && settings.list.showLoadMoreTracks && settings.list.warnOnPageChange)
+  {
+    window.addEventListener('beforeunload', (event) =>
+    {
+      if (m.player.getStatus().isPlaying)
+      {
+        event.preventDefault();
+        event.returnValue = true;
+      }
+    });
+  }
 }
 
 

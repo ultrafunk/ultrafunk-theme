@@ -208,7 +208,7 @@ class UiElements extends ElementClick
       return setCurrentTrack(this.closest('div.track-entry').id, true, true);
 
     if (this.clicked('button.track-actions-toggle'))
-      return trackActionsClick(this.closest('div.track-entry'));
+      return trackActionsClick(this.closest('div.track-entry'), m);
 
     if (this.clicked('button.remove-button'))
       return removeClick(this.closest('div.track-entry'));
@@ -230,19 +230,19 @@ class UiElements extends ElementClick
   }
 }
 
-function trackActionsClick(element)
+export function trackActionsClick(element, module)
 {
   const trackActionButtons = element.querySelector('.track-action-buttons');
 
-  if ((m.prevActionButtons !== null) && (m.prevActionButtons !== trackActionButtons))
-    m.prevActionButtons.style.display = '';
+  if ((module.prevActionButtons !== null) && (module.prevActionButtons !== trackActionButtons))
+    module.prevActionButtons.style.display = '';
 
   if (trackActionButtons.style.display === '')
     trackActionButtons.style.display = 'flex';
   else
     trackActionButtons.style.display = '';
 
-  m.prevActionButtons = trackActionButtons;
+  module.prevActionButtons = trackActionButtons;
 }
 
 function playNextClick(trackElement)

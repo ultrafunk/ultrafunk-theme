@@ -68,7 +68,7 @@ export function showModal({
   else
     elements.body.innerHTML = modalBody;
 
-  elements.container.classList = `modal-type-${modalType}`;
+  elements.container.className = `modal-type-${modalType}`;
   elements.container.classList.add((m.clickItemsCount > 10) ? 'modal-click-items-2-columns' : 'modal-click-items-1-column');
   elements.container.querySelector('.modal-dialog-title').innerHTML = modalTitle;
 

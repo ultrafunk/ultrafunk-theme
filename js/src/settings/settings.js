@@ -37,7 +37,7 @@ const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18, 
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 41, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 42, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -62,6 +62,7 @@ export const settingsSchema = {
     tracksPerPage:         { description: 'Tracks Per Page: Search & Shuffle',      type: INTEGER, values: listPerPageValues, default: 25,    valueStrings: listPerPageValueStrings },
     enableLocalPlayback:   { description: 'Enable local (device) tracks playback',  type: BOOLEAN, values: [true, false],     default: false, valueStrings: ['ON', 'OFF'] },
     sortLocalTracks:       { description: 'Sort local tracks alphabetically (asc.)',type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
+    warnOnPageChange:      { description: 'Show Warning Prompt on Page Change',     type: BOOLEAN, values: [true, false],     default: false, valueStrings: ['ON', 'OFF'] },
   },
   gallery: {
     layout:                  { description: 'Track Layout',                         type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
@@ -124,6 +125,7 @@ export const defaultSettings = {
     tracksPerPage:         settingsSchema.list.tracksPerPage.default,
     enableLocalPlayback:   settingsSchema.list.enableLocalPlayback.default,
     sortLocalTracks:       settingsSchema.list.sortLocalTracks.default,
+    warnOnPageChange:      settingsSchema.list.warnOnPageChange.default,
   },
   gallery: {
     layout:                  settingsSchema.gallery.layout.default,

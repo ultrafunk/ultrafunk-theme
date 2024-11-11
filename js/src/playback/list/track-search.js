@@ -12,9 +12,13 @@ import { navSearch }              from '../../site/nav-search.js';
 import { ElementClick }           from '../../shared/element-click.js';
 import { showSnackbar }           from '../../shared/snackbar.js';
 import { getTrackEntryHtml }      from './list-track-templates.js';
-import { getCurrentTrackElement } from './list-controls.js';
 import { setCurrentTrack }        from './list-playback.js';
 import { isShowingModal }         from '../../shared/modal.js';
+
+import {
+  getCurrentTrackElement,
+  trackActionsClick,
+} from './list-controls.js';
 
 import {
   showTrackDetails,
@@ -43,11 +47,12 @@ const m = {
   uiElements:         null,
   searchField:        null,
   trackSearchResults: null,
+  localSearchResults: [],
   resultsTracklist:   null,
   resultsCache:       new Map(),
-  localSearchResults: [],
   prevSearchString:   '',
   modalId:            -1,
+  prevActionButtons:  null,
 };
 
 const minSearchStringLength = 3;
@@ -161,6 +166,9 @@ class uiElements extends ElementClick
     if (this.clicked('div.artist-title'))
       return showTrackDetailsTouch(this.event, this.closest('div.track-entry'));
 
+    if (this.clicked('button.track-actions-toggle'))
+      return trackActionsClick(this.closest('div.track-entry'), m);
+
     if (this.clicked('button.play-next-button'))
       return playNextClick(this.closest('div.track-entry'));
 
@@ -223,8 +231,12 @@ export async function showSearchResults(searchString)
   }
   else
   {
-    if (settings.list.searchLocalTracks && (searchString !== m.prevSearchString))
+    if (settings.list.enableLocalPlayback &&
+        settings.list.searchLocalTracks   &&
+       (searchString !== m.prevSearchString))
+    {
       searchLocalTracks(searchString);
+    }
 
     if ((searchString !== m.prevSearchString) && (m.resultsCache.get(searchString) === undefined))
     {
@@ -373,9 +385,10 @@ function setResultsHtml(restResponse)
     {
       if ((index + tracksAdded) < settings.list.maxTrackSearchResults)
       {
-        const trackElement = document.getElementById(entry).cloneNode(true);
-        trackElement.id    = `track-${Date.now() + index}`;
-        trackElement.classList.replace('default-density', 'compact-density');
+        const trackElement     = document.getElementById(entry).cloneNode(true);
+        trackElement.id        = `track-${Date.now() + index + tracksAdded}`;
+        trackElement.className = 'track-entry compact-density track-type-local aspect-ratio-1_1';
+
         m.resultsTracklist.append(trackElement);
       }
     });
