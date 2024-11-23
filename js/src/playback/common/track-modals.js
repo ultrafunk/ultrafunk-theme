@@ -38,6 +38,12 @@ import {
 } from '../../shared/utils.js';
 
 
+/*************************************************************************************************/
+
+
+const m = { matchingArtistsCache: new Map() };
+
+
 // ************************************************************************************************
 //
 // ************************************************************************************************
@@ -78,7 +84,7 @@ export function showTrackDetails(element, onCloseFocusElement = null)
   const modalTitle = `Track Details<span class="light-text lowercase-text">${((trackDuration > 0) ? getTimeString(trackDuration) : 'duration N/A')}</span>`;
 
   if (getAttrTrackType(element) === TRACK_TYPE.LOCAL)
-    getLocalTrackDetails(element, modalEntries, trackArtist);
+    getLocalTrackDetails(element, modalEntries);
   else
     getTrackDetails(element, modalEntries);
 
@@ -92,32 +98,51 @@ export function showTrackDetails(element, onCloseFocusElement = null)
 
   setTrackThumbnailClick(`${trackArtist} - ${trackTitle}`);
 
+  if (getAttrTrackType(element) === TRACK_TYPE.LOCAL)
+    showMatchingArtistsResults(element, trackArtist);
+
   return modalId;
 }
 
-async function getLocalTrackDetails(element, modalEntries, trackArtist)
+function getLocalTrackDetails(element, modalEntries)
 {
   modalEntries.push({ class: 'header-entry', content: 'Filename' });
-  modalEntries.push({ class: 'default-text', content: `${stripAttribute(element, 'data-track-file-name')}` });
+  modalEntries.push({ class: 'default-text', content: `${stripAttribute(element, 'data-track-filename')}` });
   modalEntries.push({ class: 'header-entry', content: 'Type' });
   modalEntries.push({ class: 'default-text', content: `On device ${stripAttribute(element, 'data-track-file-type')} audio file` });
   modalEntries.push({ class: 'header-entry', content: 'Size' });
   modalEntries.push({ class: 'default-text', content: getReadableBytesSize(parseInt(element.getAttribute('data-track-file-size'))) });
   modalEntries.push({ class: 'header-entry', content: 'Matching Artists' });
   modalEntries.push({ class: 'default-text matching-artists', content: 'Searching...' });
+}
 
-  // Do some character replacements for better search results
-  const trackArtistReplaced = trackArtist.replaceAll(/['";,.:]/g, '').replaceAll(/[&]/g, '&amp;');
+async function showMatchingArtistsResults(element, trackArtist)
+{
+  const trackArtistReplaced = trackArtist.replaceAll(/['";,.:]/g, '').replaceAll(/[&]/g, '&amp;'); // Do some character replacements for better search results
+  let restResponse = {};
 
-  const restResponse = await fetchRest({
-    endpoint: 'artists',
-    query:    `search=${encodeURIComponent(trackArtistReplaced.toLowerCase())}&_fields=link,name`,
-  });
+  if (m.matchingArtistsCache.get(trackArtistReplaced) === undefined)
+  {
+    restResponse = await fetchRest({
+      endpoint: 'artists',
+      query:    `search=${encodeURIComponent(trackArtistReplaced.toLowerCase())}&_fields=link,name`,
+    });
+
+    m.matchingArtistsCache.set(trackArtistReplaced, restResponse);
+  }
+  else
+  {
+    restResponse = m.matchingArtistsCache.get(trackArtistReplaced);
+  }
 
   if ((restResponse.status.code === HTTP_RESPONSE.OK) && (restResponse.data.length !== 0))
     getModalRootElement().querySelector('.modal-default-text.matching-artists').outerHTML = getMatchingArtistsHtml(restResponse, element.id);
   else
     getModalRootElement().querySelector('.modal-default-text.matching-artists').innerHTML = 'None found';
+
+  // Free up some memory...
+  if (m.matchingArtistsCache.size > 250)
+    m.matchingArtistsCache.clear();
 }
 
 function getMatchingArtistsHtml(restResponse, clickId)

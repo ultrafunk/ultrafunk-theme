@@ -193,13 +193,13 @@ function setTracksMetadata()
   m.filesArray.forEach((file) =>
   {
     const trackElement  = document.getElementById(file.trackUid);
-    const fileName      = stripHtml(escHtml(file.name));
-    const fileExtIndex  = fileName.lastIndexOf('.');
-    const fileNameNoExt = (fileExtIndex !== -1) ? fileName.slice(0, fileExtIndex) : fileName;
-    const fileType      = (fileExtIndex !== -1) ? fileName.slice(fileExtIndex + 1).toUpperCase() : file.type;
+    const filename      = stripHtml(escHtml(file.name));
+    const fileExtIndex  = filename.lastIndexOf('.');
+    const filenameNoExt = (fileExtIndex !== -1) ? filename.slice(0, fileExtIndex) : filename;
+    const fileType      = (fileExtIndex !== -1) ? filename.slice(fileExtIndex + 1).toUpperCase() : file.type;
 
     trackElement.setAttribute('data-track-image-url', THEME_ENV.defaultLTImagePlaceholder);
-    trackElement.setAttribute('data-track-file-name', fileName);
+    trackElement.setAttribute('data-track-filename',  filename);
     trackElement.setAttribute('data-track-file-type', fileType);
     trackElement.setAttribute('data-track-file-size', file.size);
 
@@ -208,16 +208,16 @@ function setTracksMetadata()
       onSuccess: (mediaTags) =>
       {
         if (Object.keys(mediaTags.tags).length !== 0)
-          setTrackArtistTitle(mediaTags.tags, trackElement, fileNameNoExt);
+          setTrackArtistTitle(mediaTags.tags, trackElement, filenameNoExt);
         else
-          setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
+          setFallbackTrackArtistTitle(trackElement, filenameNoExt);
 
         if (++processedTracks === m.filesArray.length)
           logPerfTime(m.filesArray.length);
       },
       onError: () =>
       {
-        setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
+        setFallbackTrackArtistTitle(trackElement, filenameNoExt);
 
         if (++processedTracks === m.filesArray.length)
           logPerfTime(m.filesArray.length);
@@ -226,16 +226,16 @@ function setTracksMetadata()
   });
 }
 
-function setTrackArtistTitle(tags, trackElement, fileNameNoExt)
+function setTrackArtistTitle(tags, trackElement, filenameNoExt)
 {
   if ((tags.artist === undefined) && (tags.title === undefined))
   {
-    setFallbackTrackArtistTitle(trackElement, fileNameNoExt);
+    setFallbackTrackArtistTitle(trackElement, filenameNoExt);
   }
   else
   {
-    let artist = fileNameNoExt;
-    let title  = fileNameNoExt;
+    let artist = filenameNoExt;
+    let title  = filenameNoExt;
 
     if ((tags.artist !== undefined) && (tags.artist.length !== 0))
       artist = stripHtml(tags.artist);
@@ -251,14 +251,14 @@ function setTrackArtistTitle(tags, trackElement, fileNameNoExt)
   }
 }
 
-function setFallbackTrackArtistTitle(trackElement, fileNameNoExt)
+function setFallbackTrackArtistTitle(trackElement, filenameNoExt)
 {
-  const trackArtistTitle = fileNameNoExt.split(/\s{1,}[\u002D\u00B7\u2013]\s{1,}/, 2);
+  const trackArtistTitle = filenameNoExt.split(/\s{1,}[\u002D\u00B7\u2013]\s{1,}/, 2);
 
   if (trackArtistTitle.length === 2)
   {
     const trackArtist = trackArtistTitle[0];
-    const trackTitle  = fileNameNoExt.slice(fileNameNoExt.indexOf(trackArtistTitle[1]));
+    const trackTitle  = filenameNoExt.slice(filenameNoExt.indexOf(trackArtistTitle[1]));
 
     trackElement.setAttribute('data-track-artist', trackArtist);
     trackElement.setAttribute('data-track-title',  trackTitle);
@@ -266,8 +266,8 @@ function setFallbackTrackArtistTitle(trackElement, fileNameNoExt)
   }
   else
   {
-    trackElement.setAttribute('data-track-artist', fileNameNoExt);
-    trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${fileNameNoExt}</b></span>`;
+    trackElement.setAttribute('data-track-artist', filenameNoExt);
+    trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${filenameNoExt}</b></span>`;
   }
 }
 

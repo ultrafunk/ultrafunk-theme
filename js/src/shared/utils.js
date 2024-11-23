@@ -24,8 +24,8 @@ const debug = newDebugLogger('utils');
 const SITE_URL_LIST = `${THEME_ENV.siteUrl}/list`;
 
 const validUrlRegEx = IS_PROD_BUILD
-                        ? /^https:\/\/ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/
-                        : /^https:\/\/wordpress\.ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/;
+  ? /^https:\/\/ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/
+  : /^https:\/\/wordpress\.ultrafunk\.com[/?&=%A-Za-z0-9\-_.~+]*$/;
 
 const DOMParserInstance = new DOMParser();
 
@@ -180,7 +180,7 @@ export function stripAttribute(element, attribute)
 
 export function navToUrl(destUrl)
 {
-  if (destUrl && (destUrl.match(validUrlRegEx) !== null))
+  if (destUrl && isValidUrl(destUrl))
   {
     debug.log(`navToUrl() - Valid destUrl: ${destUrl}`);
     window.location.href = destUrl;
@@ -196,6 +196,17 @@ export function navToUrl(destUrl)
       actionClickCallback: () => location.reload(),
     });
   }
+}
+
+function isValidUrl(destUrl)
+{
+  // URL.parse() static method requires Chrome & Firefox v126, Safari v18.0
+  // https://caniuse.com/mdn-api_url_parse_static
+
+  if (URL.parse !== undefined)
+    return ((destUrl.startsWith(THEME_ENV.siteUrl)) && (URL.parse(destUrl) !== null));
+  else
+    return (destUrl.match(validUrlRegEx) !== null);
 }
 
 export function getListPlayerUrl(destUrl)

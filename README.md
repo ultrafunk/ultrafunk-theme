@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CodeQL](https://github.com/ultrafunk/ultrafunk-theme/workflows/CodeQL/badge.svg)](https://github.com/ultrafunk/ultrafunk-theme/actions/workflows/codeql-analysis.yml)
 
-This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress theme, updated each time a new release is published.
+This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress theme, updated each time a new version is released.
 The source code is provided as is with no warranties or support of any kind.
 
 # Client configurations
@@ -17,7 +17,7 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 # Dependencies  
 **Required:**  
 PHP version 8.3 or greater.  
-[WordPress](https://wordpress.org/download/) version 6.6 or greater.  
+[WordPress](https://wordpress.org/download/) version 6.7 or greater.  
 [Ultrafunk Plugin](https://github.com/ultrafunk/ultrafunk-plugin/) version 1.48.X or greater.  
 [ESBuild](https://github.com/evanw/esbuild/) - JavaScript / CSS bundler and minifier.  
 [Google Material Icons font](https://fonts.google.com/icons)  

@@ -381,11 +381,11 @@ function setResultsHtml(restResponse)
 
   if ((moreThanMaxResults === false) || (tracksAdded < settings.list.maxTrackSearchResults))
   {
-    m.localSearchResults.forEach((entry, index) =>
+    m.localSearchResults.forEach((elementId, index) =>
     {
       if ((index + tracksAdded) < settings.list.maxTrackSearchResults)
       {
-        const trackElement     = document.getElementById(entry).cloneNode(true);
+        const trackElement     = document.getElementById(elementId).cloneNode(true);
         trackElement.id        = `track-${Date.now() + index + tracksAdded}`;
         trackElement.className = 'track-entry compact-density track-type-local aspect-ratio-1_1';
 
