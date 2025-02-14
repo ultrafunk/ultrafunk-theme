@@ -118,7 +118,8 @@ function getLocalTrackDetails(element, modalEntries)
 
 async function showMatchingArtistsResults(element, trackArtist)
 {
-  const trackArtistReplaced = trackArtist.replaceAll(/['";,.:]/g, '').replaceAll(/[&]/g, '&amp;'); // Do some character replacements for better search results
+  // Do some character replacements for better search results
+  const trackArtistReplaced = trackArtist.replaceAll(/['";,.:]/g, '').replaceAll(/[&]/g, '&amp;');
   let restResponse = {};
 
   if (m.matchingArtistsCache.get(trackArtistReplaced) === undefined)

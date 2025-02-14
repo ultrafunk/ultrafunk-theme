@@ -162,8 +162,8 @@ function mediaUnavailable(playbackEvent)
   debug.log(playbackEvent);
 
   showSnackbar({
-    message: 'Unable to play track, skipping to next',
-    duration: 5,
+    message: 'Error playing track, skipping to next',
+    duration: 4,
     actionText: 'Stop',
     afterCloseCallback: () => playbackEventErrorTryNext(playbackEvent),
   });

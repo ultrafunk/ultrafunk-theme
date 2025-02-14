@@ -199,17 +199,17 @@ term-list {
   font-weight: 400;
 }
 
-.termlist-icons {
+.termlist-buttons {
   display: inline-flex;
 }
 
-.termlist-icons .material-icons {
+.termlist-buttons .material-icons {
   font-size: 30px;
 }
 
-.termlist-icons .play-button,
-.termlist-icons .shuffle-button,
-.termlist-icons .share-find-button {
+.termlist-buttons .play-button,
+.termlist-buttons .shuffle-button,
+.termlist-buttons .share-find-button {
   display: none;
 }
 
@@ -219,8 +219,8 @@ term-list {
   display: block;
 }
 
-.termlist-icons .play-button a,
-.termlist-icons .shuffle-button a {
+.termlist-buttons .play-button a,
+.termlist-buttons .shuffle-button a {
   display: inline-flex;
   padding: 10px;
   text-decoration: none;
@@ -230,13 +230,13 @@ term-list {
   user-select: none;
 }
 
-.termlist-icons .play-button a:hover,
-.termlist-icons .shuffle-button a:hover {
+.termlist-buttons .play-button a:hover,
+.termlist-buttons .shuffle-button a:hover {
   color: var(--link-hover-color);
 }
 
-.termlist-icons .share-find-button,
-.termlist-icons .expand-toggle {
+.termlist-buttons .share-find-button,
+.termlist-buttons .expand-toggle {
   width: 30px;
   height: 30px;
   padding: 10px;
@@ -248,10 +248,10 @@ term-list {
 
 @media all and (pointer: fine) {
 
-  .termlist-icons .play-button:hover,
-  .termlist-icons .shuffle-button:hover,
-  .termlist-icons .share-find-button:hover,
-  .termlist-icons .expand-toggle:hover {
+  .termlist-buttons .play-button:hover,
+  .termlist-buttons .shuffle-button:hover,
+  .termlist-buttons .share-find-button:hover,
+  .termlist-buttons .expand-toggle:hover {
     background-color: var(--control-highlight-color);
     border-radius: var(--button-border-radius);
   }
@@ -266,17 +266,17 @@ term-list {
 
 @media not all and (pointer: fine) {
 
-  .termlist-icons .play-button,
-  .termlist-icons .shuffle-button,
-  .termlist-icons .share-find-button,
-  .termlist-icons .expand-toggle:hover {
+  .termlist-buttons .play-button,
+  .termlist-buttons .shuffle-button,
+  .termlist-buttons .share-find-button,
+  .termlist-buttons .expand-toggle:hover {
     transition: var(--button-default-transition);
   }
 
-  .termlist-icons .play-button:active,
-  .termlist-icons .shuffle-button:active,
-  .termlist-icons .share-find-button:active,
-  .termlist-icons .expand-toggle:active {
+  .termlist-buttons .play-button:active,
+  .termlist-buttons .shuffle-button:active,
+  .termlist-buttons .share-find-button:active,
+  .termlist-buttons .expand-toggle:active {
     background-color: var(--control-highlight-color);
     border-radius: var(--button-border-radius);
     transition: var(--button-active-transition);
@@ -498,10 +498,10 @@ term-list {
     line-height: unset;
   }
 
-  .termlist-icons .play-button a,
-  .termlist-icons .shuffle-button a,
-  .termlist-icons .share-find-button,
-  .termlist-icons .expand-toggle {
+  .termlist-buttons .play-button a,
+  .termlist-buttons .shuffle-button a,
+  .termlist-buttons .share-find-button,
+  .termlist-buttons .expand-toggle {
     padding: 10px;
   }
 
@@ -556,12 +556,12 @@ term-list {
     margin-bottom: 40px;
   }
 
-  .termlist-icons .material-icons {
+  .termlist-buttons .material-icons {
     font-size: 26px;
   }
 
-  .termlist-icons .share-find-button,
-  .termlist-icons .expand-toggle {
+  .termlist-buttons .share-find-button,
+  .termlist-buttons .expand-toggle {
     width: 26px;
     height: 26px;
   }
@@ -632,17 +632,17 @@ term-list {
     padding: 11px 15px;
   }
 
-  .termlist-icons .material-icons {
+  .termlist-buttons .material-icons {
     font-size: 26px;
   }
 
-  .termlist-icons .play-button a,
-  .termlist-icons .shuffle-button a {
+  .termlist-buttons .play-button a,
+  .termlist-buttons .shuffle-button a {
     padding: 9px;
   }
 
-  .termlist-icons .share-find-button,
-  .termlist-icons .expand-toggle {
+  .termlist-buttons .share-find-button,
+  .termlist-buttons .expand-toggle {
     width: 26px;
     height: 26px;
     padding: 9px;

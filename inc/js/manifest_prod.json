@@ -6,6 +6,7 @@
   "background_color": "#0a1428",
   "theme_color": "#142850",
   "description": "Ultrafunk is an interactive playlist with carefully chosen and continually updated tracks rooted in Funk and related genres",
+  "orientation": "natural",
   "icons": [
     {
       "src": "https://ultrafunk.com/wp-content/uploads/branding/ultrafunk_pwa_icon_05-192x192.png",

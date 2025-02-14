@@ -191,10 +191,10 @@ class UiElements extends ElementClick
 {
   elementClicked()
   {
-    if (this.clicked('div.play-button'))
+    if (this.clicked('button.play-button'))
       return playClick(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
 
-    if (this.clicked('div.shuffle-button'))
+    if (this.clicked('button.shuffle-button'))
       return shuffleClick(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
 
     if (this.clicked('button.share-find-button'))

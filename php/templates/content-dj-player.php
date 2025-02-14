@@ -22,8 +22,8 @@ class DJPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
     <!doctype html>
     <html lang="en">
     <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name='robots' content='noindex, nofollow' />
       <title>Ultrafunk DJ Player</title>
       <link rel='stylesheet' id='content-dj-player-style' href='<?php echo $stylesheet_href; ?>' media='all' />

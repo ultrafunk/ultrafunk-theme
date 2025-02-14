@@ -57,13 +57,13 @@ class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
       <div id="<?php echo "term-$term->term_id"; ?>" class="termlist-entry" data-term-id="<?php echo $term->term_id; ?>" data-term-slug="<?php echo $term_slug; ?>">
         <div class="termlist-header" title="Show more or less">
           <div class="termlist-name text-nowrap-ellipsis"><?php echo "$term_name <span class='light-text'>($term->count)</span>"; ?></div>
-          <div class="termlist-icons">
-            <div class="play-button" title="Play All - <?php echo $term_name; ?>">
+          <div class="termlist-buttons">
+            <button type="button" class="play-button" title="Play All - <?php echo $term_name; ?>">
               <a href="<?php echo "/$term_path/$term_slug/"; ?>" target="_blank"><span class="material-icons">play_arrow</span></a>
-            </div>
-            <div class="shuffle-button" title="Shuffle &amp; Play All - <?php echo $term_name; ?>">
+            </button>
+            <button type="button" class="shuffle-button" title="Shuffle &amp; Play All - <?php echo $term_name; ?>">
               <a href="<?php echo "/shuffle/$term_path/$term_slug/"; ?>" target="_blank"><span class="material-icons">shuffle</span></a>
-            </div>
+            </button>
             <button type="button" class="share-find-button" title="Share <?php echo $term_name; ?> / Find On"
               data-term-path="<?php echo $term_path; ?>"
               data-term-name="<?php echo $term_name; ?>"

@@ -75,12 +75,12 @@ function pre_wp_head() : void
   }
 
   ?>
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <?php
 
   if (!empty(JS_PRELOAD_CHUNK) && IS_PROD_BUILD)
-    echo '<link rel="modulepreload" href="' . ULTRAFUNK_THEME_URI . JS_PRELOAD_CHUNK . '" as="script" crossorigin>' . PHP_EOL;
+    echo '<link rel="modulepreload" href="' . ULTRAFUNK_THEME_URI . JS_PRELOAD_CHUNK . '" as="script" crossorigin />' . PHP_EOL;
 }
 
 function channel_meta_description() : void
@@ -148,13 +148,13 @@ function scripts_styles() : void
 function head() : void
 {
   ?>
-  <link rel="manifest" href="<?php echo THEME_ENV['uf_pwa_manifest']; ?>">
-  <meta name="theme-color" content="#142850">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-startup-image" href="<?php echo THEME_ENV['uf_pwa_startup_image']; ?>">
-  <meta name="apple-mobile-web-app-title" content="Ultrafunk">
-  <meta name="application-name" content="Ultrafunk">
+  <link rel="manifest" href="<?php echo THEME_ENV['uf_pwa_manifest']; ?>" />
+  <meta name="theme-color" content="#142850" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-startup-image" href="<?php echo THEME_ENV['uf_pwa_startup_image']; ?>" />
+  <meta name="apple-mobile-web-app-title" content="Ultrafunk" />
+  <meta name="application-name" content="Ultrafunk" />
   <?php
 
   if (is_shuffle() === false)

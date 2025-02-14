@@ -377,8 +377,8 @@ function onMediaUnavailable()
     listControls.setTrackMessage('Error!');
 
     showSnackbar({
-      message: 'Unable to play track, skipping to next',
-      duration: 5,
+      message: 'Error playing track, skipping to next',
+      duration: 4,
       actionText: 'Stop',
       actionClickCallback: stopSkipToNextTrack,
       afterCloseCallback:  skipToNextTrack,
