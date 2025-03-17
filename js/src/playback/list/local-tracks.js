@@ -64,6 +64,11 @@ export function initLocalTracks()
   addListener('#clear-local-tracks', 'click',  clearLocalTracks);
 }
 
+export function hasLoadedLocalTracks()
+{
+  return (document.querySelector('div.track-entry.track-type-local') !== null);
+}
+
 
 // ************************************************************************************************
 //

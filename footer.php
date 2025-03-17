@@ -41,7 +41,7 @@
       <a href="/artists/"><b>View Artists</b></a>
       <div class="footer-site-info-block">
         <a href="/about/">About</a><br>
-        <a href="/help/">Help</a><br>
+    <!--<a href="/help/">Help</a><br>-->
         <a href="/privacy-policy/">Privacy Policy</a><br>
         <a href="mailto:contact@ultrafunk.com">Contact</a><br>
         <a href="https://github.com/ultrafunk/">GitHub</a>

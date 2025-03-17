@@ -36,6 +36,8 @@ const listPerPageValueStrings    = ['10', '15', '20', '25', '30', '35', '40', '4
 const galleryPerPageValues       = [ 4,   6,   8,   10,   12,   14,   16,   18,   20,   22,   24 ];
 const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'];
 
+const trackCrossfadeDefPresetValueStrings = ['10 sec EqPow (1)', '20 sec EqPow (2)', '30 sec EqPow (3)', '10 sec Linear (4)', '20 sec Linear (5)', '30 sec Linear (6)'];
+
 export const settingsSchema = {
   version: { description: '', type: INTEGER, values: [1, 999999], default: 42, valueStrings: [] },
   playback: {
@@ -73,7 +75,7 @@ export const settingsSchema = {
     autoCrossfadeCurve:      { description: 'Auto Crossfade Curve',                 type: INTEGER, values: [1, 2],                  default: 2,     valueStrings: ['Equal Power', 'Linear'] },
     autoScroll:              { description: 'Autoscroll to next track',             type: BOOLEAN, values: [true, false],           default: true,  valueStrings: ['ON', 'OFF'] },
     animateNowPlayingIcon:   { description: 'Animate Now Playing Track Icon',       type: BOOLEAN, values: [true, false],           default: true,  valueStrings: ['ON', 'OFF'] },
-    trackCrossfadeDefPreset: { description: 'Track Crossfade Def. Preset',          type: INTEGER, values: [0, 1, 2, 3, 4, 5],      default: 1,     valueStrings: ['10 sec EqPow (1)', '20 sec EqPow (2)', '30 sec EqPow (3)', '10 sec Linear (4)', '20 sec Linear (5)', '30 sec Linear (6)'] },
+    trackCrossfadeDefPreset: { description: 'Track Crossfade Def. Preset',          type: INTEGER, values: [0, 1, 2, 3, 4, 5],      default: 1,     valueStrings: trackCrossfadeDefPresetValueStrings },
   },
   mobile: {
     keepScreenOn:        { description: 'Keep Screen On when playing', type: BOOLEAN, values: [true, false], default: false, valueStrings: ['ON', 'OFF'] },

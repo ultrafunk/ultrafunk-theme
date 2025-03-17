@@ -5,17 +5,18 @@
 //
 
 
-import * as galleryPlayback   from './gallery/gallery-playback.js';
-import * as listPlayback      from './list/list-playback.js';
-import * as playbackEvents    from './common/playback-events.js';
-import * as utils             from '../shared/utils.js';
-import * as footerToggles     from '../site/footer-toggles.js';
-import * as shared            from './common/shared-gallery-list.js';
-import { ElementClick }       from '../shared/element-click.js';
-import { showSnackbar }       from '../shared/snackbar.js';
-import { initScreenWakeLock } from './common/screen-wakelock.js';
-import { TRACK_TYPE }         from './common/mediaplayer.js';
-import { InteractionLog }     from './common/eventlogger.js';
+import * as galleryPlayback     from './gallery/gallery-playback.js';
+import * as listPlayback        from './list/list-playback.js';
+import * as playbackEvents      from './common/playback-events.js';
+import * as utils               from '../shared/utils.js';
+import * as footerToggles       from '../site/footer-toggles.js';
+import * as shared              from './common/shared-gallery-list.js';
+import { ElementClick }         from '../shared/element-click.js';
+import { showSnackbar }         from '../shared/snackbar.js';
+import { initScreenWakeLock }   from './common/screen-wakelock.js';
+import { TRACK_TYPE }           from './common/mediaplayer.js';
+import { InteractionLog }       from './common/eventlogger.js';
+import { hasLoadedLocalTracks } from './list/local-tracks.js';
 
 import {
   showTrackSharePlay,
@@ -156,7 +157,7 @@ function initListeners()
   {
     window.addEventListener('beforeunload', (event) =>
     {
-      if (m.player.getStatus().isPlaying)
+      if (m.player.getStatus().isPlaying || hasLoadedLocalTracks())
       {
         event.preventDefault();
         event.returnValue = true;
