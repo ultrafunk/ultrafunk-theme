@@ -1,6 +1,5 @@
 {
   "name": "Ultrafunk",
-  "short_name": "Ultrafunk",
   "start_url": "https://ultrafunk.com",
   "display": "standalone",
   "background_color": "#0a1428",
