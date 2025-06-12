@@ -22,7 +22,9 @@ export function newDebugLogger(moduleName)
 
 class DebugLog
 {
-  constructor(moduleName = 'unknown')
+  moduleName = 'unknown';
+
+  constructor(moduleName)
   {
     this.moduleName = (moduleName.length > 20)
       ? moduleName.slice(0, 20).toUpperCase()

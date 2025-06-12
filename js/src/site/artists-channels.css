@@ -133,7 +133,6 @@ term-list {
   justify-content: space-between;
   border-radius: var(--button-border-radius);
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -226,7 +225,6 @@ term-list {
   text-decoration: none;
   color: var(--primary-icon-color);
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -242,7 +240,6 @@ term-list {
   padding: 10px;
   color: var(--primary-icon-color);
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -387,7 +384,6 @@ term-list {
   overflow: hidden;
   position: relative;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   background-color: var(--track-thumbnail-even-placeholder-color);
   border-radius: var(--track-thumbnail-border-radius);

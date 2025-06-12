@@ -106,12 +106,13 @@ export function showTrackDetails(element, onCloseFocusElement = null)
 
 function getLocalTrackDetails(element, modalEntries)
 {
+  const fileType = stripAttribute(element, 'data-track-file-type');
+  const fileSize = getReadableBytesSize(parseInt(element.getAttribute('data-track-file-size')));
+
   modalEntries.push({ class: 'header-entry', content: 'Filename' });
   modalEntries.push({ class: 'default-text', content: `${stripAttribute(element, 'data-track-filename')}` });
-  modalEntries.push({ class: 'header-entry', content: 'Type' });
-  modalEntries.push({ class: 'default-text', content: `On device ${stripAttribute(element, 'data-track-file-type')} audio file` });
-  modalEntries.push({ class: 'header-entry', content: 'Size' });
-  modalEntries.push({ class: 'default-text', content: getReadableBytesSize(parseInt(element.getAttribute('data-track-file-size'))) });
+  modalEntries.push({ class: 'header-entry', content: 'Type (size)' });
+  modalEntries.push({ class: 'default-text', content: `On device ${fileType} audio file (${fileSize})` });
   modalEntries.push({ class: 'header-entry', content: 'Matching Artists' });
   modalEntries.push({ class: 'default-text matching-artists', content: 'Searching...' });
 }

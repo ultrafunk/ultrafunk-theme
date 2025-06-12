@@ -182,7 +182,6 @@
     width: 40px;
     object-fit: cover;
     -webkit-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     image-rendering: -webkit-optimize-contrast;
   }
@@ -232,7 +231,6 @@
     height: 30px;
     padding: 5px;
     -webkit-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     border-radius: var(--button-border-radius);
   }

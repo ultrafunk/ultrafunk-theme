@@ -26,7 +26,6 @@ body.tracks.autoplay-off .crossfade-controls {
   font-weight: 700;
   cursor: pointer;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   margin-left: 20px;
 }

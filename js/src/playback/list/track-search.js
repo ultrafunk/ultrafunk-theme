@@ -69,7 +69,7 @@ export function initTrackSearch()
   if (settings.list.realtimeTrackSearch)
   {
     m.debounceKeyup      = debounceKeyup(showSearchResults, 250);
-    m.uiElements         = new uiElements('#track-search-results .results-tracklist');
+    m.uiElements         = new UiElements('#track-search-results .results-tracklist');
     m.searchField        = document.querySelector('#site-search-container .search-field');
     m.trackSearchResults = document.getElementById('track-search-results');
     m.resultsTracklist   = m.trackSearchResults.querySelector('.results-tracklist');
@@ -156,7 +156,7 @@ function debounceKeyup(callback, delayMilliseconds)
 // Handle UI events
 // ************************************************************************************************
 
-class uiElements extends ElementClick
+class UiElements extends ElementClick
 {
   elementClicked()
   {

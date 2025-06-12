@@ -160,7 +160,6 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   color: var(--primary-icon-color);
   max-width: 500px;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   cursor: pointer;
 }
@@ -181,7 +180,6 @@ body.autoplay-off .progress-bar-control.state-playing.time-remaining-warning {
   text-align: right;
   color: var(--primary-icon-color);
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   cursor: pointer;
 }
@@ -242,7 +240,6 @@ body.single.track .playback-player-type-toggle {
 .playback-volume-control {
   display: inline-block;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 

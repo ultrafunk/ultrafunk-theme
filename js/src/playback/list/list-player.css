@@ -177,7 +177,6 @@ body.list-player .site-branding {
     font-size: 30px;
     padding: 8px;
     -webkit-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
 
@@ -224,7 +223,6 @@ body.list-player .site-branding {
   color: var(--site-theme-icon-color);
   background-color: var(--site-theme-light-color);
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   overflow: hidden;
 }

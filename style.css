@@ -4,9 +4,9 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.48.30
-Requires at least: 6.7
-Tested up to:      6.7.2
+Version:           1.48.31
+Requires at least: 6.8
+Tested up to:      6.8
 Requires PHP:      8.3
 License:           MIT License
 License URI:       https://opensource.org/licenses/MIT
@@ -258,6 +258,7 @@ form .search-field:focus {
   width: 40px;
   overflow: hidden;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -644,7 +645,6 @@ body.page-settings .footer-settings {
   display: flex;
   color: var(--site-theme-icon-color);
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   padding: 8px 16px;
   background-color: var(--site-theme-light-color);
@@ -724,7 +724,6 @@ body.list-player #footer-crossfade-toggle {
   pointer-events: none;
   cursor: default;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 

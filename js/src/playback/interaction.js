@@ -102,8 +102,8 @@ function initCommon()
   initPlaybackEvents();
 
   m.player.init();
-  m.siteNavUiElements  = new siteNavUiElements('#site-navigation');
-  m.trackNavUiElements = new trackNavUiElements('nav.single-track-nav .nav-links');
+  m.siteNavUiElements  = new SiteNavUiElements('#site-navigation');
+  m.trackNavUiElements = new TrackNavUiElements('nav.single-track-nav .nav-links');
 
   shared.fullscreenElement.init();
   m.keyboardShortcuts = utils.keyboardShortcuts(settings.playback.keyboardShortcuts);
@@ -424,7 +424,7 @@ function playbackTimerClick()
   footerToggles.autoplay.toggle();
 }
 
-class siteNavUiElements extends ElementClick
+class SiteNavUiElements extends ElementClick
 {
   elementClicked()
   {
@@ -436,7 +436,7 @@ class siteNavUiElements extends ElementClick
   }
 }
 
-class trackNavUiElements extends ElementClick
+class TrackNavUiElements extends ElementClick
 {
   elementClicked()
   {

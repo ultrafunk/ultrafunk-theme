@@ -38,7 +38,6 @@ table.settings {
   table-layout: fixed;
   width: 100%;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-size: 22px;
   line-height: 30px;
@@ -117,7 +116,7 @@ table.settings {
   }
 
   td.current-value-false {
-    opacity: 0.3;
+    opacity: 0.6;
   }
 
 }

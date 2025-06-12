@@ -8,7 +8,6 @@
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { TRACK_TYPE }        from '../common/mediaplayer.js';
 import { getTrackEntryHtml } from './list-track-templates.js';
-import { queryTrackAll }     from './list-controls.js';
 import { settings }          from '../../shared/session-data.js';
 
 import {
@@ -27,6 +26,11 @@ import {
   escHtml,
   stripHtml,
 } from '../../shared/utils.js';
+
+import {
+  queryTrack,
+  queryTrackAll,
+} from './list-controls.js';
 
 
 /*************************************************************************************************/
@@ -66,7 +70,7 @@ export function initLocalTracks()
 
 export function hasLoadedLocalTracks()
 {
-  return (document.querySelector('div.track-entry.track-type-local') !== null);
+  return (queryTrack('div.track-entry.track-type-local') !== null);
 }
 
 
@@ -78,7 +82,7 @@ function getSelectedFiles(eventType, filesList)
 {
   if ((eventType === 'cancel') || (filesList.length === 0))
   {
-    showSnackbar({ message: 'No tracks selected', duration: 3 });
+    showSnackbar({ message: 'No local tracks selected', duration: 3 });
   }
   else
   {
