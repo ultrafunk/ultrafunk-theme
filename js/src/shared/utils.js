@@ -118,7 +118,7 @@ export function getOverlayOpacityCssValue()
 
 
 // ************************************************************************************************
-// https://github.com/janl/mustache.js/blob/master/mustache.js#L59
+// Based on: https://github.com/janl/mustache.js/blob/master/mustache.js#L59
 // ************************************************************************************************
 
 const entityMap = {
@@ -134,7 +134,18 @@ const entityMap = {
 
 export function escHtml(string)
 {
-  return String(string).replace(/[&<>"'`=/]/g, (s) => entityMap[s]);
+  return String(string).replace(/[&<>"'`=/]/g, (charToEncode, charOffset) =>
+  {
+    //
+    // The WordPress esc_html() function attempts to avoid double-encoding, so no trouble in PHP templates,
+    // but this creates problems in client-side JavaScript when getting REST results that allready contains
+    // HTML entity encoded text (as stored in the database), specifically the &amp; entity for some reason...
+    //
+    if ((charToEncode === '&') && (string.startsWith('&amp;', charOffset)))
+      return charToEncode;
+
+    return entityMap[charToEncode];
+  });
 }
 
 export function escAttribute(element, attribute)

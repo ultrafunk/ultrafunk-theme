@@ -62,7 +62,7 @@ export async function showUpNextModal()
 {
   const tracklist = getTracklist(isPlaying());
 
-  if (tracklist.length > 2)
+  if (tracklist.length > 3)
   {
     m.modalDialogId = showModal({
       modalTitle: getTitle(isPlaying()),

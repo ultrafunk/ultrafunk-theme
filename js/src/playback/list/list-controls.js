@@ -259,7 +259,7 @@ function playNextClick(trackElement)
     else
       addTrack(nextTrackElement, m.trackElement, 'afterend');
 
-    showSnackbar({ message: 'Track will play next', duration: 5, actionText: 'details', actionClickCallback: () =>  showTrackDetails(nextTrackElement) });
+    showSnackbar({ message: 'Track will play next', duration: 6, actionText: 'details', actionClickCallback: () =>  showTrackDetails(nextTrackElement) });
   }
   else
   {
