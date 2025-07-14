@@ -22,7 +22,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.53.2",
+    "@playwright/test": "^1.54.1",
     "esbuild": "^0.25.5",
     "eslint": "^9.31.0"
   },
