@@ -118,7 +118,7 @@ export function getOverlayOpacityCssValue()
 
 
 // ************************************************************************************************
-// Based on: https://github.com/janl/mustache.js/blob/master/mustache.js#L59
+// escHtml() based on: https://github.com/janl/mustache.js/blob/master/mustache.js#L59
 // ************************************************************************************************
 
 const entityMap = {
