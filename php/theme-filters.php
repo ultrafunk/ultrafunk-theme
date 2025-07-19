@@ -8,7 +8,7 @@
 namespace Ultrafunk\Theme\Filters;
 
 
-use Ultrafunk\Plugin\Shared\PLAYER_TYPE;
+use Ultrafunk\Plugin\Shared\Constants\PLAYER_TYPE;
 
 use const Ultrafunk\Theme\Config\THEME_ENV;
 

@@ -8,7 +8,7 @@
 namespace Ultrafunk\Theme\Templates\GalleryTrack;
 
 
-use function Ultrafunk\Plugin\Shared\get_term_links;
+use function Ultrafunk\Plugin\Shared\Utils\get_term_links;
 
 
 /**************************************************************************************************************************/

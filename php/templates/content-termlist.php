@@ -11,7 +11,7 @@ namespace Ultrafunk\Theme\Templates;
 /**************************************************************************************************************************/
 
 
-class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
+final class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
 {
   private bool  $is_artists = false;
   private array $terms_list = [];

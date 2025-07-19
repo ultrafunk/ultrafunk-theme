@@ -11,7 +11,7 @@ namespace Ultrafunk\Theme\Widgets;
 /**************************************************************************************************************************/
 
 
-class Taxonomies extends \WP_Widget
+final class Taxonomies extends \WP_Widget
 {
   public function __construct()
   {

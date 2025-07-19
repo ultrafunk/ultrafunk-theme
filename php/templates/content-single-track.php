@@ -8,9 +8,9 @@
 namespace Ultrafunk\Theme\Templates\SingleTrack;
 
 
-use Ultrafunk\Plugin\Shared\TRACK_TYPE;
+use Ultrafunk\Plugin\Shared\Constants\TRACK_TYPE;
 
-use function Ultrafunk\Plugin\Shared\get_term_links;
+use function Ultrafunk\Plugin\Shared\Utils\get_term_links;
 
 use function Ultrafunk\Theme\Functions\ {
   get_track_data,

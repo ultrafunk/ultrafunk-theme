@@ -11,7 +11,7 @@ namespace Ultrafunk\Theme\Templates;
 /**************************************************************************************************************************/
 
 
-class DJPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
+final class DJPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
 {
   protected function render_response() : void
   {

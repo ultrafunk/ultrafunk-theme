@@ -10,7 +10,7 @@ namespace Ultrafunk\Theme\Tags;
 
 use WP_Term;
 
-use Ultrafunk\Plugin\Shared\PLAYER_TYPE;
+use Ultrafunk\Plugin\Shared\Constants\PLAYER_TYPE;
 
 use const Ultrafunk\Theme\Config\ {
   IS_PROD_BUILD,

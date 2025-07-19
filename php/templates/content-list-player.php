@@ -8,17 +8,17 @@
 namespace Ultrafunk\Theme\Templates;
 
 
-use Ultrafunk\Plugin\Shared\TRACK_TYPE;
+use Ultrafunk\Plugin\Shared\Constants\TRACK_TYPE;
 
 use const Ultrafunk\Theme\Config\IS_PROD_BUILD;
 
-use function Ultrafunk\Plugin\Shared\get_term_links;
+use function Ultrafunk\Plugin\Shared\Utils\get_term_links;
 
 
 /**************************************************************************************************************************/
 
 
-class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
+final class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
 {
   protected function render_response() : void
   {
