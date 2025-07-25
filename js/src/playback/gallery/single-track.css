@@ -32,7 +32,6 @@ nav.navigation.single-track-nav {
 .single-track-nav .nav-links {
   display: flex;
   width: 100%;
-  align-items: center;
   font-size: 20px;
   font-weight: 400;
   line-height: 26px;
@@ -67,12 +66,12 @@ nav.navigation.single-track-nav {
 
 .prev-track-nav-thumbnail,
 .next-track-nav-thumbnail {
-  width: 46px;
-  min-width: 46px;
-  height: 46px;
+  width: 45px;
+  min-width: 45px;
+  height: 45px;
   overflow: hidden;
   cursor: pointer;
-  border-radius: var(--button-border-radius);
+  border-radius: var(--track-thumbnail-border-radius);
 }
 
 .prev-track-nav-thumbnail {
@@ -85,14 +84,14 @@ nav.navigation.single-track-nav {
 
 .prev-track-nav-thumbnail.track-type-youtube img,
 .next-track-nav-thumbnail.track-type-youtube img{
-  height: 62px;
+  height: 61px;
   margin-top: -8px;
 }
 
 .prev-track-nav-thumbnail img,
 .next-track-nav-thumbnail img {
-  width: 46px;
-  height: 46px;
+  width: 45px;
+  height: 45px;
   object-fit: cover;
   image-rendering: -webkit-optimize-contrast;
 }
@@ -124,7 +123,7 @@ nav.navigation.single-track-nav {
   }
 
   nav.navigation.single-track-nav {
-    margin: 29px auto 26px auto;
+    margin: 29px auto 25px auto;
   }
 
   .single-track-nav .nav-links {

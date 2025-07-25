@@ -4,7 +4,7 @@ Theme URI:         https://github.com/ultrafunk/ultrafunk-theme
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress theme
-Version:           1.48.34
+Version:           1.48.35
 Requires at least: 6.8
 Tested up to:      6.8
 Requires PHP:      8.4
@@ -634,14 +634,8 @@ body.page-settings .footer-settings {
   text-decoration: underline;
 }
 
-#footer-mute-toggle,
-#footer-volume-toggle,
-#footer-settings-button,
-#footer-player-type-toggle,
-#footer-autoplay-toggle,
-#footer-crossfade-toggle,
-#footer-site-theme-toggle,
-#footer-gallery-layout-toggle {
+.footer-settings button,
+.footer-settings a.button {
   display: flex;
   color: var(--site-theme-icon-color);
   -webkit-user-select: none;
@@ -691,13 +685,8 @@ body.page-settings .footer-settings {
   margin-bottom: 0;
 }
 
-#footer-mute-toggle.disabled,
-#footer-volume-toggle.disabled,
-#footer-player-type-toggle.disabled,
-#footer-autoplay-toggle.disabled,
-#footer-crossfade-toggle.disabled,
-#footer-site-theme-toggle.disabled,
-#footer-gallery-layout-toggle.disabled,
+.footer-settings button.disabled,
+.footer-settings a.button.disabled,
 
 /*
 * Handle button states here based on body classes set by server
@@ -727,13 +716,8 @@ body.list-player #footer-crossfade-toggle {
   user-select: none;
 }
 
-#footer-mute-toggle .value,
-#footer-volume-toggle .value,
-#footer-player-type-toggle .value,
-#footer-autoplay-toggle .value,
-#footer-crossfade-toggle .value,
-#footer-site-theme-toggle .value,
-#footer-gallery-layout-toggle .value {
+.footer-settings button span.value,
+.footer-settings a.button span.value {
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -746,14 +730,8 @@ a:hover#footer-player-type-toggle {
 
 @media all and (pointer: fine) {
 
-  #footer-mute-toggle:hover,
-  #footer-volume-toggle:hover,
-  #footer-settings-button:hover,
-  #footer-player-type-toggle:hover,
-  #footer-autoplay-toggle:hover,
-  #footer-crossfade-toggle:hover,
-  #footer-site-theme-toggle:hover,
-  #footer-gallery-layout-toggle:hover {
+  .footer-settings button:hover,
+  .footer-settings a.button:hover {
     background-color: var(--site-theme-medium-color);
     cursor: pointer;
   }
@@ -767,21 +745,11 @@ a:hover#footer-player-type-toggle {
 
 @media not all and (pointer: fine) {
 
-  #footer-mute-toggle,
-  #footer-volume-toggle,
-  #footer-autoplay-toggle,
-  #footer-crossfade-toggle,
-  #footer-site-theme-toggle,
-  #footer-gallery-layout-toggle {
+  .footer-settings button {
     transition: var(--button-default-transition);
   }
 
-  #footer-mute-toggle:active,
-  #footer-volume-toggle:active,
-  #footer-autoplay-toggle:active,
-  #footer-crossfade-toggle:active,
-  #footer-site-theme-toggle:active,
-  #footer-gallery-layout-toggle:active {
+  .footer-settings button:active {
     background-color: var(--site-theme-medium-color);
     transition: var(--button-active-transition);
   }

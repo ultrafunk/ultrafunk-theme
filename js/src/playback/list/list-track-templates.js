@@ -74,7 +74,9 @@ export function getTrackEntryHtml(track, density = 'default')
         </div>
         <button type="button" class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></button>
       </div>
-      <div class="track-duration text-nowrap-ellipsis" title="Track duration">${((track.meta.track_source_type === TRACK_TYPE.YOUTUBE) ? getTimeString(trackDuration) : 'N / A')}</div>
+      <div class="track-duration text-nowrap-ellipsis" title="Track duration">
+        ${((track.meta.track_source_type === TRACK_TYPE.YOUTUBE) ? getTimeString(trackDuration) : 'N / A')}
+      </div>
     </div>`;
 }
 

@@ -138,9 +138,13 @@ function get_track_data(object $track) : array
   {
     if (1 === preg_match(YOUTUBE_VIDEO_ID_REGEX, $track->track_source_data, $source_uid))
     {
+      $track_thumbnail_src = \Ultrafunk\Theme\Config\IS_PROD_BUILD
+        ? "https://i.ytimg.com/vi/$source_uid[0]/default.jpg"
+        : \Ultrafunk\Theme\Config\THEME_ENV['default_yt_thumbnail'];
+
       return [
         'track_type'   => TRACK_TYPE::YOUTUBE,
-        'thumnail_src' => "https://i.ytimg.com/vi/$source_uid[0]/default.jpg",
+        'thumnail_src' => $track_thumbnail_src,
         'css_class'    => 'track-type-youtube',
         'source_uid'   => $source_uid[0],
       ];

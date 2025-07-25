@@ -80,16 +80,13 @@ final class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
   {
     foreach($this->query_result as $track)
     {
-      $track_artist        = esc_html($track->track_artist);
-      $track_title         = esc_html($track->track_title);
-      $track_duration      = intval($track->track_duration);
-      $track_data          = \Ultrafunk\Theme\Functions\get_track_data($track);
-      $is_youtube_track    = ($track_data['track_type'] === TRACK_TYPE::YOUTUBE);
-      $artists             = get_object_term_cache($track->ID, 'uf_artist');
-      $channels            = get_object_term_cache($track->ID, 'uf_channel');
-      $track_aspect_ratio  = $this->get_aspect_ratio($channels, $track_data['track_type']);
-      $yt_thumbnail_url    = IS_PROD_BUILD     ? $track_data['thumnail_src'] : \Ultrafunk\Theme\Config\THEME_ENV['default_yt_thumbnail'];
-      $track_thumbnail_url = $is_youtube_track ? $yt_thumbnail_url           : \Ultrafunk\Theme\Config\THEME_ENV['default_sc_thumbnail'];
+      $track_artist       = esc_html($track->track_artist);
+      $track_title        = esc_html($track->track_title);
+      $track_duration     = intval($track->track_duration);
+      $track_data         = \Ultrafunk\Theme\Functions\get_track_data($track);
+      $artists            = get_object_term_cache($track->ID, 'uf_artist');
+      $channels           = get_object_term_cache($track->ID, 'uf_channel');
+      $track_aspect_ratio = $this->get_aspect_ratio($channels, $track_data['track_type']);
 
       ?>
       <div id="track-<?php echo uniqid(); ?>" class="track-entry default-density <?php echo $track_data['css_class'] . ' ' . $track_aspect_ratio; ?>"
@@ -99,7 +96,7 @@ final class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         data-track-title="<?php echo $track_title; ?>"
         data-track-duration="<?php echo $track_duration; ?>"
         data-track-url="<?php echo esc_url("$this->home_url/track/$track->post_name/"); ?>"
-        data-track-thumbnail-url="<?php echo $track_thumbnail_url; ?>"
+        data-track-thumbnail-url="<?php echo $track_data['thumnail_src']; ?>"
         data-track-source-uid="<?php echo $track_data['source_uid']; ?>"
         >
         <div class="track-artists-links"><?php echo get_term_links($artists, '/list/artist/', '', (int)$track->track_artist_id); ?></div>
@@ -107,7 +104,7 @@ final class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         <div class="track-details">
           <button type="button" class="thumbnail" title="Play Track">
             <div class="thumbnail-overlay"><div class="spinner"></div></div>
-            <img src="<?php echo $track_thumbnail_url; ?>" alt="">
+            <img src="<?php echo $track_data['thumnail_src']; ?>" alt="">
           </button>
           <div class="artist-title text-nowrap-ellipsis"><span><b><?php echo $track_artist; ?></b></span><br><span><?php echo $track_title; ?></span></div>
         </div>
@@ -121,7 +118,9 @@ final class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
           </div>
           <button type="button" class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></button>
         </div>
-        <div class="track-duration text-nowrap-ellipsis" title="Track duration"><?php echo ($is_youtube_track ? $this->getTimeString($track_duration) : 'N / A'); ?></div>
+        <div class="track-duration text-nowrap-ellipsis" title="Track duration">
+          <?php echo (($track_data['track_type'] === TRACK_TYPE::YOUTUBE) ? $this->getTimeString($track_duration) : 'N / A'); ?>
+        </div>
       </div>
       <?php
     }
