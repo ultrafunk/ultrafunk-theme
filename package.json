@@ -24,7 +24,7 @@
   "devDependencies": {
     "@playwright/test": "^1.54.2",
     "esbuild": "^0.25.8",
-    "eslint": "^9.32.0"
+    "eslint": "^9.33.0"
   },
   "com_ultrafunk": {
     "theme": {
