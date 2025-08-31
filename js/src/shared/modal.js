@@ -165,7 +165,7 @@ function modalListClick(event)
 
   if (clickedEntryElement && (m.onClickClose(event) === true))
   {
-    const entryClickId = clickedEntryElement?.getAttribute('data-click-id');
+    const entryClickId = clickedEntryElement?.getAttribute('data-modal-click-id');
 
     resetState();
 

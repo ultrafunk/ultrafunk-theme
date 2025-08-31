@@ -283,12 +283,7 @@ function getTypeValueClasses(entry)
   {
     case TYPE_INTEGER: return 'value-string type-integer';
     case TYPE_STRING:  return 'value-string type-string';
-
-    case TYPE_BOOLEAN:
-      {
-        const currentValue = (entry.values[entry.current] === true) ? 'true' : 'false';
-        return `value-string type-boolean current-value-${currentValue}`;
-      }
+    case TYPE_BOOLEAN: return `value-string type-boolean current-value-${(entry.values[entry.current] === true)}`;
   }
 }
 

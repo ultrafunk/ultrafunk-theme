@@ -189,29 +189,57 @@ function filterTermsList(event)
 
 class UiElements extends ElementClick
 {
-  elementClicked()
+  elementClicked(clickId)
   {
-    if (this.clicked('button.play-button'))
-      return playClick(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
+    switch (clickId)
+    {
+      case 'termlist-header-toggle':
+        termlistHeaderToggle(this.event);
+        break;
 
-    if (this.clicked('button.shuffle-button'))
-      return shuffleClick(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
+      case 'play-tracks':
+        navToClicked(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
+        break;
 
-    if (this.clicked('button.share-find-button'))
-      return shareFindClick(this.element);
+      case 'shuffle-tracks':
+        setCookie(KEY.UF_RESHUFFLE, 'true');
+        navToClicked(this.event, utils.getPrefPlayerUrl(this.querySelector('a').href));
+        break;
 
-    if (this.clicked('div.termlist-header'))
-      return termlistHeaderClick(this.event);
+      case 'share-find':
+        showShareFind(this.element);
+        break;
 
-    if (this.clicked('div.thumbnail'))
-      return playTrackClick(this.event, this.element);
+      case 'play-single-track':
+        playSingleTrack(this.event, this.element);
+        break;
 
-    if (this.clicked('a'))
-      return permalinkClick(this.event, this.element);
+      case 'permalink':
+        saveState();
+        utils.linkClickUsePrefPlayer(this.event);
+        break;
+    }
   }
 }
 
-function playClick(event, destUrl, trackId = null)
+function termlistHeaderToggle(event)
+{
+  const termlistEntry = event.target.closest('div.termlist-entry');
+  const expandToggle  = termlistEntry.querySelector('button.expand-toggle span');
+  const termlistBody  = termlistEntry.querySelector('div.termlist-body');
+  const isExpanded    = (termlistEntry.getAttribute('data-is-expanded') === '1');
+  const isDataFetched = (termlistEntry.getAttribute('data-is-fetched') === '1');
+
+  termlistEntry.setAttribute('data-is-expanded', isExpanded ? '' : '1');
+
+  expandToggle.textContent   = isExpanded ? 'expand_more' : 'expand_less';
+  termlistBody.style.display = isExpanded ? ''            : 'flex';
+
+  if (!isExpanded && !isDataFetched)
+    termlistRest.loadTermlist(m.listContainer, termlistEntry, termlistBody);
+}
+
+function navToClicked(event, destUrl, trackId = null)
 {
   event?.preventDefault();
   saveState();
@@ -222,13 +250,7 @@ function playClick(event, destUrl, trackId = null)
   utils.navToUrl(destUrl);
 }
 
-function shuffleClick(event, destUrl)
-{
-  setCookie(KEY.UF_RESHUFFLE, 'true');
-  playClick(event, destUrl);
-}
-
-function shareFindClick(element)
+function showShareFind(element)
 {
   const termName = utils.stripAttribute(element, 'data-term-name');
   const urlType  = (m.listContainer.getAttribute('data-term-type') === 'channels') ? 'Channel Link' : 'Artist Link';
@@ -244,14 +266,14 @@ function shareFindClick(element)
   });
 }
 
-function playTrackClick(event, element)
+function playSingleTrack(event, element)
 {
   const termType  = (m.listContainer.getAttribute('data-term-type') === 'channels') ? 'channel' : 'artist';
   const termSlug  = utils.stripAttribute(element, 'data-term-slug');
 
   if (settings.playback.preferredPlayer === PREF_PLAYER.GALLERY)
   {
-    playClick(event, element.getAttribute('data-term-url'), null);
+    navToClicked(event, element.getAttribute('data-term-url'), null);
   }
   else
   {
@@ -261,31 +283,6 @@ function playTrackClick(event, element)
     if (trackNum > response.listPerPage)
       pagination = `page/${Math.ceil(trackNum / response.listPerPage)}/`;
 
-    playClick(event, `${THEME_ENV.siteUrl}/list/${termType}/${termSlug}/${pagination}`, utils.stripAttribute(element, 'data-track-id'));
+    navToClicked(event, `${THEME_ENV.siteUrl}/list/${termType}/${termSlug}/${pagination}`, utils.stripAttribute(element, 'data-track-id'));
   }
-}
-
-function permalinkClick(event, element)
-{
-  saveState();
-
-  if (element.closest('div.permalink') !== null)
-    utils.linkClickUsePrefPlayer(event);
-}
-
-function termlistHeaderClick(event)
-{
-  const termlistEntry = event.target.closest('div.termlist-entry');
-  const expandToggle  = termlistEntry.querySelector('button.expand-toggle span');
-  const termlistBody  = termlistEntry.querySelector('div.termlist-body');
-  const isExpanded    = (termlistEntry.getAttribute('data-is-expanded') === '1');
-  const isDataFetched = (termlistEntry.getAttribute('data-is-fetched') === '1');
-
-  termlistEntry.setAttribute('data-is-expanded', isExpanded ? '' : '1');
-
-  expandToggle.textContent   = isExpanded ? 'expand_more' : 'expand_less';
-  termlistBody.style.display = isExpanded ? ''            : 'flex';
-
-  if (!isExpanded && !isDataFetched)
-    termlistRest.loadTermlist(m.listContainer, termlistEntry, termlistBody);
 }

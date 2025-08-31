@@ -89,19 +89,23 @@ function playbackReady()
 
 class UiElements extends ElementClick
 {
-  elementClicked()
+  elementClicked(clickId)
   {
-    if (this.clicked('button.track-share-button'))
-      return showTrackSharePlay(this.closest('single-track, gallery-track'));
+    switch (clickId)
+    {
+      case 'track-share-play':
+        showTrackSharePlay(this.closest('single-track, gallery-track'));
+        break;
 
-    if (this.clicked('button.track-details-button'))
-      return showTrackDetails(this.closest('single-track, gallery-track'));
+      case 'track-details':
+        showTrackDetails(this.closest('single-track, gallery-track'));
+        break;
 
-    if (this.clicked('span.track-artists-links'))
-      return linkClickUsePrefPlayer(this.event);
-
-    if (this.clicked('span.track-channels-links'))
-      return linkClickUsePrefPlayer(this.event);
+      case 'track-artist-link':
+      case 'track-channel-link':
+        linkClickUsePrefPlayer(this.event);
+        break;
+    }
   }
 }
 

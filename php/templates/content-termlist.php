@@ -55,22 +55,22 @@ final class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
 
       ?>
       <div id="<?php echo "term-$term->term_id"; ?>" class="termlist-entry" data-term-id="<?php echo $term->term_id; ?>" data-term-slug="<?php echo $term_slug; ?>">
-        <div class="termlist-header" title="Show more or less">
+        <div class="termlist-header" data-click-id="termlist-header-toggle" title="Show more or less">
           <div class="termlist-name text-nowrap-ellipsis"><?php echo "$term_name <span class='light-text'>($term->count)</span>"; ?></div>
           <div class="termlist-buttons">
-            <button type="button" class="play-button" title="Play All - <?php echo $term_name; ?>">
+            <button type="button" data-click-id="play-tracks" class="play-button" title="Play All - <?php echo $term_name; ?>">
               <a href="<?php echo "/$term_path/$term_slug/"; ?>" target="_blank"><span class="material-icons">play_arrow</span></a>
             </button>
-            <button type="button" class="shuffle-button" title="Shuffle &amp; Play All - <?php echo $term_name; ?>">
+            <button type="button" data-click-id="shuffle-tracks" class="shuffle-button" title="Shuffle &amp; Play All - <?php echo $term_name; ?>">
               <a href="<?php echo "/shuffle/$term_path/$term_slug/"; ?>" target="_blank"><span class="material-icons">shuffle</span></a>
             </button>
-            <button type="button" class="share-find-button" title="Share <?php echo $term_name; ?> / Find On"
+            <button type="button" data-click-id="share-find" class="share-find-button" title="Share <?php echo $term_name; ?> / Find On"
               data-term-path="<?php echo $term_path; ?>"
               data-term-name="<?php echo $term_name; ?>"
               data-term-url="<?php echo "$this->home_url/$term_path/$term_slug/"; ?>">
               <span class="material-icons">share</span>
             </button>
-            <button type="button" class="expand-toggle" title="Show more or less"><span class="material-icons">expand_more</span></button>
+            <button type="button" data-click-id="termlist-header-toggle" class="expand-toggle" title="Show more or less"><span class="material-icons">expand_more</span></button>
           </div>
         </div>
         <div class="termlist-body">
@@ -79,7 +79,7 @@ final class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
             <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>
           </div>
           <div class="body-right">
-            <div class="permalink"><b><?php echo ($this->is_artists ? 'Artist' : 'Channel'); ?> Link</b><br><a href="<?php echo "/$term_path/$term_slug/"; ?>"><?php echo $term_name; ?></a></div>
+            <div class="permalink"><b><?php echo ($this->is_artists ? 'Artist' : 'Channel'); ?> Link</b><br><a href="<?php echo "/$term_path/$term_slug/"; ?>" data-click-id="permalink"><?php echo $term_name; ?></a></div>
             <?php if ($this->is_artists) { ?>
               <div class="artists"><b>Related Artists</b>
                 <div class="loader-container"><div class="loader-1">&#8226;</div><div class="loader-2">&#8226;</div><div class="loader-3">&#8226;</div></div>

@@ -611,6 +611,10 @@ term-list {
     padding-right: 20px;
   }
 
+  #termlist-container {
+    overflow-y: hidden;
+  }
+
   .artist-letters-container {
     justify-content: unset;
     flex-wrap: nowrap;

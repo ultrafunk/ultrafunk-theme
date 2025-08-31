@@ -17,7 +17,7 @@ import { isShowingModal }         from '../../shared/modal.js';
 
 import {
   getCurrentTrackElement,
-  trackActionsClick,
+  trackActionsToggle,
 } from './list-controls.js';
 
 import {
@@ -158,45 +158,41 @@ function debounceKeyup(callback, delayMilliseconds)
 
 class UiElements extends ElementClick
 {
-  elementClicked()
+  elementClicked(clickId)
   {
-    if (this.clicked('button.thumbnail'))
-      return playTrackClick(this.closest('div.track-entry'));
+    switch(clickId)
+    {
+      case 'play-track':
+        setCurrentTrack(insertResultTrack(this.closest('div.track-entry')).id, true, false);
+        navSearch.hide();
+        break;
 
-    if (this.clicked('div.artist-title'))
-      return showTrackDetailsTouch(this.event, this.closest('div.track-entry'));
+      case 'track-artist-title':
+        {
+          if (isPointerTypeTouch(this.event))
+            m.modalId = showTrackDetails(this.closest('div.track-entry'), m.searchField);
+        }
+        break;
 
-    if (this.clicked('button.track-actions-toggle'))
-      return trackActionsClick(this.closest('div.track-entry'), m);
+      case 'play-next-track':
+        insertResultTrack(this.closest('div.track-entry'));
+        showSnackbar({ message: 'Track will play next', duration: 6, actionText: 'details', actionClickCallback: () =>  showTrackDetails(this.closest('div.track-entry')) });
+        navSearch.hide();
+        break;
 
-    if (this.clicked('button.play-next-button'))
-      return playNextClick(this.closest('div.track-entry'));
+      case 'track-share-play':
+        m.modalId = showTrackSharePlay(this.closest('div.track-entry'), m.searchField);
+        break;
 
-    if (this.clicked('button.share-play-button'))
-      return m.modalId = showTrackSharePlay(this.closest('div.track-entry'), m.searchField);
+      case 'track-details':
+        m.modalId = showTrackDetails(this.closest('div.track-entry'), m.searchField);
+        break;
 
-    if (this.clicked('button.details-button'))
-      return m.modalId = showTrackDetails(this.closest('div.track-entry'), m.searchField);
+      case 'track-actions-toggle':
+        trackActionsToggle(this.closest('div.track-entry'), m);
+        break;
+    }
   }
-}
-
-function playTrackClick(element)
-{
-  setCurrentTrack(insertResultTrack(element).id, true, false);
-  navSearch.hide();
-}
-
-function showTrackDetailsTouch(event, element)
-{
-  if (isPointerTypeTouch(event))
-    m.modalId = showTrackDetails(element, m.searchField);
-}
-
-function playNextClick(element)
-{
-  insertResultTrack(element);
-  showSnackbar({ message: 'Track will play next', duration: 6, actionText: 'details', actionClickCallback: () =>  showTrackDetails(element) });
-  navSearch.hide();
 }
 
 function insertResultTrack(element)

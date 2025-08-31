@@ -73,6 +73,10 @@ export const logCss = `
 
 export function logStartupExecutionTime()
 {
+  const rttInfo = navigator.connection
+    ? ` (approx. server RTT: ${navigator.connection.rtt} ms.)`
+    : '';
+
   executionStop = performance.now();
-  console.log(`%cJavaScript startup execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms. for ${THEME_ENV.siteUrl}`, logCss);
+  console.log(`%cJavaScript startup execution time: ${(Math.round((executionStop - executionStart) * 100) / 100)} ms. for ${THEME_ENV.siteUrl}${rttInfo}`, logCss);
 }

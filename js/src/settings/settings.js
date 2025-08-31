@@ -64,7 +64,7 @@ export const settingsSchema = {
     tracksPerPage:         { description: 'Tracks Per Page: Search & Shuffle',      type: INTEGER, values: listPerPageValues, default: 25,    valueStrings: listPerPageValueStrings },
     enableLocalPlayback:   { description: 'Enable local (device) tracks playback',  type: BOOLEAN, values: [true, false],     default: false, valueStrings: ['ON', 'OFF'] },
     sortLocalTracks:       { description: 'Sort local tracks alphabetically (asc.)',type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
-    warnOnPageChange:      { description: 'Show Warning Prompt on Page Change',     type: BOOLEAN, values: [true, false],     default: false, valueStrings: ['ON', 'OFF'] },
+    warnOnPageChange:      { description: 'Show Warning Prompt on Page Change',     type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
   },
   gallery: {
     layout:                  { description: 'Track Layout',                         type: STRING,  values: ['1-column', '2-column', '3-column'],    default: '3-column', valueStrings: ['1 Column', '2 Column', '3 / 4 Column'] },
@@ -180,7 +180,8 @@ export const settingsDescriptions = {
     sortLocalTracks: "All locally added (device) tracks will be sorted in numerical (0 => 9) and/or alphabetical ascending order (A => Z) based on their file names.",
   },
   site: {
-    snackbarMessageLog: "The 15 last snackbar (toast) messages shown on ultrafunk.com are stored with a timestamp and can be viewed by pressing <b>v</b>.",
+    snackbarMessageLog: `The 15 last snackbar (toast) messages shown on ultrafunk.com are stored with a timestamp and can be viewed by pressing
+                         the '<b>v</b>' key or by clicking / tapping on the <b>View Snackbar Message Log</b> link on the settings page.`,
   }
 };
 

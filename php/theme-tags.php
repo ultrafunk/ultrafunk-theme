@@ -293,8 +293,8 @@ function header_site_branding() : void
   <div class="site-branding">
     <?php echo $nav_icons['menu']; ?>
     <a href="<?php echo (is_list_player() ? get_cached_home_url('/list/') : get_cached_home_url('/')); ?>" aria-label="Home">
-      <img id="branding-logo-desktop" src="<?php echo THEME_ENV['uf_logo_desktop']; ?>" title="Ultrafunk home" alt="Site Homepage">
-      <img id="branding-logo-mobile"  src="<?php echo THEME_ENV['uf_logo_mobile'];  ?>" title="Ultrafunk home" alt="Site Homepage">
+      <img id="branding-logo-desktop" width="247" height="32" src="<?php echo THEME_ENV['uf_logo_desktop']; ?>" title="Ultrafunk home" alt="Site Homepage">
+      <img id="branding-logo-mobile"  width="200" height="26" src="<?php echo THEME_ENV['uf_logo_mobile'];  ?>" title="Ultrafunk home" alt="Site Homepage">
     </a>
     <?php echo $nav_icons['search']; ?>
   </div>
@@ -352,10 +352,10 @@ function get_nav_bar_arrows() : array
   if (($session_vars['prevPage'] !== null) || ($session_vars['nextPage'] !== null))
   {
     $nav_url = ($session_vars['prevPage'] !== null) ? $session_vars['prevPage'] : '#';
-    $nav_arrows['back'] = '<a href="' . esc_url($nav_url) . '" class="navbar-prev-link"><span class="material-icons navbar-arrow-prev" title="Previous track / page (shift + arrow left)">arrow_backward</span></a>';
+    $nav_arrows['back'] = '<a href="' . esc_url($nav_url) . '" data-click-id="nav-prev-track" class="navbar-prev-link"><span class="material-icons navbar-arrow-prev" title="Previous track / page (shift + arrow left)">arrow_backward</span></a>';
 
     $nav_url = ($session_vars['nextPage'] !== null) ? $session_vars['nextPage'] : '#';
-    $nav_arrows['fwd']  = '<a href="' . esc_url($nav_url) . '" class="navbar-next-link"><span class="material-icons navbar-arrow-next"  title="Next track / page (shift + arrow right)">arrow_forward</span></a>';
+    $nav_arrows['fwd']  = '<a href="' . esc_url($nav_url) . '" data-click-id="nav-next-track" class="navbar-next-link"><span class="material-icons navbar-arrow-next"  title="Next track / page (shift + arrow right)">arrow_forward</span></a>';
   }
   else
   {
@@ -553,8 +553,8 @@ function track_meta_controls() : void
   ?>
   <div class="track-meta-controls">
     <div class="share-details-controls">
-      <button type="button" class="track-share-button" title="Share track / Play On"><span class="material-icons">share</span></button>
-      <button type="button" class="track-details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
+      <button type="button" data-click-id="track-share-play" class="track-share-button" title="Share track / Play On"><span class="material-icons">share</span></button>
+      <button type="button" data-click-id="track-details" class="track-details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
     </div>
     <div class="crossfade-controls">
       <button type="button" class="crossfade-preset-toggle state-disabled"></button>

@@ -10,8 +10,6 @@ namespace Ultrafunk\Theme\Templates;
 
 use Ultrafunk\Plugin\Shared\Constants\TRACK_TYPE;
 
-use const Ultrafunk\Theme\Config\IS_PROD_BUILD;
-
 use function Ultrafunk\Plugin\Shared\Utils\get_term_links;
 
 
@@ -102,21 +100,21 @@ final class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         <div class="track-artists-links"><?php echo get_term_links($artists, '/list/artist/', '', (int)$track->track_artist_id); ?></div>
         <div class="track-channels-links"><?php echo get_term_links($channels, '/list/channel/'); ?></div>
         <div class="track-details">
-          <button type="button" class="thumbnail" title="Play Track">
+          <button type="button" data-click-id="play-track" class="thumbnail" title="Play Track">
             <div class="thumbnail-overlay"><div class="spinner"></div></div>
             <img src="<?php echo $track_data['thumnail_src']; ?>" alt="">
           </button>
-          <div class="artist-title text-nowrap-ellipsis"><span><b><?php echo $track_artist; ?></b></span><br><span><?php echo $track_title; ?></span></div>
+          <div data-click-id="track-artist-title" class="artist-title text-nowrap-ellipsis"><span><b><?php echo $track_artist; ?></b></span><br><span><?php echo $track_title; ?></span></div>
         </div>
         <div class="track-actions">
           <div class="track-message"></div>
           <div class="track-action-buttons">
-            <button type="button" class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></button>
-            <button type="button" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>
-            <button type="button" class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></button>
-            <button type="button" class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
+            <button type="button" data-click-id="remove-track" class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></button>
+            <button type="button" data-click-id="play-next-track" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>
+            <button type="button" data-click-id="track-share-play" class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></button>
+            <button type="button" data-click-id="track-details" class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
           </div>
-          <button type="button" class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></button>
+          <button type="button" data-click-id="track-actions-toggle" class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></button>
         </div>
         <div class="track-duration text-nowrap-ellipsis" title="Track duration">
           <?php echo (($track_data['track_type'] === TRACK_TYPE::YOUTUBE) ? $this->getTimeString($track_duration) : 'N / A'); ?>

@@ -431,7 +431,7 @@ function updateAutoplayState()
   const position = ctrl.timer.positionSeconds;
   const duration = ctrl.timer.durationSeconds;
 
-  if ((isPlaying() === false) && (position !== -1) && ((duration !== -1)))
+  if ((isPlaying() === false) && (position !== -1) && (duration !== -1))
   {
     ctrl.timer.position.textContent = settings.playback.autoplay
       ? getTimeString(position, (duration > 3600))

@@ -47,11 +47,11 @@ $track_title_split = '<h2 class="track-artist-title type-split">' . $post->track
     <div class="track-meta">
       <div class="track-meta-artists">
         <b><a href="/artists/" title="View Artists">Artists</a>: </b>
-        <span class="track-artists-links"><?php echo get_term_links($artists, '/artist/', ', ', (int)$post->track_artist_id); ?></span>
+        <span data-click-id="track-artist-link" class="track-artists-links"><?php echo get_term_links($artists, '/artist/', ', ', (int)$post->track_artist_id); ?></span>
       </div>
       <div class="track-meta-channels">
         <b><a href="/channels/" title="View Channels">Channels</a>: </b>
-        <span class="track-channels-links"><?php echo get_term_links($channels, '/channel/', ', '); ?></span>
+        <span data-click-id="track-channel-link" class="track-channels-links"><?php echo get_term_links($channels, '/channel/', ', '); ?></span>
       </div>
       <?php \Ultrafunk\Theme\Tags\track_meta_controls(); ?>
     </div>
@@ -108,13 +108,14 @@ function track_nav_link(bool $is_nav_prev, mixed $post) : void
   if (($post !== null) && ($post !== ''))
   {
     $track_artist_title = '<b>' . esc_html($post->track_artist) . '</b><br>' . esc_html($post->track_title);
-    $prev_next_title    = $is_nav_prev ? "Go to Previous track" : "Go to Next track";
+    $data_click_id      = $is_nav_prev ? 'data-click-id="nav-prev-track"' : 'data-click-id="nav-next-track"';
+    $prev_next_title    = $is_nav_prev ? 'title="Go to Previous track"' : 'title="Go to Next track"';
     $prev_next_post     = $is_nav_prev ? get_next_post() : get_previous_post();
     $track_data         = ($prev_next_post !== null) ? get_track_data($prev_next_post) : null;
 
     ?>
     <div class="<?php echo ($is_nav_prev ? 'nav-previous' : 'nav-next'); ?>">
-      <a href="<?php echo esc_url(get_the_permalink($post)); ?>" rel="<?php echo ($is_nav_prev ? 'prev' : 'next'); ?>" title="<?php echo $prev_next_title; ?>">
+      <a href="<?php echo esc_url(get_the_permalink($post)); ?>" <?php echo ($is_nav_prev ? 'rel="prev"' : 'rel="next"') . ' ' . $data_click_id . ' ' . $prev_next_title; ?>>
         <?php if ($is_nav_prev) { ?>
           <div class="prev-track-arrow">&#10094;</div>
           <div class="prev-track-nav-thumbnail <?php echo $track_data['css_class']; ?>"><img src="<?php echo $track_data['thumnail_src']; ?>" alt="Previous Track Thumbnail"></div>

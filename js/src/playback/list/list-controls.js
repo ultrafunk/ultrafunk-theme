@@ -202,35 +202,48 @@ export function showLocalPlayerInfoAndControls(event)
 
 class UiElements extends ElementClick
 {
-  elementClicked()
+  elementClicked(clickId)
   {
-    if (this.clicked('button.thumbnail'))
-      return setCurrentTrack(this.closest('div.track-entry').id, true, true);
+    switch (clickId)
+    {
+      case 'play-track':
+        setCurrentTrack(this.closest('div.track-entry').id, true, true);
+        break;
 
-    if (this.clicked('button.track-actions-toggle'))
-      return trackActionsClick(this.closest('div.track-entry'), m);
+      case 'remove-track':
+        removeTrack(this.closest('div.track-entry'));
+        break;
 
-    if (this.clicked('button.remove-button'))
-      return removeClick(this.closest('div.track-entry'));
+      case 'play-next-track':
+        playNextTrack(this.closest('div.track-entry'));
+        break;
 
-    if (this.clicked('button.play-next-button'))
-      return playNextClick(this.closest('div.track-entry'));
+      case 'track-share-play':
+        showTrackSharePlay(this.closest('div.track-entry'));
+        break;
 
-    if (this.clicked('button.share-play-button'))
-      return showTrackSharePlay(this.closest('div.track-entry'));
+      case 'track-details':
+        showTrackDetails(this.closest('div.track-entry'));
+        break;
 
-    if (this.clicked('button.details-button'))
-      return showTrackDetails(this.closest('div.track-entry'));
+      case 'track-actions-toggle':
+        trackActionsToggle(this.closest('div.track-entry'), m);
+        break;
 
-    if (this.clicked('button.arrow-up-button') || this.clicked('button.arrow-down-button'))
-      return arrowUpDownClick(this.closest('div.tracklist-page-separator'), this.clicked('button.arrow-up-button'));
+      case 'scroll-prev-page':
+      case 'scroll-next-page':
+        arrowUpDownClick(this.closest('div.tracklist-page-separator'), this.hasClass('arrow-up-button'));
+        break;
 
-    if (this.clicked('button.arrow-first-button') || this.clicked('button.arrow-last-button'))
-      return arrowFirstLastClick(this.clicked('button.arrow-first-button'));
+      case 'scroll-first-track':
+      case 'scroll-last-track':
+        arrowFirstLastClick(this.hasClass('arrow-first-button'));
+        break;
+    }
   }
 }
 
-export function trackActionsClick(element, module)
+export function trackActionsToggle(element, module)
 {
   const trackActionButtons = element.querySelector('.track-action-buttons');
 
@@ -245,7 +258,7 @@ export function trackActionsClick(element, module)
   module.prevActionButtons = trackActionButtons;
 }
 
-function playNextClick(trackElement)
+function playNextTrack(trackElement)
 {
   if (m.trackElement !== null)
   {
@@ -255,7 +268,7 @@ function playNextClick(trackElement)
     nextTrackElement.id = `track-${Date.now()}`;
 
     if (settings.list.moveTrackOnPlayNext && (trackElement !== m.trackElement))
-      removeClick(trackElement, false, () => addTrack(nextTrackElement, m.trackElement, 'afterend'));
+      removeTrack(trackElement, false, () => addTrack(nextTrackElement, m.trackElement, 'afterend'));
     else
       addTrack(nextTrackElement, m.trackElement, 'afterend');
 
@@ -267,7 +280,7 @@ function playNextClick(trackElement)
   }
 }
 
-function removeClick(trackElement, allowUndo = true, animationEndCallback = () => {})
+function removeTrack(trackElement, allowUndo = true, animationEndCallback = () => {})
 {
   if (trackElement !== m.trackElement)
   {

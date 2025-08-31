@@ -29,11 +29,11 @@ export function getPageSeparatorHtml(responseData, loadingPage)
 
   return /*html*/ `
     <div id="tracklist-page-${loadingPage}" class="tracklist-page-separator" data-page-number="${loadingPage}">
-      <button type="button" class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</button>
-      <button type="button" class="material-icons arrow-last-button" title="Scroll to Last Track">vertical_align_bottom</button>
+      <button type="button" data-click-id="scroll-next-page" class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</button>
+      <button type="button" data-click-id="scroll-last-track" class="material-icons arrow-last-button" title="Scroll to Last Track">vertical_align_bottom</button>
       <a href="${pageUrl}" title="Go to page ${loadingPage}">Page ${loadingPage} &#9660;</a>
-      <button type="button" class="material-icons arrow-first-button" title="Scroll to First Track">vertical_align_top</button>
-      <button type="button" class="material-icons arrow-up-button" title="Scroll to previous page">arrow_upward</button>
+      <button type="button" data-click-id="scroll-first-track" class="material-icons arrow-first-button" title="Scroll to First Track">vertical_align_top</button>
+      <button type="button" data-click-id="scroll-prev-page" class="material-icons arrow-up-button" title="Scroll to previous page">arrow_upward</button>
     </div>`;
 }
 
@@ -58,21 +58,21 @@ export function getTrackEntryHtml(track, density = 'default')
       <div class="track-artists-links" data-track-artist-ids="${track.artists.toString()}">${track.artists_links  ?? ''}</div>
       <div class="track-channels-links" data-track-channel-ids="${track.channels.toString()}">${track.channels_links ?? ''}</div>
       <div class="track-details">
-        <button type="button" class="thumbnail" title="Play Track">
+        <button type="button" data-click-id="play-track" class="thumbnail" title="Play Track">
           <div class="thumbnail-overlay"><div class="spinner"></div></div>
           <img src="${thumbnailData.src}" alt="">
         </button>
-        <div class="artist-title text-nowrap-ellipsis"><span><b>${trackArtist}</b></span><br><span>${trackTitle}</span></div>
+        <div data-click-id="track-artist-title" class="artist-title text-nowrap-ellipsis"><span><b>${trackArtist}</b></span><br><span>${trackTitle}</span></div>
       </div>
       <div class="track-actions">
         <div class="track-message"></div>
         <div class="track-action-buttons">
-          <button type="button" class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></button>
-          <button type="button" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>
-          <button type="button" class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></button>
-          <button type="button" class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
+          <button type="button" data-click-id="remove-track" class="remove-button" title="Remove Track from List"><span class="material-icons">close</span></button>
+          <button type="button" data-click-id="play-next-track" class="play-next-button" title="Play Next"><span class="material-icons">playlist_play</span></button>
+          <button type="button" data-click-id="track-share-play" class="share-play-button" title="Share Track / Play On"><span class="material-icons">share</span></button>
+          <button type="button" data-click-id="track-details" class="details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
         </div>
-        <button type="button" class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></button>
+        <button type="button" data-click-id="track-actions-toggle" class="track-actions-toggle" title="Show / Hide track actions"><span class="material-icons">more_horiz</span></button>
       </div>
       <div class="track-duration text-nowrap-ellipsis" title="Track duration">
         ${((track.meta.track_source_type === TRACK_TYPE.YOUTUBE) ? getTimeString(trackDuration) : 'N / A')}

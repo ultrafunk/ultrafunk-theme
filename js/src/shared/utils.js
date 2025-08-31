@@ -87,14 +87,9 @@ export function matchesMedia(matchMedia)
 {
   switch (matchMedia)
   {
-    case MATCH.SITE_MIN_WIDTH_WIDE:
-      return siteMinWidthWide.matches;
-
-    case MATCH.SITE_MAX_WIDTH:
-      return siteMaxWidth.matches;
-
-    case MATCH.SITE_MAX_WIDTH_MOBILE:
-      return siteMaxWidthMobile.matches;
+    case MATCH.SITE_MIN_WIDTH_WIDE:   return siteMinWidthWide.matches;
+    case MATCH.SITE_MAX_WIDTH:        return siteMaxWidth.matches;
+    case MATCH.SITE_MAX_WIDTH_MOBILE: return siteMaxWidthMobile.matches;
   }
 
   return false;

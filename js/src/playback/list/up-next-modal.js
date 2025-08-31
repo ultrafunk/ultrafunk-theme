@@ -68,8 +68,8 @@ export async function showUpNextModal()
       modalTitle: getTitle(isPlaying()),
       modalList:  tracklist,
       modalType:  'tracklist',
-      onClickEntryCallback: (clickedId) => onTrackClick(tracklist, clickedId),
-      onClickCloseCallback: (event)     => shouldCloseModal(event),
+      onClickEntryCallback: (clickId) => onTrackClick(tracklist, clickId),
+      onClickCloseCallback: (event)   => shouldCloseModal(event),
     });
 
     addTitleListener();
@@ -90,9 +90,9 @@ export async function showUpNextModal()
   }
 }
 
-function onTrackClick(tracklist, clickedId)
+function onTrackClick(tracklist, clickId)
 {
-  const nextTrackId = tracklist.find(item => (item.clickId === clickedId)).clickId;
+  const nextTrackId = tracklist.find(item => (item.clickId === clickId)).clickId;
 
   if ((nextTrackId === getCurrentTrackElement().id) && isPlaying())
     getCurrentTrackElement().scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
@@ -119,7 +119,7 @@ export function updateUpNextModal(isPlayingTrack)
 
     const modalEntry = getModalEntry(1);
 
-    if (modalEntry.getAttribute('data-click-id') === getCurrentTrackElement().id)
+    if (modalEntry.getAttribute('data-modal-click-id') === getCurrentTrackElement().id)
     {
       modalEntry.classList.remove('playing-track', 'cued-track');
       modalEntry.classList.add(`${isPlayingTrack ? 'playing-track' : 'cued-track'}`);
@@ -232,8 +232,8 @@ function dragDrop(event)
   modalDropTarget.insertAdjacentElement(insertPos, modalDragSource);
 
   // List player tracks drag & drop reorder = sync track lists
-  const listTrackSource = document.getElementById(modalDragSource.getAttribute('data-click-id'));
-  const listTrackTarget = document.getElementById(modalDropTarget.getAttribute('data-click-id'));
+  const listTrackSource = document.getElementById(modalDragSource.getAttribute('data-modal-click-id'));
+  const listTrackTarget = document.getElementById(modalDropTarget.getAttribute('data-modal-click-id'));
   listTrackTarget.insertAdjacentElement(insertPos, listTrackSource);
 
   return false;

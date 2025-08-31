@@ -34,11 +34,11 @@ $channels   = get_object_term_cache($post->ID, 'uf_channel');
     <div class="track-meta">
       <div class="track-meta-artists">
         <b><a href="/artists/" title="View Artists">Artists</a>: </b>
-        <span class="track-artists-links"><?php echo get_term_links($artists, '/artist/', ', ', (int)$post->track_artist_id); ?></span>
+        <span data-click-id="track-artist-link" class="track-artists-links"><?php echo get_term_links($artists, '/artist/', ', ', (int)$post->track_artist_id); ?></span>
       </div>
       <div class="track-meta-channels">
         <b><a href="/channels/" title="View Channels">Channels</a>: </b>
-        <span class="track-channels-links"><?php echo get_term_links($channels, '/channel/', ', '); ?></span>
+        <span data-click-id="track-channel-link" class="track-channels-links"><?php echo get_term_links($channels, '/channel/', ', '); ?></span>
       </div>
       <?php \Ultrafunk\Theme\Tags\track_meta_controls(); ?>
     </div>

@@ -424,27 +424,20 @@ function playbackTimerClick()
   footerToggles.autoplay.toggle();
 }
 
-class SiteNavUiElements extends ElementClick
+class SiteNavUiElements  extends ElementClick { elementClicked(clickId) { prevNextTrackNav(clickId, this.event); }}
+class TrackNavUiElements extends ElementClick { elementClicked(clickId) { prevNextTrackNav(clickId, this.event); }}
+
+function prevNextTrackNav(clickId, clickEvent)
 {
-  elementClicked()
+  switch (clickId)
   {
-    if (this.clicked('a.navbar-prev-link'))
-      return cueOrPlayPrevNextTrack(this.event, SINGLE_TRACK.PREV, response.prevPage);
+    case 'nav-prev-track':
+      cueOrPlayPrevNextTrack(clickEvent, SINGLE_TRACK.PREV, response.prevPage);
+      break;
 
-    if (this.clicked('a.navbar-next-link'))
-      return cueOrPlayPrevNextTrack(this.event, SINGLE_TRACK.NEXT, response.nextPage);
-  }
-}
-
-class TrackNavUiElements extends ElementClick
-{
-  elementClicked()
-  {
-    if (this.clicked('div.nav-previous a'))
-      return cueOrPlayPrevNextTrack(this.event, SINGLE_TRACK.PREV, response.prevPage);
-
-    if (this.clicked('div.nav-next a'))
-      return cueOrPlayPrevNextTrack(this.event, SINGLE_TRACK.NEXT, response.nextPage);
+    case'nav-next-track':
+      cueOrPlayPrevNextTrack(clickEvent, SINGLE_TRACK.NEXT, response.nextPage);
+      break;
   }
 }
 

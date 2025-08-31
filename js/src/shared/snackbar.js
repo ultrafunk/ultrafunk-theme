@@ -214,7 +214,7 @@ export function showSnackbarLog()
         ? new Date(entry.timestamp).toDateString().slice(4, 10)
         : new Date(entry.timestamp).toDateString().slice(0, 10);
 
-      const tiemString = matchesMobile
+      const timeString = matchesMobile
         ? new Date(entry.timestamp).toTimeString().slice(0, 5)
         : new Date(entry.timestamp).toTimeString().slice(0, 8);
 
@@ -222,7 +222,7 @@ export function showSnackbarLog()
         `<tr>
           <td class="normal-text nowrap">${dateString}</td>
           <td class="spacer"></td>
-          <td class="normal-text nowrap">${tiemString}</td>
+          <td class="normal-text nowrap">${timeString}</td>
           <td class="spacer"></td>
           <td>${entry.message}</td>
         </tr>`;

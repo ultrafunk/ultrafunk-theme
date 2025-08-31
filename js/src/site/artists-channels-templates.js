@@ -24,7 +24,7 @@ export function getTermlistHtml(header, termSlug, termData)
 
     html += /*html*/ `
     <div class="track">
-      <div class="thumbnail ${thumbnailData.class}"
+      <button type="button" data-click-id="play-single-track" class="thumbnail ${thumbnailData.class}"
         data-term-url="${track.link}"
         data-term-slug="${termSlug}"
         data-track-num="${index + 1}"
@@ -33,7 +33,7 @@ export function getTermlistHtml(header, termSlug, termData)
         data-track-source-uid="${thumbnailData.uid}" title="Play Track"
         >
         <img src="${thumbnailData.src}">
-      </div>
+      </button>
       <div class="artist-title text-nowrap-ellipsis">
         <a href="${track.link}" title="Go to track"><span><b>${track.meta.track_artist}</b></span><br><span>${track.meta.track_title}</span></a>
       </div>

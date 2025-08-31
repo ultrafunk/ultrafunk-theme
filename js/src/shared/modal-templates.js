@@ -47,12 +47,12 @@ export function getModalListHtml(modalList, modalItemsCount = 0)
 
     if (entry.link)
     {
-      const clickId = entry?.clickId ? `data-click-id="${entry.clickId}"` : '';
+      const clickId = entry?.clickId ? `data-modal-click-id="${entry.clickId}"` : '';
       html += `<a id="${entry.uid}" ${clickId} href="${entry.link}" ${entryLinkTarget} class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${modalItemIcons}${entryContent}</a>`;
     }
     else if (entry.clickId)
     {
-      html += `<div id="${entry.uid}" data-click-id="${entry.clickId}" class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${modalItemIcons}${entryContent}</div>`;
+      html += `<div id="${entry.uid}" data-modal-click-id="${entry.clickId}" class="modal-click-item ${entryClass} ${entryColumnsClass}" title="${entryTitle}">${modalItemIcons}${entryContent}</div>`;
     }
     else
     {
