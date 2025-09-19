@@ -372,7 +372,8 @@ function cueOrPlayPrevNextTrack(event, prevNextTrack, prevNextPage)
 
 function playbackEventPlaybackReady()
 {
-  utils.addListener('.playback-thumbnail-control', 'click', playbackThumbnailClick);
+  utils.addListener('.playback-thumbnail-control', 'click',       (event) => playbackThumbnailClick(event));
+  utils.addListener('.playback-thumbnail-control', 'contextmenu', (event) => playbackThumbnailClick(event));
   utils.addListener('.playback-details-control',   'click', playbackDetailsClick);
   utils.addListener('.playback-timer-control',     'click', playbackTimerClick);
   m.isPlaybackReady = true;
@@ -404,7 +405,7 @@ function playbackDetailsClick()
   shared.playerScrollTo(m.player.getStatus().trackElementId);
 }
 
-function playbackThumbnailClick()
+function playbackThumbnailClick(event)
 {
   if (shared.isGalleryPlayer())
   {
@@ -415,7 +416,18 @@ function playbackThumbnailClick()
   }
   else if (shared.isListPlayer())
   {
-    shared.playerScrollTo(0);
+    if (event.type === 'contextmenu')
+    {
+      if (utils.isPointerTypeTouch(event))
+      {
+        event.preventDefault();
+        showTrackDetails(document.getElementById(m.player.getStatus().trackElementId));
+      }
+    }
+    else
+    {
+      shared.playerScrollTo(0);
+    }
   }
 }
 
