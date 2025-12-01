@@ -146,25 +146,24 @@ function crossfadeToClick(event)
 
 function updateCrossfadeToState()
 {
-  const isPlayingState = isPlaying();
-  const currentTrack   = isPlayingState ? m.players.getTrackData().currentTrack : -1;
+  const currentTrack = isPlaying() ? m.players.getTrackData().currentTrack : -1;
 
-  debug.log(`updateCrossfadeToState() - playingState: ${isPlayingState} - currentTrack: ${currentTrack}`);
+  debug.log(`updateCrossfadeToState() - playingState: ${isPlaying()} - currentTrack: ${currentTrack}`);
 
   ctrl.crossfadeTo.forEach((element, index) =>
   {
     if (currentTrack === (index + 1))
     {
       replaceClass(element,
-        (isPlayingState ? STATE.ENABLED.CLASS  : STATE.DISABLED.CLASS),
-        (isPlayingState ? STATE.DISABLED.CLASS : STATE.ENABLED.CLASS)
+        (isPlaying() ? STATE.ENABLED.CLASS  : STATE.DISABLED.CLASS),
+        (isPlaying() ? STATE.DISABLED.CLASS : STATE.ENABLED.CLASS)
       );
     }
     else
     {
       replaceClass(element,
-        (isPlayingState ? STATE.DISABLED.CLASS : STATE.ENABLED.CLASS),
-        (isPlayingState ? STATE.ENABLED.CLASS  : STATE.DISABLED.CLASS)
+        (isPlaying() ? STATE.DISABLED.CLASS : STATE.ENABLED.CLASS),
+        (isPlaying() ? STATE.ENABLED.CLASS  : STATE.DISABLED.CLASS)
       );
     }
   });

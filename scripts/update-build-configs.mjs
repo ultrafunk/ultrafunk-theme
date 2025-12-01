@@ -18,7 +18,7 @@ import {
 /*************************************************************************************************/
 
 
-let packageUltrafunk = null;
+let packageJson = null;
 
 const isProdBuildRegEx    = /const\s+IS_PROD_BUILD\s+=\s+(false|true)/i;
 const isDebugRegEx        = /const\s+IS_DEBUG\s+=\s+(false|true)/i;
@@ -40,9 +40,9 @@ if (process.argv.length === 3) // eslint-disable-line no-undef
 
   if (hasValidArgument)
   {
-    packageUltrafunk = getPackageUltrafunk('./package.json');
+    packageJson = getPackageJson('./package.json');
 
-    if (packageUltrafunk !== null)
+    if (packageJson !== null)
       updateConfigs();
     else
       console.error('Error parsing package.json, it must contain a "com_ultrafunk" field!');
@@ -64,22 +64,22 @@ else
 
 function updateConfigs()
 {
-  if (packageUltrafunk.theme !== undefined)
+  if (packageJson.theme !== undefined)
   {
     if (isProdBuild || isDevBuild)
     {
-      updateConfig(packageUltrafunk.theme.javaScriptConfig);
-      updateConfig(packageUltrafunk.theme.phpConfig);
+      updateConfig(packageJson.theme.javaScriptConfig);
+      updateConfig(packageJson.theme.phpConfig);
     }
     else if (isJSChunkFile)
     {
-      updatePHPConfigJSChunkFile(packageUltrafunk.theme.phpConfig);
+      updatePHPConfigJSChunkFile(packageJson.theme.phpConfig);
     }
   }
-  else if (packageUltrafunk.plugin !== undefined)
+  else if (packageJson.plugin !== undefined)
   {
     if (isProdBuild || isDevBuild)
-      updateConfig(packageUltrafunk.plugin.phpConfig);
+      updateConfig(packageJson.plugin.phpConfig);
   }
 }
 
@@ -94,7 +94,7 @@ function updateConfig(configPath)
 
 function updatePHPConfigJSChunkFile(configPath)
 {
-  const newestChunk = getMostRecentFile(packageUltrafunk.theme.javaScriptChunkPath);
+  const newestChunk = getMostRecentFile(packageJson.theme.javaScriptChunkPath);
 
   if (newestChunk !== undefined)
   {
@@ -105,7 +105,7 @@ function updatePHPConfigJSChunkFile(configPath)
   }
   else
   {
-    console.error(`getMostRecentFile() failed for: ${packageUltrafunk.theme.javaScriptChunkPath}`);
+    console.error(`getMostRecentFile() failed for: ${packageJson.theme.javaScriptChunkPath}`);
   }
 }
 
@@ -114,12 +114,12 @@ function updatePHPConfigJSChunkFile(configPath)
 // Misc. helper functions
 // ************************************************************************************************
 
-function getPackageUltrafunk(packageJsonPath)
+function getPackageJson(packageJsonPath)
 {
   try
   {
-    const parsedConfig = JSON.parse(readFileSync(packageJsonPath))?.com_ultrafunk;
-    return ((parsedConfig !== undefined) ? parsedConfig : null);
+    const parsedJson = JSON.parse(readFileSync(packageJsonPath))?.com_ultrafunk;
+    return ((parsedJson !== undefined) ? parsedJson : null);
   }
   catch (error) // eslint-disable-line no-unused-vars
   {

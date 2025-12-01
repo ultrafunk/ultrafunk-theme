@@ -1,5 +1,5 @@
 //
-// PlaybackTimer base class
+// PlaybackTimer abstract base class
 //
 // https://ultrafunk.com
 //
@@ -46,7 +46,7 @@ export class PlaybackTimer
     addListener(EVENT.AUTOPLAY_BLOCKED,  () => this.stop());
   }
 
-  // Abstract methods to override in child class(es)
+  // Methods to implement in child classes
   updateTimer() {}
   updateVolumeMute() {}
 

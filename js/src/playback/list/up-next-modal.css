@@ -18,10 +18,14 @@
   line-height: 20px;
   padding-top: 8px;
   padding-bottom: 8px;
-  cursor: move;
+  cursor: auto;
 
   &:last-child {
     margin-bottom: 5px;
+  }
+
+  .modal-draggable-entry {
+    cursor: move;
   }
 
   .modal-track-thumbnail::before {
@@ -86,17 +90,26 @@
     display: inline-flex;
     margin-right: -10px;
     margin-left: 10px;
+    cursor: pointer;
   }
 
-  .modal-track-buttons .material-icons {
-    font-size: 30px;
-    margin: 0;
-  }
-
-  .modal-track-buttons .drag-drop-button {
+  .modal-track-buttons .track-details-button {
     width: 30px;
     height: 30px;
     padding: 5px;
+    -webkit-user-select: none;
+    user-select: none;
+    border-radius: var(--button-border-radius);
+  }
+
+  .modal-track-buttons .material-icons-outlined {
+    font-size: 30px;
+    margin: 0;
+    color: var(--primary-icon-color);
+  }
+
+  .modal-track-buttons .track-details-button:hover {
+    background-color: var(--control-highlight-color);
   }
 
 }
@@ -110,11 +123,6 @@
 
   .modal-type-tracklist .modal-header-entry {
     padding-top: 10px;
-  }
-
-  .modal-type-tracklist #modal-item-11,
-  .modal-type-tracklist #modal-item-12 {
-    display: none;
   }
 
   .modal-tracklist-entry {
@@ -156,11 +164,11 @@
       margin-left: 8px;
     }
 
-    .modal-track-buttons .material-icons {
+    .modal-track-buttons .material-icons-outlined {
       font-size: 26px;
     }
 
-    .modal-track-buttons .drag-drop-button {
+    .modal-track-buttons .track-details-button {
       width: 26px;
       height: 26px;
     }
@@ -179,6 +187,20 @@
   .modal-tracklist-entry .modal-track-duration {
     min-width: 36px;
     width: 36px;
+  }
+
+}
+
+
+/**************************************************************************************************
+* Responsive: max-height: 850px
+***************************************************************************************************/
+
+@media screen and (max-height: 850px) {
+
+  .modal-type-tracklist #modal-item-11,
+  .modal-type-tracklist #modal-item-12 {
+    display: none;
   }
 
 }

@@ -13,6 +13,7 @@ import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
 import { setCurrentTrack }   from './list-playback.js';
 import { getTrackTypeClass } from '../common/mediaplayer.js';
+import { showTrackDetails }  from '../common/track-modals.js';
 
 import {
   VERSION,
@@ -68,8 +69,8 @@ export async function showUpNextModal()
       modalTitle: getTitle(isPlaying()),
       modalList:  tracklist,
       modalType:  'tracklist',
-      onClickEntryCallback: (clickId) => onTrackClick(tracklist, clickId),
-      onClickCloseCallback: (event)   => shouldCloseModal(event),
+      onClickEntryCallback: (clickId, event) => onEntryClick(tracklist, clickId, event),
+      onClickEntryCloseCallback: (event) => shouldCloseModal(event),
     });
 
     addTitleListener();
@@ -90,21 +91,34 @@ export async function showUpNextModal()
   }
 }
 
-function onTrackClick(tracklist, clickId)
+function onEntryClick(tracklist, clickId, event)
 {
-  const nextTrackId = tracklist.find(item => (item.clickId === clickId)).clickId;
-
-  if ((nextTrackId === getCurrentTrackElement().id) && isPlaying())
-    getCurrentTrackElement().scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
+  if (event.target.closest('button.track-details-button') !== null)
+  {
+    showTrackDetails(document.getElementById(clickId), null, showUpNextModal);
+  }
   else
-    setCurrentTrack(nextTrackId, true, false);
+  {
+    const nextTrackId = tracklist.find(item => (item.clickId === clickId)).clickId;
+
+    if ((nextTrackId === getCurrentTrackElement().id) && isPlaying())
+      getCurrentTrackElement().scrollIntoView({ behavior: getScrollBehavior(), block: 'center' });
+    else
+      setCurrentTrack(nextTrackId, true, false);
+  }
+}
+
+function isClickedUiElement(event)
+{
+  return (event.target.classList.contains('modal-track-thumbnail') ||
+         (event.target.closest('button.track-details-button') !== null));
 }
 
 function shouldCloseModal(event)
 {
   if (event.target.closest('#modal-item-1'))
     return true;
-  else if (event.target.classList.contains('modal-track-thumbnail'))
+  else if (isClickedUiElement(event))
     return true;
 
   return false;
@@ -199,10 +213,10 @@ function addDragDropListeners()
   });
 }
 
-// Disable drag & drop for track play button (modal-track-thumbnail)
+// Disable drag & drop for track play button (thumbnail) and track details button
 function mouseDown(event)
 {
-  if (event.target.classList.contains('modal-track-thumbnail'))
+  if (isClickedUiElement(event))
     event.preventDefault();
 }
 
@@ -250,7 +264,7 @@ function getUpNextTrackHtml(element, trackArtistAttr, trackTitleAttr, isDraggabl
 
   return /*html*/ `
     <div class="modal-track ${isDraggable ? 'modal-draggable-entry' : ''}" ${isDraggable ? 'draggable="true"' : ''}>
-      <div class="modal-track-thumbnail modal-ignore-touchmove ${getTrackTypeClass(element)}" ${isDraggable ? 'title="Click to Play Track"' : ''}>
+      <div class="modal-track-thumbnail ${getTrackTypeClass(element)}" ${isDraggable ? 'title="Click to Play Track"' : ''}>
         <img src="${encodeURI(element.getAttribute('data-track-thumbnail-url'))}">
       </div>
       <div class="modal-track-artist-title text-nowrap-ellipsis" ${isDraggable ? 'title="Drag to Move Track"' : ''}>
@@ -268,6 +282,6 @@ function getModalTrackButtons()
 {
   return /*html*/ `
     <div class="modal-track-buttons">
-      <div class="drag-drop-button" title="Drag to Move Track"><span class="material-icons">drag_handle</span></div>
+      <button type="button" class="track-details-button" title="Track Details"><span class="material-icons-outlined">info</span></button>
     </div>`;
 }

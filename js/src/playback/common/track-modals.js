@@ -69,7 +69,7 @@ export function showTrackSharePlay(element, onCloseFocusElement = null)
   return modalId;
 }
 
-export function showTrackDetails(element, onCloseFocusElement = null)
+export function showTrackDetails(element, onCloseFocusElement = null, onModalClosedCallback = null)
 {
   const trackArtist   = stripAttribute(element, 'data-track-artist');
   const trackTitle    = stripAttribute(element, 'data-track-title');
@@ -92,8 +92,9 @@ export function showTrackDetails(element, onCloseFocusElement = null)
     modalTitle: modalTitle,
     modalList:  modalEntries,
     modalType:  'track-details',
-    onCloseFocusElement: onCloseFocusElement,
-    onClickEntryCallback: (entryClickId, event) => onIconClickTrackSearch(event),
+    onClickEntryCallback:  (entryClickId, event) => onIconClickTrackSearch(event),
+    onCloseFocusElement:   onCloseFocusElement,
+    onModalClosedCallback: onModalClosedCallback,
   });
 
   setTrackThumbnailClick(`${trackArtist} - ${trackTitle}`);

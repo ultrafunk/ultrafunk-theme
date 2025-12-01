@@ -20,13 +20,13 @@ import {
 const debug = newDebugLogger('modal');
 
 const m = {
-  onClickClose:        null,
   onClickEntry:        null,
+  onClickEntryClose:   null,
   onCloseFocusElement: null,
+  onModalClosed:       null,
   modalId:             0,
   clickItemsCount:     0,
   isOverflowY:         false,
-  ignoreTouchMove:     false,
   isTouchDraggable:    false,
 };
 
@@ -46,9 +46,10 @@ export function showModal({
   modalTitle = 'Modal Title',
   modalBody  = null,
   modalList  = [],
-  onClickCloseCallback = () => true,
-  onClickEntryCallback = () => {},
-  onCloseFocusElement  = null,
+  onClickEntryCallback      = () => {},
+  onClickEntryCloseCallback = () => true,
+  onCloseFocusElement       = null,
+  onModalClosedCallback     = () => {},
 } = {})
 {
   const isModalList = ((modalList.length > 0) && (modalBody === null));
@@ -58,9 +59,10 @@ export function showModal({
   initElements();
   resetState();
 
-  m.onClickClose        = onClickCloseCallback;
   m.onClickEntry        = onClickEntryCallback;
+  m.onClickEntryClose   = onClickEntryCloseCallback;
   m.onCloseFocusElement = onCloseFocusElement;
+  m.onModalClosed       = onModalClosedCallback;
   m.clickItemsCount     = 0;
 
   if (isModalList)
@@ -129,15 +131,15 @@ function initElements()
     elements.overlay.addEventListener('click', (event) =>
     {
       if (event.target === elements.overlay)
-        resetState();
+        resetState(true);
     });
 
-    elements.container.querySelector('.modal-dialog-close-icon').addEventListener('click', resetState);
-    elements.container.querySelector('.modal-dialog-close-button').addEventListener('click', resetState);
+    elements.container.querySelector('.modal-dialog-close-icon').addEventListener('click', () => resetState(true));
+    elements.container.querySelector('.modal-dialog-close-button').addEventListener('click', () => resetState(true));
   }
 }
 
-function resetState()
+function resetState(wasModalClosed = false)
 {
   if (isShowingModal(m.modalId))
   {
@@ -147,6 +149,9 @@ function resetState()
     elements.overlay.className = '';
     disablePageScrolling(false);
     m.onCloseFocusElement?.focus();
+
+    if (wasModalClosed)
+      m?.onModalClosed();
   }
 }
 
@@ -163,7 +168,7 @@ function modalListClick(event)
 {
   const clickedEntryElement = event.target.closest('.modal-click-item');
 
-  if (clickedEntryElement && (m.onClickClose(event) === true))
+  if (clickedEntryElement && (m.onClickEntryClose(event) === true))
   {
     const entryClickId = clickedEntryElement?.getAttribute('data-modal-click-id');
 
@@ -179,7 +184,7 @@ function keyDown(event)
   event.stopPropagation();
 
   if (event.key === 'Escape')
-    resetState();
+    resetState(true);
 }
 
 function disablePageScrolling(disableScrolling)
@@ -203,7 +208,6 @@ function disablePageScrolling(disableScrolling)
 function touchStart(event)
 {
   m.isOverflowY      = (elements.container.scrollHeight > elements.container.clientHeight);
-  m.ignoreTouchMove  = (true   === event.target.classList.contains('modal-ignore-touchmove'));
   m.isTouchDraggable = ('true' === event.target.closest('.modal-draggable-entry')?.getAttribute('draggable'));
 }
 
@@ -212,6 +216,6 @@ function touchMove(event)
   if (m.isOverflowY)
     return;
 
-  if ((m.isTouchDraggable === false) || m.ignoreTouchMove)
+  if (m.isTouchDraggable === false)
     event.preventDefault();
 }
