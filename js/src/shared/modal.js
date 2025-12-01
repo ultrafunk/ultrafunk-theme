@@ -151,7 +151,7 @@ function resetState(wasModalClosed = false)
     m.onCloseFocusElement?.focus();
 
     if (wasModalClosed)
-      m?.onModalClosed();
+      m.onModalClosed?.();
   }
 }
 
