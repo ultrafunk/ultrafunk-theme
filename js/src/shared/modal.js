@@ -36,6 +36,8 @@ const elements = {
   body:      null,
 };
 
+const MODAL_CLOSED = true;
+
 
 // ************************************************************************************************
 //
@@ -131,15 +133,15 @@ function initElements()
     elements.overlay.addEventListener('click', (event) =>
     {
       if (event.target === elements.overlay)
-        resetState(true);
+        resetState(MODAL_CLOSED);
     });
 
-    elements.container.querySelector('.modal-dialog-close-icon').addEventListener('click', () => resetState(true));
-    elements.container.querySelector('.modal-dialog-close-button').addEventListener('click', () => resetState(true));
+    elements.container.querySelector('.modal-dialog-close-icon').addEventListener('click', () => resetState(MODAL_CLOSED));
+    elements.container.querySelector('.modal-dialog-close-button').addEventListener('click', () => resetState(MODAL_CLOSED));
   }
 }
 
-function resetState(wasModalClosed = false)
+function resetState(modalClosed = false)
 {
   if (isShowingModal(m.modalId))
   {
@@ -150,7 +152,7 @@ function resetState(wasModalClosed = false)
     disablePageScrolling(false);
     m.onCloseFocusElement?.focus();
 
-    if (wasModalClosed)
+    if (modalClosed)
       m.onModalClosed?.();
   }
 }
@@ -184,7 +186,7 @@ function keyDown(event)
   event.stopPropagation();
 
   if (event.key === 'Escape')
-    resetState(true);
+    resetState(MODAL_CLOSED);
 }
 
 function disablePageScrolling(disableScrolling)

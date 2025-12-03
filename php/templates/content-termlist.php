@@ -8,6 +8,9 @@
 namespace Ultrafunk\Theme\Templates;
 
 
+use function Ultrafunk\Plugin\Shared\Utils\get_channels_top_artists_info;
+
+
 /**************************************************************************************************************************/
 
 
@@ -29,7 +32,7 @@ final class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
       data-term-type="<?php echo $this->params->query_vars['term_type']; ?>"
       >
       <?php if ($this->is_artists === false) { ?>
-        <div class="termlist-title"><b>All Channels</b> (tracks)</div>
+        <div class="termlist-title"><b>All Channels</b> (<?php echo get_channels_top_artists_info()['all_tracks_count']; ?> tracks)</div>
       <?php } ?>
       <?php $this->termlist_entries(); ?>
     </term-list>
