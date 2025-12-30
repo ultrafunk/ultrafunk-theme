@@ -272,9 +272,10 @@ export function getStatus(getCurrentTrackNum = false)
 {
   let currentTrackElement = null;
 
-  (m.currentTrackId !== null)
-    ? currentTrackElement = listControls.queryTrackId(m.currentTrackId)
-    : currentTrackElement = listControls.queryTrack('div.track-entry.current');
+  if (m.currentTrackId !== null)
+    currentTrackElement = listControls.queryTrackId(m.currentTrackId);
+  else
+    currentTrackElement = listControls.queryTrack('div.track-entry.current');
 
   if (currentTrackElement !== null)
   {

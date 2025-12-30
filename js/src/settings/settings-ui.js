@@ -16,6 +16,7 @@ import {
 import {
   addListener,
   isPointerTypeTouch,
+  replaceClass,
 } from '../shared/utils.js';
 
 import {
@@ -50,6 +51,7 @@ const debug = newDebugLogger('settings-ui');
 const m = {
   settings:     null,
   container:    null,
+  saveButton:   null,
   updatedEvent: new Event('settingsUpdated'),
 };
 
@@ -97,6 +99,7 @@ export function initSettingsUi()
       m.container.style.opacity = 1;
       m.container.addEventListener('click',       (event) => settingClicked(event));
       m.container.addEventListener('contextmenu', (event) => settingClicked(event));
+      m.saveButton = document.querySelector(`#${config.saveResetId} .settings-save-button`);
 
       addListener(`#${config.saveResetId} .settings-save-button`,  'click', settingsSaveClick);
       addListener(`#${config.saveResetId} .settings-reset-button`, 'click', settingsResetClick);
@@ -115,14 +118,11 @@ function initSaveChangesPrompt()
 {
   window.addEventListener('beforeunload', (event) =>
   {
-    m.container.querySelectorAll('table tr')?.forEach(tableRow =>
+    if (hasSettingsChanged())
     {
-      if (tableRow.classList.contains('value-changed'))
-      {
-        event.preventDefault();
-        event.returnValue = true;
-      }
-    });
+      event.preventDefault();
+      event.returnValue = true;
+    }
   });
 }
 
@@ -305,6 +305,7 @@ function updateRowData(element, settingsSection, settingsKey, schemaEntry)
     element.classList.remove('value-changed');
 
   updateRowDOM(element.querySelector('.value-string'), schemaEntry);
+  updateSaveSettingsButton();
 }
 
 function updateRowDOM(element, schemaEntry)
@@ -355,6 +356,11 @@ function settingClicked(event)
   }
 }
 
+function hasSettingsChanged()
+{
+  return (m.container.querySelector('table tr.value-changed') !== null);
+}
+
 function showSettingDetailsModal(settingsId, settingsKey, sectionIndex)
 {
   const schemaEntry = settingsSections[sectionIndex].schema[settingsKey];
@@ -380,10 +386,17 @@ function clearValueChanged()
   m.container.querySelectorAll('table  tr')?.forEach((tableRow) => tableRow.classList.remove('value-changed'));
 }
 
+function updateSaveSettingsButton()
+{
+  const hasChanged = hasSettingsChanged();
+  replaceClass(m.saveButton, hasChanged ? 'disabled' : 'enabled', hasChanged ? 'enabled' : 'disabled');
+}
+
 function settingsSaveClick()
 {
   writeSettings();
   clearValueChanged();
+  replaceClass(m.saveButton, 'enabled', 'disabled');
   showSnackbar({ message: 'All settings saved', duration: 3 });
 }
 

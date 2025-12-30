@@ -8,6 +8,11 @@
 namespace Ultrafunk\Theme\Filters;
 
 
+/**************************************************************************************************************************/
+if (!defined('ABSPATH')) exit;
+/**************************************************************************************************************************/
+
+
 use Ultrafunk\Plugin\Shared\Constants\PLAYER_TYPE;
 
 use const Ultrafunk\Theme\Config\THEME_ENV;

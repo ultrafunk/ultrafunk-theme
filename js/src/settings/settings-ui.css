@@ -169,6 +169,15 @@ table.settings {
   margin-right: 12px;
 }
 
+.settings-save-button.disabled {
+  color:rgb(150, 150, 150);
+  background-color: var(--site-theme-medium-dark-color);
+  pointer-events: none;
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 @media all and (pointer: fine) {
 
   .settings-clear-button:hover,
