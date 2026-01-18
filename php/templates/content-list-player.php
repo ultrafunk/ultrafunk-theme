@@ -8,6 +8,11 @@
 namespace Ultrafunk\Theme\Templates;
 
 
+/**************************************************************************************************************************/
+if (!defined('ABSPATH')) exit;
+/**************************************************************************************************************************/
+
+
 use Ultrafunk\Plugin\Shared\Constants\TRACK_TYPE;
 
 use function Ultrafunk\Plugin\Shared\Utils\get_term_links;
