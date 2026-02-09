@@ -37,6 +37,18 @@ export function getPageSeparatorHtml(responseData, loadingPage)
     </div>`;
 }
 
+export function getTracksTitleHtml(tracksTitle)
+{
+  return /*html*/ `
+    <div class="tracklist-page-separator local-tracks-title">
+      <button type="button" data-click-id="scroll-next-page" class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</button>
+      <button type="button" data-click-id="scroll-last-track" class="material-icons arrow-last-button" title="Scroll to Last Track">vertical_align_bottom</button>
+      <span class="tracks-title text-nowrap-ellipsis">${tracksTitle}</span>
+      <button type="button" data-click-id="scroll-first-track" class="material-icons arrow-first-button" title="Scroll to First Track">vertical_align_top</button>
+      <button type="button" data-click-id="scroll-prev-page" class="material-icons arrow-up-button" title="Scroll to previous page">arrow_upward</button>
+    </div>`;
+}
+
 export function getTrackEntryHtml(track, density = 'default')
 {
   const thumbnailData = getThumbnailData(track.meta);

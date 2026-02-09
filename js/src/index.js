@@ -262,7 +262,7 @@ const resize = (() =>
 
   function resizeEvent()
   {
-    let headerHeight = 0;
+    let headerHeight = 0; // eslint-disable-line no-useless-assignment
 
     if (noPlayback())
       headerHeight = utils.getCssPropValue('--site-header-height-no-playback');

@@ -270,7 +270,7 @@ export function stopSkipToNextTrack()
 
 export function getStatus(getCurrentTrackNum = false)
 {
-  let currentTrackElement = null;
+  let currentTrackElement = null; // eslint-disable-line no-useless-assignment
 
   if (m.currentTrackId !== null)
     currentTrackElement = listControls.queryTrackId(m.currentTrackId);

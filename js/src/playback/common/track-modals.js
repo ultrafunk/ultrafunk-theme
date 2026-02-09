@@ -122,7 +122,7 @@ async function showMatchingArtistsResults(element, trackArtist)
 {
   // Do some character replacements for better search results
   const trackArtistReplaced = trackArtist.replaceAll(/['";,.:]/g, '').replaceAll(/[&]/g, '&amp;');
-  let restResponse = {};
+  let restResponse = {}; // eslint-disable-line no-useless-assignment
 
   if (m.matchingArtistsCache.get(trackArtistReplaced) === undefined)
   {

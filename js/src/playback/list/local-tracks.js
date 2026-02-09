@@ -5,10 +5,9 @@
 //
 
 
-import { showSnackbar }      from '../../shared/snackbar.js';
-import { TRACK_TYPE }        from '../common/mediaplayer.js';
-import { getTrackEntryHtml } from './list-track-templates.js';
-import { settings }          from '../../shared/session-data.js';
+import { showSnackbar } from '../../shared/snackbar.js';
+import { TRACK_TYPE }   from '../common/mediaplayer.js';
+import { settings }     from '../../shared/session-data.js';
 
 import {
   newDebugLogger,
@@ -32,6 +31,17 @@ import {
   queryTrackAll,
 } from './list-controls.js';
 
+import {
+  getTrackEntryHtml,
+  getTracksTitleHtml,
+} from './list-track-templates.js';
+
+import {
+//closeModal,
+  showModal,
+  updateModalBody,
+} from '../../shared/modal.js';
+
 
 /*************************************************************************************************/
 
@@ -40,17 +50,11 @@ const debug = newDebugLogger('local-tracks');
 
 const m = {
   jsmediatags: null,
-  filesArray: [],
+  audioFilesArray: [],
   addTracksStartTime: 0,
   addTracksHtmlTime:  0,
+  modalId: 0,
 };
-
-const tracklistLocalHtml = /*html*/ `
-  <div id="tracklist-local">
-    <label for="select-local-files">Add local tracks:</label>
-    <input id="select-local-files" type="file" accept="audio/*" multiple />
-    <button id="clear-local-tracks" type="button">Clear Tracks</button>
-  </div>`;
 
 
 // ************************************************************************************************
@@ -61,7 +65,7 @@ export function initLocalTracks()
 {
   debug.log('init()');
 
-  document.getElementById('tracklist').insertAdjacentHTML("beforeend", tracklistLocalHtml);
+  document.getElementById('tracklist').insertAdjacentHTML("beforeend", getTracklistLocalHtml());
 
   addListener('#select-local-files', 'change', (event) => getSelectedFiles('change', event.target.files));
   addListener('#select-local-files', 'cancel', ()      => getSelectedFiles('cancel'));
@@ -78,30 +82,98 @@ export function hasLoadedLocalTracks()
 //
 // ************************************************************************************************
 
-function getSelectedFiles(eventType, filesList)
+function getTracklistLocalHtml()
 {
-  if ((eventType === 'cancel') || (filesList.length === 0))
+  return /*html*/ `
+    <div id="tracklist-local">
+      <label for="select-local-files">Add local tracks:</label>
+      <input id="select-local-files" type="file" accept="audio/*" ${settings.list.addTracksFromFolders ? 'webkitdirectory' : ''} multiple />
+      <button id="clear-local-tracks" type="button">Clear Tracks</button>
+    </div>`;
+}
+
+function getSelectedFiles(eventType, audioFilesList)
+{
+  if ((eventType === 'cancel') || (audioFilesList.length === 0))
   {
     showSnackbar({ message: 'No local tracks selected', duration: 3 });
+    return;
+  }
+
+  m.addTracksStartTime = performance.now();
+
+  populateAudioFilesArray(audioFilesList);
+
+  if (m.audioFilesArray.length === 0)
+  {
+    showModal({ modalTitle: 'Error!', modalBody: `<p>No valid audio files were selected.</p>`});
   }
   else
   {
-    showSnackbar({
-      message: `Adding ${filesList.length} local ${(filesList.length === 1) ? 'track' : 'tracks'}...`,
-      showImmediate: true,
-      duration: 5,
-    });
-
-    m.addTracksStartTime = performance.now();
-    m.filesArray = Array.from(filesList);
-
-    if (settings.list.sortLocalTracks)
-      m.filesArray.sort((a, b) => a.name.localeCompare(b.name));
+    showTracksLoadingUi();
 
     if (m.jsmediatags === null)
       loadJsMediaTagsScript();
     else
-      inserLocalTracksHtml();
+      setTimeout(() => inserLocalTracksHtml(), 0); // Yield here so loading UI displays immediately
+  }
+}
+
+function populateAudioFilesArray(audioFilesList)
+{
+  if (settings.list.addTracksFromFolders)
+  {
+    m.audioFilesArray = [];
+
+    for (const audioFile of audioFilesList)
+    {
+      if (isAudioFile(audioFile.name))
+      {
+        audioFile.trackPath = audioFile.webkitRelativePath.slice(0, audioFile.webkitRelativePath.lastIndexOf('/'));
+        m.audioFilesArray.push(audioFile);
+      }
+    }
+
+    m.audioFilesArray.sort((a, b) => a.trackPath.localeCompare(b.trackPath));
+  }
+  else
+  {
+    m.audioFilesArray = Array.from(audioFilesList);
+
+    if (settings.list.sortLocalTracks)
+      m.audioFilesArray.sort((a, b) => a.name.localeCompare(b.name));
+  }
+}
+
+function isAudioFile(fileName)
+{
+  const audioFormatExtensions = ['.opus',  '.flac', '.webm', '.weba', '.wav', '.ogg', '.m4a', '.oga', '.mid', '.mp3', '.aiff', '.wma', '.au'];
+
+  for (const extension of audioFormatExtensions)
+  {
+    if (fileName.endsWith(extension))
+      return true;
+
+    if (fileName.toUpperCase().endsWith(extension.toUpperCase()))
+      return true;
+  }
+
+  return false;
+}
+
+function showTracksLoadingUi()
+{
+  if (m.audioFilesArray.length > 25)
+  {
+    m.modalId = showModal({ modalTitle: 'Adding local traks', modalBody: `<p>Loading track 1 of ${m.audioFilesArray.length}...<br>Time used: ... sec.</p>`});
+  }
+  else
+  {
+    showSnackbar({
+      message: `Adding ${m.audioFilesArray.length} local ${(m.audioFilesArray.length === 1) ? 'track' : 'tracks'}...`,
+      showImmediate: true,
+      duration: 5,
+    });
   }
 }
 
@@ -121,7 +193,7 @@ function loadJsMediaTagsScript()
   scriptTag.onload = () =>
   {
     m.jsmediatags = window.jsmediatags;
-    inserLocalTracksHtml();
+    setTimeout(() => inserLocalTracksHtml(), 0); // Yield here so loading UI displays immediately
   };
 }
 
@@ -144,10 +216,23 @@ function clearLocalTracks()
     }
   });
 
+  queryTrackAll('div.tracklist-page-separator.local-tracks-title')?.forEach(trackElement => trackElement.remove());
+
   // Clear previously selected files from the form value
   document.getElementById('select-local-files').value = '';
 
   showSnackbar({ message: 'Local tracks removed', duration: 3 });
+}
+
+function updateLoadingModal(modalBody)
+{
+  if (m.modalId > 0)
+    updateModalBody(m.modalId, modalBody);
+}
+
+function getTracksLoadTime()
+{
+  return `Time used: ${Math.round((performance.now() - m.addTracksStartTime) / 1000)} sec.`;
 }
 
 function logPerfTime(filesCount)
@@ -156,6 +241,8 @@ function logPerfTime(filesCount)
   const insertHtmlTime = Math.ceil(m.addTracksHtmlTime - m.addTracksStartTime);
 
   console.log(`%cAdded ${filesCount} local track(s) in ${totalTime} ms. (insert HTML: ${insertHtmlTime} ms.) for ${THEME_ENV.siteUrl}`, logCss);
+  updateLoadingModal(`<p>Loading track ${filesCount} of ${filesCount}... <b>Done!</b><br>Time used: ${Math.round(totalTime / 1000)} sec.</p>`);
+//setTimeout(() => closeModal(m.modalId), 5000);
 }
 
 
@@ -165,10 +252,17 @@ function logPerfTime(filesCount)
 
 function inserLocalTracksHtml()
 {
+  let tracksPath = '';
   let tracksHtml = '';
 
-  m.filesArray.forEach((file, index) =>
+  m.audioFilesArray.forEach((file, index) =>
   {
+    if ((settings.list.addTracksFromFolders) && (tracksPath !== file.trackPath))
+    {
+      tracksPath = file.trackPath;
+      tracksHtml += getTracksTitleHtml(tracksPath.slice(tracksPath.lastIndexOf('/') + 1));
+    }
+
     const trackUri = encodeURI(URL.createObjectURL(file));
     file.trackUid  = `track-${(Date.now() + index)}`;
 
@@ -199,7 +293,7 @@ function setTracksMetadata()
 {
   let processedTracks = 0;
 
-  m.filesArray.forEach((file) =>
+  m.audioFilesArray.forEach((file) =>
   {
     const trackElement  = document.getElementById(file.trackUid);
     const filename      = stripHtml(escHtml(file.name));
@@ -221,15 +315,19 @@ function setTracksMetadata()
         else
           setFallbackTrackArtistTitle(trackElement, filenameNoExt);
 
-        if (++processedTracks === m.filesArray.length)
-          logPerfTime(m.filesArray.length);
+        if (++processedTracks === m.audioFilesArray.length)
+          logPerfTime(m.audioFilesArray.length);
+        else
+          updateLoadingModal(`<p>Loading track ${processedTracks} of ${m.audioFilesArray.length}...<br>${getTracksLoadTime()}</p>`);
       },
       onError: () =>
       {
         setFallbackTrackArtistTitle(trackElement, filenameNoExt);
 
-        if (++processedTracks === m.filesArray.length)
-          logPerfTime(m.filesArray.length);
+        if (++processedTracks === m.audioFilesArray.length)
+          logPerfTime(m.audioFilesArray.length);
+        else
+          updateLoadingModal(`<p>Loading track ${processedTracks} of ${m.audioFilesArray.length}...<br>${getTracksLoadTime()}</p>`);
       }
     });
   });
@@ -246,18 +344,18 @@ function setTrackArtistTitle(tags, trackElement, filenameNoExt)
     let artist = filenameNoExt;
     let title  = filenameNoExt;
 
-    if ((tags.artist !== undefined) && (tags.artist.length !== 0))
+    if ((tags.artist !== undefined) && (tags.artist.trim().length !== 0))
       artist = stripHtml(tags.artist);
 
-    if ((tags.title !== undefined) && (tags.title.length !== 0))
+    if ((tags.title !== undefined) && (tags.title.trim().length !== 0))
       title = stripHtml(tags.title);
 
     trackElement.setAttribute('data-track-artist', artist);
     trackElement.setAttribute('data-track-title',  title);
     trackElement.querySelector('div.artist-title').innerHTML = `<span><b>${artist}</b></span><br><span>${title}</span>`;
-
-    setTrackImages(tags, trackElement);
   }
+
+  setTrackImages(tags, trackElement);
 }
 
 function setFallbackTrackArtistTitle(trackElement, filenameNoExt)
@@ -280,19 +378,26 @@ function setFallbackTrackArtistTitle(trackElement, filenameNoExt)
   }
 }
 
-async function setTrackImages(tags, trackElement)
+function setTrackImages(tags, trackElement)
 {
-  if (tags.picture !== undefined)
+  if ((tags.picture !== undefined) && (tags.picture.data.length > 0))
   {
     const trackImage = new Image();
     const imageBlob  = new Blob([new Uint8Array(tags.picture.data).buffer], { type: tags.picture.format });
     const imageUrl   = encodeURI(URL.createObjectURL(imageBlob));
 
     trackImage.src = imageUrl;
-    await trackImage.decode();
 
-    trackElement.querySelector('button.thumbnail img').src = imageUrl;
-    trackElement.setAttribute('data-track-thumbnail-url', imageUrl);
-    trackElement.setAttribute('data-track-image-url', imageUrl);
+    trackImage.onload = () =>
+    {
+      trackElement.querySelector('button.thumbnail img').src = imageUrl;
+      trackElement.setAttribute('data-track-thumbnail-url', imageUrl);
+      trackElement.setAttribute('data-track-image-url', imageUrl);
+    };
+
+    trackImage.onerror = () =>
+    {
+      debug.warn(`setTrackImages() failed for: ${trackElement.getAttribute('data-track-artist')} - "${trackElement.getAttribute('data-track-title')}"`);
+    };
   }
 }

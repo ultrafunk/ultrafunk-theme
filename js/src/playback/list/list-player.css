@@ -17,6 +17,7 @@ body.list-player {
   --track-current-color: #ddd;
   --track-thumbnail-placeholder-color: #ddd;
   --tracklist-page-separator-color: #f1f1f1;
+  --tracklist-local-background: rgb(235, 245, 255);
 }
 
 .site-theme-dark {
@@ -24,6 +25,7 @@ body.list-player {
   --track-current-color: #444;
   --track-thumbnail-placeholder-color: #444;
   --tracklist-page-separator-color: #303030;
+  --tracklist-local-background: rgb(35, 45, 55);
 }
 
 .site-theme-black {
@@ -31,6 +33,7 @@ body.list-player {
   --track-current-color: #303030;
   --track-thumbnail-placeholder-color: #303030;
   --tracklist-page-separator-color: #202020;
+  --tracklist-local-background: rgb(20, 30, 40);
 }
 
 body.list-player .site-branding {
@@ -188,6 +191,10 @@ body.list-player .site-branding {
     margin-right: 5px;
   }
 
+  span.tracks-title {
+    margin: 0 auto;
+  }
+
   @media all and (pointer: fine) {
 
     .material-icons:hover {
@@ -288,11 +295,12 @@ body.list-player .site-branding {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--tracklist-page-separator-color);
+  background-color: var(--tracklist-local-background);
   padding: 30px 0;
   font-size: 20px;
   line-height: 30px;
   font-weight: 400;
+  border-bottom: 1px solid var(--track-separator-color);
 }
 
 input#select-local-files {

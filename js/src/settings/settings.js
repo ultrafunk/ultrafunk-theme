@@ -39,7 +39,7 @@ const galleryPerPageValueStrings = ['4', '6', '8', '10', '12', '14', '16', '18',
 const trackCrossfadeDefPresetValueStrings = ['10 sec EqPow (1)', '20 sec EqPow (2)', '30 sec EqPow (3)', '10 sec Linear (4)', '20 sec Linear (5)', '30 sec Linear (6)'];
 
 export const settingsSchema = {
-  version: { description: '', type: INTEGER, values: [1, 999999], default: 42, valueStrings: [] },
+  version: { description: '', type: INTEGER, values: [1, 999999], default: 44, valueStrings: [] },
   playback: {
     preferredPlayer:      { description: 'Preferred Player',                type: INTEGER, values: [1, 2],               default: 2,     valueStrings: ['Gallery', 'List'] },
     keyboardShortcuts:    { description: 'Keyboard Shortcuts',              type: BOOLEAN, values: [true, false],        default: true,  valueStrings: ['ON', 'OFF'] },
@@ -63,6 +63,7 @@ export const settingsSchema = {
     showLoadMoreTracks:    { description: 'Show "Load More Tracks..." prompt',      type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
     tracksPerPage:         { description: 'Tracks Per Page: Search & Shuffle',      type: INTEGER, values: listPerPageValues, default: 25,    valueStrings: listPerPageValueStrings },
     enableLocalPlayback:   { description: 'Enable local (device) tracks playback',  type: BOOLEAN, values: [true, false],     default: false, valueStrings: ['ON', 'OFF'] },
+    addTracksFromFolders:  { description: 'Add local tracks from folders',          type: BOOLEAN, values: [true, false],     default: false, valueStrings: ['ON', 'OFF'] },
     sortLocalTracks:       { description: 'Sort local tracks alphabetically (asc.)',type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
     warnOnPageChange:      { description: 'Show Warning Prompt on Page Change',     type: BOOLEAN, values: [true, false],     default: true,  valueStrings: ['ON', 'OFF'] },
   },
@@ -134,6 +135,7 @@ export const defaultSettings = {
     showLoadMoreTracks:    list.showLoadMoreTracks.default,
     tracksPerPage:         list.tracksPerPage.default,
     enableLocalPlayback:   list.enableLocalPlayback.default,
+    addTracksFromFolders:  list.addTracksFromFolders.default,
     sortLocalTracks:       list.sortLocalTracks.default,
     warnOnPageChange:      list.warnOnPageChange.default,
   },

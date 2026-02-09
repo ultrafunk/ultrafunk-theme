@@ -138,7 +138,7 @@ class PlayerTypeToggle extends ElementToggle
   {
     const isPagedRegEx = /\/page\/(?!0)\d{1,6}/;
     const sourceUrl    = window.location.href;
-    let destUrl        = null;
+    let destUrl        = null; // eslint-disable-line no-useless-assignment
 
     // Add destination pagination or remove pagination if needed
     if ((destData.pageNum > 1) && (sourceUrl.match(isPagedRegEx) !== null))

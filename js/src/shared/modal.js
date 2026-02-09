@@ -86,10 +86,16 @@ export function showModal({
   return ++m.modalId;
 }
 
-export function isShowingModal(showingModalId = -1)
+export function closeModal(modalId)
 {
-  return ((showingModalId === m.modalId) &&
-          (elements.container !== null)  &&
+  if (modalId === m.modalId)
+    resetState(MODAL_CLOSED);
+}
+
+export function isShowingModal(modalId = -1)
+{
+  return ((modalId === m.modalId)       &&
+          (elements.container !== null) &&
           (elements.overlay.classList.contains('show')));
 }
 
@@ -103,15 +109,21 @@ export function getModalEntry(entryNum)
   return document.getElementById(`modal-item-${entryNum}`);
 }
 
-export function updateModalTitle(updateModalId, updateTitle)
+export function updateModalTitle(modalId, updateTitle)
 {
-  if (updateModalId === m.modalId)
+  if (modalId === m.modalId)
     elements.container.querySelector('.modal-dialog-title').innerHTML = updateTitle;
 }
 
-export function updateModalList(updateModalId, modalList)
+export function updateModalBody(modalId, updateBody)
 {
-  if (updateModalId === m.modalId)
+  if (modalId === m.modalId)
+    elements.body.innerHTML = updateBody;
+}
+
+export function updateModalList(modalId, modalList)
+{
+  if (modalId === m.modalId)
     setModalList(modalList);
 }
 
