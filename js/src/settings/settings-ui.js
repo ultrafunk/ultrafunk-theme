@@ -96,7 +96,6 @@ export function initSettingsUi()
       settingsSections.forEach(entry => setCurrentSettings(m.settings[entry.id], entry.schema));
 
       insertSettingsHtml();
-      m.container.style.opacity = 1;
       m.container.addEventListener('click',       (event) => settingClicked(event));
       m.container.addEventListener('contextmenu', (event) => settingClicked(event));
       m.saveButton = document.querySelector(`#${config.saveResetId} .settings-save-button`);

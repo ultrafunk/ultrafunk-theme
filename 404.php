@@ -8,4 +8,4 @@ get_header();
 
 get_template_part('php/templates/content', 'none');
 
-get_footer(); 
+get_footer();

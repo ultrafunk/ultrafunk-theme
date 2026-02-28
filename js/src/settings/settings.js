@@ -183,7 +183,7 @@ export const settingsDescriptions = {
   },
   site: {
     snackbarMessageLog: `The 15 last snackbar (toast) messages shown on ultrafunk.com are stored with a timestamp and can be viewed by pressing
-                         the '<b>v</b>' key or by clicking / tapping on the <b>View Snackbar Message Log</b> link on the settings page.`,
+                         the '<b>v</b>' key or by clicking / tapping on the <b>View Snackbar Message Log</b> link on the top of the settings page.`,
   }
 };
 

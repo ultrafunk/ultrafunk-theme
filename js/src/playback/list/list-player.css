@@ -16,7 +16,7 @@ body.list-player {
   --track-separator-color: #ddd;
   --track-current-color: #ddd;
   --track-thumbnail-placeholder-color: #ddd;
-  --tracklist-page-separator-color: #f1f1f1;
+  --tracklist-separator-color: #f1f1f1;
   --tracklist-local-background: rgb(235, 245, 255);
 }
 
@@ -24,7 +24,7 @@ body.list-player {
   --track-separator-color: #444;
   --track-current-color: #444;
   --track-thumbnail-placeholder-color: #444;
-  --tracklist-page-separator-color: #303030;
+  --tracklist-separator-color: #303030;
   --tracklist-local-background: rgb(35, 45, 55);
 }
 
@@ -32,7 +32,7 @@ body.list-player {
   --track-separator-color: #303030;
   --track-current-color: #303030;
   --track-thumbnail-placeholder-color: #303030;
-  --tracklist-page-separator-color: #202020;
+  --tracklist-separator-color: #202020;
   --tracklist-local-background: rgb(20, 30, 40);
 }
 
@@ -151,12 +151,12 @@ body.list-player .site-branding {
   overscroll-behavior-y: contain;
 }
 
-.tracklist-page-separator {
+.tracklist-separator {
   font-size: 20px;
   line-height: 30px;
   font-weight: 700;
   color: var(--primary-font-color);
-  background-color: var(--tracklist-page-separator-color);
+  background-color: var(--tracklist-separator-color);
   border-bottom: 1px solid var(--track-separator-color);
   display: flex;
   align-items: center;
@@ -505,25 +505,25 @@ body.list-player .site-footer-container {
     font-size: 50px;
   }
 
-  .tracklist-page-separator {
+  .tracklist-separator {
     font-size: 15px;
     line-height: 26px;
   }
 
-  .tracklist-page-separator a {
+  .tracklist-separator a {
     padding: 7px 14px;
   }
 
-  .tracklist-page-separator .material-icons {
+  .tracklist-separator .material-icons {
     font-size: 26px;
     padding: 7px;
   }
 
-  .tracklist-page-separator .arrow-down-button {
+  .tracklist-separator .arrow-down-button {
     margin-left: 11px;
   }
 
-  .tracklist-page-separator .arrow-up-button {
+  .tracklist-separator .arrow-up-button {
     margin-right: 6px;
   }
 

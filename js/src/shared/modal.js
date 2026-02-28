@@ -109,22 +109,22 @@ export function getModalEntry(entryNum)
   return document.getElementById(`modal-item-${entryNum}`);
 }
 
-export function updateModalTitle(modalId, updateTitle)
+export function updateModalTitle(modalId, title)
 {
   if (modalId === m.modalId)
-    elements.container.querySelector('.modal-dialog-title').innerHTML = updateTitle;
+    elements.container.querySelector('.modal-dialog-title').innerHTML = title;
 }
 
-export function updateModalBody(modalId, updateBody)
+export function updateModalBody(modalId, body)
 {
   if (modalId === m.modalId)
-    elements.body.innerHTML = updateBody;
+    elements.body.innerHTML = body;
 }
 
-export function updateModalList(modalId, modalList)
+export function updateModalList(modalId, list)
 {
   if (modalId === m.modalId)
-    setModalList(modalList);
+    setModalList(list);
 }
 
 

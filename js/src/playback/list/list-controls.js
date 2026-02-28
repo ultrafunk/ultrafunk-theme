@@ -232,7 +232,7 @@ class UiElements extends ElementClick
 
       case 'scroll-prev-page':
       case 'scroll-next-page':
-        arrowUpDownClick(this.closest('div.tracklist-page-separator'), this.hasClass('arrow-up-button'));
+        arrowUpDownClick(this.closest('div.tracklist-separator'), this.hasClass('arrow-up-button'));
         break;
 
       case 'scroll-first-track':
@@ -320,20 +320,30 @@ function addTrack(trackElement, targetElement, insertPosition)
   targetElement.insertAdjacentElement(insertPosition, trackElement);
 }
 
+function getPrevNextElementMatching(getPrevious, startElement, selector)
+{
+  let prevNextElement = getPrevious ? startElement.previousElementSibling : startElement.nextElementSibling;
+
+  while (prevNextElement)
+  {
+    if (prevNextElement.matches(selector))
+      return prevNextElement;
+
+    prevNextElement = getPrevious ? prevNextElement.previousElementSibling : prevNextElement.nextElementSibling;
+  }
+
+  return null;
+}
+
 function arrowUpDownClick(targetElement, isArrowUpClick)
 {
-  const pageNumber  = parseInt(targetElement.getAttribute('data-page-number'));
-  const gotoPageNum = isArrowUpClick ? (pageNumber - 1) : (pageNumber + 1);
-  let gotoElement   = document.getElementById(`tracklist-page-${gotoPageNum}`);
-  let blockOption   = 'center';
+  let gotoElement = getPrevNextElementMatching(isArrowUpClick, targetElement, 'div.tracklist-separator');
+  let blockOption = 'center';
 
   if (gotoElement === null)
   {
-    gotoElement = isArrowUpClick ? m.tracklist.firstElementChild : document.getElementById('tracklist-load-more-button');
+    gotoElement = isArrowUpClick ? m.tracklist.firstElementChild : m.tracklist.lastElementChild;
     blockOption = isArrowUpClick ? 'end' : ((window.innerWidth > 1350) ? 'nearest' : 'center');
-
-    if ((isArrowUpClick === false) && (gotoPageNum > response.maxPages))
-      gotoElement = gotoElement?.previousElementSibling;
   }
 
   gotoElement?.scrollIntoView({ behavior: utils.getScrollBehavior(), block: blockOption });

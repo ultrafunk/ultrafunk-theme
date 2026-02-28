@@ -23,15 +23,15 @@ import {
 //
 // ************************************************************************************************
 
-export function getPageSeparatorHtml(responseData, loadingPage)
+export function getPageSeparatorHtml(responseData, pageNumber)
 {
-  const pageUrl = responseData.nextPage.replace(/\/page\/(?!0)\d{1,6}\//i, `/page/${loadingPage}/`);
+  const pageUrl = responseData.nextPage.replace(/\/page\/(?!0)\d{1,6}\//i, `/page/${pageNumber}/`);
 
   return /*html*/ `
-    <div id="tracklist-page-${loadingPage}" class="tracklist-page-separator" data-page-number="${loadingPage}">
+    <div class="tracklist-separator tracks-page-number">
       <button type="button" data-click-id="scroll-next-page" class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</button>
       <button type="button" data-click-id="scroll-last-track" class="material-icons arrow-last-button" title="Scroll to Last Track">vertical_align_bottom</button>
-      <a href="${pageUrl}" title="Go to page ${loadingPage}">Page ${loadingPage} &#9660;</a>
+      <a href="${pageUrl}" title="Go to page ${pageNumber}">Page ${pageNumber} &#9660;</a>
       <button type="button" data-click-id="scroll-first-track" class="material-icons arrow-first-button" title="Scroll to First Track">vertical_align_top</button>
       <button type="button" data-click-id="scroll-prev-page" class="material-icons arrow-up-button" title="Scroll to previous page">arrow_upward</button>
     </div>`;
@@ -40,7 +40,7 @@ export function getPageSeparatorHtml(responseData, loadingPage)
 export function getTracksTitleHtml(tracksTitle)
 {
   return /*html*/ `
-    <div class="tracklist-page-separator local-tracks-title">
+    <div class="tracklist-separator local-tracks-title">
       <button type="button" data-click-id="scroll-next-page" class="material-icons arrow-down-button" title="Scroll to next page">arrow_downward</button>
       <button type="button" data-click-id="scroll-last-track" class="material-icons arrow-last-button" title="Scroll to Last Track">vertical_align_bottom</button>
       <span class="tracks-title text-nowrap-ellipsis">${tracksTitle}</span>

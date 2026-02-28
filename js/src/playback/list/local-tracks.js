@@ -115,7 +115,7 @@ function getSelectedFiles(eventType, audioFilesList)
     if (m.jsmediatags === null)
       loadJsMediaTagsScript();
     else
-      setTimeout(() => inserLocalTracksHtml(), 0); // Yield here so loading UI displays immediately
+      setTimeout(() => inserLocalTracksHtml(), 0); // Yield here so loading-UI displays faster
   }
 }
 
@@ -193,7 +193,7 @@ function loadJsMediaTagsScript()
   scriptTag.onload = () =>
   {
     m.jsmediatags = window.jsmediatags;
-    setTimeout(() => inserLocalTracksHtml(), 0); // Yield here so loading UI displays immediately
+    setTimeout(() => inserLocalTracksHtml(), 0); // Yield here so loading-UI displays faster
   };
 }
 
@@ -216,7 +216,7 @@ function clearLocalTracks()
     }
   });
 
-  queryTrackAll('div.tracklist-page-separator.local-tracks-title')?.forEach(trackElement => trackElement.remove());
+  queryTrackAll('div.tracklist-separator.local-tracks-title')?.forEach(trackElement => trackElement.remove());
 
   // Clear previously selected files from the form value
   document.getElementById('select-local-files').value = '';
