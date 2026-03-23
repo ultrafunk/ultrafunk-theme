@@ -25,7 +25,7 @@
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.2",
     "esbuild": "^0.27.4",
-    "eslint": "^10.0.3",
+    "eslint": "^10.1.0",
     "globals": "^17.4.0"
   },
   "com_ultrafunk": {
