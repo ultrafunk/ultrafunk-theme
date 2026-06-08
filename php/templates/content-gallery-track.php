@@ -18,6 +18,7 @@ use function Ultrafunk\Plugin\Shared\Utils\get_term_links;
 
 /**************************************************************************************************************************/
 
+global $post;
 
 $track_data = \Ultrafunk\Theme\Functions\get_track_data($post);
 $artists    = get_object_term_cache($post->ID, 'uf_artist');

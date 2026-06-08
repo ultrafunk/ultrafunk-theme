@@ -12,6 +12,7 @@ namespace Ultrafunk\Theme\Templates\Page;
 if (!defined('ABSPATH')) exit;
 /**************************************************************************************************************************/
 
+global $wp_query;
 
 ?>
 <article id="post-<?php the_ID(); ?>" class="">

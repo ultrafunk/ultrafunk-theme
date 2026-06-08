@@ -1,6 +1,6 @@
 {
   "name": "ultrafunk-theme",
-  "version": "1.48.44",
+  "version": "1.48.45",
   "description": "WordPress theme",
   "homepage": "https://github.com/ultrafunk/ultrafunk-theme",
   "repository": "git@github.com:ultrafunk/ultrafunk-theme.git",
@@ -34,5 +34,8 @@
       "phpConfig": "./php/config.php",
       "javaScriptChunkPath": "./js/dist/"
     }
+  },
+  "allowScripts": {
+    "esbuild@0.28.0": true
   }
 }

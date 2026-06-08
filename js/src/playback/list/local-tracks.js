@@ -115,7 +115,7 @@ function getSelectedFiles(eventType, audioFilesList)
     if (m.jsmediatags === null)
       loadJsMediaTagsScript();
     else
-      setTimeout(() => inserLocalTracksHtml(), 0); // Yield here so loading-UI displays faster
+      setTimeout(() => inserLocalTracksHtml(), 100); // Yield here so loading-UI displays faster
   }
 }
 
@@ -163,7 +163,7 @@ function isAudioFile(fileName)
 
 function showTracksLoadingUi()
 {
-  if (m.audioFilesArray.length > 25)
+  if (m.audioFilesArray.length > 50)
   {
     m.modalId = showModal({ modalTitle: 'Adding local traks', modalBody: `<p>Loading track 1 of ${m.audioFilesArray.length}...<br>Time used: ... sec.</p>`});
   }
@@ -193,7 +193,7 @@ function loadJsMediaTagsScript()
   scriptTag.onload = () =>
   {
     m.jsmediatags = window.jsmediatags;
-    setTimeout(() => inserLocalTracksHtml(), 0); // Yield here so loading-UI displays faster
+    setTimeout(() => inserLocalTracksHtml(), 100); // Yield here so loading-UI displays faster
   };
 }
 

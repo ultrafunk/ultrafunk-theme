@@ -121,14 +121,13 @@ function initArtistsChannelsFilter()
     m.termlistFilterInput.addEventListener('keyup', (event) => filterTermsList(event));
     m.termlistFilterInput.addEventListener('focus', () => document.dispatchEvent(denyKeyboardShortcutsEvent));
     m.termlistFilterInput.addEventListener('blur',  () => document.dispatchEvent(allowKeyboardShortcutsEvent));
-  //m.termlistFilterInput.focus();
 
     // Lowercase all search term names now, optimizing comparison to user input later
     termsListArray.forEach(entry => entry.name = entry.name.toLowerCase()); // eslint-disable-line no-undef
 
     // Scroll current selection (artist letter) into view if needed...
     document.querySelector('div.artist-letter.current').scrollIntoView(false);
-    m.termlistFilterInput.focus();
+  //m.termlistFilterInput.focus();
   }
 }
 

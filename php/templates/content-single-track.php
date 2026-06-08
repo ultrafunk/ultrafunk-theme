@@ -26,6 +26,8 @@ use function Ultrafunk\Theme\Functions\ {
 /**************************************************************************************************************************/
 
 
+global $post;
+
 $track_data        = get_track_data($post);
 $artists           = get_cached_terms($post->ID, 'uf_artist');
 $channels          = get_cached_terms($post->ID, 'uf_channel');

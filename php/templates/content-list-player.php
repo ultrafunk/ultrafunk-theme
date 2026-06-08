@@ -52,7 +52,7 @@ final class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
                 <div class="artist-title text-nowrap-ellipsis"></div>
               </div>
               <img id="local-player-image" src="" title="Toggle Play / Pause" />
-              <audio id="local-audio-player" controls ></audio>
+              <audio controls id="local-audio-player"></audio>
             </div>
           </div>
         </div>

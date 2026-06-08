@@ -320,7 +320,7 @@ function addTrack(trackElement, targetElement, insertPosition)
   targetElement.insertAdjacentElement(insertPosition, trackElement);
 }
 
-function getPrevNextElementMatching(getPrevious, startElement, selector)
+function getPrevNextElement(getPrevious, startElement, selector)
 {
   let prevNextElement = getPrevious ? startElement.previousElementSibling : startElement.nextElementSibling;
 
@@ -337,7 +337,7 @@ function getPrevNextElementMatching(getPrevious, startElement, selector)
 
 function arrowUpDownClick(targetElement, isArrowUpClick)
 {
-  let gotoElement = getPrevNextElementMatching(isArrowUpClick, targetElement, 'div.tracklist-separator');
+  let gotoElement = getPrevNextElement(isArrowUpClick, targetElement, 'div.tracklist-separator');
   let blockOption = 'center';
 
   if (gotoElement === null)

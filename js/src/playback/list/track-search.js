@@ -5,15 +5,19 @@
 //
 
 
-import { newDebugLogger, logCss } from '../../shared/debuglogger.js';
-import { THEME_ENV }              from '../../config.js';
-import { settings }               from '../../shared/session-data.js';
-import { navSearch }              from '../../site/nav-search.js';
-import { ElementClick }           from '../../shared/element-click.js';
-import { showSnackbar }           from '../../shared/snackbar.js';
-import { getTrackEntryHtml }      from './list-track-templates.js';
-import { setCurrentTrack }        from './list-playback.js';
-import { isShowingModal }         from '../../shared/modal.js';
+import { THEME_ENV }         from '../../config.js';
+import { settings }          from '../../shared/session-data.js';
+import { navSearch }         from '../../site/nav-search.js';
+import { ElementClick }      from '../../shared/element-click.js';
+import { showSnackbar }      from '../../shared/snackbar.js';
+import { getTrackEntryHtml } from './list-track-templates.js';
+import { setCurrentTrack }   from './list-playback.js';
+import { isShowingModal }    from '../../shared/modal.js';
+
+import {
+  newDebugLogger,
+  logCss,
+} from '../../shared/debuglogger.js';
 
 import {
   getCurrentTrackElement,
