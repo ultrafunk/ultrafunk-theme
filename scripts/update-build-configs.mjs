@@ -36,9 +36,7 @@ const isJSChunkFile = (process.argv[2]?.toLowerCase() === 'chunk'); // eslint-di
 
 if (process.argv.length === 3) // eslint-disable-line no-undef
 {
-  const hasValidArgument = isProdBuild || isDevBuild || isJSChunkFile;
-
-  if (hasValidArgument)
+  if (isProdBuild || isDevBuild || isJSChunkFile)
   {
     packageJson = getPackageJson('./package.json');
 
