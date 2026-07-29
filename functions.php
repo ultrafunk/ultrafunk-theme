@@ -10,9 +10,6 @@ if (!defined('ABSPATH')) exit;
 /**************************************************************************************************************************/
 
 
-//
-// Theme setup
-//
 function ultrafunk_theme_setup() : void
 {
   register_nav_menus(['primary-sections' => "Primary Sections Menu"]);
@@ -72,9 +69,6 @@ function ultrafunk_limit_archives(array $args) : array
 }
 add_filter('widget_archives_args', 'ultrafunk_limit_archives');
 
-//
-// Enqueue styles
-//
 function ultrafunk_enqueue_styles() : void
 {
   $version   = \Ultrafunk\Theme\Config\VERSION;

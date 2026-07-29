@@ -23,9 +23,9 @@ import {
 //
 // ************************************************************************************************
 
-export function getPageSeparatorHtml(responseData, pageNumber)
+export function getPageSeparatorHtml(responseParams, pageNumber)
 {
-  const pageUrl = responseData.nextPage.replace(/\/page\/(?!0)\d{1,6}\//i, `/page/${pageNumber}/`);
+  const pageUrl = responseParams.nextPage.replace(/\/page\/(?!0)\d{1,6}\//i, `/page/${pageNumber}/`);
 
   return /*html*/ `
     <div class="tracklist-separator tracks-page-number">

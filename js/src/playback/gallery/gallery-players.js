@@ -6,7 +6,7 @@
 
 
 import { newDebugLogger }     from '../../shared/debuglogger.js';
-import { settings }           from '../../shared/session-data.js';
+import { settings }           from '../../settings/settings.js';
 import { EVENT, addListener } from '../common/playback-events.js';
 import { onPlayerError }      from './embedded-players.js';
 

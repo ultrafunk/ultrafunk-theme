@@ -20,10 +20,6 @@ import {
 } from '../shared/utils.js';
 
 import {
-  settings as storedSettings
-} from '../shared/session-data.js';
-
-import {
   KEY,
   YEAR_IN_SECONDS,
   setCookie,
@@ -34,6 +30,7 @@ import {
 } from '../shared/storage.js';
 
 import {
+  settings as loadedSettings,
   TYPE_INTEGER,
   TYPE_BOOLEAN,
   TYPE_STRING,
@@ -298,7 +295,7 @@ function updateRowData(element, settingsSection, settingsKey, schemaEntry)
                           : schemaEntry.current = 0;
   m.settings[settingsSection][settingsKey] = schemaEntry.values[schemaEntry.current];
 
-  if (m.settings[settingsSection][settingsKey] !== storedSettings[settingsSection][settingsKey])
+  if (m.settings[settingsSection][settingsKey] !== loadedSettings[settingsSection][settingsKey])
     element.classList.add('value-changed');
   else
     element.classList.remove('value-changed');

@@ -17,7 +17,7 @@ use Ultrafunk\Plugin\Shared\Constants\PLAYER_TYPE;
 
 use const Ultrafunk\Theme\Config\THEME_ENV;
 
-use function Ultrafunk\Plugin\Globals\ {
+use function Ultrafunk\Plugin\Singleton\ {
   get_request_params,
   is_list_player,
   is_shuffle,
@@ -38,7 +38,7 @@ use function Ultrafunk\Theme\Functions\ {
 //
 function document_title_parts(array $title) : array
 {
-  $params = get_request_params();
+  $request_params = get_request_params();
 
   if (is_shuffle(PLAYER_TYPE::GALLERY))
   {
@@ -47,19 +47,19 @@ function document_title_parts(array $title) : array
   }
   else if (is_termlist())
   {
-    if ($params->max_pages > 1)
-      $title['title'] = esc_html(get_title() . ' - Page ' . $params->current_page);
+    if ($request_params->max_pages > 1)
+      $title['title'] = esc_html(get_title() . ' - Page ' . $request_params->current_page);
     else
       $title['title'] = esc_html(get_title());
   }
   else if (is_list_player())
   {
     $title_parts = is_shuffle(PLAYER_TYPE::LIST)
-                     ? ($params->title_parts['prefix'] . ': ' . get_title())
+                     ? ($request_params->title_parts['prefix'] . ': ' . get_title())
                      : get_title();
 
-    if ($params->current_page > 1)
-      $title_parts .= ' - Page ' . $params->current_page;
+    if ($request_params->current_page > 1)
+      $title_parts .= ' - Page ' . $request_params->current_page;
 
     $title['title'] = esc_html($title_parts);
   }

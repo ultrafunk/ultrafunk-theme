@@ -26,15 +26,15 @@ final class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
 
   protected function render_response() : void
   {
-    $this->is_artists = \Ultrafunk\Plugin\Globals\is_termlist('artists');
+    $this->is_artists = \Ultrafunk\Plugin\Singleton\is_termlist('artists');
 
     if ($this->is_artists)
       $this->artist_letters();
 
     ?>
     <term-list id="termlist-container"
-      class="<?php echo "term-{$this->params->query_vars['term_type']}"; ?>"
-      data-term-type="<?php echo $this->params->query_vars['term_type']; ?>"
+      class="<?php echo "term-{$this->request_params->query_vars['term_type']}"; ?>"
+      data-term-type="<?php echo $this->request_params->query_vars['term_type']; ?>"
       >
       <?php if ($this->is_artists === false) { ?>
         <div class="termlist-title"><b>All Channels</b> (<?php echo get_channels_top_artists_info()['all_tracks_count']; ?> tracks)</div>
@@ -44,7 +44,7 @@ final class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
     <?php
 
     if ($this->is_artists)
-      echo '<script> const termsListArray = ' . \json_encode($this->terms_list) . '</script>';
+      echo '<script> const ufTermsListArray = ' . \json_encode($this->terms_list) . '</script>';
   }
 
 
@@ -53,7 +53,7 @@ final class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
 
   private function termlist_entries() : void
   {
-    $term_path = $this->params->query_vars['term_path'];
+    $term_path = $this->request_params->query_vars['term_path'];
 
     foreach($this->query_result as $term)
     {
@@ -115,10 +115,10 @@ final class Termlist extends \Ultrafunk\Theme\Templates\TemplateBase
   {
     ?><div class="artist-letters-container"><?php
 
-    foreach($this->params->query_vars['letters_range'] as $letter)
+    foreach($this->request_params->query_vars['letters_range'] as $letter)
     {
       ?>
-      <div class="artist-letter <?php echo ($this->params->query_vars['first_letter'] === $letter) ? 'current' : ''; ?>">
+      <div class="artist-letter <?php echo ($this->request_params->query_vars['first_letter'] === $letter) ? 'current' : ''; ?>">
         <a href="/artists/<?php echo $letter; ?>/"><?php echo $letter; ?></a>
       </div>
       <?php

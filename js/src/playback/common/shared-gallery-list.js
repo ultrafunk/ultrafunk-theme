@@ -5,12 +5,13 @@
 //
 
 
-import { newDebugLogger }     from '../../shared/debuglogger.js';
-import { showSnackbar }       from '../../shared/snackbar.js';
-import { KEY, setCookie }     from '../../shared/storage.js';
-import { showUpNextModal }    from '../list/up-next-modal.js';
-import { response, settings } from '../../shared/session-data.js';
-import { VOLUME }             from '../gallery/crossfade.js';
+import { newDebugLogger }  from '../../shared/debuglogger.js';
+import { showSnackbar }    from '../../shared/snackbar.js';
+import { KEY, setCookie }  from '../../shared/storage.js';
+import { showUpNextModal } from '../list/up-next-modal.js';
+import { responseParams }  from '../../shared/response-params.js';
+import { settings }        from '../../settings/settings.js';
+import { VOLUME }          from '../gallery/crossfade.js';
 
 import {
   getCssPropValue,
@@ -65,7 +66,7 @@ export function shuffleClickNavTo(event = null)
 {
   event?.preventDefault();
   setCookie(KEY.UF_RESHUFFLE, 'true');
-  navToUrl(getPrefPlayerUrl(response.shufflePath));
+  navToUrl(getPrefPlayerUrl(responseParams.shufflePath));
 }
 
 export function autoplayNavTo(destUrl, continueAutoplay = false)

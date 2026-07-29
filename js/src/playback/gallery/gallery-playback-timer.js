@@ -5,7 +5,7 @@
 //
 
 
-import { settings }       from '../../shared/session-data.js';
+import { settings }       from '../../settings/settings.js';
 import { PlaybackTimer }  from '../common/playback-timer.js';
 import { CROSSFADE_TYPE } from './crossfade.js';
 import { updateVolumeMuteSettings } from '../common/shared-gallery-list.js';

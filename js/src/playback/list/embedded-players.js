@@ -11,7 +11,7 @@ import * as playbackControls from '../common/playback-controls.js';
 import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { initLocalTracks }   from './local-tracks.js';
 import { ListPlayers }       from './list-players.js';
-import { settings }          from '../../shared/session-data.js';
+import { settings }          from '../../settings/settings.js';
 import { STATE }             from '../common/element-wrappers.js';
 import { getTimeString }     from '../../shared/utils.js';
 import { PlaybackLog }       from '../common/eventlogger.js';

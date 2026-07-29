@@ -5,6 +5,17 @@
 //
 
 
+import {
+  KEY,
+  readWriteSettingsProxy,
+} from '../shared/storage.js';
+
+
+/*************************************************************************************************/
+
+
+export let settings = {};
+
 const INTEGER = 1;
 const BOOLEAN = 2;
 const STRING  = 3;
@@ -20,6 +31,15 @@ export const PREF_PLAYER = {
   GALLERY: 1,
   LIST:    2,
 };
+
+
+/*************************************************************************************************/
+
+
+export function readSettings()
+{
+  settings = readWriteSettingsProxy(KEY.UF_SETTINGS, defaultSettings, true);
+}
 
 
 // ************************************************************************************************

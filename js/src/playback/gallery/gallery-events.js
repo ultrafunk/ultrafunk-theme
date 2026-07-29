@@ -9,7 +9,8 @@ import { newDebugLogger }     from '../../shared/debuglogger.js';
 import { KEY }                from '../../shared/storage.js';
 import { TRACK_TYPE }         from '../common/mediaplayer.js';
 import { replaceClass }       from '../../shared/utils.js';
-import { response, settings } from '../../shared/session-data.js';
+import { responseParams }     from '../../shared/response-params.js';
+import { settings }           from '../../settings/settings.js';
 import { EVENT, addListener } from '../common/playback-events.js';
 
 import {
@@ -119,7 +120,7 @@ function continueAutoplay(playbackEvent)
   if (isSingleTrackFetch() && (playbackEvent.data.trackType === TRACK_TYPE.YOUTUBE))
     cueOrPlaySingleTrack(SINGLE_TRACK.NEXT, true);
   else
-    autoplayNavTo(response.nextPage, true);
+    autoplayNavTo(responseParams.nextPage, true);
 }
 
 function resumeAutoplay(playbackEvent)
@@ -199,9 +200,9 @@ function playbackEventErrorTryNext(playbackEvent)
       // Meaning settings.playback.autoplay must be TRUE for autoplay triggering on next track played...?
       cueOrPlaySingleTrack(SINGLE_TRACK.NEXT, settings.playback.autoplay);
     }
-    else if (response.nextPage !== null)
+    else if (responseParams.nextPage !== null)
     {
-      autoplayNavTo(response.nextPage, true);
+      autoplayNavTo(responseParams.nextPage, true);
     }
   }
 }

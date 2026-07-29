@@ -13,7 +13,7 @@ import { getCssPropString } from '../shared/utils.js';
 import {
   settings,
   readSettings,
-} from '../shared/session-data.js';
+} from '../settings/settings.js';
 
 
 /*************************************************************************************************/

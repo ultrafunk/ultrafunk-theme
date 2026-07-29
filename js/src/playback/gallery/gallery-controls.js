@@ -9,8 +9,11 @@ import * as playbackEvents from '../common/playback-events.js';
 import { newDebugLogger }  from '../../shared/debuglogger.js';
 import { ElementClick }    from '../../shared/element-click.js';
 import { isPlaying }       from '../common/playback-controls.js';
-import { presetList }      from '../../settings/settings.js';
-import { settings }        from '../../shared/session-data.js';
+
+import {
+  settings,
+  presetList,
+} from '../../settings/settings.js';
 
 import {
   STATE,

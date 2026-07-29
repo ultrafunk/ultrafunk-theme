@@ -7,6 +7,8 @@
 
 import * as utils              from './shared/utils.js';
 import * as themeLayout        from './site/theme-layout.js';
+import { responseParams }      from './shared/response-params.js';
+import { settings }            from './settings/settings.js';
 import { initSettingsUi }      from './settings/settings-ui.js';
 import { navMenu }             from './site/nav-menu.js';
 import { navSearch }           from './site/nav-search.js';
@@ -18,11 +20,6 @@ import {
   newDebugLogger,
   logStartupExecutionTime,
 } from './shared/debuglogger.js';
-
-import {
-  response,
-  settings,
-} from './shared/session-data.js';
 
 
 /*************************************************************************************************/
@@ -49,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () =>
 
   initIndex();
 
-  if (response?.get?.termlist)
+  if (responseParams?.get?.termlist)
     initArtistsChannels();
   else if (isSettingsPage())
     initSettingsUi();
@@ -157,7 +154,7 @@ function documentEventKeyDown(event)
         if (event.shiftKey && noPlayback())
         {
           event.preventDefault();
-          utils.navToUrl(response.prevPage);
+          utils.navToUrl(responseParams.prevPage);
         }
         break;
 
@@ -165,7 +162,7 @@ function documentEventKeyDown(event)
         if (event.shiftKey && noPlayback())
         {
           event.preventDefault();
-          utils.navToUrl(response.nextPage);
+          utils.navToUrl(responseParams.nextPage);
         }
         break;
     }

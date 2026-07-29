@@ -5,15 +5,16 @@
 //
 
 
-import * as playbackEvents    from '../common/playback-events.js';
-import * as utils             from '../../shared/utils.js';
-import { newDebugLogger }     from '../../shared/debuglogger.js';
-import { ElementClick }       from '../../shared/element-click.js';
-import { STATE }              from '../common/element-wrappers.js';
-import { loadTracks }         from './list-tracks-rest.js';
-import { showSnackbar }       from '../../shared/snackbar.js';
-import { response, settings } from '../../shared/session-data.js';
-import { updateUpNextModal }  from './up-next-modal.js';
+import * as playbackEvents   from '../common/playback-events.js';
+import * as utils            from '../../shared/utils.js';
+import { newDebugLogger }    from '../../shared/debuglogger.js';
+import { ElementClick }      from '../../shared/element-click.js';
+import { STATE }             from '../common/element-wrappers.js';
+import { loadTracks }        from './list-tracks-rest.js';
+import { showSnackbar }      from '../../shared/snackbar.js';
+import { responseParams }    from '../../shared/response-params.js';
+import { settings }          from '../../settings/settings.js';
+import { updateUpNextModal } from './up-next-modal.js';
 
 import {
   setCurrentTrack,
@@ -372,16 +373,16 @@ function arrowFirstLastClick(isArrowFirstClick)
 
 function initLoadMoreTracks()
 {
-  if (response.get.list_player === 'all'     ||
-      response.get.list_player === 'channel' ||
-      response.get.list_player === 'artist'  ||
-      response.get.list_player === 'shuffle' ||
-      response.get.list_player === 'search')
+  if (responseParams.get.list_player === 'all'     ||
+      responseParams.get.list_player === 'channel' ||
+      responseParams.get.list_player === 'artist'  ||
+      responseParams.get.list_player === 'shuffle' ||
+      responseParams.get.list_player === 'search')
   {
-    if ((response.nextPage !== null) && (response.currentPage < response.maxPages))
+    if ((responseParams.nextPage !== null) && (responseParams.currentPage < responseParams.maxPages))
     {
       m.tracklistLoadMore = document.getElementById('tracklist-load-more-button');
-      m.tracklistLoadMore.querySelector('.load-more-title span').textContent = ` ( ${response.currentPage + 1} / ${response.maxPages} )`;
+      m.tracklistLoadMore.querySelector('.load-more-title span').textContent = ` ( ${responseParams.currentPage + 1} / ${responseParams.maxPages} )`;
       m.tracklistLoadMore.style.display = 'block';
       m.tracklistLoadMore.addEventListener('click', loadMoreTracks);
     }
@@ -392,7 +393,7 @@ export async function loadMoreTracks()
 {
   let tracksLoaded = false;
 
-  if ((response.currentPage + 1) <= response.maxPages)
+  if ((responseParams.currentPage + 1) <= responseParams.maxPages)
   {
     setIsLoadingTracks(true);
     tracksLoaded = await loadTracks(utils.stripAttribute(m.tracklist, 'data-term-type'), utils.stripAttribute(m.tracklist, 'data-term-id'));
@@ -400,8 +401,8 @@ export async function loadMoreTracks()
 
     if (tracksLoaded)
     {
-      response.currentPage++;
-      m.tracklistLoadMore.querySelector('.load-more-title span').textContent = ` ( ${response.currentPage + 1} / ${response.maxPages} )`;
+      responseParams.currentPage++;
+      m.tracklistLoadMore.querySelector('.load-more-title span').textContent = ` ( ${responseParams.currentPage + 1} / ${responseParams.maxPages} )`;
     }
     else
     {
@@ -414,7 +415,7 @@ export async function loadMoreTracks()
     }
   }
 
-  if ((response.currentPage >= response.maxPages) && (tracksLoaded === true))
+  if ((responseParams.currentPage >= responseParams.maxPages) && (tracksLoaded === true))
     m.tracklistLoadMore.style.display = 'none';
 
   return tracksLoaded;

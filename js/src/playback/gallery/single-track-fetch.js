@@ -9,16 +9,13 @@ import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { KEY }               from '../../shared/storage.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../common/shared-gallery-list.js';
+import { responseParams }    from '../../shared/response-params.js';
+import { settings }          from '../../settings/settings.js';
 
 import {
   TRACK_TYPE,
   getThumbnailData,
 } from '../common/mediaplayer.js';
-
-import {
-  response,
-  settings,
-} from '../../shared/session-data.js';
 
 import {
   HTTP_RESPONSE,
@@ -230,11 +227,11 @@ function getTrackNavHtml(isNavPrev, navUrl, trackMeta)
 
 function updatePage(trackData, thumbnailData, pushState = true)
 {
-  response.prevPage = (trackData[0] !== null)  ? trackData[0].link : null;
-  response.nextPage = (trackData.length === 3) ? trackData[2].link : null;
+  responseParams.prevPage = (trackData[0] !== null)  ? trackData[0].link : null;
+  responseParams.nextPage = (trackData.length === 3) ? trackData[2].link : null;
 
-  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-prev'), response.prevPage);
-  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-next'), response.nextPage);
+  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-prev'), responseParams.prevPage);
+  updateSiteNavLinks(document.querySelectorAll('span.navbar-arrow-next'), responseParams.nextPage);
   updateTrackNavLinks(document.querySelector('div.nav-links'), trackData);
   updateTrackHeader(document.querySelector('header.track-header'), trackData[1]);
   updateTrackAttributes(document.querySelector('single-track'), trackData[1], thumbnailData);
@@ -255,10 +252,10 @@ function updateTrackNavLinks(element, trackData)
   let trackNavHtml = '';
 
   if (trackData[0] !== null)
-    trackNavHtml += getTrackNavHtml(true, response.prevPage, trackData[0].meta);
+    trackNavHtml += getTrackNavHtml(true, responseParams.prevPage, trackData[0].meta);
 
   if (trackData.length === 3)
-    trackNavHtml += getTrackNavHtml(false, response.nextPage, trackData[2].meta);
+    trackNavHtml += getTrackNavHtml(false, responseParams.nextPage, trackData[2].meta);
 
   element.innerHTML = trackNavHtml;
 }

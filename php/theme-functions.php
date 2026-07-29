@@ -20,7 +20,7 @@ use Ultrafunk\Plugin\Shared\Constants\ {
 
 use const Ultrafunk\Plugin\Shared\Constants\YOUTUBE_VIDEO_ID_REGEX;
 
-use function Ultrafunk\Plugin\Globals\ {
+use function Ultrafunk\Plugin\Singleton\ {
   is_shuffle,
   is_termlist,
   is_list_player,
@@ -44,24 +44,24 @@ function get_title() : string
   if ($title !== null)
     return $title;
 
-  $params = get_request_params();
+  $request_params = get_request_params();
 
   if (is_shuffle(PLAYER_TYPE::GALLERY))
   {
-    $title = isset($params->slug_name) ? $params->slug_name : 'All Tracks';
+    $title = isset($request_params->slug_name) ? $request_params->slug_name : 'All Tracks';
   }
   else if (is_termlist())
   {
     $title = is_termlist('artists')
-               ? ('Artists: ' . strtoupper($params->query_vars['first_letter']))
+               ? ('Artists: ' . strtoupper($request_params->query_vars['first_letter']))
                : 'All Channels';
   }
   else if (is_list_player())
   {
     if (is_list_player('search'))
-      $title = 'Search Results for "' . $params->title_parts['title'] . '"';
+      $title = 'Search Results for "' . $request_params->title_parts['title'] . '"';
     else
-      $title = $params->title_parts['title'];
+      $title = $request_params->title_parts['title'];
   }
   else if (is_tax())
   {
@@ -76,7 +76,7 @@ function get_title() : string
     $title = 'All Tracks';
   }
 
-  $title .= get_filter_result_by($params);
+  $title .= get_filter_result_by($request_params);
 
   set_cached_title($title);
 

@@ -5,15 +5,19 @@
 //
 
 
-import * as termlistRest      from './artists-channels-rest.js';
-import * as utils             from '../shared/utils.js';
-import { newDebugLogger }     from '../shared/debuglogger.js';
-import { THEME_ENV }          from '../config.js';
-import { ElementClick }       from '../shared/element-click.js';
-import { shareModal }         from '../shared/share-modal.js';
-import { KEY, setCookie }     from '../shared/storage.js';
-import { PREF_PLAYER }        from '../settings/settings.js';
-import { response, settings } from '../shared/session-data.js';
+import * as termlistRest  from './artists-channels-rest.js';
+import * as utils         from '../shared/utils.js';
+import { newDebugLogger } from '../shared/debuglogger.js';
+import { THEME_ENV }      from '../config.js';
+import { ElementClick }   from '../shared/element-click.js';
+import { shareModal }     from '../shared/share-modal.js';
+import { KEY, setCookie } from '../shared/storage.js';
+import { responseParams } from '../shared/response-params.js';
+
+import {
+  settings,
+  PREF_PLAYER,
+} from '../settings/settings.js';
 
 
 /*************************************************************************************************/
@@ -123,7 +127,7 @@ function initArtistsChannelsFilter()
     m.termlistFilterInput.addEventListener('blur',  () => document.dispatchEvent(allowKeyboardShortcutsEvent));
 
     // Lowercase all search term names now, optimizing comparison to user input later
-    termsListArray.forEach(entry => entry.name = entry.name.toLowerCase()); // eslint-disable-line no-undef
+    ufTermsListArray.forEach(entry => entry.name = entry.name.toLowerCase()); // eslint-disable-line no-undef
 
     // Scroll current selection (artist letter) into view if needed...
     document.querySelector('div.artist-letter.current').scrollIntoView(false);
@@ -147,7 +151,7 @@ function filterTermsList(event)
   if (filterString.length >= 3)
   {
     // eslint-disable-next-line no-undef
-    const foundEntries = termsListArray.filter(entry => (entry.name.includes(filterString)));
+    const foundEntries = ufTermsListArray.filter(entry => (entry.name.includes(filterString)));
     let filteredOddEvenRow = 1;
     foundCount = (foundEntries.length > 0) ? foundEntries.length : 0;
 
@@ -279,8 +283,8 @@ function playSingleTrack(event, element)
     const trackNum = parseInt(element.getAttribute('data-track-num'));
     let pagination = '';
 
-    if (trackNum > response.listPerPage)
-      pagination = `page/${Math.ceil(trackNum / response.listPerPage)}/`;
+    if (trackNum > responseParams.listPerPage)
+      pagination = `page/${Math.ceil(trackNum / responseParams.listPerPage)}/`;
 
     navToClicked(event, `${THEME_ENV.siteUrl}/list/${termType}/${termSlug}/${pagination}`, utils.stripAttribute(element, 'data-track-id'));
   }

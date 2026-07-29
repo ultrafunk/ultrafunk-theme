@@ -20,7 +20,7 @@
       <a href="/settings/" id="footer-settings-button" class="button" title="Ultrafunk Settings">
         <span class="label">Settings</span><span class="material-icons">settings</span>
       </a>
-      <a href="<?php echo (\Ultrafunk\Plugin\Globals\is_list_player() ? '/' : '/list/'); ?>" id="footer-player-type-toggle" class="button" title="Toggle Gallery / List Player (p)">
+      <a href="<?php echo (\Ultrafunk\Plugin\Singleton\is_list_player() ? '/' : '/list/'); ?>" id="footer-player-type-toggle" class="button" title="Toggle Gallery / List Player (p)">
         <span class="label">Pref. Player</span><span class="value">...</span>
       </a>
       <button type="button" id="footer-autoplay-toggle" title="Toggle Autoplay (shift + a)">
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="footer-logo">
-      <a href="<?php echo \Ultrafunk\Plugin\Globals\get_cached_home_url('/'); ?>" aria-label="Home"><img src="<?php echo esc_url(get_theme_mod('ultrafunk_footer_logo')); ?>" loading="lazy" alt="Site Logo"></a>
+      <a href="<?php echo \Ultrafunk\Plugin\Singleton\get_cached_home_url('/'); ?>" aria-label="Home"><img src="<?php echo esc_url(get_theme_mod('ultrafunk_footer_logo')); ?>" loading="lazy" alt="Site Logo"></a>
     </div>
   </div>
 </footer>

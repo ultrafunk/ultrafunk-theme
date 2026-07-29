@@ -5,15 +5,16 @@
 //
 
 
-import * as playbackControls  from '../common/playback-controls.js';
-import * as listControls      from './list-controls.js';
-import * as playbackEvents    from '../common/playback-events.js';
-import { newDebugLogger }     from '../../shared/debuglogger.js';
-import { KEY }                from '../../shared/storage.js';
-import { STATE }              from '../common/element-wrappers.js';
-import { response, settings } from '../../shared/session-data.js';
-import { initTrackSearch }    from './track-search.js';
-import { playbackTimer }      from './list-playback-timer.js';
+import * as playbackControls from '../common/playback-controls.js';
+import * as listControls     from './list-controls.js';
+import * as playbackEvents   from '../common/playback-events.js';
+import { newDebugLogger }    from '../../shared/debuglogger.js';
+import { KEY }               from '../../shared/storage.js';
+import { STATE }             from '../common/element-wrappers.js';
+import { responseParams }    from '../../shared/response-params.js';
+import { settings }          from '../../settings/settings.js';
+import { initTrackSearch }   from './track-search.js';
+import { playbackTimer }     from './list-playback-timer.js';
 
 import {
   eventLog as embeddedPlayersEventLog,
@@ -243,7 +244,7 @@ export async function advanceToNextTrack(autoplay = false, isPlaybackError = fal
       }
       else
       {
-        autoplayNavTo(response.nextPage, autoplay);
+        autoplayNavTo(responseParams.nextPage, autoplay);
       }
     }
     else

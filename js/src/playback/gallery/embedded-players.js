@@ -7,7 +7,7 @@
 
 import * as playbackEvents from '../common/playback-events.js';
 import { newDebugLogger }  from '../../shared/debuglogger.js';
-import { settings }        from '../../shared/session-data.js';
+import { settings }        from '../../settings/settings.js';
 import { PlaybackLog }     from '../common/eventlogger.js';
 
 import {

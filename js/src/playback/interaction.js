@@ -17,6 +17,12 @@ import { initScreenWakeLock }   from './common/screen-wakelock.js';
 import { TRACK_TYPE }           from './common/mediaplayer.js';
 import { InteractionLog }       from './common/eventlogger.js';
 import { hasLoadedLocalTracks } from './list/local-tracks.js';
+import { responseParams }       from '../shared/response-params.js';
+
+import {
+  settings,
+  readSettings,
+} from '../settings/settings.js';
 
 import {
   showTrackSharePlay,
@@ -39,12 +45,6 @@ import {
   setPlaybackControlsCss,
   toggleRepeat,
 } from './common/playback-controls.js';
-
-import {
-  response,
-  settings,
-  getSessionData,
-} from '../shared/session-data.js';
 
 
 /*************************************************************************************************/
@@ -73,7 +73,10 @@ document.addEventListener('DOMContentLoaded', () =>
 
   debug.log('DOMContentLoaded');
 
-  getSessionData();
+  readSettings();
+
+  debug.log(responseParams);
+  debug.log(settings);
 
   if (shared.hasGalleryPlayer())
     m.player = galleryPlayback;
@@ -120,8 +123,8 @@ function initPlaybackEvents()
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_CUE_TRACK,      playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_ENDED,          playbackEventMediaEnded);
   playbackEvents.addListener(playbackEvents.EVENT.MEDIA_TIME_REMAINING, playbackEventMediaTimeRemaining);
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PREV_TRACK,     () => cueOrPlayPrevNextTrack(null, SINGLE_TRACK.PREV, response.prevPage));
-  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_NEXT_TRACK,     () => cueOrPlayPrevNextTrack(null, SINGLE_TRACK.NEXT, response.nextPage));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_PREV_TRACK,     () => cueOrPlayPrevNextTrack(null, SINGLE_TRACK.PREV, responseParams.prevPage));
+  playbackEvents.addListener(playbackEvents.EVENT.MEDIA_NEXT_TRACK,     () => cueOrPlayPrevNextTrack(null, SINGLE_TRACK.NEXT, responseParams.nextPage));
 }
 
 function initListeners()
@@ -326,7 +329,7 @@ function onKeyArrowLeft(event)
   event.preventDefault();
 
   if (event.shiftKey === true)
-    cueOrPlayPrevNextTrack(null, SINGLE_TRACK.PREV, response.prevPage);
+    cueOrPlayPrevNextTrack(null, SINGLE_TRACK.PREV, responseParams.prevPage);
   else
     m.player.prevTrack();
 }
@@ -336,7 +339,7 @@ function onKeyArrowRight(event)
   event.preventDefault();
 
   if (event.shiftKey === true)
-    cueOrPlayPrevNextTrack(null, SINGLE_TRACK.NEXT, response.nextPage);
+    cueOrPlayPrevNextTrack(null, SINGLE_TRACK.NEXT, responseParams.nextPage);
   else
     m.player.nextTrack();
 }
@@ -444,11 +447,11 @@ function prevNextTrackNav(clickId, clickEvent)
   switch (clickId)
   {
     case 'nav-prev-track':
-      cueOrPlayPrevNextTrack(clickEvent, SINGLE_TRACK.PREV, response.prevPage);
+      cueOrPlayPrevNextTrack(clickEvent, SINGLE_TRACK.PREV, responseParams.prevPage);
       break;
 
     case'nav-next-track':
-      cueOrPlayPrevNextTrack(clickEvent, SINGLE_TRACK.NEXT, response.nextPage);
+      cueOrPlayPrevNextTrack(clickEvent, SINGLE_TRACK.NEXT, responseParams.nextPage);
       break;
   }
 }

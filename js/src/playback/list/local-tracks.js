@@ -7,7 +7,7 @@
 
 import { showSnackbar } from '../../shared/snackbar.js';
 import { TRACK_TYPE }   from '../common/mediaplayer.js';
-import { settings }     from '../../shared/session-data.js';
+import { settings }     from '../../settings/settings.js';
 
 import {
   newDebugLogger,

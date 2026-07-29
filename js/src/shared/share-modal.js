@@ -73,6 +73,7 @@ const shareModalClosure = (() =>
       { icon: icon,           content: `<b>${verb}</b> on Apple Music`,   link: `https://music.apple.com/ca/search?term=${searchString}`, linkTarget: '_blank' },
       { icon: icon,           content: `<b>${verb}</b> on SoundCloud`,    link: `https://${trackSourceUid}`,                              linkTarget: '_blank' },
       { icon: icon,           content: `<b>${verb}</b> on Spotify`,       link: spotifyLink,                                              linkTarget: '_blank' },
+      { icon: icon,           content: `<b>${verb}</b> on Tidal`,         link: `https://tidal.com/search?q=${searchString}`,             linkTarget: '_blank' },
       { icon: icon,           content: `<b>${verb}</b> on YouTube Music`, link: youTubeLink,                                              linkTarget: '_blank' },
     ];
 

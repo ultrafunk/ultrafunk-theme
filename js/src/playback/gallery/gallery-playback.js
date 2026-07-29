@@ -11,7 +11,7 @@ import { newDebugLogger }        from '../../shared/debuglogger.js';
 import { playbackTimer }         from './gallery-playback-timer.js';
 import { GalleryPlayers }        from './gallery-players.js';
 import { CROSSFADE_TYPE }        from './crossfade.js';
-import { settings }              from '../../shared/session-data.js';
+import { settings }              from '../../settings/settings.js';
 import { singleTrackFetchReady } from './single-track-fetch.js';
 import { initGalleryEvents }     from './gallery-events.js';
 import { initGalleryControls }   from './gallery-controls.js';

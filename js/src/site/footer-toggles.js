@@ -5,10 +5,11 @@
 //
 
 
-import { ElementToggle }      from '../shared/element-toggle.js';
-import { showSnackbar }       from '../shared/snackbar.js';
-import { response, settings } from '../shared/session-data.js';
-import { TRACK_TYPE }         from '../playback/common/mediaplayer.js';
+import { ElementToggle }  from '../shared/element-toggle.js';
+import { showSnackbar }   from '../shared/snackbar.js';
+import { responseParams } from '../shared/response-params.js';
+import { settings }       from '../settings/settings.js';
+import { TRACK_TYPE }     from '../playback/common/mediaplayer.js';
 
 import {
   replaceClass,
@@ -166,8 +167,8 @@ class PlayerTypeToggle extends ElementToggle
                                 ? parseInt(urlParts[pageIndex + 1])
                                 : 1;
     const trackData         = await m.player.getStatus(true);
-    const tracksPerPageFrom = isListPlayer() ? response.listPerPage    : response.galleryPerPage;
-    const tracksPerPageTo   = isListPlayer() ? response.galleryPerPage : response.listPerPage;
+    const tracksPerPageFrom = isListPlayer() ? responseParams.listPerPage    : responseParams.galleryPerPage;
+    const tracksPerPageTo   = isListPlayer() ? responseParams.galleryPerPage : responseParams.listPerPage;
     const trackOffset       = trackData.currentTrack + ((currentPage - 1) * tracksPerPageFrom);
 
     return {

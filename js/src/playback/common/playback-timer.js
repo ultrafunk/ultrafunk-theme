@@ -5,7 +5,7 @@
 //
 
 
-import { settings } from '../../shared/session-data.js';
+import { settings } from '../../settings/settings.js';
 import { timeRemainingWarningBlink } from './playback-controls.js';
 
 import {

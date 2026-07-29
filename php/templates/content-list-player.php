@@ -58,8 +58,8 @@ final class ListPlayer extends \Ultrafunk\Theme\Templates\TemplateBase
         </div>
       </div>
       <div id="tracklist"
-        data-term-type="<?php echo $this->params->query_vars['term_type'] ?? ''; ?>"
-        data-term-id="<?php   echo $this->params->query_vars['term_id']   ?? ''; ?>"
+        data-term-type="<?php echo $this->request_params->query_vars['term_type'] ?? ''; ?>"
+        data-term-id="<?php   echo $this->request_params->query_vars['term_id']   ?? ''; ?>"
         >
         <?php $this->tracklist_entries(); ?>
         <button type="button" id="tracklist-load-more-button">

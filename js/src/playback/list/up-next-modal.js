@@ -7,7 +7,7 @@
 
 //import { newDebugLogger }    from '../../shared/debuglogger.js';
 import { autoplay }          from '../../site/footer-toggles.js';
-import { settings }          from '../../shared/session-data.js';
+import { settings }          from '../../settings/settings.js';
 import { isPlaying }         from '../common/playback-controls.js';
 import { showSnackbar }      from '../../shared/snackbar.js';
 import { shuffleClickNavTo } from '../common/shared-gallery-list.js';

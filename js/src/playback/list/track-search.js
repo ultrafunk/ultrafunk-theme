@@ -6,7 +6,7 @@
 
 
 import { THEME_ENV }         from '../../config.js';
-import { settings }          from '../../shared/session-data.js';
+import { settings }          from '../../settings/settings.js';
 import { navSearch }         from '../../site/nav-search.js';
 import { ElementClick }      from '../../shared/element-click.js';
 import { showSnackbar }      from '../../shared/snackbar.js';

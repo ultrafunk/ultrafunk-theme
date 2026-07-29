@@ -30,8 +30,8 @@ final class Taxonomies extends \WP_Widget
     if (!isset($args['widget_id']))
       $args['widget_id'] = $this->id;
 
-    $title    = (!empty($instance['title']))    ? $instance['title']          : 'Taxonomy';
-    $taxonomy = (!empty($instance['taxonomy'])) ? $instance['taxonomy']       : 'category';
+    $title    = (!empty($instance['title']))    ? $instance['title']    : 'Taxonomy';
+    $taxonomy = (!empty($instance['taxonomy'])) ? $instance['taxonomy'] : 'category';
     $number   = (!empty($instance['number']))   ? absint($instance['number']) : 10;
 
     $listArgs = [

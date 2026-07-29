@@ -23,14 +23,14 @@ use const Ultrafunk\Theme\Config\ {
   JS_PRELOAD_CHUNK,
 };
 
-use function Ultrafunk\Plugin\Globals\ {
+use function Ultrafunk\Plugin\Singleton\ {
   is_response,
   is_termlist,
   is_list_player,
   is_shuffle,
   get_perf_data,
   get_request_params,
-  get_session_vars,
+  get_response_params,
   get_cached_home_url,
 };
 
@@ -69,7 +69,7 @@ function pre_wp_head() : void
   {
     // esbuild site-theme-layout.js --minify --bundle --format=esm
     ?>
-    <script>var l=document.documentElement.classList,e=localStorage.getItem("uf_site_theme"),t="site-theme-light";e!==null&&(e==="light"?t="site-theme-light":e==="dark"?t="site-theme-dark":e==="black"&&(t="site-theme-black"));l.add(t);if(l.contains("gallery-layout")){let a=localStorage.getItem("uf_gallery_layout"),i="gallery-3-col";a!==null&&(a==="1-column"?i="gallery-1-col":a==="2-column"&&(i="gallery-2-col")),window.innerWidth>1100?l.add(i):l.add("gallery-1-col")}</script>
+    <script>s();function s(){let e=document.documentElement.classList,l=localStorage.getItem("uf_site_theme"),t="site-theme-light";if(l!==null&&(l==="light"?t="site-theme-light":l==="dark"?t="site-theme-dark":l==="black"&&(t="site-theme-black")),e.add(t),e.contains("gallery-layout")){let a=localStorage.getItem("uf_gallery_layout"),i="gallery-3-col";a!==null&&(a==="1-column"?i="gallery-1-col":a==="2-column"&&(i="gallery-2-col")),window.innerWidth>1100?e.add(i):e.add("gallery-1-col")}}</script>
     <?php
   }
   else
@@ -137,10 +137,10 @@ function track_meta_description() : void
 
 function scripts_styles() : void
 {
-  \Ultrafunk\Plugin\Globals\set_session_vars(\Ultrafunk\Plugin\Request\get_session_vars());
+  \Ultrafunk\Plugin\Singleton\set_response_params(\Ultrafunk\Plugin\Request\get_client_response_params());
 
   ?>
-  <script><?php echo 'const UF_ResponseData = ' . json_encode(\Ultrafunk\Plugin\Globals\get_session_vars()); ?></script>
+  <script><?php echo 'const ufResponseParams = ' . json_encode(get_response_params(), JSON_UNESCAPED_SLASHES) . ';'; ?></script>
   <script type="module" src="<?php echo ULTRAFUNK_THEME_URI . THEME_ENV['js_path'] . 'playback/interaction.js?ver=' . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
   <script type="module" src="<?php echo ULTRAFUNK_THEME_URI . THEME_ENV['js_path'] . 'index.js?ver='                . \Ultrafunk\Theme\Config\VERSION; ?>"></script>
   <noscript><link rel="stylesheet" href="<?php echo ULTRAFUNK_THEME_URI . '/inc/css/style-noscript.css?ver='        . \Ultrafunk\Theme\Config\VERSION; ?>" media="all" /></noscript>
@@ -352,14 +352,14 @@ function get_nav_bar_icons() : array
 
 function get_nav_bar_arrows() : array
 {
-  $session_vars = get_session_vars();
+  $response_params = get_response_params();
 
-  if (($session_vars['prevPage'] !== null) || ($session_vars['nextPage'] !== null))
+  if (($response_params['prevPage'] !== null) || ($response_params['nextPage'] !== null))
   {
-    $nav_url = ($session_vars['prevPage'] !== null) ? $session_vars['prevPage'] : '#';
+    $nav_url = ($response_params['prevPage'] !== null) ? $response_params['prevPage'] : '#';
     $nav_arrows['back'] = '<a href="' . esc_url($nav_url) . '" data-click-id="nav-prev-track" class="navbar-prev-link"><span class="material-icons navbar-arrow-prev" title="Previous track / page (shift + arrow left)">arrow_backward</span></a>';
 
-    $nav_url = ($session_vars['nextPage'] !== null) ? $session_vars['nextPage'] : '#';
+    $nav_url = ($response_params['nextPage'] !== null) ? $response_params['nextPage'] : '#';
     $nav_arrows['fwd']  = '<a href="' . esc_url($nav_url) . '" data-click-id="nav-next-track" class="navbar-next-link"><span class="material-icons navbar-arrow-next"  title="Next track / page (shift + arrow right)">arrow_forward</span></a>';
   }
   else
@@ -414,18 +414,18 @@ function get_wp_pagination(string $before = ' ( ', string $separator = ' / ', st
   return $pagination;
 }
 
-function get_uf_pagination(object $params) : string
+function get_uf_pagination(object $request_params) : string
 {
   if (is_list_player('search'))
   {
-    return ($params->max_pages <= 1)
-      ? ' (' . $params->found_items . ' matches)'
-      : ' (' . $params->found_items . ' matches - page ' . $params->current_page . ' of ' . $params->max_pages . ')';
+    return ($request_params->max_pages <= 1)
+      ? ' (' . $request_params->found_items . ' matches)'
+      : ' (' . $request_params->found_items . ' matches - page ' . $request_params->current_page . ' of ' . $request_params->max_pages . ')';
   }
   else
   {
-    return ($params->max_pages > 1)
-      ? ' ( ' . $params->current_page . ' / ' . $params->max_pages . ' )'
+    return ($request_params->max_pages > 1)
+      ? ' ( ' . $request_params->current_page . ' / ' . $request_params->max_pages . ' )'
       : '';
   }
 }
@@ -444,14 +444,14 @@ function get_wp_search_matches() : string
   return '';
 }
 
-function get_list_player_prefix(object $params) : string
+function get_list_player_prefix(object $request_params) : string
 {
   if (is_list_player('channel') || is_list_player('all') || is_list_player('date'))
-    return '<b><a href="/channels/" title="View Channels">' . $params->title_parts['prefix'] . '</a>: </b>';
+    return '<b><a href="/channels/" title="View Channels">' . $request_params->title_parts['prefix'] . '</a>: </b>';
   else if (is_list_player('artist'))
-    return'<b><a href="/artists/" title="View Artists">' . $params->title_parts['prefix'] . '</a>: </b>';
+    return'<b><a href="/artists/" title="View Artists">' . $request_params->title_parts['prefix'] . '</a>: </b>';
 
-  return '<b>' . $params->title_parts['prefix'] . ': </b>';
+  return '<b>' . $request_params->title_parts['prefix'] . ': </b>';
 }
 
 function get_nav_bar_title() : string
@@ -460,9 +460,9 @@ function get_nav_bar_title() : string
     ? '<b>Shuffle: </b>'
     : '<b><a href="/channels/" title="View Channels">Channel</a>: </b>';
 
-  $title      = esc_html(get_title());
-  $pagination = esc_html(get_wp_pagination());
-  $params     = get_request_params();
+  $title          = esc_html(get_title());
+  $pagination     = esc_html(get_wp_pagination());
+  $request_params = get_request_params();
 
   if (is_single())
   {
@@ -481,20 +481,20 @@ function get_nav_bar_title() : string
     $prefix     = is_termlist('artists') ? '<b>Artists</b>' : '<b>All Channels</b>';
     $title      = '';
     $pagination = '';
-    $query_vars = $params->query_vars;
+    $query_vars = $request_params->query_vars;
 
-    if ($params->max_pages > 1)
-      $prefix = $prefix . ' ( ' . $params->current_page . ' / ' . $params->max_pages . ' )';
+    if ($request_params->max_pages > 1)
+      $prefix = $prefix . ' ( ' . $request_params->current_page . ' / ' . $request_params->max_pages . ' )';
     else if (isset($query_vars['first_letter']))
-      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($query_vars['first_letter']) . '</span><span class="found-items"> ( ' . $params->found_items . ' found )</span>';
+      $prefix = '<b>Artists: </b><span class="normal-text">' . strtoupper($query_vars['first_letter']) . '</span><span class="found-items"> ( ' . $request_params->found_items . ' found )</span>';
     else
       $prefix = '<span class="go-back-to"><b>Go Back: </b><span class="go-back-title"></span></span>';
   }
   else if (is_list_player())
   {
-    $prefix     = get_list_player_prefix($params);
+    $prefix     = get_list_player_prefix($request_params);
     $title      = is_list_player('search') ? get_search_string() : $title;
-    $pagination = esc_html(get_uf_pagination($params));
+    $pagination = esc_html(get_uf_pagination($request_params));
   }
   else if (is_404())
   {

@@ -6,9 +6,12 @@
 
 
 import { newDebugLogger } from './debuglogger.js';
-import { settings }       from './session-data.js';
-import { PREF_PLAYER }    from '../settings/settings.js';
 import { showSnackbar }   from './snackbar.js';
+
+import {
+  settings,
+  PREF_PLAYER,
+} from '../settings/settings.js';
 
 import {
   IS_PROD_BUILD,

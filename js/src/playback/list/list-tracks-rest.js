@@ -6,15 +6,12 @@
 
 
 import { newDebugLogger } from '../../shared/debuglogger.js';
+import { responseParams } from '../../shared/response-params.js';
 
 import {
   HTTP_RESPONSE,
   fetchRest,
 } from '../../shared/fetch-rest.js';
-
-import {
-  response as responseData
-} from '../../shared/session-data.js';
 
 import {
   getPageSeparatorHtml,
@@ -40,15 +37,15 @@ const m = {
 
 export async function loadTracks(termType, termId)
 {
-  const loadingPage  = parseInt(responseData.currentPage + 1);
-  const restResponse = await fetchTracks(termType, termId, loadingPage, parseInt(responseData.listPerPage));
+  const loadingPage  = parseInt(responseParams.currentPage + 1);
+  const restResponse = await fetchTracks(termType, termId, loadingPage, parseInt(responseParams.listPerPage));
 
   if (restResponse.status.code === HTTP_RESPONSE.OK)
   {
     const trackData  = restResponse.data;
     const artistIds  = new Set();
     const channelIds = new Set();
-    let tracksHtml   = getPageSeparatorHtml(responseData, loadingPage);
+    let tracksHtml   = getPageSeparatorHtml(responseParams, loadingPage);
 
     trackData.forEach((track, index) =>
     {
@@ -101,11 +98,11 @@ function fetchTracks(termType = '', termId = '', page = 1, tracksPerPage = 25)
   const pagination = `page=${page}&per_page=${tracksPerPage}`;
   const fields     = '&_fields=id,link,artists,channels,meta';
 
-  if ((responseData.get.list_player === 'channel') || (responseData.get.list_player === 'artist'))
+  if ((responseParams.get.list_player === 'channel') || (responseParams.get.list_player === 'artist'))
     params = getTermQueryParams(termType, termId);
-  else if (responseData.get.list_player === 'shuffle')
+  else if (responseParams.get.list_player === 'shuffle')
     params = getShuffleQueryParams();
-  else if (responseData.get.list_player === 'search')
+  else if (responseParams.get.list_player === 'search')
     params = getSearchQueryParams();
 
   return fetchRest({
@@ -128,8 +125,8 @@ function getTermQueryParams(termType, termId)
   {
     let termParams = `${termType}=${parseInt(termId)}&`;
 
-    if (responseData.filter?.taxonomy && responseData.filter?.taxonomy_id)
-      termParams += `tax_relation=AND&${responseData.filter.taxonomy}=${responseData.filter.taxonomy_id}&`;
+    if (responseParams.filter?.taxonomy && responseParams.filter?.taxonomy_id)
+      termParams += `tax_relation=AND&${responseParams.filter.taxonomy}=${responseParams.filter.taxonomy_id}&`;
 
     return termParams;
   }
@@ -139,10 +136,10 @@ function getTermQueryParams(termType, termId)
 
 function getShuffleQueryParams()
 {
-  let shuffleParams = `shuffle=true&shuffle_type=${responseData.get.shuffle_type}&`;
+  let shuffleParams = `shuffle=true&shuffle_type=${responseParams.get.shuffle_type}&`;
 
-  if (responseData.get.shuffle_slug !== null)
-    shuffleParams += `shuffle_slug=${responseData.get.shuffle_slug}&`;
+  if (responseParams.get.shuffle_slug !== null)
+    shuffleParams += `shuffle_slug=${responseParams.get.shuffle_slug}&`;
 
   return shuffleParams;
 }

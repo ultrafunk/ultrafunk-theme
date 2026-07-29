@@ -6,7 +6,7 @@
 
 
 import { newDebugLogger } from '../../shared/debuglogger.js';
-import { settings }       from '../../shared/session-data.js';
+import { settings }       from '../../settings/settings.js';
 
 
 /*************************************************************************************************/

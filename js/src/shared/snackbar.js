@@ -7,7 +7,7 @@
 
 import { newDebugLogger }      from './debuglogger.js';
 import { showModal }           from './modal.js';
-import { settings }            from './session-data.js';
+import { settings }            from '../settings/settings.js';
 import { KEY }                 from './storage.js';
 import { MATCH, matchesMedia } from './utils.js';
 
